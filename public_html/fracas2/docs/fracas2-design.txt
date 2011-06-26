@@ -1,0 +1,16 @@
+Extremely primitive graphics - rects will do for now.
+Level is still a text file:
+- entrance
+- exit
+- walls
+- spaces
+- gnomes
+- gnome generators
+
+- boulders
+- gold
+- health
+
+Level, score, health meter.
+Level-in-URL?
+

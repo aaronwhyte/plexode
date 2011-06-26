@@ -1,0 +1,16 @@
+Follow: Get a certain dist from the player.
+Flee.
+Chase.
+Wander.
+Get behind player.
+Hide and pop out when player is close.
+Follow player's scent trail.
+Follow other scent trail.
+Grapple player and then take him somewhere.
+Grapple some other object and carry it away.
+State-machines in general are keen.
+Give player energy if player is low.
+Avoid the walls.
+Hug the walls.
+Take cover.
+Shield up, but it takes a sec.

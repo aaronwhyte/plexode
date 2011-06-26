@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>circularqueue tests</title>
+<script src="../public_html/js/testing.js"></script>
+<script src="../public_html/js/util.js"></script>
+<script src="../public_html/js/circularqueue.js"></script>
+<script>
+addTest(function testEmptyQueue() {
+  var q = new CircularQueue(3);
+  assertEquals(true, q.isEmpty());
+  assertEquals(false, q.isFull());
+  assertEquals(null, q.dequeue());
+});
+
+addTest(function testFillAndEmpty() {
+  var q = new CircularQueue(3);
+  q.enqueue("one");
+  assertEquals(false, q.isEmpty());
+  assertEquals(false, q.isFull());
+  q.enqueue("two");
+  q.enqueue("three");
+  assertEquals(false, q.isEmpty());
+  assertEquals(true, q.isFull());
+  // drain it
+  assertEquals("one", q.dequeue());
+  assertEquals("two", q.dequeue());
+  assertEquals(false, q.isEmpty());
+  assertEquals("three", q.dequeue());
+  assertEquals(true, q.isEmpty());
+  assertEquals(null, q.dequeue());
+  assertEquals(true, q.isEmpty());
+});
+
+addTest(function testOverfill() {
+  var q = new CircularQueue(3);
+  q.enqueue("one");
+  q.enqueue("two");
+  q.enqueue("three");
+  assertEquals(true, q.isFull());
+  q.enqueue("four");
+  q.enqueue("4.5");
+  assertEquals(true, q.isFull());
+  q.dequeue();
+  assertEquals(false, q.isFull());
+  q.enqueue("five");
+  q.enqueue("six");
+  q.enqueue("seven");
+  // drain it
+  assertEquals("five", q.dequeue());
+  assertEquals("six", q.dequeue());
+  assertEquals(false, q.isEmpty());
+  assertEquals("seven", q.dequeue());
+  assertEquals(true, q.isEmpty());
+  assertEquals(null, q.dequeue());
+  assertEquals(true, q.isEmpty());
+});
+
+addTest(function testGet() {
+  var q = new CircularQueue(3);
+  try {
+    q.get(0);
+    fail("should have thrown an error");
+  } catch (e) {
+    // expected
+  }
+  try {
+    q.get(-1);
+    fail("should have thrown an error");
+  } catch (e) {
+    // expected
+  }
+  q.enqueue("one");
+  assertEquals("one", q.get(0));
+  try {
+    q.get(1);
+    fail("should have thrown an error");
+  } catch (e) {
+    // expected
+  }
+  q.enqueue("two");
+  q.enqueue("three");
+  assertEquals("one", q.get(0));
+  assertEquals("two", q.get(1));
+  assertEquals("three", q.get(2));
+  
+  // add another element so one gets dropped
+  q.enqueue("four");
+  assertEquals("two", q.get(0));
+  assertEquals("three", q.get(1));
+  assertEquals("four", q.get(2));
+  try {
+    q.get(3);
+    fail("should have thrown an error");
+  } catch (e) {
+    // expected
+  }
+  
+  q.dequeue();
+  assertEquals("three", q.get(0));
+  assertEquals("four", q.get(1));
+  
+  q.dequeue();
+  assertEquals("four", q.get(0));
+});
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

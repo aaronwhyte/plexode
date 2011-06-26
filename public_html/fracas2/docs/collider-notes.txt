@@ -1,0 +1,68 @@
+simple collider
+
+for each infinite-speed bonkee:
+  // process the bonkee forever
+  bonk = 1;
+  while (1):
+  	bonk = this.getNextBonk(bonkee); // null if !bonkee.exists
+  	if (!bonk) break; // done bonking
+  	this.publish(bonk);
+
+Add the next bonk, within some timeframe, whenever a bonkee is added,
+and track the first bonk index all the time.
+To change a bonkee, you remove the old version and add the new version,
+so all bonkees are immutable.
+
+Grid bonks are O(cells traversed) to compute, but bonkee bonks are O(1).
+So separate the known endTimes for bonkee bonks and grid bonks.
+
+// 
+getNextBonk(bonkee, startTime, endTime) {
+  Bonkeebonks (bbonks) are always up to date, because they're fully calculated
+  when bonkees are added.
+  Just be sure to know the next grid bonk (gbonk) up through either the bbonk,
+  or the end time if there's no next bbonk.
+  if (bonkee.gbonkKnownThroughTime < endTime) {
+    // There's a gbonk in the timespan
+    // might need to calc more gbonk time
+    if (!bonkee.bbonk || bonkee.bbonk.time < bonkee.gbonkKnownThroughTime) {
+      getNextGridBonkTime(bonkee, startTime, endTime);
+    }
+  }
+}
+
+for each normal-speed bonkee:
+  // Do grid calculations for any missing endTimes.
+  // Bonkee/Bonkee collisions are always known infinitely far into the future.
+  if (!bonkee.nextBonk && bonkee.gridEndTime < endTime) {
+    update(bonkee, bonkee.gridEndTime, endTime); // updates bonkee.endTime
+  }
+  this.getNextBonk(bonkee, endTime);
+if (this.bonks.length) {
+}
+
+- add all collisions, 
+- select the earliest one, 
+- process, 
+- remove and add collisions, 
+- select the earliest one again, etc.
+... until there are no more collisions in the timespan.
+If I keep the interactions simple then there will only be a few objects at a time,
+like line-of-sight particles, a few bullets, player and NPCs of course,
+some powerups, some props, etc.
+Many objects don't need to be checked against all others.
+
+The main fancy coding will be calculating the sprite-to-wall collisions.
+Just increase the occupied-cell range whenever a leading edge crosses a grid line,
+and decrease it when a trailing edge crosses.  And since that happens at regular
+intervals, there's no need to guess.
+Point-particles are even easier.
+
+
+collision with grids:
+DONE: Any change should be a remove+add, like a sledge change.  Grids are considered immutable.
+
+OPTIMIZATIONS:
+DONE: Optional max-time for grid and sledge collisions, so they can avoid calcs and hit allocation for
+collisions that will never happen due to constantly invalidated sledges.
+If not provided, the value defaults to infinity.

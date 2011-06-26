@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>JS perf tests</title>
+<style>
+button {
+  border:1px solid silver;
+  padding:2px;
+  margin:2px;
+}
+</style>
+<script>
+function now() {
+  return (new Date()).getTime();
+}
+
+function log(html) {
+  document.getElementById('log').innerHTML += html + '<br>';
+}
+
+function empty() {
+}
+
+var counter = 0;
+function inc() {
+  counter++;
+}
+
+function testNothing() {
+  var s = now();
+  var t = now() - s;
+  log('Doing nothing took ' + t + ' ms.');
+}
+
+function testEmptyLoop() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+  }
+  var t = now() - s;
+  log('An empty 10000-step for-loop took ' + t + ' ms.');
+}
+
+function testCreateDates() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = new Date();
+  }
+  var t = now() - s;
+  log('Making 10000 dates took ' + t + ' ms.');
+}
+
+function testCreateEmptyArrays() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = [];
+  }
+  var t = now() - s;
+  log('Making 10000 empty arrays took ' + t + ' ms.');
+}
+
+function testCreateThreeElementArrays() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = [1, 2, 3];
+  }
+  var t = now() - s;
+  log('Making 10000 3-element arrays took ' + t + ' ms.');
+}
+
+function testPushNumbers() {
+  var s = now();
+  var a = [];
+  for (var i = 0; i < 10000; i++) {
+    a.push(i);
+  }
+  var t = now() - s;
+  log('Pushing 10000 numbers onto an array took ' + t + ' ms.');
+}
+
+function testCallEmptyFunc() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    empty();
+  }
+  var t = now() - s;
+  log('Calling empty() 10000 times took ' + t + ' ms.');
+}
+
+function testCallIncFunc() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    inc();
+  }
+  var t = now() - s;
+  log('Calling inc() 10000 times took ' + t + ' ms.');
+}
+
+function testMultiply() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = i * i;
+  }
+  var t = now() - s;
+  log('Multiplying 10000 times took ' + t + ' ms.');
+}
+
+function testDivide() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = 1 / i;
+  }
+  var t = now() - s;
+  log('Dividing 10000 times took ' + t + ' ms.');
+}
+
+function testSqrt() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = Math.sqrt(i);
+  }
+  var t = now() - s;
+  log('Math.sqrt 10000 times took ' + t + ' ms.');
+}
+
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+function testConstructor() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = new Point(i, i);
+  }
+  var t = now() - s;
+  log('new Point(x, y) 10000 times took ' + t + ' ms.');
+}
+
+
+</script>
+</head><body>
+<button onclick="testNothing()">nothing</button>
+<button onclick="testEmptyLoop()">empty loop</button>
+<button onclick="testCreateDates()">create dates</button>
+<button onclick="testCreateEmptyArrays()">create empty arrays</button>
+<button onclick="testCreateThreeElementArrays()">create 3-element arrays</button>
+<button onclick="testPushNumbers()">push numbers</button>
+<button onclick="testCallEmptyFunc()">call empty()</button>
+<button onclick="testCallIncFunc()">call inc()</button>
+<button onclick="testMultiply()">multiply</button>
+<button onclick="testDivide()">divide</button>
+<button onclick="testSqrt()">sqrt</button>
+<button onclick="testConstructor()">constructor</button>
+<div id="log"></div>
+</body></html>

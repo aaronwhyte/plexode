@@ -1,0 +1,4 @@
+Redirect permanent /cgi-bin/eval.py http://plexode.com/eval/
+Redirect permanent /cgi-bin/fracas.py http://plexode.com/fracas/
+Redirect permanent /cgi-bin/insta-html.py http://plexode.com/insta-html/
+Redirect permanent /cgi-bin/main.py http://plexode.com/

@@ -1,0 +1,112 @@
+body {
+  font-family:verdana;
+  font-size:90%;
+  margin:0; padding:0.5em 0 0 0;
+  background-color:#ffffff;
+  color:#000000;
+}
+p {
+  margin:0; padding:0.5em 1em; color:44aa44;
+}
+
+a {
+  font-weight:bold;
+  border-style:solid;
+  border-color:white;
+  border-width:0 0 3px;
+  padding:0px;
+  text-decoration:none;
+}
+a:visited {
+}
+a:hover {
+  border-color:orange;
+}
+
+form {
+  margin:0; padding:0;
+}
+.tinyForm {
+  white-space:nowrap;
+  padding:2;
+  margin:0;
+}
+
+code {
+  font-family:courier;
+  color:#008844;
+}
+div.main {
+  margin:0;
+  color:#663322;
+  border-width:2 0; 
+  border-style:solid; 
+  border-color:#dddddd;
+}
+div.footer {
+  clear:both;
+  font-size:80%;
+  padding:0.5em 1em 0;
+  text-align:right;
+  white-space:nowrap;
+}
+
+div.section {
+  float:left; margin:0 6; padding:0;
+}
+div.sectionTitle {
+  display:block;
+  position:relative; top:0.2em;
+  margin:0; padding:0 0.2em; 
+  text-align:left;
+  font-size:120%; font-weight:bold;
+  z-index:1;
+  color:#888888;
+}
+div.sectionBody {
+  border-width:1; 
+  border-style:solid; 
+  border-color:#dddddd;
+  padding:0.2em;
+}
+
+div.clear {
+  clear:both;
+  font-size:1pt;
+}
+div.unclear {
+  font-size:1pt;
+}
+
+a.linkMenu {
+  display:block;
+  white-space:nowrap;
+  font-size:90%;
+}
+
+.mapNode {
+  font-weight:bold;
+  padding:1px;
+}
+a.mapNode {
+}
+span.mapNode {
+  color:#888888;
+}
+.mapNodeSelected {
+  font-weight:bold;
+  padding:1px;
+  background-color:#ffaacc;
+}
+table.mapSubs {
+  border-width:1 1 0 1;
+  border-style:solid;
+  border-color:#dddddd;
+  font-size:90%
+}
+
+.mapNodeUnderspace {
+  padding:0; margin:0; border:0;
+  font-size:3pt;
+}
+

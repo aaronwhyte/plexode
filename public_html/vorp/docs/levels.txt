@@ -1,0 +1,73 @@
+Buttons, doors, and the exit.
+- design
+- doors
+- impl
+
+Box carrying and laser sensors.
+- laser sensors
+
+Player passwalls, antiplayer passwalls.
+- plr passwalls: use to evade some stuff.  Also, inconvenient for carrying stuff.
+- design
+- impl
+
+Grabbing and throwing.
+- design
+- ?
+- impl
+
+Immortality.
+v design
+- time bomb - sprite, prefab, timer
+- assembler to produce anything, but mainly a time bomb
+- shrapnel - sprite, vanishing
+- bio damage, regeneration, death
+- KE damage?
+- player assembler, registration, respawn.  Player passwall?  Or generic one-way?  Tractor field?  Ignore?
+- gibs - sprite only
+- drone - sprite, prefab, rayScans, behavior
+- drone exhaust sprite?
+- drone assembler?
+- timer for drone doors.
+- plasma cannon - sprite, prefab
+- plasma sprite - path segment recording & rendering
+- energy damage
+
+Waking up in strange places: spawn point selection.
+- design
+- spawn selection (just a button?)
+
+Bomb juggling
+- design
+- booster fields?
+- timers?
+
+Line of sight, plasma turrets, blocks as cover
+
+Portals, passwalls, and buttons.  (level 3-ish)
+
+Portals to bypass turrets
+
+Zombies and stealth.
+I told you not to touch the Annihilator.  Block vacuuming, light zombie cleaning.
+Zombie fighting with the Annihilator.  Circle of Death, Stream of Death.
+Tractor-beam zombie wrestling?
+Bomb throwing and zombies.
+Bomb throwing and zombies and portals.
+
+Drones.
+Drone wrestling.
+Wield portals against drones?
+Drones vs. zombies.
+
+Push-fields
+Anchor grabbing & swinging
+
+Plasma cannons & portals.
+Plasma guides and portals.
+Zombies cooking with plasma.
+
+Portal momentum puzzles.
+
+Hypnosis?  Compulsions?
+

@@ -1,0 +1,11 @@
+Create level from text file.
+Level can have hyperlinks to resources.
+Player provides itself as a resource link
+
+Resources:
+level: grids, non-grid walls, other objects, player start, URLs for resources like monsters and objects. 
+player: looks, inventory of objects, stats...?
+
+Basic nethack-ish game code architecture:
+player actions:
+items: get, drop, throw, use, consume, weild/wear/slot, un-weild/un-wear/un-slot, eat/drink/read/consume, etc.

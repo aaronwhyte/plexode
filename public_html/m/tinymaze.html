@@ -1,0 +1,147 @@
+<html>
+<head>
+<title>tinymaze</title>
+<style>
+body {
+  padding:0;
+  margin:0;
+  border:0;
+  overflow:hidden;
+}
+td.cell {
+  font-family: courier new, monospace;
+  text-align:center;
+  overflow:hidden;
+}
+
+td.wall {
+  background-color:blue;
+  color:cyan;
+}
+
+td.floor {
+  background-color:black;
+  color:gray;
+}
+
+td.plr {
+  background-color:pink;
+  color:red;
+}
+</style>
+
+<script>
+function listen(element, eventName, fn) {
+  if (element.addEventListener) {
+    // DOM Level 2
+    element.addEventListener(eventName, fn, false);
+  } else if (element.attachEvent) {
+    // IE
+    element.attachEvent('on' + eventName, fn);
+  }
+}
+
+function squareSize() {
+  var win = window;
+  if (win.innerHeight) {
+    return Math.min(win.innerWidth, win.innerHeight);
+  } else {
+    // IE messing with our heads
+    var de = win.document.documentElement;
+    if (de && de.clientHeight) {
+      // IE 6 strict, yay!
+      return Math.min(de.clientWidth, de.clientHeight);
+    } else {
+      return Math.min(document.body.clientWidth, document.body.clientHeight);
+    }
+  }
+  return null;
+}
+
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function start() {
+  makeMaze();
+  draw();
+  listen($('d'), 'mousedown', function(e){dump(e, 'mousedown')}, false);
+}
+
+function dump(e, msg) {
+  var t = $('t');
+  var nx = e.clientX - t.clientWidth / 2;
+  var ny = e.clientY - t.clientHeight / 2;
+  //var nx = e.clientX - s / 2;
+  //var ny = e.clientY - s / 2;
+  var dx = 0, dy = 0;
+  if (nx*nx > ny*ny) {
+    dx = nx > 0 ? 1 : -1;
+  } else {
+    dy= ny > 0 ? 1 : -1;
+  }
+  if (!walls[py + dy][px + dx]) {
+    px += dx; py += dy;
+    draw();
+  }
+  //$('log').innerHTML = [nx, ny, px, py] + ' ' + msg;
+}
+
+var px = 20, py = 20;
+var CS = 9;
+var MID = Math.floor(CS/2);
+
+var CLASS = {
+  '#' : 'wall',
+  '.' : 'floor',
+  '@' : 'plr'
+};
+function draw() {
+  var s = squareSize();
+  var h = [];
+  h.push('<table id="t" cellpadding=0 cellspacing=0 border=0 style="table-layout:fixed; height:');
+  h.push(s);
+  h.push('px; width:');
+  h.push(s);
+  h.push('px; font-size:');
+  h.push(s/CS * 0.8);
+  h.push('px">');
+  for (var y=0; y<CS; y++) {
+    h.push('<tr>');
+    for (var x=0; x<CS; x++) {
+      var content = walls[y+py-MID] && walls[y+py-MID][x+px-MID] ? '#' : '.';
+      if (x == MID && y == MID) content = '@';
+      h.push('<td class="');
+      h.push(CLASS[content]);
+      h.push(' cell" style="width:');
+      h.push(s/CS);
+      h.push('px;height:');
+      h.push(s/CS * 0.5);
+      h.push('px">');
+      h.push(content);
+    }
+  }
+  h.push('</table>');
+  $('d').innerHTML = h.join('');
+}
+
+var walls;
+
+function makeMaze() {
+  walls = [];
+  for (var y = 0; y < 40; y++) {
+    walls[y] = [];
+    for (var x = 0; x < 40; x++) {
+      walls[y][x] = Math.random() < 0.3;
+    }
+  }
+  
+}
+</script>
+</head>
+<body onload="start()">
+<div id="d">whaa?</div>
+<div id="log" style="display:none">log</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>plex.array test</title>
+<script src="../../jsunit/app/jsUnitCore.js"></script>
+<script src="../../js/plex/array.js"></script>
+</head>
+<body>
+<script>
+
+function testDiff() {
+  var a = [10, 20, 30, 40];
+  var tests = [
+    // add leading element
+    [[5, 10, 20, 30, 40], [0, 0, 1]],
+     
+    // remove leading element
+    [[20, 30, 40], [0, 1, 0]],
+    
+    // add trailing element
+    [[10, 20, 30, 40, 'arrr'], [4, 0, 1]], 
+    
+    // remove trailing element
+    [[10, 20, 30], [3, 1, 0]],
+    
+    // add middle elements
+    [[10, 20, 'arrr', 'yargh', 30, 40], [2, 0, 2]], 
+    
+    // swap middle elements
+    [[10, 30, 20, 40], [1, 2, 2]], 
+
+    // remove middle elements
+    [[10, 40], [1, 2, 0]],
+    
+    // remove everything
+    [[], [0, 4, 0]],
+    
+    // dup starting elements
+    [[10, 10, 10, 20, 30, 40], [1, 0, 2]],
+    
+    // dup trailing elements
+    [[10, 20, 30, 40, 40, 40], [4, 0, 2]],
+
+    // no resemblance
+    [['aa', 'bb', 'cc'], [0, 4, 3]],
+    
+    // no diff
+    [[10, 20, 30, 40], null]
+    
+  ];
+  
+  for (var i = 0; i < tests.length; ++i) {
+    var test = tests[i];
+    var b = test[0];
+    var actual = plex.array.diff(a, b);
+    var expected = test[1];
+    assertEquals('test #' + i, String(expected), String(actual));
+  }
+}
+
+
+function testEquals() {
+  var i = 1;
+  
+  function test(a, b, expected) {
+    var actual = plex.array.equals(a, b);
+    assertEquals('test #' + (i++) + ': [' + a.join(', ') +
+                 '] equals [' + b.join(', ') + ']', expected, actual);
+  }
+  
+  function s(a) {
+    test(a, a, true);
+  }
+  
+  function t(a, b) {
+    test(a, b, true);
+  }
+  
+  function f(a, b) {
+    test(a, b, false);
+  }
+  
+  s([1, 2, 3]);
+  s([]);
+  s([null, '', 0]);
+  s([,,,]);
+  s([[], {}]);
+  f([1, 2, 3], ['1', 2, 2+1]);
+  t([], []);
+  f([], [0]);
+  f([1], [2]);
+  f([1, 2, 3], [1, 2, 3, 4]);
+  f([1, 2], [2, 1]);
+}
+</script>
+</body>
+</html>

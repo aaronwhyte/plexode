@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>fracas2 tests</title>
+<script src="../js/testing.js"></script>
+<script src="../js/util.js"></script>
+<script src="./sledge.js"></script>
+<script>
+addTest(function testNothing() {
+});
+
+addTest(function testFail() {
+  fail("always fails");
+});
+
+
+addTest(function testSledgeCollision() {
+  // Meet at 40 in 1 tic.
+  // A's right edge starts at 20 and moves 20.  A is 1 unit big.
+  var a = new Sledge(19, 0, 20, 0, 1, 1, 0, 2);
+  
+  // B's left edge starts at 50 and moves 10.   B is 5 units big.
+  var b = new Sledge(55, 0, -10, 0, 5, 5, 0, 2);
+  
+  var hitPair = [null, null];
+  a.calcHitTime(b, hitPair, 0);
+  assertEquals(1, hitPair[0]);
+});
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

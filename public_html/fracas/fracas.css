@@ -1,0 +1,90 @@
+#video {
+  width: 26em;
+  height: 26em;
+  overflow: hidden;
+}
+
+#map {
+  background: black;
+  color: #ffffff;
+}
+
+#map table tr td,div.particle {
+  font-size: 250%;
+  font-family: monospace;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+div.particle {
+  position: absolute;
+}
+
+div#particles {
+  position: absolute;
+}
+
+.wall {
+  background: #4444ff;
+  color: #222288;
+}
+
+.gold {
+  background: #000000;
+  color: #ffff00;
+}
+
+.health {
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.floor {
+  background: #000000;
+  color: #222222;
+}
+
+.gnome {
+  background: #000000;
+  color: #aaffaa;
+}
+
+.gnomeGen {
+  background: #aaffaa;
+  color: #000000;
+}
+
+.stair {
+  background: #006600;
+  color: #00ff88;
+}
+
+.player {
+  background: #ff88ff;
+  color: #000000;
+}
+
+.bullet {
+  background: #000022;
+  color: #ffffff;
+}
+
+td.stat {
+  padding: 0 0.5em;
+  font-family: verdana;
+  vertical-align: top;
+}
+
+td.stat div {
+  text-align: right;
+  font-weight: bold;
+}
+
+#health {
+  font-size: 150%;
+}
+
+#score {
+  font-size: 150%;
+}

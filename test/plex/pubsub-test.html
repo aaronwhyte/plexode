@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>plex.pubsub test</title>
+<script src="../../jsunit/app/jsUnitCore.js"></script>
+<script src="../../js/plex/array.js"></script>
+<script src="../../js/plex/pubsub.js"></script>
+</head>
+<body>
+<script>
+
+var results = [];
+
+function more(a) {
+  results.push(a + 1);
+}
+
+function less(a) {
+  results.push(a - 1);
+}
+
+function testBasics() {
+  var ps = new plex.PubSub();
+  ps.publish(50); // nothing
+  ps.subscribe(more);
+  ps.subscribe(less);
+  ps.publish(6); // 7, 5
+  ps.unsubscribe(more);
+  ps.publish(0); // -1
+  ps.unsubscribe(less);
+  ps.publish(100); // nothing
+  assertTrue(plex.array.equals([7, 5, -1], results));
+}
+
+</script>
+</body>
+</html>

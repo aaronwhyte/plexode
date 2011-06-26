@@ -1,0 +1,41 @@
+body {
+  background: #000;
+  color: #aaa;
+  font-family:verdana, arial, sans-serif;
+}
+
+a {
+  font-weight:bold;
+  text-decoration:none;
+  color:#f88;
+}
+
+div.center {
+  max-width:40em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+canvas {
+  border: 2px solid #444;
+}
+
+#levelCenter {
+  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#game {
+  vertical-align:top;
+  display:inline-block;
+}
+
+#settings {
+  text-align:left;
+  vertical-align:top;
+  float:right;
+  padding: 1em;
+}
+
+

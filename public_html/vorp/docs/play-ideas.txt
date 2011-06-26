@@ -1,0 +1,62 @@
+Dangers and stuff
+- Crushbots
+- Bomb, shrapnel, bomb factory
+- Zombies
+- Fixed Plasma Cannons
+- Portable Plasma Redirectors
+
+Turrets - railgun, missile, plasma, machinegun
+Plasma guide.
+Zombies!
+Annihilator
+
+Weapons that
+fire when you have a charged grip
+fire when they're moving fast (like swinging)
+you throw
+activated by bumping
+
+joystick!  pull it out of center to aim it. 1D, 2D, multiple, whatevs.
+Buttons can be the same UI, with multiple rest-states (like 2) and sometimes
+final states, for one-time buttons.  Also, the button mass will make it hard to
+activate them with a glancing blow or a tiny mass, which is plausible and good.
+
+Robot tool ideas:
+self-stationing
+stiff grip sets aim vector
+or loose grip sets aim vector - may be easier to discover, and leaves stiff grip open
+stiff grip cycles through modes
+stiff grip marks a waypoint
+re-stationable by lifting
+draw computer-graphics-y wireframe UI projected around robot, like a debug layer
+unmovable
+untractorable
+plasma-shielded (or reincarnating)
+too big to teleport
+Heavy Shover.  power-assisted tractor-handling.  Good for shoving other heavy equipment.
+
+Heavy Equipment:
+semiportable respawners and factories
+industrial plasma stream
+ 
+
+Robots uses:
+grab and throw - chain them for delivery, or make a wall of them for security or collection
+deliver - ditto.  Also deadly if dragging to death.
+fetch - great for 
+
+trigger IR beams
+follow the player
+follow a special object
+love to push buttons
+can be picked up and deployed
+are trapped and need to be released
+are off and need to be powered up
+have limited energy
+grab objects (boxes?  Portals?  Other robots!?) and drop them somewhere.
+- Point them at a target and they'll get it and bring it back, or push the button, or whatever.
+kill zombies
+guard things but can be lured
+target whatever they're pointed at when they're picked up, including other robots.
+are very hostile towards everyone
+you can hitch a ride on

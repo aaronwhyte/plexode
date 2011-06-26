@@ -1,0 +1,43 @@
+Portal:
+- teleporters, though mine are very different.
+- spare settings, no distractions
+- puzzles for their own sake
+- cubes, and buttons to rest them on (I made grip-switches, since there's no gravity in Vorp)
+- doors
+- filter fields
+- stationary turrets
+- buttons and timers
+- plasma balls, to introduce timing constraints
+- one goal: exit
+- GLaDOS.  Not that I can replicate that in any way, but it sets a great tone.
+
+Portal 2 trailers:
+- Thermal discouragement beams
+
+Charles Stoss, mainly Glasshouse:
+- Portable teleport gates and their many uses.
+- Assembly gates
+
+Ian Banks "Culture" books
+- Drones as suitcase-sized slabs
+- Effectors fields as the only manipulators you need
+
+Sci-fi in general
+- animal/cyborg/robot spectrum
+- sentient/obsessed/programmed/tool spectrum
+- Tractor beams
+
+Wagonchrist's Musipal album artwork.
+Cover art for Jasper Fforde's Shades of Grey - colorful pipes
+
+Augmented reality overlays, for robot and device UIs.
+
+The Exploratorium
+- Workshops littered with devices
+- Combine physics effects to generate an interesting exhibit.
+This might be the real guiding light design pattern:
+No plotted sci-fi conflict or characters.  Just matter and ideas,
+attention focused by the "finish the level" goal, but with plenty
+of time to do free-form experimentation.
+Each level could have an idea to express or explore, the understanding of which
+is necessary to progress. 

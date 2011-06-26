@@ -1,0 +1,46 @@
+Tool Ideas:
+
+Guns
+- shotgun, nach
+- machine gun
+- railgun
+- crazygun
+- r-type warm-up gun
+- chainsaw!  Bullets fire away from player but return under constant acceleration.
+
+Manipulators
+- Puller: Simple tractor-particle-launcher that pulls player and target towards each other.  Works on walls!
+- Kicker: Fires short pusher-particles that affect both player and target.  Also works on walls!
+- Two click kicker: One to pick where the force comes from, and one to pick its force 
+- Inertialess puller/kicker: Doesn't affect player.
+- Some kinda sticky flail.  Fire it, it hits and attaches to whatever, then spring forces ensue.
+- Grappling hook.  Mostly tricky because of all the chain elements.
+
+Explosives
+- Explosive rockets.
+- Laser tripmines.  I <3 laser tripmines!
+- Remotely detonated jobbers.
+- Grenades.
+- Proximity mines.
+
+Sensing
+- Sensor spray, if player isn't omniscient.
+- Scent spray, for monsters that care.
+- Fake player, to trick monsters.
+
+Other
+- Teleport Gun: Fires a player-sized particle, and player ends up wherever it hits.
+- Portal gun: Player fires two teleporter endpoints.
+- Wall Gun: Particles fire from player, to hit nearby walls.  Wall hits become Something Else.
+- Brick Shooter: Semi-permanent heavy bricks can block stuff.
+- Energy Flail for player to swing around.  Multiple links, even?
+- Freezer: Temporarily transforms object into block of ice.
+- Procrastinator: Vanish something into the future. (how to appear atop another thing?)
+- Ignitable Gas.  Floats without colliding, converts to fire when touched by fire.
+- Smoke.  Blocks sight particles with diminishing effectiveness (200%-->0%)
+- Wind.  Affects gas.  Created by moving, too?
+
+Jump
+Shield
+Cloak
+Enter a monster, and pop out later.  Trick is you don't control the monster.

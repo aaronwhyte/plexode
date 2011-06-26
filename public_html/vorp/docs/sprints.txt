@@ -1,0 +1,319 @@
+=== SPRINTS ===
+
+2010.11.22 - 2010.11.22
+v Joystick: move the player around
+
+2010.11.22 - 2010.11.22
+v Egress: Exit sprites, and two levels with exits into each other
+
+2010.11.24 - 2010.11.25
+v Portals: PortalSprites that teleport certain objects that touch them.
+
+2010.11.25 - 2010.11.25
+v Blocks: Boxes that you can knock around.
+
+2010.11.25 - 2010.11.26
+Gripper v1
+v no hold + A-down: rayScan
+v rayScan hit: loose hold
+v loose hold: center+r to center+r spring
+v loose + B-up: release
+
+2010.11.28 - 2010.12.01
+VorpWham: Pass a custom Vorp Wham to Phy
+v Refactor Wham to use a separate method for doing the important math chunk.
+v Add Vorp logic so portals don't wiggle when used.
+
+2010.12.5 - 2010.12.5
+Gripper Stiff Hold
+v stiff + A-up --> loose hold
+v loose + A-down --> stiff hold
+
+2010.12.5 - 2010.12.06
+Gripper Kick
+v B-down: begin kick buildup
+v B-up: release any held thing, and kick what was held
+
+2010.12.07 - 2010.12.07
+First challenge level
+v basic zapper
+v cross zapper wall with portal pair
+
+2010.12.08 - 2010.12.09
+Portal Fix: Make it so portals can't let you through thin walls
+v Don't teleport sprites that are moving away from a portal.
+v Teleport to the middle of a portal.
+v GNASH YOUR TEETH because it makes infinite loops somefuckinghow.
+v FIX IT HARDER by probing the landing site with a rayScan.
+v FIX IT EVEN HARDER by hacking in a per-sprite limit of N teleports per clock
+
+2010.12.08 - 2010.12.10
+v Prefab sprites and sprite assemblies.
+v Zapper needs to be 2 endpoint sprites, with a removable deadly sprite.
+v Vorp level-building API needs to be higher level.
+v Eliminate unneeded params
+
+2010.12.10 - 2010.12.11
+Button
+v sprite
+v prefab
+v touch event piped from sprite to prefab to level listener
+
+2010.12.13
+First real level:
+v Hit button to turn off zapper.
+v Tap button on far side of zapper.
+v Throw crate at button.
+v Throw crate through portals to turn off zapper.
+v Use portals to bypass two more zappers (forces re-use)
+
+2010.12.14
+v Put that shit on the internet!
+
+Design ideas for a bunch of new content.
+v New twist on death and respawning.
+v Doors, filter fields.
+v Zombies, time bombs, plasma streams, drones, turrets.
+v Levels as lessons, and lots of them.
+v Voice of the game.
+
+2010.12.25 - 2010.12.27
+Gripper 2.0
+v Charge and pull closer with "z", uncharge instantly by lifting "z".
+v Release/fire with "x"
+v Change grip alg and like 10x the number of rayScans.
+v Grab closeby objs while holding still.
+
+2010.12.28 - 2010.12.28 
+Overlap response: Make reasonable behavior for stuff that just appears on top of other stuff, or stuff that grows.
+v Expand "hit" to include info about pre-existing overlaps
+v Make default sprite overlap behavior be "force away along shortest dimension, or from the center, or randomly
+v Test level 2 field-closing on player.
+
+2010.12.28 - 2011.01.02
+Doors & Beam Sensors & little test level
+v bare bones level
+v door
+v beamsensor 
+v fix beamsensor graphics
+
+2011.01.03 - 2011.01.03
+Misc door tweaks
+v Give doors acceleration, for more "heavy" look.
+v Break grip with WALL-group object blocks the scan.  Prevents gripping through walls and doors.
+
+2011.01.03 - 2011.01.03
+Intro page
+v about
+v keys
+v dvorak
+v levels links
+
+2011.01.03 - 2011.01.09
+Easier Level Building 
+v LevelBuilder, API like so:
+var b = new LevelBuilder();
+b.scale(30);
+b.save();  // like HTML5 canvas
+b.translate(10, 300);
+b.xy(1, 1).dx(-4).dy(3).wall();
+var door = b.dy(2).door();
+b.dy(2).dx(4).dy(2).wall();
+b.xy(0, 1).button(Prefab.DOWN, function() {door.setOpen(!door.isOpen);});
+b.restore()
+v Auto-calc bounding box.
+v Get rid of level boilerplate.
+v update level 1
+v update level 2
+v update level 3
+v update level 4
+
+2011.01.09 - 2011.01.10
+Timer
+v sprite
+x visible countdown (didn't look good)
+v timeSpan (in ticks)
+v reset()  Oops, collided with Sprite.reset!  Debugged for hours.  Renamed "resetTimer".
+v onTimeout
+v prefab
+v levelbuilder
+v add to level 4 to make door easier to open
+
+2011.01.16 - 2011.01.17
+GripSprite
+v sprite w own tractor beam (copy Player)
+v prefab (copy Button)
+v levelBuilder
+v Test level
+
+2011.01.17 - 2011.01.19
+Level 6:
+v tractor, gripswitch, door...  and I made it fun, not just a simple intro level.
+
+2011.01.24
+v Publish
+
+2011.04.09
+v Use Git!
+v Move generated files out of src dir.
+
+2011.04.10 - 2011.04.16
+Trails part 1/2
+v circularqueue class
+v circularqueue unit tests
+v trailevent class.  type (moveTo, jumpTo), time, x, y
+
+2011.04.14
+v Add JS compiler into Linux setup.
+
+2011.04.16 - 2011.04.29
+Painters - rendering overhaul - part 1
+Allow painting for effects, and on behalf of dead sprites (for streaks)
+Painters must be able to remove themselves from game's list when done - use Painter.isKaput()
+FooSprite pushes data to FooPainter like trail events, vel, foo-specific events including death, debug info, etc.
+v Write Painter class that implements "paint(now, renderer, layer)"
+v Figure out what I want to actually paint: basic shapes, tractor sparks, collision sparks, plasma trails
+v Game removes dead painters.
+v Game calls live painter paint(layer) methods in order.
+v Make some sprites update painter with all trajectory updates.
+  v walls
+  v blocks
+BRIEF PAUSE FOR TEMPLATIZING
+
+2011.04.29 - 2011.04.29
+Templatize
+v generate level HTML files using Python.  Don't repeat script file list.
+x generate compilation script using Python?
+
+2011.05.02 - 2011.05.03
+Painters - rendering overhaul - part 2
+Make *all* sprites update painter with all trajectory updates.
+v Add RectPainter for generic sprites
+v Replace with RectPainter:
+  v block
+  v door
+  v exit
+  v portal
+  v sensor
+  v wall
+v Custom non-spark Painters:
+  v button - glow effect
+  v timer - invisible
+  v zapper - visible/invisible, and flicker.
+PAUSE FOR SPARKS
+
+2011.05.09 - 2011.05.26 with interruptions below
+Sparks 1
+So far, sparks are a design pattern, not a class,
+but similar spark code can be could up to a painter helper class.
+Sparks are implemented by a Painter in a few parts:
+* A pile of spark state objects like this (but anything goes):
+  {pos:Vec2d, vel:Vec2d, startTime:number, etc:etc}
+* A mutator function to update a spark in-place, or delete it. Return false for delete?
+* A loop that iterates over the pile, removing deleted ones in pile fashion,
+  maybe mutating the rest.
+  (Aside: Feels like Painters need now() and act(), or clock() or whatever,
+  like Sprites.  Remove "now" from paint() and add advance(now).  OK, done.)
+  Call from Painter.advance().
+* A function to draw a spark (maybe at multiple layers),
+  using a state object (and maybe the Painter's other state) as input.
+  Call from Painter.draw().  Paydirt!
+Add sparks to painters:
+v grip
+  v seeking
+  v holding (and acceleration!)
+v Generify tractor beam rendering, since we'll have at least 3 sprites that use 'em.
+  v seek(rayScan): light sparkle along rayScan beam
+  v hold(holderPos, holderVel, heldPos, heldVel, holdStrength): 
+    v solid line indicating strength.
+    v Maybe fade-bubbles along path or on target for higher-strength ones.
+    x Emit fade-bubbles at source for high-strength grips?
+    v awesome polygons instead of sparks?!
+    v Quickly fade polygons in - don't just snap 'em in
+v hook up to player
+v hook up to gripswitch
+
+2011.05.19 Fixed RayScan flaw.  Same as old cell-collider flaw:
+Once you've found the earilest collision in a cell, you still have to check other cells
+until you've gone past the cell with the collision *location*.
+Say you have a wall that crosses a lot of cells.  If you scan nearly parallel to it,
+you might hit it 5 cells away.  But there might still be something in a closer cell that
+results in an earlier hit.
+
+2011.05.23 Replace noisy tractorbeam sparks with awesome clean line-of-sight polygon sweeps.
+
+2011.05.26 Cool portal preview grx
+v refactor vorp drawing to allow repeated world-rendering with different transformations.
+v keep track of all portals in play
+v redraw the whole world around each portal, from the other portal's persoective
+v reduce alpha for preview world
+v clip preview world
+v circle background for preview worlds
+
+2011.05.27 beamer painter
+v flicker line
+v Remove draw() and pull painter up to Sprite.
+
+2011.05.27
+v tractor beam release/kick sparks
+
+2011.05.29 Flags framework
+v Auto-expose as checkboxes on page
+v Actual flags:
+  v debugRayScans (false)
+  v portalScry (true)
+  v tractorRangePoly (true)
+
+2011.06.01 - 2011.06.05 Player Spawner v1
+v sprite, prefab, level builder
+v active spawner API at the Vorp level
+v death & rebirth
+v Redo all levels to start with a spawner
+
+2011.06.06 - ... death and reassembly UX
+v remove player from collider upon death
+  v but preserve painter
+  v fix painter-removal logic and enhance stuff
+v add DeadPlayer sprite
+  v sprite, prefab, painter
+  v calls vorp.assemblePlayer() after like 15 frames
+- Cool Graphics
+  - dead player
+  - assembler
+
+teleport sparks
+- implode
+- explode
+- light up the tube?
+
+TractorBeamPainter3
+- Fire sparks from self just so show that Something Is Happening.
+- When you get a grip, accel sparks to target.
+- Sparks constantly hover between ply and target?  No more tbeam line? 
+
+Robot to collect portals on level 3
+- sprite, prefab, level builder
+- 
+
+Design some new levels
+- please enjoy hot plasma
+
+Stuff we're gonna need:
+- plasma cannon
+- plasma itself
+- plasma switch?
+
+Spawner 2
+- Generic spawner sprite/painter/prefab/levelbuilderfn
+- active spawner indicator
+
+Flags v2
+Redo flags to be set of singletons.
+Make flags
+
+
+Stat framework
+- Stat.foo++ - Increment stuff
+- Dump stats to innerHTML area somewhere?
+- Derived stats
+- Stat.

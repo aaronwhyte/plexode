@@ -1,0 +1,31 @@
+java -jar ../../../../tools/jscomp/compiler.jar \
+--compilation_level ADVANCED_OPTIMIZATIONS \
+--js_output_file out.js \
+--jscomp_warning checkVars \
+--jscomp_warning undefinedVars \
+--jscomp_warning missingProperties \
+--js ../js/plex/array.js \
+--js ../js/vec2d.js \
+--js ../js/gameutil.js \
+--js ../js/util.js \
+--js ../js/skipqueue.js \
+--js ../js/gaam/cellcollider.js \
+--js ../js/gaam/cellentryevent.js \
+--js ../js/gaam/cellgroup.js \
+--js ../js/gaam/hit.js \
+--js ../js/gaam/mark.js \
+--js ../js/gaam/phy.js \
+--js ../js/gaam/rayScan.js \
+--js ../js/gaam/sledge.js \
+--js ../js/gaam/sprite.js \
+--js ../js/gaam/spritetimeout.js \
+--js ../js/gaam/wham.js \
+--js sprites/bouldersprite.js \
+--js sprites/bulletsprite.js \
+--js sprites/followersprite.js \
+--js sprites/playersprite.js \
+--js sprites/wallsprite.js \
+--js renderer.js \
+--js fracas2.js \
+--js main.js
+rm out.js

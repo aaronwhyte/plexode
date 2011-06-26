@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>fun0</title>
+<script>
+
+function log(html) {
+  document.getElementById('log').innerHTML += html + '<br>';
+}
+
+function listen(element, eventName, fn) {
+  if (element.addEventListener) {
+    // DOM Level 2
+    element.addEventListener(eventName, fn, false);
+  } else if (element.attachEvent) {
+    // IE
+    element.attachEvent('on' + eventName, fn);
+  }
+}
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function start() {
+  listen(document, 'mousedown', function(e){dump(e, 'm-down')}, false);
+  listen(document, 'mouseup', function(e){dump(e, 'm-up')}, false);
+  listen(document, 'mousemove', function(e){dump(e, 'm-move')}, false);
+  listen($('d'), 'mouseover', function(e){dump(e, 'm-over')}, false);
+  listen($('d'), 'mouseout', function(e){dump(e, 'm-out')}, false);
+  listen($('ta'), 'keydown', function(e){dump(e, 'k-down')}, false);
+  listen($('ta'), 'keyup', function(e){dump(e, 'k-up')}, false);
+}
+
+function dump(e, msg) {
+  var x = e.clientX;
+  var y = e.clientY;
+  log([msg, x, y].join());
+}
+
+</script>
+</head>
+<body onload="start()">
+<div id="d">mouseover/out target</div>
+<textarea id="ta">key target</textarea>
+<div id="log"></div>
+</body>
+</html>

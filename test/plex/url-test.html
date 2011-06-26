@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>plex.url test</title>
+<script src="../../jsunit/app/jsUnitCore.js"></script>
+<script src="../../js/plex/object.js"></script>
+<script src="../../js/plex/url.js"></script>
+</head>
+<body>
+<script>
+
+function testEncodeDecodeObject() {
+  var a = {a:1, b:2, 'a&b=c\nd e':'e&f=g\nh i'};
+  var q = encodeObjectAsQuery(a);
+  var b = decodeQueryAsObject(q);
+  assertEquals(plex.object.expose(a), plex.object.expose(b));
+}
+
+</script>
+</body>
+</html>

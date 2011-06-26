@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>fun1</title>
+<script>
+
+function log(html) {
+  document.getElementById('log').innerHTML += html;
+}
+
+function listen(element, eventName, fn) {
+  if (element.addEventListener) {
+    // DOM Level 2
+    element.addEventListener(eventName, fn, false);
+  } else if (element.attachEvent) {
+    // IE
+    element.attachEvent('on' + eventName, fn);
+  }
+}
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function start() {
+  listen(window, 'scroll', function(e){dump(e, 'scroll')}, false);
+}
+
+function dump(e, msg) {
+  log('s ');
+}
+
+</script>
+</head>
+<body onload="start()">
+<div style="position:fixed; top:10px; left:10px">FIXED</div>
+<div style="border:1px dashed red; width:2000px">
+scroller
+</div>
+<div id="log"></div>
+</body>
+</html>

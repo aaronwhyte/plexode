@@ -1,0 +1,134 @@
+This is a journal of concrete short-range goals.
+
+1/18/2010
+Boulders: Add massy, pushable boulders to the level. 
+v Add sledge IDs to sprites
+v Add spriteId and sprite CRUD: addSprite, getSprite, updateSpriteSledge, removeSprite
+v Add sledgeId->spriteId tracking, for collision->response.
+
+rethink...
+v Take sledgeId out of Sprite,
+v put whole sledge into sprite
+
+v Add Closure jscomp support.
+
+v Add collision response function for 2 solid masses.
+v Add massy boulder sprites.
+v Give player sprite some mass.
+
+2/22/2010 - 4/10/2030
+Shotgun: Shotgun for the player, with spread of infinite-speed bullets.
+v Move sprite logic to sprite classes: player, boulder.
+v Add bullet sprite type.
+v Make Sprite.render() method.
+v Add game services like
+  v getNow,
+  v addSpriteTimeout
+  v addSprite, 
+  v removeSprite
+v SpriteTimeouts - make 'em work
+v Add player firing action and reload time.
+v Lets make bullets!
+  v create bullets at plr center, and send them in the right direction
+  v remove bullets in ~5 ticks
+
+4/10/2010 - 4/11/2010
+Reorg: Separate Fracas2, Phy, and Rend into independent classes.
+v Fracas2 uses Phy
+v Fracas2 uses Rend
+
+4/11/2010 - 4/11/2010
+v Rock Solid: Fix interpenetration
+
+4/13/2010 - 4/17/2010
+Wham: Building a better bullet.
+v Move collision response logic out of Phy and into Wham.
+v Make bullets die on impact, but they still push boulders.
+v Fix collision groups so bullets don't hit themselves.
+v Add perpendicular-dimension collision momentum transfer.
+
+4/17/2010 BONUS: Use Closure compiler to find bugs.
+
+4/18/2010 - 4/19/2010
+Follower: Sense particles for NPCs.  Thrust to get within certain dist of player
+v groups: player-sensor and mass-sensor
+v FollowerSprite - wanders in roughly straight lines.
+v SenseSprite - signals creator with collision info.
+v Scan short-range spread in travel direction for walls and boulders, and thrust away.
+v Scan at player and thrust towards it.
+
+4/20/2010 - 4/20/2010
+v Metric: put a little FPS display on the page.
+
+4/20/2010 - 4/22/2010
+v Everybody in the Pool: Use pools to eliminate allocation of new sprite, sledge, spritetimeout, hit, and gridhit objects.
+
+5/1/2010 - 6/6/2010
+Sektor: Sectorize the sledge-collider to scale past 10s of objects, up to 100s of objects.
+v Write SkipQueue.
+v Obsolete TimeList.
+v Sectorize new sledge positions.
+v cache collision results for sledges
+v When adding a sledge to a cell (by add or motion), calc collisions.
+v Be able to calculate next cell entry time.
+v Create CellEntryEvent object for cellEntries to hold.
+v Put next cell entry time into skipqueue, on add and on cell entry.
+v Process entries in order with hits in getNextHitBeforeTime.
+v Insert *next* entry into cellEntries when consuming a cellEntry.
+x Put next cell exit times into sledge
+
+7/4/2010 - 7/4/2010
+One Collider: Only collide using CellCollider.
+v WallSprite
+v Support infinite mass.
+v Use CellCollider for maze.
+v Obsolete Multicollider.  Move sledge ID management to CellCollider.
+v Obsolete GridCollider, GridHit, Grid, Multicollider.
+
+7/5/2010 - 7/7/2010
+Scanner: Add a phy.scan(x0, y1, x1, y1, rx, ry, group) API for sprites,
+  instead of using sensorsprites w timeouts and callbacks.
+v Add it to CellCollider.
+v Add it to Phy, for sprites.
+v Use it in Follower.
+v Finish cell traversal code in CellCollider.
+
+7/10/2010 - 7/11/2010
+v Debug: Add world marks of a certain duration, and debug rayScan.
+
+F2 launch plan:
+Graphics:
+- Player
+- Gnomes - images?
+- smoke
+- generators
+- Backgrounds?
+- walls
+- powerups
+- effects
+Levels:
+- in-mem
+- deserializer
+- serializer
+- insta-level w url magic
+- drag-n-drop editor?  bah.
+- maybe more but probably not.
+- 
+Gameplay:
+- smoke bombs
+- collectible: gold, bombs, health
+- death
+
+Bucket o' Goals:
+Sketchable: Put multiple demos on the same page.  Forces cleanup of globals.
+- plex.eventbuffer
+- plex.keystate?
+- pause and play
+Health: Give player and enemies health attribs and "dead" state.
+Food: Food for player and enemies.  Enemies steer towards food when low on health?
+WebLevel: Load mazes from URLs.
+Streak: Make bullets leave trails.
+Puff: Make collisions leave little 'splosions. 
+Wiggle: Make basic player and monster animations.
+Sound: pow, thump, whir, etc.
+Force & impact damage system?

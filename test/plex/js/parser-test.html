@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>plex.js.parser test</title>
+<script src="../../../jsunit/app/jsUnitCore.js"></script>
+<script src="../../../js/plex/js/token.js"></script>
+<script src="../../../js/plex/js/parser.js"></script>
+</head>
+<body>
+<script>
+
+function TokenList() {
+  this.tokens = [];
+  this.str = '';
+}
+
+TokenList.prototype.add = function(type, newStr) {
+  var start = this.str.length;
+  var end = start + newStr.length;
+  var token = new plex.js.Token(type, start, end);
+  this.tokens.push(token);
+  this.str += newStr;
+};
+
+TokenList.prototype.test = function() {
+  var actuals =  plex.js.parser.tokenize(this.str);
+  var expecteds = this.tokens;
+  assertEquals(expecteds.length, actuals.length);
+  for (var i = 0; i < actuals.length; ++i) {
+    var actual = actuals[i];
+    var expected = expecteds[i];
+    debug('actual token: ' + actual.type + ' {' +
+          this.str.substring(actual.start, actual.end) + '}');
+    assertEquals(expected.toString(), actual.toString());
+  }
+};
+
+function checkTokenization(data) {
+  var tokenList = new TokenList();
+  for (var i = 0; i < data.length; i += 2) {
+    var type = data[i];
+    var str = data[i + 1];
+    debug('expected token: ' + type + ' {' + str + '}');
+    tokenList.add(type, str);
+  }
+  tokenList.test();
+}
+
+function testTokenize() {
+  var T = plex.js.token.TYPE;
+  checkTokenization([
+    T.DQSTR, '"abc"',
+    T.ID, 'def',
+    T.SQSTR, "'ghi'"
+  ]);
+  checkTokenization([
+    T.ID, 'aAzZ',
+    T.WHITE, '\n',
+    T.ID, '$',
+    T.LSQUAREB, '[',
+    T.SQSTR, "'hello, // /**/ \\'world\\'!'",
+    T.OTHER, '+',
+    T.DQSTR, '"aaron \\"NOD\\" whyte"',
+    T.RSQUAREB, ']',
+    T.DOT, '.',
+    T.ID, 'THIS_THAT'
+  ]);
+  checkTokenization([
+    T.CMT, '/* // /* * / la la\nla la */',
+    T.CMT, '// la /*la*/ // la',
+    T.WHITE, '\n',
+    T.NUM, '123',
+    T.CMT, '// 1230/10'
+  ]);
+}
+
+</script>
+</body>
+</html>

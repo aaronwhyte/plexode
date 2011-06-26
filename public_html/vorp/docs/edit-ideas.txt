@@ -1,0 +1,105 @@
+I really need a level editor.  Workflows:
+
+Level Doodling:
+Draw a basic level.
+Play it.  See how the elements combine.  Feel what's fun.
+
+Edit/play cycle should be blurred into one seamless experience.
+Edit walls and things in real-time as the game plays, so areas can be fine-tuned.
+Immovable/timeless objects are easiest.  Edits are immedate and permanent.
+
+Movable objects and editable bits have initial state and downstream state.  Each is
+a layer in the experience but initial state is most critical since that's what gets
+saved.
+
+Done-ish levels need to be editable for tweaking and stuff.
+
+loader
+saver
+reversible operations clustered into intentions.  Idea of an "undo cursor",
+but even undo is really
+- create reverse of op at undo cursor
+- apply reverse-op 
+- more undo cursor back one more
+
+Editor session should be its own data, including levels open, references, and clips.
+Use mouse and modifier keys to include/exclude stuff from current selection.
+Ctrl-x|c cut/copy to new clip and push that onto the clip list.
+Click a clip icon to move it to the head of the list.
+
+Bare minimum for usfulness is a lot of stuff.  Minimize.
+- Rejigger level logic to be expressable as data?  Or allow JS code?
+- Zoomable UI
+- minimap?
+- hilight with mouse
+- selection add/remove/clear
+- clipboard, 
+- control points for walls?
+- joins
+
+======================================================================================
+2011.06.05 New Ideas
+
+Ved file + translator function code generates a level.
+Ved file is optimized for editability by Ved a program, but is ignorant of the UI.
+
+A Ved file is a list of parts and list of links.
+Parts and their geometric properties:
+- wall - has start and end points, constrained to same x or same y.
+- field - has 4 axis-aligned edges definable by 2 points.
+- portal - two points.  Delete or create together, but move independently.
+- block, exit timer, toggle, and-gate - single points.
+- button, grip, assembler - single points.  Sprite will cleave to nearest wall and face out.
+- door, zapper, sensor - single points.  Sprite will cleave to nearest wall and extend to facing wall.
+- heavy tractor, zom-b-gone, and plasma fountains all have one or more directions and/or targets,
+  definable by points.
+Some parts refer to other ones by logic links.  All sensors, logic, and effectors are like this.
+Example logic flow: beamsensor --> (timer reset, timer running) --> open door
+
+Some parts may refer to other points...
+I want to have a robot that wanders between waypoints,
+picks up stuff, and drops it at dropoff points.
+The waypoints for this bot are one set of points.
+The dropoffs are another set.
+Multiple robots could use the same set of points,
+so maybe the points shouldn't belong to the robot...
+But lots of parts have extra points, angles, jacks, etc,
+so giving a robot some points seems uniform-ish,
+and simpler for simple cases.
+
+
+The main mouse interaction things are control points which can be..
+- hovered over
+- deleted (hit "delete" when hovering)
+  - delete a prefab
+  - delete a logic link
+  - delete a waypoint or some such
+- mouse-downed, switching to grip mode sometimes
+- dragged when in grip node
+- mouse-down can also lead to creation of a new point, in grip mode
+- mouse-down can ALSO lead to logic-link-grip
+- logic-link-grip drag to another part's logic thing of opposite direction creates a logic link.
+
+Part
+required:
+- ID
+- type
+based on type...
+one or more control points with various constraints and natures
+- A wall has 2 endpoints that are forced to be on same axis,
+  and maybe a middle point just for repositioning.
+  A wall can agree to rotate itself if an endpoint is dragged past 45 degrees off.
+- A portal has two peer points, independently positioned but deleting one deletes the other.
+- Wall-huggers have one point for positioning.
+- Logical parts have jackgroups with deletable jacks and a creation/destination jack
+- Some parts have aim points which become directions.
+  No need to constrain these to a circle really.
+- Some have targets, like heavy lifters.
+- Some robots have multiple point groups like waypoints and dropoff points.
+- Timers can even use control points to dictate timer length.  Wee, abuse the system! 
+
+Parts have painters.  They do NOT show the resulting sprites.  Just an AR overlay of data.
+The under-layer *is* the resulting sprites and their painters... but not a full Vorp.
+
+Selection
+

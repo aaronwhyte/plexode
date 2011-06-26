@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>DOM perf tests</title>
+<style>
+button {
+  border:1px solid silver;
+  padding:2px;
+  margin:2px;
+}
+</style>
+<script>
+function now() {
+  return (new Date()).getTime();
+}
+
+function log(html) {
+  document.getElementById('log').innerHTML += html + '<br>';
+}
+
+function testNothing() {
+  var s = now();
+  var t = now() - s;
+  log('Doing nothing took ' + t + ' ms.');
+}
+
+function testEmptyLoop() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+  }
+  var t = now() - s;
+  log('An empty 10000-step for-loop took ' + t + ' ms.');
+}
+
+function testGetElementById() {
+  var s = now();
+  for (var i = 0; i < 10000; i++) {
+    var x = document.getElementById('log');
+  }
+  var t = now() - s;
+  log('getElementById 10000 times took ' + t + ' ms.');
+}
+
+function testEmptyInnerHtml() {
+  var d = document.getElementById('d');
+  var s = now();
+  for (var i = 0; i < 1000; i++) {
+    d.innerHTML = '';
+  }
+  var t = now() - s;
+  log('innerHTML="" 1000 times took ' + t + ' ms.');
+}
+
+function testTinyInnerHtml() {
+  var d = document.getElementById('d');
+  var s = now();
+  for (var i = 0; i < 1000; i++) {
+    d.innerHTML = i;
+  }
+  var t = now() - s;
+  d.innerHTML = '';
+  log('innerHTML=i 1000 times took ' + t + ' ms.');
+}
+
+var gs, gd, gn;
+
+function zeroTimeout() {
+  if (gn <= 0) {
+    var t = now() - gs;
+    log('100 chained zero-timeouts took ' + t + ' ms.');
+    return;
+  }
+  gn--;
+  setTimeout(zeroTimeout, 0);
+}
+
+function testZeroTimeout() {
+  gd = document.getElementById('d');
+  gs = now();
+  gn = 100;
+  zeroTimeout();
+}
+
+
+function tenMsTimeout() {
+  if (gn <= 0) {
+    var t = now() - gs;
+    log('100 chained 10ms-timeouts took ' + t + ' ms.');
+    return;
+  }
+  gn--;
+  setTimeout(tenMsTimeout, 10);
+}
+
+function testTenMsTimeout() {
+  gd = document.getElementById('d');
+  gs = now();
+  gn = 100;
+  tenMsTimeout();
+}
+
+
+function hundredMsTimeout() {
+  if (gn <= 0) {
+    var t = now() - gs;
+    log('100 chained 100ms-timeouts took ' + t + ' ms.');
+    return;
+  }
+  gn--;
+  setTimeout(hundredMsTimeout, 100);
+}
+
+function testHundredMsTimeout() {
+  gd = document.getElementById('d');
+  gs = now();
+  gn = 100;
+  hundredMsTimeout();
+}
+
+
+</script>
+</head><body>
+<button onclick="testNothing()">nothing</button>
+<button onclick="testEmptyLoop()">empty loop</button>
+<button onclick="testGetElementById()">getElementById</button>
+<button onclick="testEmptyInnerHtml()">empty innerHTML</button>
+<button onclick="testTinyInnerHtml()">tiny innerHTML</button>
+<button onclick="testZeroTimeout()">zero timeout</button>
+<button onclick="testTenMsTimeout()">10ms timeout</button>
+<button onclick="testHundredMsTimeout()">100ms timeout</button>
+<div id="d"></div>
+<div id="log"></div>
+</body></html>
