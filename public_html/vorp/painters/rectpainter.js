@@ -23,7 +23,7 @@ RectPainter.prototype.setColor = function(color) {
 RectPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_MASSES) {
     renderer.setFillStyle(this.color);
-    e = this.events.getFromHead(0);
+    var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }

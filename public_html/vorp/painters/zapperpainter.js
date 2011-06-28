@@ -17,7 +17,7 @@ ZapperPainter.prototype.setActive = function(active) {
 ZapperPainter.prototype.paint = function(renderer, layer) {
   if (!this.active) return; 
   if (layer == Vorp.LAYER_SPARKS) {
-    e = this.events.getFromHead(0);
+    var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.setFillStyle("rgba(255, 0, 0, " + (Math.random() * 0.15 + 0.4) + ")");
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);

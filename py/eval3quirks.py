@@ -3,18 +3,18 @@
 import format
 
 name = 'eval3quirks'
-print format.headStartQuirks(name)
+print format.headStartQuirks(name, 1)
 print """
-<script src="/js/plex/dom.js"></script>
-<script src="/js/plex/event.js"></script>
-<script src="/js/plex/func.js"></script>
-<script src="/js/plex/object.js"></script>
-<script src="/js/plex/pubsub.js"></script>
-<script src="/js/plex/string.js"></script>
-<script src="/js/plex/url.js"></script>
-<script src="/js/plex/wij/tachanges.js"></script>
+<script src="../js/plex/dom.js"></script>
+<script src="../js/plex/event.js"></script>
+<script src="../js/plex/func.js"></script>
+<script src="../js/plex/object.js"></script>
+<script src="../js/plex/pubsub.js"></script>
+<script src="../js/plex/string.js"></script>
+<script src="../js/plex/url.js"></script>
+<script src="../js/plex/wij/tachanges.js"></script>
 
-<script src="/js/eval3.js"></script>
+<script src="../js/eval3.js"></script>
 <style>
 #log {
   height:100em;

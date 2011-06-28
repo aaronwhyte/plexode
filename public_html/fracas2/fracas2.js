@@ -56,8 +56,6 @@ Fracas2.CELL_SIZE = 100;
 
 
 Fracas2.prototype.initSprites = function() {
-  var sprite;
-
   // Walls
   var thickness = 4;
   this.addWall(0, 0, Fracas2.LEVEL_WIDTH, thickness);

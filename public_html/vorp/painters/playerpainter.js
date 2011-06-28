@@ -78,7 +78,7 @@ PlayerPainter.prototype.paint = function(renderer, layer) {
     }
   } else if (layer == Vorp.LAYER_MASSES && !this.dying && !this.events.isEmpty()) {
     renderer.setFillStyle('rgb(255, 68, 221)');
-    e = this.events.getFromHead(0);
+    var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }

@@ -86,7 +86,7 @@ PortalSprite.prototype.onSpriteHit = function(hitSprite, thisAcc, hitAcc, xTime,
     hitSprite.setVelXY(this.targetSprite.vx + dvx * 1.0, this.targetSprite.vy + dvy * 1.0);
     return true;
   } else {
-    var c = 0.1;
+//    var c = 0.1;
     //this.targetSprite.addVelXY(-c * thisAcc.x, -c * thisAcc.y);
 ////    this.addVelXY(-0.1 * this.vx, -0.1 * this.vy);
 //    this.addVelXY(c * thisAcc.x, c * thisAcc.y);

@@ -67,7 +67,6 @@ plex.js.props.formatChain = function(globalName, chain) {
   var result = [];
   for (var i = 0; i < chain.length; ++i) {
     var name = chain[i];
-    var str;
     if (plex.js.parser.isId(name)) {
       // Use dot notation for names like identifiers.
       result.push((i ? '.' : '') + name);
@@ -113,7 +112,7 @@ plex.js.props.getPropertyChain = function(jsText, tokens) {
   var leftTok = null;
   var endsWithDot = false;
   for (var i = tokens.length - 1; i >= 0; --i) {
-    var leftTok = tokens[i];
+    leftTok = tokens[i];
     if (rightGoodTok == null) {
       // look for a dot with optional comments/whitespace, or an ID
       switch (leftTok.type) {

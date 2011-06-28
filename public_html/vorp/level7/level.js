@@ -51,11 +51,11 @@ function room1(b) {
       5, 2).wall();
   var d1 = b.mark(4, 1, 4, 2).door(true);
   var d2 = b.mark(4.2, 1, 4.2, 2).door(true);
-  var b1 = b.mark(4, 0.8).dir(Prefab.LEFT).button(
+  b.mark(4, 0.8).dir(Prefab.LEFT).button(
       function() {
         d1.setClosed(!d1.closed);
       });
-  var b2 = b.mark(4, 2.2).dir(Prefab.LEFT).button(
+  b.mark(4, 2.2).dir(Prefab.LEFT).button(
       function() {
         d2.setClosed(!d2.closed);
       });
@@ -80,11 +80,11 @@ function room2(b) {
       6, 2).wall();
   var d1 = b.mark(4, 1, 4, 2).door(true);
   var d2 = b.mark(4.2, 1, 4.2, 2).door(true);
-  var b1 = b.mark(4, 0.8).dir(Prefab.LEFT).button(
+  b.mark(4, 0.8).dir(Prefab.LEFT).button(
       function() {
         d1.setClosed(!d1.closed);
       });
-  var b2 = b.mark(4, 2.2).dir(Prefab.LEFT).button(
+  b.mark(4, 2.2).dir(Prefab.LEFT).button(
       function() {
         d2.setClosed(!d2.closed);
       });

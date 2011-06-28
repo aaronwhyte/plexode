@@ -167,8 +167,6 @@ function outlinedNode(topNode, rowNum, maxDepth) {
  * Skips empty text nodes.
  */
 function outline(topNode, maxDepth) {
-  var returnNode = null;
-
   function getRowText(depth, node) {
     var text = rows.length + ') ';
     for (var i = 1; i < depth; ++i) {

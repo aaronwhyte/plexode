@@ -24,6 +24,7 @@ var levelToMap = {
 };
 
 var levels = [];
+var level;
 var mapHeight, mapWidth;
 
 var MOVECOOL = 4;
@@ -242,7 +243,6 @@ function Fracas(fracasDivID, log) {
     
     opPos.set(pPos);
     if (pDir.x==0 && pDir.y==0) return;
-    var pos2=0;
     if (!move(pDir.x, pDir.y)) {
       move(pDir.x, 0);
       move(0, pDir.y);
@@ -327,7 +327,7 @@ function Fracas(fracasDivID, log) {
       return false;
     }
     
-    var x0, x1, y0, y1, push;
+    var x0, x1, y0, y1;
     var h, v;
     var moved=[];
     var bulletFound=false;
@@ -408,7 +408,7 @@ function Fracas(fracasDivID, log) {
       setMap(bPos.x, bPos.y, FLOOR);
     }
   }
-  
+
   function startLevel() {
     level = levels[levelNum];
     initMap();
@@ -450,7 +450,6 @@ function Fracas(fracasDivID, log) {
   // main
   /////////
   var rend = new FracRend(fracasDivID, log);
-  var levelNum = 0;
   initStats();
   document.onkeydown = keyDown;
   document.onkeypressed = keyDown;

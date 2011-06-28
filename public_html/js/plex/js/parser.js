@@ -91,6 +91,7 @@ plex.js.parser.tokenize = function(str) {
   var start = 0;
   var pos = -1;
   var state = S.OTHER;
+  var c, eoln;
   
   while (advance()) {
     var newState = 0;

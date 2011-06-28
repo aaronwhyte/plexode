@@ -114,7 +114,7 @@ plex.wij.JsAc.prototype.getQueryHandler = function() {
         this.prefix = completions.prefix;
         var matches = completions.matches;
         this.items.length = 0;
-        for (name in matches) {
+        for (var name in matches) {
           // push items like {name:name, value:value}
           this.items.push({name:name, value:matches[name]});
         }

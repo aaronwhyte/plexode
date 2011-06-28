@@ -3,7 +3,7 @@
 import format
 
 name = 'vorp'
-print format.headStart(name)
+print format.headStart(name, 1)
 
 print """
 <link rel="stylesheet" type="text/css" href="./vorp.css">

@@ -10,7 +10,7 @@ function SkipQueue(expectedLength) {
   this.next = [];
   this.size = 0;  
   this.prevs = [];
-};
+}
 
 SkipQueue.BASE = 2;
 SkipQueue.LEVEL_UP_ODDS = 1 / SkipQueue.BASE;

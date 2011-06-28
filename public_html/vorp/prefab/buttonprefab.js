@@ -11,7 +11,6 @@ function ButtonPrefab(x, y, facing, onClick) {
 ButtonPrefab.prototype.createSprites = function(vorp) {
   var thickness = 0.3;
   var width = 0.9;
-  var r = Prefab.BOX_RADIUS * (1 + thickness / 2);
   var a = new ButtonSprite(vorp.phy, new ButtonPainter(),
       this.x + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.x,
       this.y + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.y,

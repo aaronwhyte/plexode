@@ -9,7 +9,7 @@ window['main'] = function() {
   b.mark(6, 3).exit('../level5/index.html');
   
   var door = b.mark(3.5, 0).markY(2).door(true);
-  var sensor = b.mark(2.5, 0).markY(2).beamSensor(function(beamBroken) {
+  b.mark(2.5, 0).markY(2).beamSensor(function(beamBroken) {
     if (beamBroken) {
       door.setClosed(false);
       timer.stop();

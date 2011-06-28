@@ -257,7 +257,8 @@ CellCollider.prototype.getNextCollisionBeforeTime = function(beforeTime) {
     if (entry.xTime) {
       CellEntryEvent.free(this.cellEntries.removeFirst());
       // add to a column of cells
-      var x = sledge.frontCellIndexX += sledge.dirX;
+      sledge.frontCellIndexX += sledge.dirX;
+      var x = sledge.frontCellIndexX;
       var y0 = this.getCellIndexY(sledge.py - sledge.ry - CellCollider.PAD);
       var y1 = this.getCellIndexY(sledge.py + sledge.ry + CellCollider.PAD);
       this.addSledgeToCells(sledge, sledgeId, x, y0, x, y1);
@@ -269,7 +270,8 @@ CellCollider.prototype.getNextCollisionBeforeTime = function(beforeTime) {
     } else if (entry.yTime) {
       CellEntryEvent.free(this.cellEntries.removeFirst());
       // add to a row of cells
-      var y = sledge.frontCellIndexY += sledge.dirY;
+      sledge.frontCellIndexY += sledge.dirY;
+      var y = sledge.frontCellIndexY;
       var x0 = this.getCellIndexX(sledge.px - sledge.rx - CellCollider.PAD);
       var x1 = this.getCellIndexX(sledge.px + sledge.rx + CellCollider.PAD);
       this.addSledgeToCells(sledge, sledgeId, x0, y, x1, y);

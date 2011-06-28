@@ -8,19 +8,20 @@ links = [
   ("vorp", "/vorp/"),
 ]
 
+def headStart(name, depth):
+    toTop = '../' * depth
+    return ''.join(['''<!DOCTYPE HTML>
+<html><head><title>plexode:''', name, '''</title>
+<link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode2.css">
+<script src="''', toTop, '''js/util.js"></script>
+'''])
 
-def headStart(name):
-    return ''.join(["""<!DOCTYPE HTML>
-<html><head><title>plexode:""", name, """</title>
-<link rel="stylesheet" type="text/css" href="/css/plexode2.css">
-<script src="/js/util.js"></script>
-"""])
-
-def headStartQuirks(name):
-    return ''.join(["""<html><head><title>plexode:""", name, """</title>
-<link rel="stylesheet" type="text/css" href="/css/plexode2.css">
-<script src="/js/util.js"></script>
-"""])
+def headStartQuirks(name, depth):
+    toTop = '../' * depth
+    return ''.join(['''<html><head><title>plexode:''', name, '''</title>
+<link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode2.css">
+<script src="''', toTop, '''js/util.js"></script>
+'''])
 
 def plexScripts():
     html = []

@@ -3,10 +3,10 @@
 import format
 
 name = 'eval2'
-print format.headStart(name)
+print format.headStart(name, 1)
 print format.plexScripts()
 print """
-<script src="/js/eval2.js"></script>
+<script src="../js/eval2.js"></script>
 <style>
 #log {
   height:100em;

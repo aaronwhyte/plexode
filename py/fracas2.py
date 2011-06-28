@@ -3,7 +3,7 @@
 import format
 
 name = 'fracas2'
-print format.headStart(name)
+print format.headStart(name, 1)
 
 print """
 <script src="../js/util.js"></script>

@@ -62,23 +62,6 @@ Sledge.prototype.moveToTime = function(t) {
   }
 };
 
-/**
- * Mutates the sledge by moving it to time t on its original trajectory,
- * and then changing the trajectory so it is anchored at that new position.
- * In other words, turn a corner.
- * Use:
- * 1) Invalidate all references to the "immutable" sledge.
- * 2) Call this.
- * 3) Set new velocity on this sledge.
- * 4) Re-use it as an immutable!
- */
-Sledge.prototype.resetToTime = function(t) {
-  this.moveToTime(t);
-  this.ot = t;
-  this.opx = this.px;
-  this.opy = this.py;
-  this.resetCellCache();
-};
 
 Sledge.prototype.resetVelocity = function(vx, vy) {
   this.vx = vx;

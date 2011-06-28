@@ -51,7 +51,7 @@ FollowerSprite.prototype.act = function(frac) {
   if (rayScan.hitSledgeId) {
     this.wallThrust.set(this.workVec);
     //this.wallThrust.rot90Right();
-    this.wallThrust.scaleToLength(1 * (rayScan.time - 1));
+    this.wallThrust.scaleToLength(rayScan.time - 1);
     this.wallFoundTime = now;
   }
   RayScan.free(rayScan);

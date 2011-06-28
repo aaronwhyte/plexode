@@ -10,7 +10,7 @@ Vec2d.poolSize = 0;
 function Vec2d(x, y) {
   this.x = x || 0;
   this.y = y || 0;
-};
+}
 
 Vec2d.prototype.reset = function(x, y) {
   this.x = x || 0;

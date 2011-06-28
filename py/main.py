@@ -3,13 +3,15 @@
 import format
 
 name = 'main'
-print format.headStart(name)
+print format.headStart(name, 0)
 print '</head><body>'
 print format.navDiv(name)
 print format.mainDiv("""
 <p>
-<i>2011-05-27</i><br>
-Upgraded <a href="/vorp">Vorp</a> graphics and handling a bit.
+<i>2011-06-27</i><br>
+Upgraded <a href="/vorp">Vorp</a> graphics and handling a bit.<br>
+Now plexode's source is on github, at
+<a href="https://github.com/aaronwhyte/plexode">https://github.com/aaronwhyte/plexode</a>.
 <p>
 <i>2011-01-23</i><br>
 Added a new game, <a href="/vorp">Vorp</a>, to the nav bar.

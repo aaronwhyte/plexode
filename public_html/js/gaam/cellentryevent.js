@@ -3,7 +3,7 @@
  */
 function CellEntryEvent(xTime, yTime, sledgeId) {
   this.reset(xTime, yTime, sledgeId);
-};
+}
 
 CellEntryEvent.prototype.reset = function(xTime, yTime, sledgeId) {
   // Set xTime if hitting from the left or right,

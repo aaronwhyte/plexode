@@ -2,15 +2,10 @@ function FracRend(fracasDivID, log) {
   /////////////////
   // private vars
   /////////////////
-  var sLeft = 0;
-  var sTop = 0;
-  
   var score = 0;
   var health = 0;
   
   var mapTable; // in the HTML sense
-  
-  var particles = [];
   
   var tileWidth, tileHeight;
   
@@ -146,14 +141,21 @@ function FracRend(fracasDivID, log) {
 // public functions
 /////////////////////
 
+function randSgn() {
+  var r = Math.random() * 3;
+  if (r < 1) return -1;
+  if (r < 2) return 0;
+  return 1;
+};
+
 FracRend.prototype.clock = function() {
   if (this.pain>0) {
   this.pain--;
   this.setMap(pPos.x, pPos.y, PLAYER);
   var pstyle = this.getCell(pPos.x, pPos.y).firstChild.style;
   pstyle.position='relative';
-  pstyle.left=this.pain * Math.randSgn();
-  pstyle.top=this.pain * Math.randSgn();    
+  pstyle.left=this.pain * randSgn();
+  pstyle.top=this.pain * randSgn();
   }
   this.camera();
 };

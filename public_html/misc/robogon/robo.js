@@ -44,7 +44,7 @@ Robo.prototype.draw = function(c) {
   c.moveTo(this.pos.x, this.pos.y);
   c.lineTo(this.closestRobo.pos.x, this.closestRobo.pos.y);
   c.stroke();
-  var r = 0.01;
+//  var r = 0.01;
 //  c.fillRect(
 //      this.pos.x - r, this.pos.y - r,
 //      r*2, r*2);

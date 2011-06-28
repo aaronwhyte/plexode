@@ -3,19 +3,19 @@
 import format
 
 name = 'fracas'
-print format.headStart(name)
+print format.headStart(name, 1)
 
 print """
-<link rel="stylesheet" type="text/css" href="/fracas/fracas.css">
-<script src="/js/vec2d.js"></script>
-<script src="/fracas/FracRend.js"></script>
-<script src="/fracas/Fracas.js"></script>
-<script src="/fracas/levels/level0.js"></script>
-<script src="/fracas/levels/level1.js"></script>
-<script src="/fracas/levels/level2.js"></script>
-<script src="/fracas/levels/level3.js"></script>
-<script src="/fracas/levels/level4.js"></script>
-<script src="/fracas/levels/level5.js"></script>
+<link rel="stylesheet" type="text/css" href="./fracas.css">
+<script src="../js/vec2d.js"></script>
+<script src="./FracRend.js"></script>
+<script src="./Fracas.js"></script>
+<script src="./levels/level0.js"></script>
+<script src="./levels/level1.js"></script>
+<script src="./levels/level2.js"></script>
+<script src="./levels/level3.js"></script>
+<script src="./levels/level4.js"></script>
+<script src="./levels/level5.js"></script>
 <script>
 function onloadHandler() {
   var frac = new Fracas('fracas');

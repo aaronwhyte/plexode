@@ -36,6 +36,5 @@ BeamSensorPrefab.prototype.createSprites = function(vorp) {
   }
   beamer.setTargetSprite(sensor);
   beamer.setOnChange(this.onChange);
-  this.beamer = beamer;
   return [beamer, sensor];
 };

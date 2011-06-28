@@ -1,29 +1,25 @@
 /**
- * Basic painter for colored rectangles.
- * @param {string} color
  * @constructor
  * @extends {Painter}
  */
-function DeadPlayerPainter(color) {
+function PlayerAssemblerPainter() {
   Painter.call(this, 1);
-  this.color = color;
   this.kaput = false;
   this.sparks = this.createSparkList();
-  
-  this.sparked = false;
-  this.sparkTemplate = DeadPlayerPainter.SPARK_ALLOC();
+
+  this.sparkTemplate = PlayerAssemblerPainter.SPARK_ALLOC();
 }
 
-DeadPlayerPainter.prototype = new Painter();
-DeadPlayerPainter.prototype.constructor = DeadPlayerPainter;
+PlayerAssemblerPainter.prototype = new Painter();
+PlayerAssemblerPainter.prototype.constructor = PlayerAssemblerPainter;
 
-DeadPlayerPainter.sparkPos = new Vec2d();
+PlayerAssemblerPainter.sparkPos = new Vec2d();
 
 ///////////////////////////////////////
 // sparklist implementation functions
 ///////////////////////////////////////
 
-DeadPlayerPainter.SPARK_ALLOC = function() {
+PlayerAssemblerPainter.SPARK_ALLOC = function() {
   return {
     startTime: 0,
     endTime: 0,
@@ -32,23 +28,23 @@ DeadPlayerPainter.SPARK_ALLOC = function() {
   };
 };
 
-DeadPlayerPainter.SPARK_COPY = function(src, dest) {
+PlayerAssemblerPainter.SPARK_COPY = function(src, dest) {
   dest.startTime = src.startTime;
   dest.endTime = src.endTime;
   dest.pos.set(src.pos);
   dest.vel.set(src.vel);
 };
 
-DeadPlayerPainter.SPARK_ISKAPUT = function(spark, now) {
+PlayerAssemblerPainter.SPARK_ISKAPUT = function(spark, now) {
   return spark.endTime <= now;
 };
 
-DeadPlayerPainter.SPARK_ADVANCESPARK = function(spark, now) {
+PlayerAssemblerPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.vel.scale(0.95);
   spark.pos.add(spark.vel);
 };
 
-DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
+PlayerAssemblerPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
   renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
@@ -62,29 +58,29 @@ DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
 // methods
 ////////////
 
-DeadPlayerPainter.prototype.advance = function(now) {
+PlayerAssemblerPainter.prototype.advance = function(now) {
   Painter.prototype.advance.call(this, now);
   this.sparks.advance(now);
 };
 
-DeadPlayerPainter.prototype.createSparkList = function() {
+PlayerAssemblerPainter.prototype.createSparkList = function() {
   var s = new SparkList();
-  s.alloc = DeadPlayerPainter.SPARK_ALLOC;
-  s.copy = DeadPlayerPainter.SPARK_COPY;
-  s.isKaput = DeadPlayerPainter.SPARK_ISKAPUT;
-  s.advanceSpark = DeadPlayerPainter.SPARK_ADVANCESPARK;
-  s.paint = DeadPlayerPainter.SPARK_PAINT;
+  s.alloc = PlayerAssemblerPainter.SPARK_ALLOC;
+  s.copy = PlayerAssemblerPainter.SPARK_COPY;
+  s.isKaput = PlayerAssemblerPainter.SPARK_ISKAPUT;
+  s.advanceSpark = PlayerAssemblerPainter.SPARK_ADVANCESPARK;
+  s.paint = PlayerAssemblerPainter.SPARK_PAINT;
   return s;
 };
 
 /**
  * @param {string} color
  */
-DeadPlayerPainter.prototype.setColor = function(color) {
+PlayerAssemblerPainter.prototype.setColor = function(color) {
   this.color = color;
 };
 
-DeadPlayerPainter.prototype.paint = function(renderer, layer) {
+PlayerAssemblerPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_SUPERSPARKS) {
     // rectangle
     renderer.setFillStyle(this.color);
@@ -101,7 +97,7 @@ DeadPlayerPainter.prototype.paint = function(renderer, layer) {
   }
 };
 
-DeadPlayerPainter.prototype.createSparks = function(px, py, rx, ry, now) {
+PlayerAssemblerPainter.prototype.createSparks = function(px, py, rx, ry, now) {
   // Iterate over a grid within the player's footprint.
   for (var a = 0; a < 2 * Math.PI; a += Math.random() * 2 * Math.PI / 10) {
     this.sparkTemplate.startTime = now;
@@ -121,6 +117,6 @@ DeadPlayerPainter.prototype.createSparks = function(px, py, rx, ry, now) {
   }
 };
 
-DeadPlayerPainter.prototype.isKaput = function() {
+PlayerAssemblerPainter.prototype.isKaput = function() {
   return this.sparked && this.sparks.isEmpty();
 };

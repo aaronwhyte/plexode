@@ -49,7 +49,7 @@ GripPainter.prototype.paint = function(renderer, layer) {
     this.tractorBeamPainter.paint(renderer, layer);
   } else if (layer == Vorp.LAYER_MASSES) {
     renderer.setFillStyle(this.isHolding ? '#9f9' : '#7a7');
-    e = this.events.getFromHead(0);
+    var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }

@@ -26,7 +26,7 @@ PaintEvent.Type = {
   /**
    * Change in trajectory or size.  Basically records sledge creation. 
    */
-  PATH: 2,
+  PATH: 2
 };
 
 /**

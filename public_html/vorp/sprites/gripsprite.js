@@ -81,7 +81,6 @@ GripSprite.prototype.gripScanSweep = function(vec, arc, scans) {
         this.painter.clearRayScans();
         // Pick the closest target.
         minTime = rayScan.time;
-        var hitSledgeId = rayScan.hitSledgeId;
       }
     }
     if (!this.heldSprite) {

@@ -68,7 +68,7 @@ Vorp.LAYERS = [
 
 Vorp.start = function(levelBuilder, canvas, flagsDiv) {
   var renderer = new Renderer(canvas);
-  FLAGS = new Flags(flagsDiv);
+  window.FLAGS = new Flags(flagsDiv);
   var now = 1;
   var brect = levelBuilder.getBoundingRect();
   var width = brect.x1 - brect.x0;
@@ -96,7 +96,7 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv) {
       vorp.playerAssembler = sprites[0];
       vorp.assemblePlayer();
     }
-  };
+  }
   GU_start(function(){vorp.clock();}, Vorp.FPS);
 }
 
@@ -228,7 +228,6 @@ Vorp.prototype.draw = function() {
 };
 
 Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos) {
-  var now = this.getNow();
   this.renderer.transformStart();
 
   if (opt_portalClipPos) {

@@ -3,7 +3,7 @@
  */
 function Hit(xTime, yTime, overlapping, sledgeId1, sledgeId2) {
   this.reset(xTime, yTime, overlapping, sledgeId1, sledgeId2);
-};
+}
 
 Hit.prototype.reset = function(xTime, yTime, overlapping, sledgeId1, sledgeId2) {
   // Set xTime if hitting from the left or right,

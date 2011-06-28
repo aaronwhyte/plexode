@@ -19,7 +19,7 @@ BeamerPainter.prototype.advance = function(now) {
 };
 
 BeamerPainter.prototype.paint = function(renderer, layer) {
-  e = this.events.getFromHead(0);
+  var e = this.events.getFromHead(0);
   e.moveToTime(this.now);
   if (layer == Vorp.LAYER_SPARKS) {
     renderer.context.lineWidth = Math.random() + 1.5;

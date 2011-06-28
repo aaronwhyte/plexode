@@ -3,7 +3,7 @@
 import format
 
 name = 'insta-html'
-print format.headStart(name)
+print format.headStart(name, 1)
 print '</head><body onload="onLoadHandler()">'
 print format.navDiv(name)
 print format.mainDiv("""

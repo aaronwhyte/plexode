@@ -22,7 +22,7 @@ function cubicBezier(p0, p1, p2, p3, t, out) {
     c2 * p2.y +
     c3 * p3.y;
   return out;
-};
+}
 
 function cubicBezierChain(points, t, out) {
   var numBeziers = points.length / 2 - 1;
@@ -33,6 +33,6 @@ function cubicBezierChain(points, t, out) {
       points[i], points[i + 1], points[i + 2], points[i + 3],
       t * numBeziers - bezierIndex,
       out);
-};
+}
 // The problem is that I want to express (pos,vel,pos,vel)
 // but beziers are (pos,control,control,pos)

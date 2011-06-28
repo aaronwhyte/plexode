@@ -109,7 +109,6 @@ PlayerSprite.prototype.kickKeyDown = function() {
 
 PlayerSprite.prototype.gripScan = function() {
   GU_copyKeysVec(this.keysVec);
-  var p = this.getPos(this.pos);
 
   if (this.keysVec.x || this.keysVec.y) {
     // long-range directional seek
@@ -153,7 +152,6 @@ PlayerSprite.prototype.gripScanSweep = function(vec, arc, scans) {
         }
         // Pick the closest target.
         minTime = rayScan.time;
-        var hitSledgeId = rayScan.hitSledgeId;
       }
     }
     this.painter.addRayScan(rayScan);
