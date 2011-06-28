@@ -10,6 +10,10 @@ a {
   color:#f88;
 }
 
+a.nav {
+  border-color:	black;
+}
+
 div.center {
   max-width:40em;
   margin-left: auto;
