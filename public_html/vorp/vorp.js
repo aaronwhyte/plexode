@@ -298,4 +298,5 @@ Vorp.prototype.assemblePlayer = function() {
   var playerSprites = playerPrefab.createSprites(this);
   this.playerSprite = playerSprites[0];
   this.addSprites(playerSprites);
+  this.playerAssembler.onPlayerAssembled(this.getNow());
 };

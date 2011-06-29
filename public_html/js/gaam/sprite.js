@@ -73,13 +73,6 @@ Sprite.prototype.accelerateXY = function(x, y) {
 };
 
 /**
- * Override this to draw your fine lookin' sprites.
- * @deprecated in favor of Painters
- * TODO: delete once all sprites are migrated to painters
- */
-Sprite.prototype.draw = null;
-
-/**
  * Inject a painter into your sprite constructor and call it "painter".
  * @return {Painter?} Might be null, if the sprite isn't using painters yet.
  */

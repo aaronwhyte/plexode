@@ -71,6 +71,7 @@ def formatPage(title, description):
 <script src="../painters/buttonpainter.js"></script>
 <script src="../painters/deadplayerpainter.js"></script>
 <script src="../painters/grippainter.js"></script>
+<script src="../painters/playerassemblerpainter.js"></script>
 <script src="../painters/playerpainter.js"></script>
 <script src="../painters/rectpainter.js"></script>
 <script src="../painters/timerpainter.js"></script>

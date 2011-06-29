@@ -51,10 +51,15 @@ DeadPlayerPainter.SPARK_ADVANCESPARK = function(spark, now) {
 DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
-  renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
+  var size = Math.max(0.2, timeFrac) * Prefab.BOX_RADIUS;
   //renderer.setFillStyle('rgba(255, 68, 221, ' + alpha + ')');
-  var size = Math.max(0.2, timeFrac * timeFrac) * Prefab.BOX_RADIUS;
+  renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
+//  renderer.setStrokeStyle('rgba(255, 255, 255, ' + alpha + ')');
+//  renderer.context.lineWidth = size * 2;
+//  var len = size + 1;
+//  var speed = spark.vel.magnitude();
+//  renderer.drawLineXYXY(spark.pos.x, spark.pos.y, spark.pos.x + spark.vel.x / speed * len, spark.pos.y + spark.vel.y / speed * len);
 };
 
 
@@ -90,19 +95,18 @@ DeadPlayerPainter.prototype.paint = function(renderer, layer) {
     renderer.setFillStyle(this.color);
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-//    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
 
     // sparks
     if (!this.sparked) {
-      this.createSparks(e.px, e.py, e.rx, e.ry, this.now);
+      this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
     this.sparks.paintAll(renderer, this.now);    
   }
 };
 
-DeadPlayerPainter.prototype.createSparks = function(px, py, rx, ry, now) {
-  // Iterate over a grid within the player's footprint.
+DeadPlayerPainter.prototype.createSparks = function(px, py, now) {
+  // fast-moving short-lived sparks
   for (var a = 0; a < 2 * Math.PI; a += Math.random() * 2 * Math.PI / 10) {
     this.sparkTemplate.startTime = now;
     this.sparkTemplate.endTime = now + 10 + 10 * Math.random();
@@ -111,6 +115,7 @@ DeadPlayerPainter.prototype.createSparks = function(px, py, rx, ry, now) {
     this.sparkTemplate.vel.setXY(speed * Math.sin(a), speed * Math.cos(a));
     this.sparks.add(this.sparkTemplate);
   }
+  // slow-moving longer-lived smoke-sparks
   for (var a = 0; a < 2 * Math.PI; a += 2 * Math.PI / 30 + 2 * Math.PI / 30 * Math.random()) {
     this.sparkTemplate.startTime = now;
     this.sparkTemplate.endTime = now + 30 + 25 * Math.random();

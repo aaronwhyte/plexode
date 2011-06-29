@@ -13,3 +13,8 @@ function PlayerAssemblerSprite(phy, painter, px, py, vx, vy, rx, ry, mass, group
 
 PlayerAssemblerSprite.prototype = new Sprite();
 PlayerAssemblerSprite.prototype.constructor = PlayerAssemblerSprite;
+
+PlayerAssemblerSprite.prototype.onPlayerAssembled = function(now) {
+  this.painter.createSparks(this.px, this.py, this.targetPos.x, this.targetPos.y, now);
+};
+

@@ -83,6 +83,10 @@ Vec2d.prototype.rot90Right = function() {
 };
 
 Vec2d.prototype.rot = function(rads) {
+  if (!rads) {
+    // no rotation
+    return this;
+  }
   var sin = Math.sin(rads);
   var cos = Math.cos(rads);
   var nx = cos * this.x + sin * this.y;

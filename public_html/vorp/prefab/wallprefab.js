@@ -38,14 +38,14 @@ WallPrefab.prototype.createSprites = function(vorp) {
     return Math.abs(a - b) / 2 + r;
   }
   if (this.solid || rad(x0, x1) < 2 * r || rad(y0, y1) < 2 * r) {
-    return [new WallSprite(phy, new RectPainter("#53b"),
+    return [new WallSprite(phy, new RectPainter("rgb(80,48,176)"),
         mid(x0, x1), mid(y0, y1), rad(x0, x1), rad(y0, y1))];
   } else {
     return [
-      new WallSprite(phy, new RectPainter("#53b"), mid(x0, x1), y0, rad(x0, x1), r),
-      new WallSprite(phy, new RectPainter("#53b"), mid(x0, x1), y1, rad(x0, x1), r),
-      new WallSprite(phy, new RectPainter("#53b"), x0, mid(y0, y1), r, rad(y0, y1)),
-      new WallSprite(phy, new RectPainter("#53b"), x1, mid(y0, y1), r, rad(y0, y1))
+      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y0, rad(x0, x1), r),
+      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y1, rad(x0, x1), r),
+      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), x0, mid(y0, y1), r, rad(y0, y1)),
+      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), x1, mid(y0, y1), r, rad(y0, y1))
     ];
   }
 };

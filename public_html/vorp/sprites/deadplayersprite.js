@@ -11,7 +11,7 @@ function DeadPlayerSprite(phy, painter, px, py, vx, vy, rx, ry) {
 DeadPlayerSprite.prototype = new Sprite();
 DeadPlayerSprite.prototype.constructor = DeadPlayerSprite;
 
-DeadPlayerSprite.REASSEMBLY_TIMEOUT = 25;
+DeadPlayerSprite.REASSEMBLY_TIMEOUT = 45;
 
 DeadPlayerSprite.prototype.setVorp = function(vorp) {
   this.vorp = vorp;
