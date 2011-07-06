@@ -84,7 +84,6 @@ PlayerSprite.prototype.act = function() {
       this.looseForce();
     }
   }
-  //this.painter.setHolderPosVel(this.getPos(this.pos), this.getVel(this.vel));
   this.painter.setHolderPos(this.getPos(this.pos));
   if (this.heldSprite) {
     //this.painter.setHeldPosVel(this.heldSprite.getPos(this.pos), this.heldSprite.getVel(this.vel));

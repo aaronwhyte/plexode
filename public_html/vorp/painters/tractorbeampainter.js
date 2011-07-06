@@ -125,6 +125,7 @@ TractorBeamPainter.prototype.advance = function(now) {
           .add(this.holderPos);
       temp.vel.set(this.heldPos).subtract(this.holderPos).rot90Right();
       temp.vel.scaleToLength((Math.random() - 0.5) * (2 + this.holdStrength));
+      temp.rad = 5;
       temp.endTime = this.now + Math.random() * 30;
       this.sparks.add(temp);
     }

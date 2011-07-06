@@ -53,7 +53,7 @@ TractorBeamSparkList.prototype.advanceSpark = function(spark, now) {
 //    spark.vel.y += (this.heldPos.y - spark.pos.y) / 50;
 //  }
   spark.pos.add(spark.vel);
-}
+};
 
 TractorBeamSparkList.prototype.paint = function(renderer, spark, now) {
   renderer.setFillStyle('rgba(50, 255, 50, ' + (Math.random() * 0.2 + 0.4) + ')');
