@@ -2,11 +2,13 @@
 
 import format
 
-name = 'main'
-print format.headStart(name, 0)
-print '</head><body>'
-print format.navDiv(name)
-print format.mainDiv("""
+def formatMain():
+  name = 'main'
+  h = []
+  h.append(format.headStart(name, 0))
+  h.append('</head><body>')
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 <p>
 <i>2011-06-27</i><br>
 Upgraded <a href="/vorp">Vorp</a> graphics and handling a bit.<br>
@@ -39,5 +41,14 @@ Good idea, Julie!
 <i>Many moons ago...</i><br>
 Welcome to Plexode!<br>
 Want to <a href="/fracas">play a game</a>?
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatMain()
+
+if __name__ == "__main__":
+  main()
+

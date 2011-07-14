@@ -2,11 +2,13 @@
 
 import format
 
-name = 'eval'
-print format.headStart(name, 1)
-print '</head><body>'
-print format.navDiv(name)
-print format.mainDiv("""
+def formatEval():
+  name = 'eval'
+  h = []
+  h.append(format.headStart(name, 1))
+  h.append('</head><body>')
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 A JavaScript evaluator.&nbsp; <button onclick="toggleHelp()">help</button><br>
 <div id="help" style="display:none">
 Some util functions:""" +
@@ -80,5 +82,13 @@ function calc() {
 }
 
 </script>
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatEval()
+
+if __name__ == "__main__":
+  main()

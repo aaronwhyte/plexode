@@ -2,10 +2,11 @@
 
 import format
 
-name = 'fracas'
-print format.headStart(name, 1)
-
-print """
+def formatFracas():
+  name = 'fracas'
+  h = []
+  h.append(format.headStart(name, 1))
+  h.append("""
 <link rel="stylesheet" type="text/css" href="./fracas.css">
 <script src="../js/vec2d.js"></script>
 <script src="./FracRend.js"></script>
@@ -23,11 +24,9 @@ function onloadHandler() {
 }
 </script>
 
-</head><body onload="onloadHandler()">"""
-
-print format.navDiv(name)
-
-print format.mainDiv("""
+</head><body onload="onloadHandler()">""")
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 <div id="game">
 <div align="center">
 <div class="smalldoc" style="padding-bottom:4px">
@@ -36,6 +35,13 @@ Arrows move, space &amp arrows fire.  Defeat the gnomes!
 <div id="fracas">fracas goes here</div>
 </div>
 </div>
-""")
+"""))
+  h.append(format.footer())
+  return ''.join(h)
 
-print format.footer()
+
+def main():
+  print formatFracas()
+
+if __name__ == "__main__":
+  main()

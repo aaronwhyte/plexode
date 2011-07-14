@@ -270,26 +270,36 @@ v active spawner API at the Vorp level
 v death & rebirth
 v Redo all levels to start with a spawner
 
-2011.06.06 - ... death and reassembly UX
+2011.06.06 - 2011.06.29 death and reassembly UX
 v remove player from collider upon death
   v but preserve painter
   v fix painter-removal logic and enhance stuff
 v add DeadPlayer sprite
   v sprite, prefab, painter
   v calls vorp.assemblePlayer() after like 15 frames
-- Cool Graphics
-  - dead player
-  - assembler
+v Cool Graphics
+  v dead player
+  v assembler
+v push it!
+
+compile JS
+- python function to find and compile all Vorp JS deps into filename passed in
+  - create file manifest by searching some root dirs for JS files
+  - make it dump jscomp warnings to stdout and/or a file
+
+deploy compiled JS, optionally
+- Write make.py parallel to make.sh.
+  - Compare output of make.sh and make.py as a test.
+- Add -vorp_jscomp [off,warnings,deploy_readable,deploy_opt] flag to make.py.
+- Make the off and warnings values work.
+- Make deploy_* pass a param to Vorp level builders so they point to one file instead of a huge list.
+
+push plexode
 
 teleport sparks
 - implode
 - explode
 - light up the tube?
-
-TractorBeamPainter3
-- Fire sparks from self just so show that Something Is Happening.
-- When you get a grip, accel sparks to target.
-- Sparks constantly hover between ply and target?  No more tbeam line? 
 
 Robot to collect portals on level 3
 - sprite, prefab, level builder

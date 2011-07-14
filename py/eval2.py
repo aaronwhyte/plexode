@@ -2,10 +2,12 @@
 
 import format
 
-name = 'eval2'
-print format.headStart(name, 1)
-print format.plexScripts()
-print """
+def formatEval2():
+  name = 'eval2'
+  h = []
+  h.append(format.headStart(name, 1))
+  h.append(format.plexScripts())
+  h.append("""
 <script src="../js/eval2.js"></script>
 <style>
 #log {
@@ -61,10 +63,10 @@ print """
   margin:0;
 }
 </style>
-"""
-print '</head><body onload="plex.eval2.start()">'
-print format.navDiv(name)
-print format.mainDiv("""
+""")
+  h.append('</head><body onload="plex.eval2.start()">')
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 <div id="log"></div>
 A JavaScript evaluator - Now with autocomplete!<sub>BETA</sub><br>
 [ctrl-up] and [ctrl-down] change the hilited item.<br>
@@ -90,5 +92,13 @@ N:<input id="ms" type="text" value="100" size="5">
 
 <div id="out"></div>
 <div id="d"></div>
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatEval2()
+
+if __name__ == "__main__":
+  main()

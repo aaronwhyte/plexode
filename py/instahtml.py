@@ -2,11 +2,13 @@
 
 import format
 
-name = 'insta-html'
-print format.headStart(name, 1)
-print '</head><body onload="onLoadHandler()">'
-print format.navDiv(name)
-print format.mainDiv("""
+def formatInstaHtml():
+  name = 'insta-html'
+  h = []
+  h.append(format.headStart(name, 1))
+  h.append('</head><body onload="onLoadHandler()">')
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 Type HTML in the textarea, and it will be instantly rendered below.
 <textarea onkeyup="changeHtml()" rows="20" style="width:100%" id="ta">
 </textarea>
@@ -27,5 +29,13 @@ function changeHtml() {
   div.innerHTML = '<br>' + ta.value;
 }
 </script>
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatInstaHtml()
+
+if __name__ == "__main__":
+  main()

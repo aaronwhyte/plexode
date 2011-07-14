@@ -2,9 +2,11 @@
 
 import format
 
-name = 'eval3'
-print format.headStart(name, 1)
-print """
+def formatEval3():
+  name = 'eval3'
+  h = []
+  h.append(format.headStart(name, 1))
+  h.append("""
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
@@ -39,10 +41,10 @@ print """
 }
 
 </style>
-"""
-print '</head><body onload="plex.eval3.start()">'
-print format.navDiv(name)
-print format.mainDiv("""
+</head><body onload="plex.eval3.start()">
+""")
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 <div id="log"></div>
 
 <table style="width:100%" cellpadding=4>
@@ -94,5 +96,13 @@ Every <input type="text" value="100" size="4" id="ms">ms
 <div id="hd"></div>
 <hr>
 <div id="jd"></div>
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatEval3()
+
+if __name__ == "__main__":
+  main()

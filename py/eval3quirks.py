@@ -2,9 +2,11 @@
 
 import format
 
-name = 'eval3quirks'
-print format.headStartQuirks(name, 1)
-print """
+def formatEval3Quirks():
+  name = 'eval3quirks'
+  h = []
+  h.append(format.headStartQuirks(name, 1))
+  h.append("""
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
@@ -39,10 +41,11 @@ print """
 }
 
 </style>
-"""
-print '</head><body onload="plex.eval3.start()">'
-print format.navDiv(name)
-print format.mainDiv("""
+""")
+  h.append('</head><body onload="plex.eval3.start()">')
+  h.append('</head><body>')
+  h.append(format.navDiv(name))
+  h.append(format.mainDiv("""
 <div id="log"></div>
 
 <table style="width:100%" cellpadding=4>
@@ -94,5 +97,14 @@ Every <input type="text" value="100" size="4" id="ms">ms
 <div id="hd"></div>
 <hr>
 <div id="jd"></div>
-""")
-print format.footer()
+"""))
+  h.append(format.footer())
+  return ''.join(h)
+
+
+def main():
+  print formatEval3Quirks()
+
+if __name__ == "__main__":
+  main()
+

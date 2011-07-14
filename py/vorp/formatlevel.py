@@ -1,5 +1,5 @@
-def formatPage(title, description):
-    return ''.join([
+def formatVorpLevel(title, description):
+  return ''.join([
 """<!DOCTYPE HTML>
 <html><head><title>""", title, """</title>
 <link rel="stylesheet" type="text/css" href="../vorp.css">
