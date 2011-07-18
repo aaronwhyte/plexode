@@ -25,7 +25,7 @@ function onloadHandler() {
 </script>
 
 </head><body onload="onloadHandler()">""")
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <div id="game">
 <div align="center">

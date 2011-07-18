@@ -7,7 +7,7 @@ def formatEval():
   h = []
   h.append(format.headStart(name, 1))
   h.append('</head><body>')
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 A JavaScript evaluator.&nbsp; <button onclick="toggleHelp()">help</button><br>
 <div id="help" style="display:none">

@@ -1,11 +1,11 @@
 links = [
-  ("main", "/"),
-  ("insta-html", "/insta-html/"),
-  ("eval", "/eval/"),
-  ("eval2", "/eval2/"),
-  ("eval3", "/eval3/"),
-  ("fracas", "/fracas/"),
-  ("vorp", "/vorp/"),
+  ("main", ""),
+  ("insta-html", "insta-html/"),
+  ("eval", "eval/"),
+  ("eval2", "eval2/"),
+  ("eval3", "eval3/"),
+  ("fracas", "fracas/"),
+  ("vorp", "vorp/"),
 ]
 
 def headStart(name, depth):
@@ -57,58 +57,6 @@ def plexScripts():
     return ''.join(html)
 
 
-def roundDiv(innerHtml, innerClass):
-    return ''.join([
-        '<div style="border-style:solid;border-width:2px 0;margin:0 4px">',
-        '<div style="border-style:solid;border-width:2px 0;margin:0 -2px">',
-        '<div class="', innerClass, '" ',
-        'style="border-style:solid;border-width:0 2px;margin:0 -2px">',
-        innerHtml,
-        '</div></div></div>'])
-
-
-def roundLeftDiv(innerHtml, innerClass):
-    return ''.join([
-        '<div style="border-style:solid;border-width:4px 0px;margin:0 0 0 8px">',
-        '<div style="border-style:solid;border-width:4px 0px;margin:0 0 0 -4px">',
-        '<div class="', innerClass, '" ',
-        'style="border-style:solid;border-width:0 0 0 4px;margin:0 0 0 -4px">',
-        innerHtml,
-        '</div></div></div>'])
-
-
-def roundRightDiv(innerHtml, innerClass):
-    return ''.join([
-        '<div style="border-style:solid;border-width:4px 0px;margin:0 8px 0 0">',
-        '<div style="border-style:solid;border-width:4px 0px;margin:0 -4px 0 0">',
-        '<div class="', innerClass, '" ',
-        'style="border-style:solid;border-width:0 4px 0 0;margin:0 -4px 0 0">',
-        innerHtml,
-        '</div></div></div>'])
-
-
-def roundTopDiv(innerHtml, innerClass):
-    return ''.join([
-        '<div style="border-style:solid;border-width:4px 0 0;margin:0 8px">',
-        '<div style="border-style:solid;border-width:4px 0 0;margin:0 -4px">',
-        '<div class="', innerClass, '" ',
-        'style="border-style:solid;border-width:0 4px;',
-        'margin:0 -4px">',
-        innerHtml,
-        '</div></div></div>'])
-
-
-def roundBottomDiv(innerHtml, innerClass):
-    return ''.join([
-        '<div style="border-style:solid;border-width:0 0 4px;margin:0 8px">',
-        '<div style="border-style:solid;border-width:0 0 4px;margin:0 -4px">',
-        '<div class="', innerClass, '" ',
-        'style="border-style:solid;border-width:0 4px;',
-        'margin:0 -4px">',
-        innerHtml,
-        '</div></div></div>'])
-
-
 def navHere(navTuple):
     return ''.join([
         '&nbsp;<span class="nav">',
@@ -116,9 +64,9 @@ def navHere(navTuple):
         '</span>\n'])
 
 
-def navLink(navTuple):
+def navLink(navTuple, level):
     return ''.join([
-        '&nbsp;<a class="nav" href="', navTuple[1], '">',
+        '&nbsp;<a class="nav" href="', '../' * level, navTuple[1], '">',
         navTuple[0],
         '</a>\n'])
 
@@ -137,7 +85,7 @@ def plexodeLogo():
     return ''.join(html)
 
 
-def navDiv(name):
+def navDiv(name, level):
     html = ['<div class="top">']
     html.append('<div class="copyright">Copyright 2006 Aaron Whyte</div>')
     html.append(plexodeLogo())
@@ -145,7 +93,7 @@ def navDiv(name):
         if link[0] == name:
             html.append(navHere(link))
         else:
-            html.append(navLink(link))
+            html.append(navLink(link, level))
     html.append('</div>')
     return ''.join(html)
 

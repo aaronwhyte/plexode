@@ -44,7 +44,7 @@ def formatEval3Quirks():
 """)
   h.append('</head><body onload="plex.eval3.start()">')
   h.append('</head><body>')
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <div id="log"></div>
 

@@ -7,7 +7,7 @@ def formatInstaHtml():
   h = []
   h.append(format.headStart(name, 1))
   h.append('</head><body onload="onLoadHandler()">')
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 Type HTML in the textarea, and it will be instantly rendered below.
 <textarea onkeyup="changeHtml()" rows="20" style="width:100%" id="ta">

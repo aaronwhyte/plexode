@@ -7,7 +7,7 @@ def formatMain():
   h = []
   h.append(format.headStart(name, 0))
   h.append('</head><body>')
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 0))
   h.append(format.mainDiv("""
 <p>
 <i>2011-06-27</i><br>

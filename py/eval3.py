@@ -43,7 +43,7 @@ def formatEval3():
 </style>
 </head><body onload="plex.eval3.start()">
 """)
-  h.append(format.navDiv(name))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <div id="log"></div>
 
