@@ -14,7 +14,7 @@ TimerSprite.prototype = new Sprite();
 TimerSprite.prototype.constructor = TimerSprite;
 
 /**
- * @param (number} timeoutLength  timeout length length in ticks
+ * @param {number} timeoutLength  timeout length length in ticks
  */
 TimerSprite.prototype.setTimeoutLength = function(timeoutLength) {
   this.timeoutLength = timeoutLength;

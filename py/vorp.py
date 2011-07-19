@@ -60,12 +60,12 @@ Vorp is still under construction, so check back here for updates.
   return ''.join(h)
 
 
-def formatVorpLevel(title, description):
+def formatVorpLevel(jsName, title, description):
   return ''.join([
 """<!DOCTYPE HTML>
 <html><head><title>""", title, """</title>
 <link rel="stylesheet" type="text/css" href="../vorp.css">
-<script src="../vorp-compiled.js"></script>
+<script src="../""" + jsName + """"></script>
 <script src="./level.js"></script>
 </head>
 <body onload="main()">

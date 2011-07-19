@@ -2,17 +2,45 @@ import os
 import os.path
 import shutil
 import subprocess
+import time
 
 import py
 from py import *
 
-# where will the built files go?
+# The basic file layout extends beyond what's in git.
+# You can have a root directory anywhere.  I call it "dev", but you can call it
+# anything, as it's never referred to by name in the code.
+#
+# The closure compiler goes here:
+# dev/tools/closure-compiler/compiler.jar
+#
+# The git directory for project plexode goes here:
+# dev/src/plexode
+# so that this file ends up at
+# dev/src/plexode/make.py
+#
+# Invoke it from dev/src/plexode, like this:
+# python make.py
+#
+# That erases the ../../build/plexode directory and rebuilds it, like this:
+# dev/build/plexode/cgi-bin/{some python CGI scripts}
+# dev/build/plexode/public_html/index.html
+# dev/build/plexode/public_html/insta-html/index.html
+# etc.
+# dev/build/plexode/public_html/vorp/index.html
+# dev/build/plexode/public_html/vorp/vorp_sometimestamp.js
+# etc.
+
+
+# Where will the built files go?
 bdir = "../../build/plexode"
+
 
 def ensureDir(f):
   d = os.path.dirname(f)
   if not os.path.exists(d):
     os.makedirs(d)
+
 
 def writePublicHtml(path, content):
   print "  " + path + "/index.html"
@@ -21,6 +49,7 @@ def writePublicHtml(path, content):
   f = open(d + '/index.html', 'w')
   f.write(content)
   f.close()
+
 
 def buildPlexode():
   print "START building plexode"
@@ -36,6 +65,12 @@ def buildPlexode():
   shutil.copytree("cgi-bin", bdir + "/cgi-bin")
   shutil.copytree("public_html", bdir + "/public_html")
   
+  print "compiling vorp JS"
+  vorpJsName = 'vorp_' + str(int(time.time() * 1000)) + '.js'
+  compileJs(
+    '../../tools/closure-compiler/compiler.jar',
+    getVorpJsCompFlags(getVorpJsFileNames(), vorpJsName))
+
   print "generating index.html files"
   writePublicHtml('', mainpage.formatMain())
   writePublicHtml('/insta-html', instahtml.formatInstaHtml())
@@ -45,12 +80,12 @@ def buildPlexode():
   writePublicHtml('/eval3quirks', eval3quirks.formatEval3Quirks())
   writePublicHtml('/fracas', fracas.formatFracas())
   writePublicHtml('/vorp', vorp.formatVorp())
-  writePublicHtml('/vorp/level1', vorp.formatVorpLevel("Level 1", "first level ever"))
-  writePublicHtml('/vorp/level2', vorp.formatVorpLevel("Level 2", "wall of death test"))
-  writePublicHtml('/vorp/level3', vorp.formatVorpLevel("Level 3", "first proper level"))
-  writePublicHtml('/vorp/level4', vorp.formatVorpLevel("Level 4", "sensor and door test"))
-  writePublicHtml('/vorp/level5', vorp.formatVorpLevel("Level 5", "zero-gravity grip-switch test"))
-  writePublicHtml('/vorp/level6', vorp.formatVorpLevel("Level 6", "second proper level"))
+  writePublicHtml('/vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
+  writePublicHtml('/vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
+  writePublicHtml('/vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
+  writePublicHtml('/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
+  writePublicHtml('/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
+  writePublicHtml('/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
   
   print "DONE building plexode"
 
@@ -63,6 +98,7 @@ def getJsFileNamesInPath(startPath):
       if (fname[-3:] == ".js"):
         js.append(os.path.join(root, fname))
   return js
+
 
 def getVorpJsFileNames():
   js = []
@@ -89,11 +125,14 @@ def getVorpJsFileNames():
 
   return js
 
-def getVorpJsCompFlags(jsFileNames):
+
+def getVorpJsCompFlags(jsFileNames, vorpJsName):
   flags = []
-  flags.extend(['--js_output_file', bdir + '/public_html/vorp/vorp-compiled.js'])
+  flags.extend(['--js_output_file', bdir + '/public_html/vorp/' + vorpJsName])
   flags.extend(['--compilation_level', 'WHITESPACE_ONLY'])
   #flags.extend(['--compilation_level', 'SIMPLE_OPTIMIZATIONS'])
+  # SIMPLE_OPTIMIZATIONS works, with lots of good warnings but little compression win.
+  # ADVANCED_OPTIMIZATIONS doesn't work yet.
 
   warnings = ['checkVars', 'undefinedVars', 'missingProperties']
   for warning in warnings:
@@ -106,6 +145,7 @@ def getVorpJsCompFlags(jsFileNames):
     
   return flags
 
+
 def compileJs(pathToCompilerJar, jsCompFlags):
   argList = ['java', '-jar', pathToCompilerJar]
   argList.extend(jsCompFlags)
@@ -116,11 +156,7 @@ def compileJs(pathToCompilerJar, jsCompFlags):
 
 def main():
   buildPlexode()
-  compileJs(
-    '../../tools/closure-compiler/compiler.jar',
-    getVorpJsCompFlags(getVorpJsFileNames()))
 
 if __name__ == "__main__":
   main()
-
 
