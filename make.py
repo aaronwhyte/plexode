@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os
 import os.path
 import shutil
@@ -20,7 +22,7 @@ from py import *
 # dev/src/plexode/make.py
 #
 # Invoke it from dev/src/plexode, like this:
-# python make.py
+# ./make.py
 #
 # That erases the ../../build/plexode directory and rebuilds it, like this:
 # dev/build/plexode/cgi-bin/{some python CGI scripts}
@@ -37,16 +39,17 @@ bdir = "../../build/plexode"
 
 
 def ensureDir(f):
-  d = os.path.dirname(f)
+  d = os.path.dirname('%s/' % f)
+  print 'ensuring %s' % d
   if not os.path.exists(d):
     os.makedirs(d)
 
 
 def writePublicHtml(path, content):
-  print "  " + path + "/index.html"
-  d = bdir + '/public_html' + path
+  print "  %s/index.html" % path
+  d = '%s/public_html%s' % (bdir, path)
   ensureDir(d)
-  f = open(d + '/index.html', 'w')
+  f = open('%s/index.html' % d, 'w')
   f.write(content)
   f.close()
 
@@ -55,20 +58,20 @@ def buildPlexode():
   print "START building plexode"
 
   if os.path.exists(bdir):
-    print "removing old " + bdir
+    print "removing old %s" % bdir
     shutil.rmtree(bdir)
   
-  print "creating " + bdir
+  print "creating %s" % bdir
   os.makedirs(bdir)
   
-  print "copying stuff to " + bdir
-  shutil.copytree("cgi-bin", bdir + "/cgi-bin")
-  shutil.copytree("public_html", bdir + "/public_html")
+  print "copying stuff to %s" % bdir
+  shutil.copytree("cgi-bin", "%s/cgi-bin" % bdir)
+  shutil.copytree("public_html",  "%s/public_html" % bdir)
   
   print "compiling vorp JS"
-  vorpJsName = 'vorp_' + str(int(time.time() * 1000)) + '.js'
+  vorpJsName = 'vorp_%s.js' % str(int(time.time() * 1000))
   compileJs(
-    '../../tools/closure-compiler/compiler.jar',
+    '../../tools/closure-compiler',
     getVorpJsCompFlags(getVorpJsFileNames(), vorpJsName))
 
   print "generating index.html files"
@@ -103,7 +106,7 @@ def getJsFileNamesInPath(startPath):
 def getVorpJsFileNames():
   js = []
   prefix = 'public_html/js/'
-  js.extend(getJsFileNamesInPath(prefix + 'gaam'))
+  js.extend(getJsFileNamesInPath('%sgaam' % prefix))
   miscDeps = [
     'circularqueue.js',
     'gameutil.js',
@@ -116,7 +119,7 @@ def getVorpJsFileNames():
     'plex/type.js',
   ]
   for dep in miscDeps:
-    js.append(prefix + dep)
+    js.append('%s%s' % (prefix, dep))
 
   vorpJs = getJsFileNamesInPath('public_html/vorp')
   for dep in vorpJs:
@@ -128,7 +131,7 @@ def getVorpJsFileNames():
 
 def getVorpJsCompFlags(jsFileNames, vorpJsName):
   flags = []
-  flags.extend(['--js_output_file', bdir + '/public_html/vorp/' + vorpJsName])
+  flags.extend(['--js_output_file', '%s/public_html/vorp/%s' % (bdir, vorpJsName)])
   flags.extend(['--compilation_level', 'WHITESPACE_ONLY'])
   #flags.extend(['--compilation_level', 'SIMPLE_OPTIMIZATIONS'])
   # SIMPLE_OPTIMIZATIONS works, with lots of good warnings but little compression win.
@@ -146,16 +149,45 @@ def getVorpJsCompFlags(jsFileNames, vorpJsName):
   return flags
 
 
-def compileJs(pathToCompilerJar, jsCompFlags):
-  argList = ['java', '-jar', pathToCompilerJar]
+def compileJs(pathOfCompilerJar, jsCompFlags):
+  compilerJarPath = os.path.join(pathOfCompilerJar, 'compiler.jar')
+  while not os.path.isfile(compilerJarPath):
+    print 'You must download the closure compiler to %s' % compilerJarPath
+    response = raw_input('Would you like to download the compiler? [Y/n] ')
+    if not response or response.upper() == 'Y':
+      downloadClosure(pathOfCompilerJar)
+    else:
+      print 'not downloading'
+      exit(1)
+
+  argList = ['java', '-jar', compilerJarPath]
   argList.extend(jsCompFlags)
+  runCommand(argList)
+
+
+def downloadClosure(pathOfCompilerJar):
+  ensureDir(pathOfCompilerJar)
+  argList = [
+      'curl', '-O',
+      'http://closure-compiler.googlecode.com/files/compiler-latest.zip']
+  runCommand(argList)
+  argList = [
+      'unzip', 'compiler-latest.zip', 'compiler.jar', '-d', pathOfCompilerJar]
+  runCommand(argList)
+  argList = ['rm', 'compiler-latest.zip']
+  runCommand(argList)
+
+
+def runCommand(argList):
   print 'calling'
   print ' '.join(argList)
   print 'now...'
   subprocess.check_call(argList)
 
+
 def main():
   buildPlexode()
+
 
 if __name__ == "__main__":
   main()
