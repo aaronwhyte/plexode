@@ -29,27 +29,27 @@ function room0(b) {
       1, 4,
       2, 4,
       2, 6).wall();
-  var d = b.mark(2, 5).markX(3).door(true);
-  var timer = b.mark(0, 5).timer(30, function() {
-    d.setClosed(true);
-  });
-  var broken1 = false, broken2 = false;
-  function updateTimer() {
-    if (broken1 || broken2) {
-      d.setClosed(false);
-      timer.stop();
-    } else {
-      timer.start();
-    }
-  }
-  b.mark(3, 4.5).markX(2).beamSensor(function(beamBroken) {
-    broken1 = beamBroken;
-    updateTimer();
-  });
-  b.mark(2, 5.5).markX(3).beamSensor(function(beamBroken) {
-    broken2 = beamBroken;
-    updateTimer();
-  });
+//  var d = b.mark(2, 5).markX(3).door(true);
+//  var timer = b.mark(0, 5).timer(30, function() {
+//    d.setClosed(true);
+//  });
+//  var broken1 = false, broken2 = false;
+//  function updateTimer() {
+//    if (broken1 || broken2) {
+//      d.setClosed(false);
+//      timer.stop();
+//    } else {
+//      timer.start();
+//    }
+//  }
+//  b.mark(3, 4.5).markX(2).beamSensor(function(beamBroken) {
+//    broken1 = beamBroken;
+//    updateTimer();
+//  });
+//  b.mark(2, 5.5).markX(3).beamSensor(function(beamBroken) {
+//    broken2 = beamBroken;
+//    updateTimer();
+//  });
   b.mark(3.6, 3.4).block();
 }
 
@@ -113,27 +113,27 @@ function room2(b) {
       });
   b.mark(3 - 0.4, 2.5).block();
 
-  var d = b.mark(4, 6, 4, 7).door(true);
-  var timer = b.mark(4, 5.75).timer(40, function() {
-    d.setClosed(true);
-  });
-  var broken1 = false, broken2 = false;
-  function updateTimer() {
-    if (broken1 || broken2) {
-      d.setClosed(false);
-      timer.stop();
-    } else {
-      timer.start();
-    }
-  }
-  b.mark(3.5, 6).markY(7).beamSensor(function(beamBroken) {
-    broken1 = beamBroken;
-    updateTimer();
-  });
-  b.mark(4.5, 7).markY(6).beamSensor(function(beamBroken) {
-    broken2 = beamBroken;
-    updateTimer();
-  });
+//  var d = b.mark(4, 6, 4, 7).door(true);
+//  var timer = b.mark(4, 5.75).timer(40, function() {
+//    d.setClosed(true);
+//  });
+//  var broken1 = false, broken2 = false;
+//  function updateTimer() {
+//    if (broken1 || broken2) {
+//      d.setClosed(false);
+//      timer.stop();
+//    } else {
+//      timer.start();
+//    }
+//  }
+//  b.mark(3.5, 6).markY(7).beamSensor(function(beamBroken) {
+//    broken1 = beamBroken;
+//    updateTimer();
+//  });
+//  b.mark(4.5, 7).markY(6).beamSensor(function(beamBroken) {
+//    broken2 = beamBroken;
+//    updateTimer();
+//  });
 }
 
 function room3(b) {

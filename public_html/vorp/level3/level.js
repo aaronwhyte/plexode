@@ -66,8 +66,8 @@ window['main'] = function() {
   b.mark(1, 4, 2, 4).zapper(true);
   b.mark(4, 6, 4, 7).zapper(true);
   b.mark(12.5, 5.5).block();
-  b.mark(12.5, 6).block();
-  b.mark(12.5, 6.5).block();
+//  b.mark(12.5, 6).block();
+//  b.mark(12.5, 6.5).block();
   b.mark(14.5, 11.5, 12, 12.5).portals();
   b.mark(1.5, 1.5).exit('../level4/index.html');
   Vorp.start(b, document.getElementById('canvas'), document.getElementById('flags'));

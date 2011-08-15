@@ -59,49 +59,56 @@ addTest(function testOverfill() {
 addTest(function testGet() {
   var q = new CircularQueue(3);
   try {
-    q.get(0);
+    q.getFromHead(0);
     fail("should have thrown an error");
   } catch (e) {
     // expected
   }
   try {
-    q.get(-1);
+    q.getFromTail(0);
     fail("should have thrown an error");
   } catch (e) {
     // expected
   }
   q.enqueue("one");
-  assertEquals("one", q.get(0));
+  assertEquals("one", q.getFromHead(0));
+  assertEquals("one", q.getFromTail(0));
   try {
-    q.get(1);
+    q.getFromHead(1);
+    fail("should have thrown an error");
+  } catch (e) {
+    // expected
+  }
+  try {
+    q.getFromTail(1);
     fail("should have thrown an error");
   } catch (e) {
     // expected
   }
   q.enqueue("two");
   q.enqueue("three");
-  assertEquals("one", q.get(0));
-  assertEquals("two", q.get(1));
-  assertEquals("three", q.get(2));
-  
+  assertEquals("one", q.getFromTail(0));
+  assertEquals("two", q.getFromTail(1));
+  assertEquals("three", q.getFromTail(2));
+
   // add another element so one gets dropped
   q.enqueue("four");
-  assertEquals("two", q.get(0));
-  assertEquals("three", q.get(1));
-  assertEquals("four", q.get(2));
+  assertEquals("two", q.getFromTail(0));
+  assertEquals("three", q.getFromTail(1));
+  assertEquals("four", q.getFromTail(2));
   try {
-    q.get(3);
+    q.getFromTail(3);
     fail("should have thrown an error");
   } catch (e) {
     // expected
   }
-  
+
   q.dequeue();
-  assertEquals("three", q.get(0));
-  assertEquals("four", q.get(1));
-  
+  assertEquals("three", q.getFromTail(0));
+  assertEquals("four", q.getFromTail(1));
+
   q.dequeue();
-  assertEquals("four", q.get(0));
+  assertEquals("four", q.getFromTail(0));
 });
 </script>
 </head>
