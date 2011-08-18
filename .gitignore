@@ -1,1 +1,7 @@
-py/*.pyc
+.gitignore
+.idea
+.project
+.settings
+public_html/suzannekramer
+*.pyc
+*~
