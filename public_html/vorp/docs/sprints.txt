@@ -283,18 +283,19 @@ v Cool Graphics
 v push it!
 
 compile JS
-- python function to find and compile all Vorp JS deps into filename passed in
-  - create file manifest by searching some root dirs for JS files
-  - make it dump jscomp warnings to stdout and/or a file
+v python function to find and compile all Vorp JS deps into filename passed in
+  v create file manifest by searching some root dirs for JS files
+  v make it dump jscomp warnings to stdout and/or a file
 
 deploy compiled JS, optionally
-- Write make.py parallel to make.sh.
-  - Compare output of make.sh and make.py as a test.
+v Write make.py parallel to make.sh.
+  v Compare output of make.sh and make.py as a test.
 - Add -vorp_jscomp [off,warnings,deploy_readable,deploy_opt] flag to make.py.
 - Make the off and warnings values work.
 - Make deploy_* pass a param to Vorp level builders so they point to one file instead of a huge list.
 
-push plexode
+HUGE BREAK FOR LEVEL EDITOR, "VED".
+(Hey, I edited this file right in GitHub.  Pretty great!)
 
 teleport sparks
 - implode
