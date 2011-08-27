@@ -42,6 +42,16 @@ function assertEquals(expected, actual) {
   }
 }
 
+function assertStringifyEquals(expected, actual) {
+  expected = JSON.stringify(expected);
+  actual = JSON.stringify(actual);
+  if (expected !== actual) {
+    var msg = 'expected:\n' + expected + '\nactual:\n' + actual;
+    fail(msg);
+    throw msg;
+  }
+}
+
 var tests = [];
 function addTest(testFunc) {
   tests.push(testFunc);

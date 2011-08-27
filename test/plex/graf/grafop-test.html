@@ -7,8 +7,17 @@
 <script src="../../../public_html/js/graf/grafop.js"></script>
 <script>
 
-addTest(function testConstructor() {
-  var op = new GrafOp();
+addTest(function testCluster() {
+  var add = {
+    type:GrafOp.Type.ADD_CLUSTER,
+    id: 123
+  };
+  var expectedRemove = {
+    type:GrafOp.Type.REMOVE_CLUSTER,
+    id: 123
+  };
+  var actualRemove = GrafOp.createReverse(add);
+  assertStringifyEquals(expectedRemove, actualRemove);
 });
 
 addTest(function testSanity() {
