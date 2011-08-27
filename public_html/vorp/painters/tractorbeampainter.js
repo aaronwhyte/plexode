@@ -6,6 +6,7 @@ function TractorBeamPainter() {
   Painter.call(this, 1); // doesn't really track events, though.
   //FLAGS && FLAGS.init('tractorSparksFromSource', false);
   FLAGS && FLAGS.init('tractorSparksWhileHolding', true);
+  FLAGS && FLAGS.init('tractorSparksWhileSeeking', true);
   this.kaput = false;
 
   this.sparks = new TractorBeamSparkList();
@@ -32,46 +33,26 @@ TractorBeamPainter.State = {
 };
 
 TractorBeamPainter.prototype.addRayScan = function(rayScan) {
-//  var temp = this.sparkTemplate;
-//  if (FLAGS && FLAGS.get('tractorSparksFromSource')) {
-//    temp.pos.setXY(rayScan.x0, rayScan.y0)
-//    if (false && rayScan.time) {
-//      temp.vel.setXY(0, 0);
-//    } else {
-//      temp.vel.setXY(
-//          (rayScan.x1 - rayScan.x0) * (rayScan.time || 1),
-//          (rayScan.y1 - rayScan.y0) * (rayScan.time || 1));
-//      temp.vel.scale(1/10);
-//      if (temp.vel.magnitudeSquared() > 100*100) {
-//        temp.vel.scaleToLength(100);
-//      }
-//    }
-//  } else {
-//    temp.pos.setXY(
-//        rayScan.x0 + (rayScan.x1 - rayScan.x0) * (rayScan.time || 1),
-//        rayScan.y0 + (rayScan.y1 - rayScan.y0) * (rayScan.time || 1));
-//    if (false && rayScan.time) {
-//      temp.vel.setXY(0, 0);
-//    } else {
-//      temp.vel.setXY(
-//          (rayScan.x1 - rayScan.x0) * (rayScan.time || 1),
-//          (rayScan.y1 - rayScan.y0) * (rayScan.time || 1));
-//      temp.vel.scale(-1/20);
-//      if (temp.vel.magnitudeSquared() > 16) {
-//        temp.vel.scaleToLength(4);
-//      }
-//    }
-//  }
-//  temp.rad = 5;// + Math.random() * 2;
-//  temp.endTime = this.now + 5 + 5 * Math.random();
-//  this.sparks.add(temp);
+  if (!FLAGS || !FLAGS.get('tractorSparksWhileSeeking')) return;
+  if (Math.random() < 0.4) return;
+  var temp = this.sparkTemplate;
+  var coef = Math.random() * 0.85;
+  coef = 1 - (coef * coef * coef);
+  temp.pos.setXY(
+      rayScan.x0 + (rayScan.x1 - rayScan.x0) * (rayScan.time || 1) * coef,
+      rayScan.y0 + (rayScan.y1 - rayScan.y0) * (rayScan.time || 1) * coef);
+//  if (false && rayScan.time) {
+  temp.vel.setXY(0, 0);
+  temp.rad = 5;// + Math.random() * 2;
+  temp.endTime = this.now + 8 + 2 * Math.random();
+  this.sparks.add(temp);
 //
 //  if (Math.random() < 0.5) return;
 //  var r = Math.random();
 //  r = 1 - r * r;
 //  temp.vel.scaleToLength(-2.5 * r * r);
 //  temp.pos.setXY(rayScan.x0, rayScan.y0);
-//      rayScan.y0);  temp.endTime = this.now + 5 + 5 * r;
+//  temp.endTime = this.now + 5 + 5 * r;
 //  this.sparks.add(temp);
 };
 
