@@ -41,19 +41,10 @@ TractorBeamPainter.prototype.addRayScan = function(rayScan) {
   temp.pos.setXY(
       rayScan.x0 + (rayScan.x1 - rayScan.x0) * (rayScan.time || 1) * coef,
       rayScan.y0 + (rayScan.y1 - rayScan.y0) * (rayScan.time || 1) * coef);
-//  if (false && rayScan.time) {
   temp.vel.setXY(0, 0);
   temp.rad = 5;// + Math.random() * 2;
   temp.endTime = this.now + 8 + 2 * Math.random();
   this.sparks.add(temp);
-//
-//  if (Math.random() < 0.5) return;
-//  var r = Math.random();
-//  r = 1 - r * r;
-//  temp.vel.scaleToLength(-2.5 * r * r);
-//  temp.pos.setXY(rayScan.x0, rayScan.y0);
-//  temp.endTime = this.now + 5 + 5 * r;
-//  this.sparks.add(temp);
 };
 
 TractorBeamPainter.prototype.clearRayScans = function() {
