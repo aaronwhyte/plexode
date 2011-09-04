@@ -82,18 +82,18 @@ addTest(function testAddRemoveLink() {
   });
 });
 
-addTest(function testSetNullData() {
+addTest(function testSetDataUndefined() {
   assertReverseEquals({
     type:GrafOp.Type.SET_DATA,
     objId: 123,
     key: 'strength',
     value: 'medium',
-    oldValue: null
+    oldValue: undefined
   }, {
     type:GrafOp.Type.SET_DATA,
     objId: 123,
     key: 'strength',
-    value: null,
+    value: undefined,
     oldValue: 'medium'
   });
 });

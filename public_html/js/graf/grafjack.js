@@ -4,6 +4,7 @@
 function GrafJack(op) {
   this.id = op.id;
   this.data = {}; // key/value pairs.
+  this.partId = op.partId;
   this.links = {};
 }
 

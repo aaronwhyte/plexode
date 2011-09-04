@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>GrafModel tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/graf/grafop.js"></script>
+<script src="../../../public_html/js/graf/grafmodel.js"></script>
+<script src="../../../public_html/js/graf/grafcluster.js"></script>
+<script src="../../../public_html/js/graf/grafpart.js"></script>
+<script src="../../../public_html/js/graf/grafjack.js"></script>
+<script src="../../../public_html/js/graf/graflink.js"></script>
+<script>
+
+addTest(function testConstructor() {
+  var m = new GrafModel();
+});
+
+addTest(function testConnectedClusters() {
+  var m = new GrafModel();
+
+  // Build two clusters and connect them with a link.
+  m.applyOp({
+    type: GrafOp.Type.ADD_CLUSTER,
+    id: 100
+  });
+  m.applyOp({
+    type: GrafOp.Type.ADD_PART,
+    id: 110,
+    clusterId: 100,
+    x: 10, y: 10
+  });
+  m.applyOp({
+    type: GrafOp.Type.ADD_JACK,
+    id: 111,
+    partId: 110
+  });
+  m.applyOp({
+    type: GrafOp.Type.ADD_CLUSTER,
+    id: 200
+  });
+  m.applyOp({
+    type: GrafOp.Type.ADD_PART,
+    id: 210,
+    clusterId: 200,
+    x: 20, y: 20
+  });
+  m.applyOp({
+    type: GrafOp.Type.ADD_JACK,
+    id: 211,
+    partId: 210
+  });
+
+  m.applyOp({
+    type: GrafOp.Type.ADD_LINK,
+    id: 1000,
+    jackId1: 111,
+    jackId2: 211
+  });
+
+  // Navigate from one cluster to the other.
+  var c1 = m.getCluster(100);
+  var p1 = c1.parts[110];
+  var j1 = p1.jacks[111];
+  var link = j1.links[1000];
+  var j2 = m.getJack(link.jackId1 == j1.id ?  link.jackId2 : link.jackId1);
+  var p2 = m.getPart(j2.partId);
+  var c2 = m.getCluster(p2.clusterId);
+  assertEquals(200, c2.id);
+});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

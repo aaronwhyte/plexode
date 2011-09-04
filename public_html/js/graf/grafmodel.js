@@ -15,12 +15,12 @@ function GrafModel() {
  */
 GrafModel.prototype.applyOp = function(op) {
   var cluster, part, jack, link, jack1, jack2, obj;
-
   function dumpOp() {
     return JSON.stringify(op);
   }
+  var self = this;
   function assertOpIdFree() {
-    if (this.objs[op.id]) {
+    if (self.objs[op.id]) {
       throw Error('Obj with ID already exists: ' + dumpOp());
     }
   }
@@ -48,7 +48,7 @@ GrafModel.prototype.applyOp = function(op) {
   switch (op.type) {
     case GrafOp.Type.ADD_CLUSTER: {
       assertOpIdFree();
-      this.objs[op.od] = this.clusters[op.id] = new GrafCluster(op.id);
+      this.objs[op.id] = this.clusters[op.id] = new GrafCluster(op);
       break;
     }
     case GrafOp.Type.REMOVE_CLUSTER: {
@@ -114,8 +114,8 @@ GrafModel.prototype.applyOp = function(op) {
       jack2 = this.getJack(op.jackId2);
       assertParentExists(jack2);
       link = new GrafLink(op);
-      jack1.addLink(jack1);
-      jack2.addLink(jack2);
+      jack1.addLink(link);
+      jack2.addLink(link);
       this.objs[op.id] = this.links[op.id] = link;
       break;
     }
@@ -161,40 +161,4 @@ GrafModel.prototype.getJack = function(id) {
 
 GrafModel.prototype.getLink = function(id) {
   return this.links[id];
-};
-
-GrafModel.prototype.getPartsWithClusterId = function(clusterId) {
-  var parts = [];
-  for (var partId in this.parts) {
-    var part = this.getPart(partId);
-    if (!part) continue;
-    if (clusterId == part.clusterId) {
-      parts.push(part);
-    }
-  }
-  return parts;
-};
-
-GrafModel.prototype.getJacksWithPartId = function(partId) {
-  var jacks = [];
-  for (var jackId in this.jacks) {
-    var jack = this.getJack(jackId);
-    if (!jack) continue;
-    if (partId == jack.partId) {
-      jacks.push(jack);
-    }
-  }
-  return jacks;
-};
-
-GrafModel.prototype.getLinksWithJackId = function(jackId) {
-  var links = [];
-  for (var linkId in this.links) {
-    var link = this.getLink(linkId);
-    if (!link) continue;
-    if (jackId == link.jackId1 || jackId == link.jackId2) {
-      links.push(link);
-    }
-  }
-  return links;
 };

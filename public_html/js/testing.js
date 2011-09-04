@@ -20,7 +20,7 @@ function logln(text, color) {
 var TEST_FUNC_NAME_RE = /(function )?(test[a-zA-Z0-9_$]*)/;
 function getTestFunctionNameFromStack() {
   var caller = arguments.callee.caller;
-  while(caller) {
+  while (caller) {
     var m = TEST_FUNC_NAME_RE.exec(caller.toString());
     if (m) return m[2];
     caller = caller.caller;
@@ -31,7 +31,6 @@ var failed = false;
 function fail(message) {
   failed = true;
   logln('FAILED: ' + message, '#800');
-  
 }
 
 function assertEquals(expected, actual) {
@@ -43,10 +42,10 @@ function assertEquals(expected, actual) {
 }
 
 function assertStringifyEquals(expected, actual) {
-  expected = JSON.stringify(expected);
-  actual = JSON.stringify(actual);
-  if (expected !== actual) {
-    var msg = 'expected:\n' + expected + '\nactual:\n' + actual;
+  var expectedStr = JSON.stringify(expected);
+  var actualStr = JSON.stringify(actual);
+  if (expectedStr !== actualStr) {
+    var msg = 'expected:\n' + expectedStr + '\nactual:\n' + actualStr;
     fail(msg);
     throw msg;
   }
