@@ -1,0 +1,61 @@
+v Hella design work
+
+2011.08.26 -
+Graf op JSON format
+v JSON schema for ops
+v Op reversal fn
+- Action JSON schema (intentions and concequences)
+- Action reversal fn
+
+Graf model
+- build from ops
+- write invariant-enforcing concequence computer?
+  - deleting any obj deletes its data hash
+  - deleting jack deletes links
+  - deleting part deletes jacks
+  - deleting cluster deletes parts
+- nice text representation for debugging
+
+Ved model
+- design all ved commands in their JSONy glory
+- write extra Ved-specific invariant-enforcing concequence computer
+  - deleting one portal or wall-endpoint deletes the whole cluster
+  - other wall endpoint moves minimum distance to remain coaxial
+Note: Ved enforcement happens before graf enforcement.  Maybe graf concequences need
+to be visible to Ved in case a Graf concequence triggers another Ved rule?  Or
+maybe not, because that's impossible?  There are no required links, and
+jacks are dictated by part type.  Part constraints are enforced within clusters
+by Ved alone.  No cluster requires another.  I think we're good.
+
+Ved-to-Vorp transformer
+- walls
+- one-point wall-huggers
+  - assembler
+  - button
+  - grip
+- two-point wall-huggers
+  - beamsensor
+  - door
+  - zapper
+- free-floaters:
+  - block
+  - exit
+  - portal
+  - timer
+
+Play level written entirely with ved actions.
+
+Logic: Part I
+- design all logic parts needed for existing levels
+- ved commands
+- ved concequences
+
+Logic: Part II
+- vorp support for clocked logic parts
+- ved-to-vorp transformer support
+- rewrite a wiring test level
+
+Total Conversion:
+- Rewrite all levels as ved action JSON.
+- Redo all logic support in prefabs.
+- Delete levelbuilder.js.
