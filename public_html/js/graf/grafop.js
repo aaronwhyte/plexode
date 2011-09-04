@@ -87,15 +87,15 @@ GrafOp.createReverse = function(op) {
       return {
         'type': GrafOp.Type.REMOVE_LINK,
         'id': op['id'],
-        'jackId1': op['jackId2'],
-        'jackId2': op['jackId1']
+        'jackId1': op['jackId1'],
+        'jackId2': op['jackId2']
       };
     case GrafOp.Type.REMOVE_LINK:
       return {
         'type': GrafOp.Type.ADD_LINK,
         'id': op['id'],
-        'jackId1': op['jackId2'],
-        'jackId2': op['jackId1']
+        'jackId1': op['jackId1'],
+        'jackId2': op['jackId2']
       };
     case GrafOp.Type.SET_DATA:
       return {

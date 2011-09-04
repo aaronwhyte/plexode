@@ -1,20 +1,37 @@
 v Hella design work
 
-2011.08.26 -
+2011.08.26 - 2011.08.31
 Graf op JSON format
 v JSON schema for ops
 v Op reversal fn
-- Action JSON schema (intentions and concequences)
-- Action reversal fn
+v unit test op reversal
 
-Graf model
-- build from ops
-- write invariant-enforcing concequence computer?
+2011.08.31 -
+GrafModel
+v build from ops
+v basic queries
+- unit test graf stuff
+- write invariant-enforcing consequence computer
   - deleting any obj deletes its data hash
   - deleting jack deletes links
   - deleting part deletes jacks
   - deleting cluster deletes parts
-- nice text representation for debugging
+
+GrafRenderer
+- parts circles
+- cluster polys
+- links as curves
+- jack "positions", dynamic based on linked part positions and separation around part
+- labels
+  - obj ids
+  - data
+
+Insta-graf
+- edit in text area
+- render edit
+- data in URL
+
+ZUI - zoomable user interface
 
 Ved model
 - design all ved commands in their JSONy glory

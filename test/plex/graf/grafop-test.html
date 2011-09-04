@@ -7,21 +7,111 @@
 <script src="../../../public_html/js/graf/grafop.js"></script>
 <script>
 
-addTest(function testCluster() {
-  var add = {
+function assertReverseEquals(a, b) {
+  assertStringifyEquals(a, GrafOp.createReverse(b));
+  assertStringifyEquals(b, GrafOp.createReverse(a));
+}
+
+addTest(function testAddRemoveCluster() {
+  assertReverseEquals({
     type:GrafOp.Type.ADD_CLUSTER,
     id: 123
-  };
-  var expectedRemove = {
+  }, {
     type:GrafOp.Type.REMOVE_CLUSTER,
     id: 123
-  };
-  var actualRemove = GrafOp.createReverse(add);
-  assertStringifyEquals(expectedRemove, actualRemove);
+  });
 });
 
-addTest(function testSanity() {
-  fail("yaaay");
+addTest(function testAddRemovePart() {
+  assertReverseEquals({
+    type:GrafOp.Type.ADD_PART,
+    id: 123,
+    clusterId: 321,
+    x: 10,
+    y: 20
+  }, {
+    type:GrafOp.Type.REMOVE_PART,
+    id: 123,
+    clusterId: 321,
+    x: 10,
+    y: 20
+  });
+});
+
+addTest(function testMovePart() {
+  assertReverseEquals({
+    type:GrafOp.Type.MOVE_PART,
+    id: 123,
+    x: 30,
+    y: 40,
+    oldX: 10,
+    oldY: 20
+  }, {
+    type:GrafOp.Type.MOVE_PART,
+    id: 123,
+    x: 10,
+    y: 20,
+    oldX: 30,
+    oldY: 40
+  });
+});
+
+addTest(function testAddRemoveJack() {
+  assertReverseEquals({
+    type:GrafOp.Type.ADD_JACK,
+    id: 123,
+    partId: 321
+  }, {
+    type:GrafOp.Type.REMOVE_JACK,
+    id: 123,
+    partId: 321
+  });
+});
+
+addTest(function testAddRemoveLink() {
+  assertReverseEquals({
+    type:GrafOp.Type.ADD_LINK,
+    id: 123,
+    jackId1: 100,
+    jackId2: 200
+  }, {
+    type:GrafOp.Type.REMOVE_LINK,
+    id: 123,
+    jackId1: 100,
+    jackId2: 200
+  });
+});
+
+addTest(function testSetNullData() {
+  assertReverseEquals({
+    type:GrafOp.Type.SET_DATA,
+    objId: 123,
+    key: 'strength',
+    value: 'medium',
+    oldValue: null
+  }, {
+    type:GrafOp.Type.SET_DATA,
+    objId: 123,
+    key: 'strength',
+    value: null,
+    oldValue: 'medium'
+  });
+});
+
+addTest(function testSetData() {
+  assertReverseEquals({
+    type:GrafOp.Type.SET_DATA,
+    objId: 123,
+    key: 'strength',
+    value: 'mighty',
+    oldValue: 'wimpy'
+  }, {
+    type:GrafOp.Type.SET_DATA,
+    objId: 123,
+    key: 'strength',
+    value: 'wimpy',
+    oldValue: 'mighty'
+  });
 });
 
 </script>
