@@ -2,18 +2,26 @@
 /**
  * This class is just a namespace for static values and methods.
  * A real Graf operation is JSON, like so:
+ *
  * { type:”addCluster”,  id: 1 }
  * { type:”removeCluster”, id:1 }
+ *
  * { type:“addPart”, id:2, clusterId:1, x:10, y:10 }
  * { type:“movePart”, id:2, oldX:10, oldY:10, x:20, y:20}
  * { type:“removePart”, id:2, clusterId:1, x:20, y:20 }
+ *
  * { type:”addJack”, id:3, partId:2 }
  * { type:”removeJack”, id:3, partId:2 }
+ *
  * { type:”addLink”, id:5, jackId1:3, jackId2:4}
  * { type:”removeLink”, id:5, jackId1:3, jackId2:4}
- * { type:”setData”, objId:2, key:”color”, oldValue:null, value:”red” }
- * { type:”setData”, objId:2, key:”color”, oldValue:”red”, value:”blue” }
- * { type:”setData”, objId:2, key:”color”, oldValue:”blue”, value:null }
+ *
+ * Every instance of the object types above has its own key/value store.
+ * Use "setData" ops to update those stores.  Set a value as undefined to erase
+ * it.
+ * { type:”setData”, id:2, key:”color”, oldValue:undefined, value:”red” }
+ * { type:”setData”, id:2, key:”color”, oldValue:”red”, value:”blue” }
+ * { type:”setData”, id:2, key:”color”, oldValue:”blue”, value:undefined }
  */
 function GrafOp() {}
 
@@ -33,6 +41,20 @@ GrafOp.Type = {
   SET_DATA: 'setData'
 };
 
+/**
+ * Create a list of ops that will reverse the input list.
+ */
+GrafOp.createReverses = function(ops) {
+  var reverses = [];
+  for (var i = ops.length - 1; i >= 0; i--) {
+    reverses.push(GrafOp.createReverse(ops[i]));
+  }
+  return reverses;
+};
+
+/**
+ * Create the reverse of a single op.
+ */
 GrafOp.createReverse = function(op) {
   if (!op) throw Error('cannot reverse falsy op: ' + op);
   switch(op['type']) {
@@ -100,7 +122,7 @@ GrafOp.createReverse = function(op) {
     case GrafOp.Type.SET_DATA:
       return {
         'type': GrafOp.Type.SET_DATA,
-        'objId': op['objId'],
+        'id': op['id'],
         'key': op['key'],
         'value': op['oldValue'],
         'oldValue': op['value']

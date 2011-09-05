@@ -11,6 +11,16 @@ function GrafModel() {
 
 /**
  * Mutates the model.
+ * @param ops  array of GrafOp JSON objects
+ */
+GrafModel.prototype.applyOps = function(ops) {
+  for (var i = 0; i < ops.length; i++) {
+    this.applyOp(ops[i]);
+  }
+};
+
+/**
+ * Mutates the model.
  * @param op  a GrafOp JSON object
  */
 GrafModel.prototype.applyOp = function(op) {
@@ -133,13 +143,17 @@ GrafModel.prototype.applyOp = function(op) {
       break;
     }
     case GrafOp.Type.SET_DATA: {
-      obj = objs[op.id];
+      obj = this.objs[op.id];
       assertObjExists(obj);
       if (obj.data[op.key] != op.oldValue) {
         throw Error('expected oldValue ' + op.oldValue +
             ' does not match actual value ' + obj.data[op.key]);
       }
-      obj.data[op.key] = op.value;
+      if (typeof op.value === 'undefined') {
+        delete obj.data[op.key];
+      } else {
+        obj.data[op.key] = op.value;
+      }
       break;
     }
     default:

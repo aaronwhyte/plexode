@@ -12,11 +12,7 @@
 <script src="../../../public_html/js/graf/graflink.js"></script>
 <script>
 
-addTest(function testConstructor() {
-  var m = new GrafModel();
-});
-
-addTest(function testConnectedClusters() {
+addTest(function navigateBetweenConnectedClusters() {
   var m = new GrafModel();
 
   // Build two clusters and connect them with a link.
@@ -67,6 +63,90 @@ addTest(function testConnectedClusters() {
   var p2 = m.getPart(j2.partId);
   var c2 = m.getCluster(p2.clusterId);
   assertEquals(200, c2.id);
+});
+
+addTest(function exerciseEveryOpType() {
+  var ops = [
+    {
+      type: GrafOp.Type.ADD_CLUSTER,
+      id: 100
+    }, {
+      type: GrafOp.Type.ADD_PART,
+      id: 110,
+      clusterId: 100,
+      x: 10, y: 10
+    }, {
+      type: GrafOp.Type.ADD_JACK,
+      id: 111,
+      partId: 110
+    }, {
+      type: GrafOp.Type.ADD_CLUSTER,
+      id: 200
+    }, {
+      type: GrafOp.Type.ADD_PART,
+      id: 210,
+      clusterId: 200,
+      x: 20, y: 20
+    }, {
+      type: GrafOp.Type.ADD_JACK,
+      id: 211,
+      partId: 210
+    }, {
+      type: GrafOp.Type.ADD_LINK,
+      id: 1000,
+      jackId1: 111,
+      jackId2: 211
+    }, {
+      type: GrafOp.Type.MOVE_PART,
+      id: 110,
+      oldX: 10, oldY: 10,
+      x: 9, y: 8
+    }, {
+      type: GrafOp.Type.SET_DATA,
+      id: 100,
+      key: 'fruit',
+      oldValue: undefined,
+      value: 'watermelon'
+    }, {
+      type: GrafOp.Type.SET_DATA,
+      id: 110,
+      key: 'shape',
+      oldValue: undefined,
+      value: 'like a ball'
+    }, {
+      type: GrafOp.Type.SET_DATA,
+      id: 111,
+      key: 'plug',
+      oldValue: undefined,
+      value: 'four-prong'
+    }, {
+      type: GrafOp.Type.SET_DATA,
+      id: 1000,
+      key: 'pasta',
+      oldValue: undefined,
+      value: 'spaghetti'
+    }, {
+      type: GrafOp.Type.SET_DATA,
+      id: 1000,
+      key: 'pasta',
+      oldValue: 'spaghetti',
+      value: 'linguine'
+    }
+  ];
+
+  var m = new GrafModel();
+  m.applyOps(ops);
+  var count = 0;
+  for (var obj in m.objs) {
+    count++
+  }
+  assertEquals(7, count);
+
+  var reverseOps = GrafOp.createReverses(ops);
+  m.applyOps(reverseOps);
+  for (var obj in m.objs) {
+    fail('expected the graf to be empty after reversing all creation ops');
+  }
 });
 
 </script>

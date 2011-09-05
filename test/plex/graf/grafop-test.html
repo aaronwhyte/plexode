@@ -85,13 +85,13 @@ addTest(function testAddRemoveLink() {
 addTest(function testSetDataUndefined() {
   assertReverseEquals({
     type:GrafOp.Type.SET_DATA,
-    objId: 123,
+    id: 123,
     key: 'strength',
     value: 'medium',
     oldValue: undefined
   }, {
     type:GrafOp.Type.SET_DATA,
-    objId: 123,
+    id: 123,
     key: 'strength',
     value: undefined,
     oldValue: 'medium'
@@ -101,13 +101,13 @@ addTest(function testSetDataUndefined() {
 addTest(function testSetData() {
   assertReverseEquals({
     type:GrafOp.Type.SET_DATA,
-    objId: 123,
+    id: 123,
     key: 'strength',
     value: 'mighty',
     oldValue: 'wimpy'
   }, {
     type:GrafOp.Type.SET_DATA,
-    objId: 123,
+    id: 123,
     key: 'strength',
     value: 'wimpy',
     oldValue: 'mighty'
