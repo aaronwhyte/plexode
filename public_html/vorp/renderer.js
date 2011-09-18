@@ -2,8 +2,9 @@
  * Renders all of Fracas2 using an HTML5 canvas.
  * @constructor
  */
-function Renderer(canvas) {
+function Renderer(canvas, camera) {
   this.canvas = canvas;
+  this.camera = camera;
   this.context = canvas.getContext('2d');
   this.context.font = "bold 14px monospace";
   this.context.lineWidth = 2;
@@ -16,18 +17,12 @@ function Renderer(canvas) {
   this.radVec = new Vec2d();
 }
 
-Renderer.prototype.cameraX = 0;
-Renderer.prototype.cameraY = 0;
-
-Renderer.prototype.zoom = 1;
-
 Renderer.prototype.setCenter = function(x, y) {
-  this.cameraX = x;
-  this.cameraY = y;
+  this.camera.setPanXY(x, y);
 };
 
 Renderer.prototype.setZoom = function(zoom) {
-  this.zoom = zoom;
+  this.camera.setZoom(zoom);
 };
 
 Renderer.prototype.clear = function() {
@@ -45,8 +40,9 @@ Renderer.prototype.transformStart = function() {
   var c = this.context;
   c.save();
   c.translate(this.canvasWidth/2, this.canvasHeight/2);
-  c.scale(this.zoom, this.zoom);
-  c.translate(-this.cameraX, -this.cameraY);
+  var zoom = this.camera.getZoom();
+  c.scale(zoom, zoom);
+  c.translate(-this.camera.getPanX(), -this.camera.getPanY());
 };
 
 Renderer.prototype.transformEnd = function() {

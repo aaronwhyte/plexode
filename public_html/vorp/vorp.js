@@ -66,8 +66,9 @@ Vorp.LAYERS = [
   Vorp.LAYER_DEBUG = 'debug'
 ];
 
-Vorp.start = function(levelBuilder, canvas, flagsDiv) {
-  var renderer = new Renderer(canvas);
+Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
+  var camera = opt_camera || new Camera();
+  var renderer = new Renderer(canvas, camera);
   window.FLAGS = new Flags(flagsDiv);
   var now = 1;
   var brect = levelBuilder.getBoundingRect();

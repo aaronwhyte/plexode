@@ -6,43 +6,28 @@ v JSON schema for ops
 v Op reversal fn
 v unit test op reversal
 
-2011.08.31 -
-GrafModel
+2011.08.31 - 2011.09.04
+GrafModel basics
 v build from ops
 v basic queries
-- unit test graf stuff
-- write invariant-enforcing consequence computer
-  - deleting any obj deletes its data hash
-  - deleting jack deletes links
-  - deleting part deletes jacks
-  - deleting cluster deletes parts
+v unit tests
 
-GrafRenderer
-- parts circles
-- cluster polys
-- links as curves
-- jack "positions", dynamic based on linked part positions and separation around part
-- labels
-  - obj ids
-  - data
-
-Insta-graf
-- edit in text area
-- render edit
-- data in URL
-
-ZUI - zoomable user interface
-
-Ved model
-- design all ved commands in their JSONy glory
-- write extra Ved-specific invariant-enforcing concequence computer
-  - deleting one portal or wall-endpoint deletes the whole cluster
-  - other wall endpoint moves minimum distance to remain coaxial
-Note: Ved enforcement happens before graf enforcement.  Maybe graf concequences need
-to be visible to Ved in case a Graf concequence triggers another Ved rule?  Or
-maybe not, because that's impossible?  There are no required links, and
-jacks are dictated by part type.  Part constraints are enforced within clusters
-by Ved alone.  No cluster requires another.  I think we're good.
+Ved model for hand-coded file building
+- design ved model on top of graf model
+- design level-building ved commands in their JSONy glory
+  - add wall cluster with two parts (x, y, x, y)
+  - add portal cluster with two parts (x, y, x, y)
+  - add single-part cluster (type, x, y)
+    - player assembler
+    - block
+    - button
+    - grip
+    - zapper
+    - door
+    - beamsensor
+    - timer
+  - add exit (x, y, URL)
+  - add wire (outputJack, inputJack)
 
 Ved-to-Vorp transformer
 - walls
@@ -76,3 +61,34 @@ Total Conversion:
 - Rewrite all levels as ved action JSON.
 - Redo all logic support in prefabs.
 - Delete levelbuilder.js.
+
+============== VED UI ============
+Ved model for interactive editing
+- write invariant-enforcing concequence computer
+  - deleting one portal or wall-endpoint deletes the whole cluster
+  - other wall endpoint moves minimum distance to remain coaxial
+  - deleting any part deletes all jacks and links and data first
+  - deleting last part in a cluster deletes cluster
+
+
+ATTIC
+GrafRenderer
+- part: circle
+- cluster: transparent poly or outline
+- links as curves
+- jack "positions", dynamic based on linked part positions and separation around part
+- labels
+  - obj ids
+  - data
+
+Insta-graf
+- edit in text area
+- render edit
+- data in URL
+
+Graf consequence calculator
+- deleting any obj deletes its data hash
+- deleting jack deletes links
+- deleting part deletes jacks
+- deleting cluster deletes parts
+
