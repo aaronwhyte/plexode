@@ -1,0 +1,28 @@
+Level can be a series of actions taken by someone with an editor, so start there.
+
+// paste wall clipboard:
+addcluster 1
+setdata 9 type undefined -> wall
+addpart 2 x, y
+addpart 3 x, y
+
+// move one
+movepart 2 ox, oy, nx, ny
+
+// move the other
+movepart 3 ox, oy, nx, ny
+
+etc...
+
+// paste player assembler
+addcluster 9
+setdata 9 type undefined -> player_assembler
+addpart 15 x y
+
+// paste exit
+addcluster 10
+setdata 10 type undefined -> wall
+addpart 16 x, y
+
+// set exit URL
+setdata 10 url: "../level2/index.html"

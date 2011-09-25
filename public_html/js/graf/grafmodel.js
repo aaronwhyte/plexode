@@ -7,10 +7,24 @@ function GrafModel() {
   this.parts = {};
   this.jacks = {};
   this.links = {};
+  this.lastId = 0;
+  this.size = 0;
 }
 
 /**
- * Mutates the model.
+ * Returns a new ID that is not currently in use.
+ * Will never return the same ID twice.
+ */
+GrafModel.prototype.newId = function() {
+  this.lastId++;
+  while (this.objs[this.lastId]) {
+    this.lastId++;
+  }
+  return this.lastId;
+};
+
+/**
+ * Mutates the model.  If an error happens, the model is left partly mutated.
  * @param ops  array of GrafOp JSON objects
  */
 GrafModel.prototype.applyOps = function(ops) {
@@ -20,7 +34,7 @@ GrafModel.prototype.applyOps = function(ops) {
 };
 
 /**
- * Mutates the model.
+ * Mutates the model, or throws an error.
  * @param op  a GrafOp JSON object
  */
 GrafModel.prototype.applyOp = function(op) {
@@ -59,6 +73,7 @@ GrafModel.prototype.applyOp = function(op) {
     case GrafOp.Type.ADD_CLUSTER: {
       assertOpIdFree();
       this.objs[op.id] = this.clusters[op.id] = new GrafCluster(op);
+      this.size++;
       break;
     }
     case GrafOp.Type.REMOVE_CLUSTER: {
@@ -66,6 +81,7 @@ GrafModel.prototype.applyOp = function(op) {
       assertRemovable(cluster);
       delete this.clusters[op.id];
       delete this.objs[op.id];
+      this.size--;
       break;
     }
     case GrafOp.Type.ADD_PART: {
@@ -75,6 +91,7 @@ GrafModel.prototype.applyOp = function(op) {
       part = new GrafPart(op);
       cluster.addPart(part);
       this.objs[op.id] = this.parts[op.id] = part;
+      this.size++;
       break;
     }
     case GrafOp.Type.REMOVE_PART: {
@@ -85,6 +102,7 @@ GrafModel.prototype.applyOp = function(op) {
       cluster.removePart(part);
       delete this.parts[op.id];
       delete this.objs[op.id];
+      this.size--;
       break;
     }
     case GrafOp.Type.MOVE_PART: {
@@ -105,6 +123,7 @@ GrafModel.prototype.applyOp = function(op) {
       jack = new GrafJack(op);
       part.addJack(jack);
       this.objs[op.id] = this.jacks[op.id] = jack;
+      this.size++;
       break;
     }
     case GrafOp.Type.REMOVE_JACK: {
@@ -115,6 +134,7 @@ GrafModel.prototype.applyOp = function(op) {
       part.removeJack(jack);
       delete this.jacks[op.id];
       delete this.objs[op.id];
+      this.size--;
       break;
     }
     case GrafOp.Type.ADD_LINK: {
@@ -127,6 +147,7 @@ GrafModel.prototype.applyOp = function(op) {
       jack1.addLink(link);
       jack2.addLink(link);
       this.objs[op.id] = this.links[op.id] = link;
+      this.size++;
       break;
     }
     case GrafOp.Type.REMOVE_LINK: {
@@ -140,6 +161,7 @@ GrafModel.prototype.applyOp = function(op) {
       jack2.removeLink(link);
       delete this.links[op.id];
       delete this.objs[op.id];
+      this.size--;
       break;
     }
     case GrafOp.Type.SET_DATA: {
@@ -175,4 +197,93 @@ GrafModel.prototype.getJack = function(id) {
 
 GrafModel.prototype.getLink = function(id) {
   return this.links[id];
+};
+
+/**
+ * @param {GrafModel} model  something to paste into this model
+ * @return a mapping from old obj IDs to new obj IDs
+ */
+GrafModel.prototype.addModel = function(model) {
+  var self = this;
+  var idMap = {};
+
+  function addId(oldId) {
+    var newId = self.newId();
+    idMap[oldId] = newId;
+    return newId;
+  }
+  function getId(oldId) {
+    var newId = idMap[oldId];
+    if (!newId) {
+      throw Error('model refers to nonexistent id: ' + oldId);
+    }
+    return newId;
+  }
+  function pushDataOps(objId, data) {
+    for (var key in data) {
+      ops.push({
+        type: GrafOp.Type.SET_DATA,
+        id: objId,
+        key: key,
+        oldValue: undefined,
+        value: data[key]
+      });
+    }
+  }
+
+  // buffer up all ops before applying any
+  var ops = [];
+
+  // Add clusters.
+  for (var clusterId in model.clusters) {
+    var cluster = model.clusters[clusterId];
+    var newClusterId = addId(clusterId);
+    ops.push({
+      type: GrafOp.Type.ADD_CLUSTER,
+      id: newClusterId
+    });
+    pushDataOps(newClusterId, cluster.data);
+    
+    // Add cluster's parts.
+    for (var partId in cluster.parts) {
+      var part = cluster.parts[partId];
+      var newPartId = addId(partId);
+      ops.push({
+        type: GrafOp.Type.ADD_PART,
+        id: newPartId,
+        clusterId: newClusterId,
+        x: part.x,
+        y: part.y
+      });
+      pushDataOps(newPartId, part.data);
+
+      // Add part's jacks.
+      for (var jackId in part.jacks) {
+        var jack = part.jacks[jackId];
+        var newJackId = addId(jackId);
+        ops.push({
+          type: GrafOp.Type.ADD_JACK,
+          id: newJackId,
+          partId: newPartId
+        });
+        pushDataOps(newJackId, jack.data);
+      }
+    }
+  }
+
+  // Add links.
+  for (var linkId in model.links) {
+    var link = model.links[linkId];
+    var newLinkId = addId(linkId);
+    ops.push({
+      type: GrafOp.Type.ADD_LINK,
+      id: newLinkId,
+      jackId1: getId(link.jackId1),
+      jackId2: getId(link.jackId2)
+    });
+    pushDataOps(newLinkId, link.data);
+  }
+
+  this.applyOps(ops);
+  return idMap;
 };

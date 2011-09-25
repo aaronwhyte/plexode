@@ -12,10 +12,11 @@
 <script src="../../../public_html/js/graf/graflink.js"></script>
 <script>
 
-addTest(function navigateBetweenConnectedClusters() {
+/**
+ * Build two clusters and connect them with a link.
+ */
+function buildTwoClusterModel() {
   var m = new GrafModel();
-
-  // Build two clusters and connect them with a link.
   m.applyOp({
     type: GrafOp.Type.ADD_CLUSTER,
     id: 100
@@ -54,6 +55,12 @@ addTest(function navigateBetweenConnectedClusters() {
     jackId2: 211
   });
 
+  return m;
+}
+
+addTest(function navigateBetweenConnectedClusters() {
+  var m = buildTwoClusterModel();
+  
   // Navigate from one cluster to the other.
   var c1 = m.getCluster(100);
   var p1 = c1.parts[110];
@@ -136,17 +143,43 @@ addTest(function exerciseEveryOpType() {
 
   var m = new GrafModel();
   m.applyOps(ops);
-  var count = 0;
-  for (var obj in m.objs) {
-    count++
-  }
-  assertEquals(7, count);
+
+//  var count = 0;
+//  for (var obj in m.objs) {
+//    count++
+//  }
+  assertEquals(7, m.size);
 
   var reverseOps = GrafOp.createReverses(ops);
   m.applyOps(reverseOps);
   for (var obj in m.objs) {
     fail('expected the graf to be empty after reversing all creation ops');
   }
+  assertEquals(0, m.size);
+});
+
+
+addTest(function testAddModel() {
+  var source = buildTwoClusterModel();
+  var target = new GrafModel();
+  assertEquals(0, target.size);
+  target.addModel(source);
+  assertEquals(7, target.size);
+  target.addModel(source);
+  assertEquals(14, target.size);
+  target.addModel(source);
+  assertEquals(21, target.size);
+});
+
+addTest(function testAddModelToItself() {
+  var m = buildTwoClusterModel();
+  m.addModel(m);
+  m.addModel(m);
+  m.addModel(m);
+  m.addModel(m);
+  m.addModel(m);
+  m.addModel(m);
+  assertEquals(7 * 2 * 2 * 2 * 2 * 2 * 2, m.size);
 });
 
 </script>

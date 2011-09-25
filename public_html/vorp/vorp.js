@@ -84,7 +84,7 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
       now);
   var wham = new VorpWham();
   var phy = new Phy(collider, wham, now);
-  var vorp = new Vorp(renderer, phy);
+  var vorp = new Vorp(renderer, phy, camera);
   
   var prefabs = levelBuilder.getPrefabs();
   var playerPrefab = null;

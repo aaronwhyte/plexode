@@ -100,6 +100,3 @@ one or more control points with various constraints and natures
 
 Parts have painters.  They do NOT show the resulting sprites.  Just an AR overlay of data.
 The under-layer *is* the resulting sprites and their painters... but not a full Vorp.
-
-Selection
-

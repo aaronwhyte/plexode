@@ -12,6 +12,17 @@ v build from ops
 v basic queries
 v unit tests
 
+2011.09.24 - 2011.09.25
+Graf Paste
+v descend through clusters, parts, jacks
+v grafModel allocates new IDs
+v grafModel.paste(grafModel) returns ID map
+v unit tests
+
+Ved Validate
+- validate cluster, for every cluster type
+- validate link
+
 Ved model for hand-coded file building
 - design ved model on top of graf model
 - design level-building ved commands in their JSONy glory
@@ -28,6 +39,23 @@ Ved model for hand-coded file building
     - timer
   - add exit (x, y, URL)
   - add wire (outputJack, inputJack)
+
+Ved UI API:
+- iteration for rendering
+- spacial queries
+  - mouseover
+  - drag selection
+  - alter selection
+- copy selection to a clipboard
+- changes
+  - paste from a clipboard
+  - link
+  - delete
+  - undo
+- previews
+  - linking
+  - paste preview
+  - dragging parts
 
 Ved-to-Vorp transformer
 - walls
