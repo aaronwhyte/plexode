@@ -1,0 +1,73 @@
+2011.11.20 - 2011.11.20
+v DESIGN AND PLAN
+
+2011.11.20 - 2011.11.20
+MODEL
+x (Use array of strings) Fingering: 6 strings, from low E to high E, with values like "x" or "o" or "1/3" or "//1"
+x (Use JSON {tokens:[strings], fingering[6 strings]}) ChordDef: A single chord fingering definition. Includes Tokens and Fingering.
+x (Use JSON {type:SongPart.TYPE, chordDef:(above), playable SongPart: A part of a song definition: ChordDef, Playable, MeasureBreak, LineBreak
+x ChordDef: SearchTokens, Fingering, and maybe additional display hints
+x Song: A list of SongParts
+
+JSON schema:
+song = [
+  // songParts
+  {
+    chordDef: {
+      tokens: ["open", "G"],
+      strings: ["//3", "/2", "o", "o", "o", "//4"]
+    }
+  },
+  {
+    playable: {
+      tokens: ["G", "open"],
+      lyrics: "Sing while you code"
+    }
+  },
+  "measureBreak",
+  "lineBreak"
+]
+
+2011.11.20 -
+PARSERS
+
+SongParser: Converts a text string into a Song. Splits on "\n" and feeds list to...
+SongPartParser: Parses one line of a Song string. Tries LineBreak, MeasureBreak, ChordDef, then Playable.
+LineBreakParser: Tries to consume a linebreak
+MeasureBreakParser: Same idea.
+ChordDefParser: Tries to consume a chord def. If that fails...
+PlayableParser: Always works. Unparsable chord tokens converted to lyrics.
+
+SCORING POTENTIAL MATCHES
+
+The tricky part is matching the Playable chord tokens to a ChordDef.
+Compute score of all possible tokens, then take highest score's one.
+Scoring:
+Each token is scored once, using its highest possible score.
+A perfect match on a token is 10000 points.
+1000 points for a query which is a prefix of a definition token, minus 100 for every unmatched def char.
+Completely unmatched definition tokens (no prefix match even) are -10.
+Unmatched tokens in the query are -1
+
+So, if the def is "maj7 form6" and the query is "A maj" then the score is...
+query's A: no match: -1
+query's maj: prefix match: 1000-100 = 900
+Leftover def tokens: form6: -10
+Total: 889
+
+Always use the highest-scoring match as the actual match.
+For autocomplete, order by score. A click will complete prefixes and add missing def tokens,
+but it will never remove tokens.
+
+
+SUPER BASIC UI
+
+Nav links at the top, then text area, then song renders below.
+
+NEXT FEATURES
+- Rendered song scroll div occupies all available window space below nav and text area.
+- "Maximize song" button.
+- Highlight song divs based on source selection
+- Auto-scrolling from source selection to song
+- Auto-scrolling from song click to source
+- Autocomplete menu for chord completion

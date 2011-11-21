@@ -22,7 +22,7 @@ addpart 15 x y
 // paste exit
 addcluster 10
 setdata 10 type undefined -> wall
-addpart 16 x, y
+addpart 16 x, y 
 
 // set exit URL
 setdata 10 url: "../level2/index.html"

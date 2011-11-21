@@ -19,45 +19,8 @@ v grafModel allocates new IDs
 v grafModel.paste(grafModel) returns ID map
 v unit tests
 
-Ved Validate
-- validate cluster, for every cluster type
-- validate link
-
-Ved model for hand-coded file building
-- design ved model on top of graf model
-- design level-building ved commands in their JSONy glory
-  - add wall cluster with two parts (x, y, x, y)
-  - add portal cluster with two parts (x, y, x, y)
-  - add single-part cluster (type, x, y)
-    - player assembler
-    - block
-    - button
-    - grip
-    - zapper
-    - door
-    - beamsensor
-    - timer
-  - add exit (x, y, URL)
-  - add wire (outputJack, inputJack)
-
-Ved UI API:
-- iteration for rendering
-- spacial queries
-  - mouseover
-  - drag selection
-  - alter selection
-- copy selection to a clipboard
-- changes
-  - paste from a clipboard
-  - link
-  - delete
-  - undo
-- previews
-  - linking
-  - paste preview
-  - dragging parts
-
 Ved-to-Vorp transformer
+Reads GrafModel directly?
 - walls
 - one-point wall-huggers
   - assembler
@@ -72,6 +35,11 @@ Ved-to-Vorp transformer
   - exit
   - portal
   - timer
+
+Ved Validate
+x design ved model on top of graf model
+- validate cluster, for every cluster type
+- validate link
 
 Play level written entirely with ved actions.
 
@@ -91,6 +59,23 @@ Total Conversion:
 - Delete levelbuilder.js.
 
 ============== VED UI ============
+Ved UI API:
+- iteration for rendering
+- spacial queries
+  - mouseover
+  - drag selection
+  - alter selection
+- copy selection to a clipboard
+- changes
+  - paste from a clipboard
+  - link
+  - delete
+  - undo
+- previews
+  - linking
+  - paste preview
+  - dragging parts
+
 Ved model for interactive editing
 - write invariant-enforcing concequence computer
   - deleting one portal or wall-endpoint deletes the whole cluster
