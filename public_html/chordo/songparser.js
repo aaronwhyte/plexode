@@ -30,6 +30,7 @@ SongParser.prototype.parse = function(songText) {
     }
     song.push(this.parsePlayable(t));
   }
+  return song;
 };
 
 /**
@@ -46,7 +47,7 @@ SongParser.prototype.parseLineBreak = function(text) {
  * @param {string} text
  */
 SongParser.prototype.parseMeasureBreak = function(text) {
-  if (/^\s*-\s*$/.test(text)) {
+  if (/^\s*-+\s*$/.test(text)) {
     return "measureBreak";
   }
   return null;
@@ -107,10 +108,10 @@ SongParser.prototype.parsePlayable = function(text) {
     lyrics = "";
   } else {
     tokensText = text.substr(0, colonIndex);
-    lyrics = text.substr(colonIndex + 1, text.length);
+    lyrics = text.substr(colonIndex + 1, text.length).trim();
   }
   return {
-    'tokens': this.tokenize(tokenText),
+    'tokens': this.tokenize(tokensText),
     'lyrics': lyrics
   };
 };

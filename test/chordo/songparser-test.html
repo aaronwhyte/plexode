@@ -7,6 +7,29 @@
 <script src="../../public_html/chordo/songparser.js"></script>
 <script>
 addTest(function testParseTinySong() {
+  var p = new SongParser();
+  var s = p.parse([
+      "C open: x //3 /2 o 1 o",
+      "C: La la la",
+      "   ",
+      "---",
+      "blarg"].join("\n"));
+  assertStringifyEquals([
+    {
+      "tokens": ["C", "open"],
+      "strings": ["x", "//3", "/2", "o", "1", "o"]
+    },
+    {
+      "tokens": ["C"],
+      "lyrics": "La la la"
+    },
+    "lineBreak",
+    "measureBreak",
+    {
+      "tokens": ["blarg"],
+      "lyrics": ""
+    }
+  ], s)
 });
 </script>
 </head>
