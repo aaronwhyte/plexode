@@ -6,6 +6,7 @@ links = [
   ("eval3", "eval3/"),
   ("fracas", "fracas/"),
   ("vorp", "vorp/"),
+  ("chordo", "chordo/"),
 ]
 
 def headStart(name, depth):

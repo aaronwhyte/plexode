@@ -4,6 +4,7 @@
 <title>songparser tests</title>
 <script src="../..//public_html/js/testing.js"></script>
 <script src="../../public_html/js/util.js"></script>
+<script src="../../public_html/chordo/songmodel.js"></script>
 <script src="../../public_html/chordo/songparser.js"></script>
 <script>
 addTest(function testParseTinySong() {
@@ -17,7 +18,7 @@ addTest(function testParseTinySong() {
   assertStringifyEquals([
     {
       "tokens": ["C", "open"],
-      "strings": ["x", "//3", "/2", "o", "1", "o"]
+      "fingering": ["x", "//3", "/2", "o", "1", "o"]
     },
     {
       "tokens": ["C"],

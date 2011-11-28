@@ -8,54 +8,47 @@ function SongParser() {
  * @param {string} songText
  */
 SongParser.prototype.parse = function(songText) {
-  var song = [];
+  var song = new SongModel();
   var textLines = songText.split('\n');
   var parsed;
   for (var i = 0; i < textLines.length; i++) {
     var t = textLines[i];
-    parsed = this.parseLineBreak(t);
-    if (parsed) {
-      song.push(parsed);
+    if (this.isLineBreak(t)) {
+      song.addLineBreak();
       continue;
     }
-    parsed = this.parseMeasureBreak(t);
-    if (parsed) {
-      song.push(parsed);
+    if (this.isMeasureBreak(t)) {
+      song.addMeasureBreak();
       continue;
     }
-    parsed = this.parseChordDef(t);
-    if (parsed) {
-      song.push(parsed);
+    var chordDef = this.parseChordDef(t);
+    if (chordDef) {
+      song.addChordDef(chordDef);
       continue;
     }
-    song.push(this.parsePlayable(t));
+    song.addPlayable(this.parsePlayable(t));
   }
+  song.calcBestMatches();
   return song;
 };
 
 /**
  * @param {string} text
  */
-SongParser.prototype.parseLineBreak = function(text) {
-  if (/^\s*$/.test(text)) {
-    return "lineBreak";
-  }
-  return null;
+SongParser.prototype.isLineBreak = function(text) {
+  return /^\s*$/.test(text);
 };
 
 /**
  * @param {string} text
  */
-SongParser.prototype.parseMeasureBreak = function(text) {
-  if (/^\s*-+\s*$/.test(text)) {
-    return "measureBreak";
-  }
-  return null;
+SongParser.prototype.isMeasureBreak = function(text) {
+  return /^\s*-+\s*$/.test(text);
 };
 
 SongParser.prototype.tokenize = function(text) {
   var tokens = text.trim().split(/\s+/g);
-  // Spritting empty-string or whitespace results in one empty token.
+  // Splitting empty-string or whitespace results in one empty token.
   if (tokens.length == 1 && !tokens.length) return [];
   return tokens;
 };
@@ -86,7 +79,7 @@ SongParser.prototype.parseChordDef = function(text) {
   }
   return {
     'tokens': tokens,
-    'strings': strings
+    'fingering': strings
   };
 };
 

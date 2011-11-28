@@ -28,24 +28,25 @@ song = [
   "lineBreak"
 ]
 
-2011.11.20 -
+2011.11.20 - 2011-11-24
 PARSERS
-
-SongParser: Converts a text string into a Song. Splits on "\n" and feeds list to...
-SongPartParser: Parses one line of a Song string. Tries LineBreak, MeasureBreak, ChordDef, then Playable.
+SongParser: Converts a text string into a Song.
+SongPartParser: Parses one line of a Song string. Tries LineBreak, MeasureBreak,
+ChordDef, then Playable.
 LineBreakParser: Tries to consume a linebreak
 MeasureBreakParser: Same idea.
 ChordDefParser: Tries to consume a chord def. If that fails...
 PlayableParser: Always works. Unparsable chord tokens converted to lyrics.
 
+2011.11.24 - 2011.11.27
 SCORING POTENTIAL MATCHES
-
 The tricky part is matching the Playable chord tokens to a ChordDef.
 Compute score of all possible tokens, then take highest score's one.
 Scoring:
 Each token is scored once, using its highest possible score.
 A perfect match on a token is 10000 points.
-1000 points for a query which is a prefix of a definition token, minus 100 for every unmatched def char.
+1000 points for a query which is a prefix of a definition token, minus 100 for
+every unmatched def char.
 Completely unmatched definition tokens (no prefix match even) are -10.
 Unmatched tokens in the query are -1
 
@@ -56,16 +57,17 @@ Leftover def tokens: form6: -10
 Total: 889
 
 Always use the highest-scoring match as the actual match.
-For autocomplete, order by score. A click will complete prefixes and add missing def tokens,
-but it will never remove tokens.
+For autocomplete, order by score. A click will complete prefixes and add
+missing def tokens, but it will never remove tokens.
 
-
+2011.11.27 - 
 SUPER BASIC UI
 
 Nav links at the top, then text area, then song renders below.
 
 NEXT FEATURES
-- Rendered song scroll div occupies all available window space below nav and text area.
+- Rendered song scroll div occupies all available window space below nav and
+text area.
 - "Maximize song" button.
 - Highlight song divs based on source selection
 - Auto-scrolling from source selection to song

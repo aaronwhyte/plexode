@@ -89,7 +89,8 @@ def buildPlexode():
   writePublicHtml('/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml('/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml('/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  
+  writePublicHtml('/chordo', chordo.formatChordo())
+
   print "DONE building plexode"
 
 
