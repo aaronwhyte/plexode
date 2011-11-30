@@ -60,10 +60,15 @@ Always use the highest-scoring match as the actual match.
 For autocomplete, order by score. A click will complete prefixes and add
 missing def tokens, but it will never remove tokens.
 
-2011.11.27 - 
+2011.11.27 - 2011.11.28
 SUPER BASIC UI
-
 Nav links at the top, then text area, then song renders below.
+
+2011.11.29 - 2011.11.29
+URLize
+- Store song in hash fragment of URL
+- Read hash fragment into URL when starting up.
+
 
 NEXT FEATURES
 - Rendered song scroll div occupies all available window space below nav and

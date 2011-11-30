@@ -26,13 +26,34 @@ Chordo.prototype.start = function() {
     c.setElement(plex.dom.gebi(id));
     c.subChange(handler);
   }
-  taListen(this.inputId, plex.func.bind(this.redraw, this));
+  taListen(this.inputId, plex.func.bind(this.updateSong, this));
 
   this.inputEl = plex.dom.gebi(this.inputId);
   this.outputEl = plex.dom.gebi(this.outputId);
 };
 
+Chordo.prototype.updateSong = function() {
+  this.redraw();
+  this.save();
+};
+
 Chordo.prototype.redraw = function() {
   var song = this.parser.parse(this.inputEl.value);
   this.outputEl.innerHTML = this.renderer.formatSong(song);
+};
+
+Chordo.prototype.save = function() {
+  var map = {};
+  var ids = [this.inputId];
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var input = plex.dom.gebi(id);
+    if (input.type == 'checkbox') {
+      map[id] = input.checked ? 1 : 0;
+    } else {
+      map[id] = plex.dom.gebi(id).value;
+    }
+  }
+  var q = plex.url.encodeQuery(map);
+  plex.url.setFragment(q);
 };
