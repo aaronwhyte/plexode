@@ -7,6 +7,7 @@ def formatChordo():
   h = []
   h.append(format.headStart(name, 1))
   h.append("""
+<link rel="stylesheet" type="text/css" href="./chordo.css">
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
@@ -29,33 +30,24 @@ function onLoadHandler() {
       'ta',
       'output');
   c.start();
+  c.redraw();
 }
 </script>
-<style>
-
-#ta {
-  width:100%;
-  height:20em;
-}
-
-#output {
-  background:#ddd;
-  padding:1em;
-}
-
-.nowrap {
-  white-space:nowrap;
-}
-
-</style>
 </head><body onload="onLoadHandler()">
 """)
   h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <textarea id="ta">
-C open: x //3 /2 o 1 o
+Em: o /2 /3 o o o
+E: o /2 /3 1 o o
+C: x //3 /2 o 1 o
+maj bar: 1 1/3 1/4 12 1 1
+
+C: Hello!
+E: This is major
 -
-C: hi there
+Em: This is minor.
+F maj bar: Bar chord
 </textarea>
 <div id="output"></div>
 """))

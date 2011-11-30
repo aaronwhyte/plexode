@@ -1,0 +1,53 @@
+
+#ta {
+    width:100%;
+    height:20em;
+    font-family:monospace;
+}
+
+#output {
+    background-color:#eee;
+    padding:1em;
+}
+
+.nowrap {
+    white-space:nowrap;
+}
+
+.fingering {
+    white-space: pre;
+    font-family: monospace;
+    xfont-size:90%;
+    xcolor:#d00;
+}
+
+.measurebreak {
+    display:inline-block;
+    width:2px;
+    margin: 1em 0.5em;
+    height:7em;
+    background-color:#888;
+    vertical-align: middle;
+}
+
+.chorddef {
+    display:inline-block;
+    margin:1em;
+    vertical-align: top;
+    font-size:75%;
+}
+
+.playable {
+    display:inline-block;
+    margin:1em;
+    vertical-align: top;
+}
+
+.playabletokens {
+    font-size:110%;
+    font-style:italic;
+}
+
+.lyrics {
+    margin-top:0.5em;
+}

@@ -26,13 +26,13 @@ Chordo.prototype.start = function() {
     c.setElement(plex.dom.gebi(id));
     c.subChange(handler);
   }
-  taListen(this.inputId, plex.func.bind(this.onTaChange, this));
+  taListen(this.inputId, plex.func.bind(this.redraw, this));
 
   this.inputEl = plex.dom.gebi(this.inputId);
   this.outputEl = plex.dom.gebi(this.outputId);
 };
 
-Chordo.prototype.onTaChange = function() {
+Chordo.prototype.redraw = function() {
   var song = this.parser.parse(this.inputEl.value);
   this.outputEl.innerHTML = this.renderer.formatSong(song);
 };

@@ -9,22 +9,24 @@ SongRenderer.prototype.formatSong = function(song) {
   for (var i = 0; i < song.layout.length; i++) {
     var e = song.layout[i];
     if (e == SongModel.MEASURE_BREAK) {
-      h.push(' | ');
+      h.push('<div class="measurebreak"></div>');
     } else if (e == SongModel.LINE_BREAK) {
       h.push('<br>');
     } else if (e['fingering']) {
-      h.push('<div style="display:inline-block; margin:1em">',
-          plex.string.textToHtml(e.tokens.join(' ')), ': ',
+      h.push('<div class="chorddef">',
+          plex.string.textToHtml(e.tokens.join(' ')), ' ',
           this.formatFingering(e.fingering),
           '</div>');
     } else {
       var f = song.getFingeringForPlayable(e);
-      h.push('<div style="display:inline-block; margin:1em">',
+      h.push('<div class="playable">',
+          '<span class="playabletokens">',
           plex.string.textToHtml(e.tokens.join(' ')),
-          '<br>',
-          plex.string.textToHtml(e.lyrics),
-          '<br>',
+          '</span>',
           f ? this.formatFingering(f.fingering) : '',
+          '<div class="lyrics">',
+          plex.string.textToHtml(e.lyrics),
+          '</div>',
           '</div>');
     }
   }
@@ -32,7 +34,8 @@ SongRenderer.prototype.formatSong = function(song) {
 };
 
 SongRenderer.prototype.formatFingering = function(fingering) {
-  var h = ['<div style="white-space: pre; font-family: monospace">'];
+  var rowsRendered = 0;
+  var h = ['<div class="fingering">'];
   var chars = [];
   var hasXoRow = false;
   for (var i = 0; i < 6; i++) {
@@ -43,8 +46,11 @@ SongRenderer.prototype.formatFingering = function(fingering) {
       chars[i] = ' ';
     }
   }
+  var sep = '';
   if (hasXoRow) {
-    h.push(chars.join(''), '<br>');
+    h.push(chars.join(''));
+    sep = '<br>';
+    rowsRendered++;
   }
   var empty = false;
   for (var rowIndex = 0; !empty; rowIndex++) {
@@ -65,8 +71,13 @@ SongRenderer.prototype.formatFingering = function(fingering) {
       }
     }
     if (!empty) {
-      h.push(chars.join(''), '<br>');
+      rowsRendered++;
+      h.push(sep, chars.join(''));
+      sep = '<br>';
     }
+  }
+  for (var i = rowsRendered; i < 4; i++) {
+    h.push(sep, '------');
   }
   h.push('</div>');
   return h.join('');
