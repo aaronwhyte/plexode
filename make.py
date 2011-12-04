@@ -188,7 +188,6 @@ def printHelp():
     
 
 def main():
-  d = {}
   if len(sys.argv) == 3 and sys.argv[1] == '-build_dir':
     buildPlexode(sys.argv[2])
   else:

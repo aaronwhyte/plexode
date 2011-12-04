@@ -1,0 +1,35 @@
+So like the URLs are too long?
+And I want to make them shorter without recording data server-side?
+So I need to compress them?
+
+IDEAS:
+There are 71 chars not mutated by encodeURIComponent-encoding:
+!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~
+
+We can make a lot of urls shorter by swapping short chars for long ones.
+So if the string is
+Do you like cheese as much as I do?
+it escapes to
+Do%20you%20like%20cheese%20as%20much%20as%20I%20do%3F
+But we could compress it a bit by making one swap:
+1~!%20Do!you!like!cheese!as!much!as!I!do%3F
+That can help a lot but not.. Infinity.
+Source code strings have runs of spaces, and pairs of chars too.
+It's be SWEET to have substitutions like
+1~X%20%20
+to mean that "X" means "%20%20" aka two spaces. 6:1 ratio!
+
+encodeURI gives us 82 chars, which is way better:
+!#$&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~
+
+Can we characterize all substrings under some size limit,
+by frequency times escaped length,
+and then prioritize substitutions based on those.
+We can also use unused two-char sequences, out of the 6724 possible,
+And we can swap rare short strings with expensive long ones,
+to free up the short ones for other stuff.
+
+For characterization, use a trie with counts and stuff?
+Or just loop over it making MAX_LEN number of substrings and incrementing
+their values in a hashtable.
+

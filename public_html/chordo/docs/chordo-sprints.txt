@@ -69,7 +69,6 @@ URLize
 - Store song in hash fragment of URL
 - Read hash fragment into URL when starting up.
 
-
 NEXT FEATURES
 - Rendered song scroll div occupies all available window space below nav and
 text area.
