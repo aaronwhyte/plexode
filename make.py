@@ -4,8 +4,8 @@ import os
 import os.path
 import shutil
 import subprocess
+import sys
 import time
-
 import py
 from py import *
 
@@ -34,8 +34,6 @@ from py import *
 # etc.
 
 
-# Where will the built files go?
-bdir = "../../build/plexode"
 
 
 def ensureDir(f):
@@ -45,7 +43,7 @@ def ensureDir(f):
     os.makedirs(d)
 
 
-def writePublicHtml(path, content):
+def writePublicHtml(bdir, path, content):
   print "  %s/index.html" % path
   d = '%s/public_html%s' % (bdir, path)
   ensureDir(d)
@@ -54,7 +52,7 @@ def writePublicHtml(path, content):
   f.close()
 
 
-def buildPlexode():
+def buildPlexode(bdir):
   print "START building plexode"
 
   if os.path.exists(bdir):
@@ -72,24 +70,24 @@ def buildPlexode():
   vorpJsName = 'vorp_%s.js' % str(int(time.time() * 1000))
   compileJs(
     '../../tools/closure-compiler',
-    getVorpJsCompFlags(getVorpJsFileNames(), vorpJsName))
+    getVorpJsCompFlags(bdir, getVorpJsFileNames(), vorpJsName))
 
   print "generating index.html files"
-  writePublicHtml('', mainpage.formatMain())
-  writePublicHtml('/insta-html', instahtml.formatInstaHtml())
-  writePublicHtml('/eval', eval1.formatEval())
-  writePublicHtml('/eval2', eval2.formatEval2())
-  writePublicHtml('/eval3', eval3.formatEval3())
-  writePublicHtml('/eval3quirks', eval3quirks.formatEval3Quirks())
-  writePublicHtml('/fracas', fracas.formatFracas())
-  writePublicHtml('/vorp', vorp.formatVorp())
-  writePublicHtml('/vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
-  writePublicHtml('/vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
-  writePublicHtml('/vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
-  writePublicHtml('/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
-  writePublicHtml('/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
-  writePublicHtml('/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  writePublicHtml('/chordo', chordo.formatChordo())
+  writePublicHtml(bdir,'', mainpage.formatMain())
+  writePublicHtml(bdir, '/insta-html', instahtml.formatInstaHtml())
+  writePublicHtml(bdir, '/eval', eval1.formatEval())
+  writePublicHtml(bdir, '/eval2', eval2.formatEval2())
+  writePublicHtml(bdir, '/eval3', eval3.formatEval3())
+  writePublicHtml(bdir, '/eval3quirks', eval3quirks.formatEval3Quirks())
+  writePublicHtml(bdir, '/fracas', fracas.formatFracas())
+  writePublicHtml(bdir, '/vorp', vorp.formatVorp())
+  writePublicHtml(bdir, '/vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
+  writePublicHtml(bdir, '/vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
+  writePublicHtml(bdir, '/vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
+  writePublicHtml(bdir, '/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
+  writePublicHtml(bdir, '/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
+  writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
+  writePublicHtml(bdir, '/chordo', chordo.formatChordo())
 
   print "DONE building plexode"
 
@@ -130,7 +128,7 @@ def getVorpJsFileNames():
   return js
 
 
-def getVorpJsCompFlags(jsFileNames, vorpJsName):
+def getVorpJsCompFlags(bdir, jsFileNames, vorpJsName):
   flags = []
   flags.extend(['--js_output_file', '%s/public_html/vorp/%s' % (bdir, vorpJsName)])
   flags.extend(['--compilation_level', 'WHITESPACE_ONLY'])
@@ -185,10 +183,18 @@ def runCommand(argList):
   print 'now...'
   subprocess.check_call(argList)
 
+def printHelp():
+  print("Usage: make.py -build_dir DIRECTORY")
+    
 
 def main():
-  buildPlexode()
-
+  d = {}
+  if len(sys.argv) == 3 and sys.argv[1] == '-build_dir':
+    buildPlexode(sys.argv[2])
+  else:
+    printHelp()
+    sys.exit(2)
+    
 
 if __name__ == "__main__":
   main()
