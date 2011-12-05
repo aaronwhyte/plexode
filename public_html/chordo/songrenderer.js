@@ -76,7 +76,7 @@ SongRenderer.prototype.formatFingering = function(fingering) {
       sep = '<br>';
     }
   }
-  for (var i = rowsRendered; i < 4; i++) {
+  for (var i = rowsRendered; i < 6; i++) {
     h.push(sep, '------');
   }
   h.push('</div>');

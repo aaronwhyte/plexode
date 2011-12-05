@@ -28,7 +28,8 @@ function onLoadHandler() {
       new SongParser(),
       new SongRenderer(),
       'ta',
-      'output');
+      'output',
+      'jazzChords');
   c.start();
   c.redraw();
 }
@@ -37,6 +38,10 @@ function onLoadHandler() {
 """)
   h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
+<div>
+<input type="checkbox" id="jazzChords">
+<label for="jazzChords">include jazz chords</label>
+</div>
 <textarea id="ta">
 Em: o /2 /3 o o o
 E: o /2 /3 1 o o
