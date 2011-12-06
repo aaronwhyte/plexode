@@ -49,7 +49,7 @@ SongParser.prototype.isMeasureBreak = function(text) {
 SongParser.prototype.tokenize = function(text) {
   var tokens = text.trim().split(/\s+/g);
   // Splitting empty-string or whitespace results in one empty token.
-  if (tokens.length == 1 && !tokens.length) return [];
+  if (tokens.length == 1 && !tokens[0]) return [];
   return tokens;
 };
 

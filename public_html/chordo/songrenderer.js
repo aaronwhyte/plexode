@@ -4,36 +4,55 @@
 function SongRenderer() {
 }
 
+// global for debugging
 SongRenderer.prototype.formatSong = function(song) {
+  window['song'] = song;
   var h = [];
+  var oldInMeasure = false;
+  function measure(newInMeasure) {
+    if (!oldInMeasure && newInMeasure) {
+      h.push('<div class="measure">');
+    } else if (oldInMeasure && !newInMeasure) {
+      h.push('</div>');
+    }
+    oldInMeasure = newInMeasure;
+  }
   for (var i = 0; i < song.layout.length; i++) {
     var e = song.layout[i];
     if (e == SongModel.MEASURE_BREAK) {
-      h.push('<div class="measurebreak"></div>');
+      measure(false);
+      //h.push('<div class="measurebreak"></div>');
     } else if (e == SongModel.LINE_BREAK) {
+      measure(false);
       h.push('<br>');
     } else if (e['fingering']) {
+      measure(false);
       h.push('<div class="chorddef">',
           plex.string.textToHtml(e.tokens.join(' ')), ' ',
           this.formatFingering(e.fingering),
           '</div>');
     } else {
+      measure(true);
       var f = song.getFingeringForPlayable(e);
       h.push('<div class="playable">',
-          '<span class="playabletokens">',
-          plex.string.textToHtml(e.tokens.join(' ')),
-          '</span>',
-          f ? this.formatFingering(f.fingering) : '',
+          '<div class="playabletokens">',
+          plex.string.textToHtml(e.tokens.join(' ')) || '&nbsp;',
+          '</div>',
+          this.formatFingering(f ? f.fingering: null),
           '<div class="lyrics">',
           plex.string.textToHtml(e.lyrics),
           '</div>',
           '</div>');
     }
   }
+  measure(false);
   return h.join('');
 };
 
 SongRenderer.prototype.formatFingering = function(fingering) {
+  if (!fingering) {
+    return '<div class="fingering"><br><br><br><br><br><br></div>'
+  }
   var rowsRendered = 0;
   var h = ['<div class="fingering">'];
   var chars = [];

@@ -22,16 +22,18 @@ def formatChordo():
 <script src="../chordo/songparser.js"></script>
 <script src="../chordo/songrenderer.js"></script>
 <script>
+// Global, for debugging.
+var chordo;
 function onLoadHandler() {
   console.log('onload');
-  var c = new Chordo(
+  chordo = new Chordo(
       new SongParser(),
       new SongRenderer(),
       'ta',
       'output',
       'jazzChords');
-  c.start();
-  c.redraw();
+  chordo.start();
+  chordo.redraw();
 }
 </script>
 </head><body onload="onLoadHandler()">

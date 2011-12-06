@@ -66,14 +66,20 @@ Nav links at the top, then text area, then song renders below.
 
 2011.11.29 - 2011.11.29
 URLize
-- Store song in hash fragment of URL
-- Read hash fragment into URL when starting up.
+v Store song in hash fragment of URL
+v Read hash fragment into URL when starting up.
+
+2011.12.06
+v No match if the score is too low.
+v Don't line-break mid-measure. Renderer needs to wrap measures in nowrap dics.
 
 NEXT FEATURES
+- URL compression.
+- Render first token (the note) biggest.
+- Canvas renderers
 - Rendered song scroll div occupies all available window space below nav and
 text area.
 - "Maximize song" button.
 - Highlight song divs based on source selection
 - Auto-scrolling from source selection to song
 - Auto-scrolling from song click to source
-- Autocomplete menu for chord completion

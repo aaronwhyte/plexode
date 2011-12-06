@@ -56,7 +56,7 @@ SongModel.prototype.calcBestMatches = function() {
 };
 
 /**
- * Returns the best fingering key match.
+ * Returns the best fingering key match, or null if there's nothing good.
  */
 SongModel.prototype.calcBestMatch = function(queryTokens) {
   var bestKey = null;
@@ -68,7 +68,8 @@ SongModel.prototype.calcBestMatch = function(queryTokens) {
       bestKey = key;
     }
   }
-  return bestKey;
+  console.log('queryTokens:', queryTokens, 'bestKey:', bestKey, 'bestScore:', bestScore);
+  return bestScore > 500 ? bestKey : null;
 };
 
 /**
