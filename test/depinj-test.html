@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>depinj tests</title>
+<script src="../public_html/js/testing.js"></script>
+<script src="../public_html/js/util.js"></script>
+<script src="../public_html/js/depinj.js"></script>
+<script>
+
+addTest(function testDoubleBindError() {
+  function Foo() {}
+  var scope = "whatev";
+  var di = new DepInj();
+  di.bind(Foo, scope);
+  try {
+    di.bind(Foo, scope);
+    fail("expectd exception to be thrown")
+  } catch (e) {
+    // yay
+  }
+});
+
+addTest(function testEnterScopeTwice() {
+  var scope = "whatev";
+  var di = new DepInj();
+  di.enterScope(scope);
+  try {
+    di.enterScope(Foo, scope);
+    fail("expectd exception to be thrown")
+  } catch (e) {
+    // yay
+  }
+});
+
+addTest(function testExitWithoutEntry() {
+  var scope = "whatev";
+  var di = new DepInj();
+  try {
+    di.exitScope(Foo, scope);
+    fail("expectd exception to be thrown")
+  } catch (e) {
+    // yay
+  }
+});
+
+addTest(function testScopeCaching() {
+  var foos = 0;
+  function Foo() {
+    foos++;
+  }
+  var scope = "whatev";
+  var di = new DepInj();
+  di.bind(Foo, scope);
+
+  di.enterScope(scope);
+  assertEquals(0, foos);
+  di.inject(Foo);
+  assertEquals(1, foos);
+  di.inject(Foo);
+  assertEquals(1, foos); // still just one instance created
+  di.exitScope(scope);
+
+  di.enterScope(scope);
+  assertEquals(1, foos);
+  di.inject(Foo);
+  assertEquals(2, foos);
+  di.inject(Foo);
+  assertEquals(2, foos); // cache hit again
+  di.exitScope(scope);
+});
+
+addTest(function testOnDemandInjection() {
+  var foos = 0;
+  function Foo() {
+    foos++;
+  }
+  var bars = 0;
+  function Bar(foo) {
+    bars++;
+    this.foo = foo || di.inject(Foo);
+  }
+
+  var di = new DepInj();
+  di.bind(Foo, "singleton");
+  di.bind(Bar, "pageview");
+  di.enterScope("singleton");
+  di.enterScope("pageview");
+
+  assertEquals(0, foos);
+  assertEquals(0, bars);
+  di.inject(Bar);
+  assertEquals(1, foos);
+  assertEquals(1, bars);
+  di.inject(Bar);
+  assertEquals(1, foos);
+  assertEquals(1, bars);
+  di.exitScope("pageview");
+
+  di.enterScope("pageview");
+  di.inject(Bar);
+  assertEquals(1, foos); // still just one Foo instance
+  assertEquals(2, bars); // yay another Bar
+});
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>
