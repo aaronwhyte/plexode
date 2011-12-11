@@ -5,6 +5,7 @@ links = [
   ("eval2", "eval2/"),
   ("eval3", "eval3/"),
   ("fracas", "fracas/"),
+  ("minigames", "minigames/"),
   ("vorp", "vorp/"),
   ("chordo", "chordo/"),
 ]

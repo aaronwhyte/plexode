@@ -1,37 +1,60 @@
 /**
- * @param x  leftmost edge of leftmost cell
- * @param y  top edge of top cell
- * @param xCells  number of cells along x axis
- * @param yCells  number of cells along y axis
- * @param cellWidth
- * @param cellHeight
+ * @param {object} brect  Collision space bounding rect,
+ * with members x0, y0, x1, y1
+ * @param {number} cellSize  max height and width for each cell in the
+ * collider. The actual may be a little smaller.
  * @param groupPairs an array of 2-element arrays with group IDs.
  * This tells the collider to compare sledges in 2 groups for collisions.
  * The two IDs of a pair may be the same, to make
  * a group's sledges collide with each other.
  * @constructor
  */
-function CellCollider(
-    x, y,
-    xCells, yCells,
-    cellWidth, cellHeight,
-    groupPairs,
-    now) {
+function CellCollider(brect, cellSize, groupPairs, now) {
   FLAGS && FLAGS.set('debugRayScans', false);
-  this.x = x;
-  this.y = y;
-  this.xCells = xCells;
-  this.yCells = yCells;
-  this.cellWidth = cellWidth;
-  this.cellHeight = cellHeight;
+
+  var width = brect.x1 - brect.x0;
+  var height = brect.y1 - brect.y0;
+  this.x = brect.x0;
+  this.y = brect.y0;
+  this.xCells = Math.floor(width / cellSize);
+  this.yCells = Math.floor(height / cellSize);
+  this.cellWidth = width / this.xCells;
+  this.cellHeight = height / this.yCells;
+
   this.groupPairs = groupPairs;
   this.now = now;
+
   this.marks = [];
 
+  // Sledges by ID
+  this.sledges = {};
+  this.nextId = 1;
+
+  // times when sledges cross into new cells
+  this.cellEntries = new SkipQueue(200);
+
+  // sledge-to-sledge hit objects
+  this.hits = new SkipQueue(200);
+
+  this.hitOut = Hit.alloc(0, 0, false, -1, -1);
+}
+
+/**
+ * Sledge radius padding, for deciding which cells a sledge occupies.
+ */
+CellCollider.PAD = 0.01;
+
+/**
+ * Lazy-inits the mapping from a group to all the groups it hits.
+ */
+CellCollider.prototype.getGroupToGroups = function() {
+  if (this.groupToGroups) {
+    return this.groupToGroups;
+  }
   // map a group to all the groups it hits
   this.groupToGroups = {};
-  for (var i = 0; i < groupPairs.length; i++) {
-    var pair = groupPairs[i];
+  for (var i = 0; i < this.groupPairs.length; i++) {
+    var pair = this.groupPairs[i];
     // lazy init lists
     if (!this.groupToGroups[pair[0]]) {
       this.groupToGroups[pair[0]] = [];
@@ -47,36 +70,30 @@ function CellCollider(
       this.groupToGroups[pair[1]].push(pair[0]);
     }
   }
-  // Sledges by ID
-  this.sledges = {};
-  this.nextId = 1;
+  return this.groupToGroups;
+};
 
+/**
+ * Lazy-inits the grid of cells.
+ */
+CellCollider.prototype.getGrid = function() {
+  if (this.grid) {
+    return this.grid;
+  }
   // Initialize the grid.
   this.grid = [];
-  for (var x = 0; x < xCells; x++) {
+  var groupToGroups = this.getGroupToGroups();
+  for (var x = 0; x < this.xCells; x++) {
     this.grid[x] = [];
-    for (var y = 0; y < yCells; y++) {
+    for (var y = 0; y < this.yCells; y++) {
       var cell = this.grid[x][y] = {};
-      for (var group in this.groupToGroups) {
+      for (var group in groupToGroups) {
         cell[group] = new CellGroup();
       }
     }
   }
-
-  // times when sledges cross into new cells
-  this.cellEntries = new SkipQueue(200);
-
-  // sledge-to-sledge hit objects
-  this.hits = new SkipQueue(200);
-
-  this.hitOut = Hit.alloc(0, 0, false, -1, -1);
-}
-
-/**
- * Amount to pad sledge radii when deciding what cells they occupy.
- */
-CellCollider.PAD = 0.01;
-
+  return this.grid;
+};
 
 /**
  * Adds a sledge to the collider.
@@ -92,12 +109,6 @@ CellCollider.prototype.addSledgeInGroup = function(sledge, group) {
 
   // Add next sledge entry times to cellEntries
   this.initSledgeCellTimes(sledge);
-//  if (sledge.cellEntryTimeX && sledge.cellEntryTimeY) {
-//    throw Error('sledge.cellEntryTimeX && sledge.cellEntryTimeY');
-//  }
-//  if (!sledge.cellEntryTimeX && !sledge.cellEntryTimeY) {
-//    throw Error('!sledge.cellEntryTimeX && !sledge.cellEntryTimeY');
-//  }
   if (sledge.cellEntryTimeX && sledge.cellEntryTimeX <= sledge.expiration) {
     this.cellEntries.add(
         CellEntryEvent.alloc(sledge.cellEntryTimeX, null, sledgeId));
@@ -123,14 +134,15 @@ CellCollider.prototype.addSledgeInGroup = function(sledge, group) {
 CellCollider.prototype.addSledgeToCells = function(
     sledge, sledgeId, x0, y0, x1, y1) {
   var group = sledge.group;
-  var collidesWithGroups = this.groupToGroups[group];
+  var collidesWithGroups = this.getGroupToGroups()[group];
   x0 = Math.max(x0, 0);
   x1 = Math.min(x1, this.xCells - 1);
   y0 = Math.max(y0, 0);
   y1 = Math.min(y1, this.yCells - 1);
+  var grid = this.getGrid();
   for (var x = x0; x <= x1; x++) {
     for (var y = y0; y <= y1; y++) {
-      var cell = this.grid[x][y];
+      var cell = grid[x][y];
       // For every group the sledge can collide with...
       for (var g = 0; g < collidesWithGroups.length; g++) {
         var cellGroup = cell[collidesWithGroups[g]];
@@ -138,7 +150,6 @@ CellCollider.prototype.addSledgeToCells = function(
         while (i < cellGroup.length) {
           var otherSledgeId = cellGroup.sledgeIds[i];
           if (!(otherSledgeId in this.sledges)) {
-            //console.log('remove cellGroup element with deleted sledge ' + otherSledgeId);
             cellGroup.remove(i);
             continue;
           }
@@ -166,7 +177,9 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
     sledge.cellPeriodX = Math.abs(this.cellWidth / sledge.vx);
     positive = sledge.vx > 0;
     // front entry
-    front = sledge.px + (positive ? sledge.rx + CellCollider.PAD : -sledge.rx - CellCollider.PAD);
+    front = sledge.px + (positive
+        ? sledge.rx + CellCollider.PAD
+        : -sledge.rx - CellCollider.PAD);
     cellIndex = this.getCellIndexX(front);
     sledge.frontCellIndexX = cellIndex;
     wall = this.x + this.cellWidth * (cellIndex + (positive ? 1 : 0));
@@ -180,7 +193,9 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
     sledge.cellPeriodY = Math.abs(this.cellHeight / sledge.vy);
     positive = sledge.vy > 0;
     // front entry
-    front = sledge.py + (positive ? sledge.ry + CellCollider.PAD: -sledge.ry - CellCollider.PAD);
+    front = sledge.py + (positive
+        ? sledge.ry + CellCollider.PAD
+        : -sledge.ry - CellCollider.PAD);
     cellIndex = this.getCellIndexY(front);
     sledge.frontCellIndexY = cellIndex;
     wall = this.y + this.cellHeight * (cellIndex + (positive ? 1 : 0));
@@ -439,9 +454,9 @@ CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
   var hitSledgeId = null;
   var now = this.now;
 
-  var cell = this.grid[x][y];
+  var cell = this.getGrid()[x][y];
   // For every group the rayScan can collide with...
-  var collidesWithGroups = this.groupToGroups[group];
+  var collidesWithGroups = this.getGroupToGroups()[group];
   for (var g = 0; g < collidesWithGroups.length; g++) {
     var cellGroup = cell[collidesWithGroups[g]];
     var i = 0;
@@ -449,7 +464,6 @@ CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
       var sledgeId = cellGroup.sledgeIds[i];
       var sledge = this.sledges[sledgeId];
       if (!sledge) {
-        //console.log('remove cellGroup element with deleted sledge ' + otherSledgeId);
         cellGroup.remove(i);
         continue;
       }
@@ -467,17 +481,3 @@ CellCollider.prototype.draw = function(renderer) {
   }
   this.marks.length = 0;
 };
-
-//
-///**
-// * @returns the off-grid bits, Grid.LOW_X, HIGH_X, LOW_Y, or HIGH_Y,
-// * all bitwise-ORed together.  Returns 0 if the point is on the grid.
-// */
-//CellCollider.prototype.offGridBits = function(x, y) {
-//  var b = 0;
-//  if (x < this.x) b |= Grid.LOW_X;
-//  if (x > this.x + this.xCells * this.cellWidth) b |= Grid.HIGH_X;
-//  if (y < this.y) b |= Grid.LOW_Y;
-//  if (y > this.y + this.yCells * this.cellHeight) b |= Grid.HIGH_Y;
-//  return b;
-//};

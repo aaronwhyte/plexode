@@ -71,21 +71,12 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var renderer = new Renderer(canvas, camera);
   window.FLAGS = new Flags(flagsDiv);
   var now = 1;
-  var brect = levelBuilder.getBoundingRect();
-  var width = brect.x1 - brect.x0;
-  var height = brect.y1 - brect.y0;
-  var cellsX = Math.floor(width / Vorp.CELL_SIZE);
-  var cellsY = Math.floor(height / Vorp.CELL_SIZE);
-  var collider = new CellCollider(
-      brect.x0, brect.y0,
-      cellsX, cellsY,
-      width / cellsX, height / cellsY,
-      Vorp.COLLIDER_GROUP_PAIRS,
-      now);
+  var collider = new CellCollider(levelBuilder.getBoundingRect(),
+      Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, now);
   var wham = new VorpWham();
   var phy = new Phy(collider, wham, now);
-  var vorp = new Vorp(renderer, phy, camera);
-  
+  var vorp = new Vorp(renderer, phy);
+
   var prefabs = levelBuilder.getPrefabs();
   var playerPrefab = null;
   for (var i = 0; i < prefabs.length; i++) {

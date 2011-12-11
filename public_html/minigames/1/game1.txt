@@ -1,0 +1,43 @@
+design:
+- 4 walls
+- scrolling plr-centered
+- wall, plr, plr fire, enemy, enemyfire, misc rocks
+
+Gameplay ideas:
+- Level is an arena with walls forming a small maze or something.
+- plr starts at plr spawn point
+- enemies warp in at their spawn points in the 4 corners of the maze.
+- individual enemies get stronger + larger over time. Kill while young!
+  - more max hit points
+  - more rapid fire
+  - more bullets, spread out a bit
+  - faster movement
+  - faster bullets
+  - longer bullet range
+- player has 3 hit points, and heals over time.
+- bullets do 1 point of damage
+- survival time = score.
+- player weapon is attached to player like vorp-tractored obj
+- It blocks enemy shots, and hurts them when it hits them (w recharge time)
+- It controls fire direction.
+
+utils:
+- key listener, event queue, event objects
+- simple joystick util maybe?
+- looper: set loop func, set fps, play, pause
+- simple canvas renderer
+
+event loop:
+- process plr input
+- clock world fwd
+- draw
+
+model:
+- phy
+- collider
+- sprites: wall, plr, bullet, enemy
+
+view:
+- canvas
+- renderer (basic utils for painters)
+- painters: wall, plr, bullet, enemy, explosions

@@ -34,8 +34,6 @@ from py import *
 # etc.
 
 
-
-
 def ensureDir(f):
   d = os.path.dirname('%s/' % f)
   print 'ensuring %s' % d
@@ -70,7 +68,13 @@ def buildPlexode(bdir):
   vorpJsName = 'vorp_%s.js' % str(int(time.time() * 1000))
   compileJs(
     '../../tools/closure-compiler',
-    getVorpJsCompFlags(bdir, getVorpJsFileNames(), vorpJsName))
+    getJsCompFlags(bdir, getVorpJsFileNames(), "vorp/" + vorpJsName))
+
+  print "compiling minigames/1 JS"
+  minigame1JsName = 'mg1_%s.js' % str(int(time.time() * 1000))
+  compileJs(
+    '../../tools/closure-compiler',
+    getJsCompFlags(bdir, getMinigame1JsFileNames(), "minigames/1/" + minigame1JsName))
 
   print "generating index.html files"
   writePublicHtml(bdir,'', mainpage.formatMain())
@@ -87,6 +91,8 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, '/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml(bdir, '/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
+  writePublicHtml(bdir, '/minigames', minigames.formatMinigames())
+  writePublicHtml(bdir, '/minigames/1', minigames.formatMinigame1(minigame1JsName))
   writePublicHtml(bdir, '/chordo', chordo.formatChordo())
 
   print "DONE building plexode"
@@ -108,6 +114,7 @@ def getVorpJsFileNames():
   js.extend(getJsFileNamesInPath('%sgaam' % prefix))
   miscDeps = [
     'circularqueue.js',
+    'depinj.js',
     'gameutil.js',
     'skipqueue.js',
     'util.js',
@@ -119,18 +126,40 @@ def getVorpJsFileNames():
   ]
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
-
   vorpJs = getJsFileNamesInPath('public_html/vorp')
   for dep in vorpJs:
     if dep[-8:] != 'level.js':
       js.append(dep)
-
   return js
 
 
-def getVorpJsCompFlags(bdir, jsFileNames, vorpJsName):
+def getMinigame1JsFileNames():
+  js = []
+  prefix = 'public_html/js/'
+  js.extend(getJsFileNamesInPath('%sgaam' % prefix))
+  miscDeps = [
+    'circularqueue.js',
+    'depinj.js',
+    'gameutil.js',
+    'skipqueue.js',
+    'util.js',
+    'vec2d.js',
+    'plex/array.js',
+    'plex/point.js',
+    'plex/rect.js',
+    'plex/type.js',
+  ]
+  for dep in miscDeps:
+    js.append('%s%s' % (prefix, dep))
+  gameJs = getJsFileNamesInPath('public_html/minigames/1')
+  for dep in gameJs:
+    js.append(dep)
+  return js
+
+
+def getJsCompFlags(bdir, jsFileNames, outputFileName):
   flags = []
-  flags.extend(['--js_output_file', '%s/public_html/vorp/%s' % (bdir, vorpJsName)])
+  flags.extend(['--js_output_file', '%s/public_html/%s' % (bdir, outputFileName)])
   flags.extend(['--compilation_level', 'WHITESPACE_ONLY'])
   #flags.extend(['--compilation_level', 'SIMPLE_OPTIMIZATIONS'])
   # SIMPLE_OPTIMIZATIONS works, with lots of good warnings but little compression win.
@@ -144,7 +173,7 @@ def getVorpJsCompFlags(bdir, jsFileNames, vorpJsName):
   for jsFileName in jsFileNames:
     flags.append('--js')
     flags.append(jsFileName)
-    
+
   return flags
 
 
@@ -158,7 +187,6 @@ def compileJs(pathOfCompilerJar, jsCompFlags):
     else:
       print 'not downloading'
       exit(1)
-
   argList = ['java', '-jar', compilerJarPath]
   argList.extend(jsCompFlags)
   runCommand(argList)
@@ -182,6 +210,7 @@ def runCommand(argList):
   print ' '.join(argList)
   print 'now...'
   subprocess.check_call(argList)
+
 
 def printHelp():
   print("Usage: make.py -build_dir DIRECTORY")

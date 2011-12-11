@@ -290,12 +290,21 @@ v python function to find and compile all Vorp JS deps into filename passed in
 deploy compiled JS, optionally
 v Write make.py parallel to make.sh.
   v Compare output of make.sh and make.py as a test.
-- Add -vorp_jscomp [off,warnings,deploy_readable,deploy_opt] flag to make.py.
-- Make the off and warnings values work.
-- Make deploy_* pass a param to Vorp level builders so they point to one file instead of a huge list.
+x Add -vorp_jscomp [off,warnings,deploy_readable,deploy_opt] flag to make.py.
+v Make the off and warnings values work.
+v Make deploy_* pass a param to Vorp level builders so they point to one file instead of a huge list.
 
 HUGE BREAK FOR LEVEL EDITOR, "VED".
 (Hey, I edited this file right in GitHub.  Pretty great!)
+Did not finish yet but we're back for some saw sharpening...
+
+Rejigger Vorp to use DepInj
+- make collider injectable
+  - make levelBuilder..Provider?... injectable.
+  - make colliderGroupPairs injectable
+- make phy injectable
+- remove static Vorp.start()
+- redo all levels to use that stuff.
 
 teleport sparks
 - implode

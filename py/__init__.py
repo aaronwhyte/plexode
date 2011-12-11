@@ -6,6 +6,7 @@ __all__ = [
   'fracas',
   'instahtml',
   'mainpage',
+  'minigames',
   'vorp',
   'chordo',
   ]
