@@ -26,8 +26,10 @@ def formatMinigame1(jsName):
 <script src="./""" + jsName + """"></script>
 </head>
 <body onload="main()">
+<div id="levelCenter">
 minigame 1 ?<br>
-<canvas id="canvas" width=600 height=600 style="border:1px solid silver"></canvas>
+<canvas id="canvas" width=600 height=600></canvas>
+</div>
 </body>
 </html>
 """)

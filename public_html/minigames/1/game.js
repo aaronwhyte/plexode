@@ -10,7 +10,7 @@ function Game(renderer, phy) {
   this.painters = [];
 }
 
-Game.FPS = 60;
+Game.FPS = 45;
 
 Game.nextGroup = 1;
 
@@ -47,7 +47,7 @@ Game.COLLIDER_GROUP_PAIRS = [
   [Game.NO_HIT_GROUP, Game.EMPTY_GROUP]
 ];
 
-Game.LEVEL_RADIUS = 500;
+Game.LEVEL_RADIUS = 1000;
 Game.CELL_SIZE = 100;
 
 // Ordered list of paint layers
@@ -76,7 +76,38 @@ Game.start = function(canvas) {
 };
 
 Game.prototype.populateLevel = function(levelNum) {
-  this.addSprite(new PlayerSprite(this.phy, 0, 0));
+  var playerSprite = new PlayerSprite(this.phy, 0, 0);
+  this.addSprite(playerSprite);
+  this.setPlayerSprite(playerSprite);
+
+  var arenaRad = Game.LEVEL_RADIUS - 20;
+  var wallRad = 15;
+  // top
+  this.addSprite(new WallSprite(this.phy, 0, -arenaRad, arenaRad + wallRad, wallRad));
+  // bottom
+  this.addSprite(new WallSprite(this.phy, 0, arenaRad, arenaRad + wallRad, wallRad));
+  // left
+  this.addSprite(new WallSprite(this.phy, -arenaRad, 0, wallRad, arenaRad + wallRad));
+  // right
+  this.addSprite(new WallSprite(this.phy, arenaRad, 0, wallRad, arenaRad + wallRad));
+
+//  this.addSprite(new WallSprite(this.phy, 0, -arenaRad/4, arenaRad/8 + wallRad, wallRad));
+//  this.addSprite(new WallSprite(this.phy, 0, arenaRad/4, arenaRad/8 + wallRad, wallRad));
+//  this.addSprite(new WallSprite(this.phy, -arenaRad/4, 0, wallRad, arenaRad/8 + wallRad));
+//  this.addSprite(new WallSprite(this.phy, arenaRad/4, 0, wallRad, arenaRad/8 + wallRad));
+
+  var game = this;
+  function plus(x, y) {
+    var len = 0.15;
+    game.addSprite(new WallSprite(game.phy, x, y, wallRad, arenaRad * len + wallRad));
+    game.addSprite(new WallSprite(game.phy, x, y, arenaRad * len + wallRad, wallRad));
+  }
+  var dist = 0.4;
+  plus(dist * arenaRad, dist * arenaRad);
+  plus(-dist * arenaRad, dist * arenaRad);
+  plus(dist * arenaRad, -dist * arenaRad);
+  plus(-dist * arenaRad, -dist * arenaRad);
+
 };
 
 Game.prototype.addSprites = function(sprites) {
@@ -137,7 +168,7 @@ Game.prototype.draw = function() {
   var i, painter;
   var now = this.getNow();
   this.renderer.clear();
-  this.renderer.setZoom(0.37);
+  this.renderer.setZoom(0.4);
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);
   }

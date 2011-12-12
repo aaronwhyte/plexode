@@ -5,7 +5,7 @@
 function PlayerSprite(phy, px, py) {
   var radius = 20;
   Sprite.call(this, phy,
-      new RectPainter("#000"),
+      new RectPainter("#f4a"),
       px, py,
       0, 0, // vel
       radius, radius, // size
@@ -26,8 +26,8 @@ PlayerSprite.prototype.constructor = PlayerSprite;
 
 PlayerSprite.GRIP_RANGE = 120;
 
-PlayerSprite.ACCEL = 2.5;
-PlayerSprite.BRAKE = 0.10;
+PlayerSprite.ACCEL = 3;
+PlayerSprite.BRAKE = 0;//0.10;
 
 PlayerSprite.prototype.act = function() {
   // move
