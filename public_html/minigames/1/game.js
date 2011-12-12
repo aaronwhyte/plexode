@@ -97,6 +97,7 @@ Game.prototype.populateLevel = function(levelNum) {
 //  this.addSprite(new WallSprite(this.phy, arenaRad/4, 0, wallRad, arenaRad/8 + wallRad));
 
   var game = this;
+
   function plus(x, y) {
     var len = 0.15;
     game.addSprite(new WallSprite(game.phy, x, y, wallRad, arenaRad * len + wallRad));
@@ -108,6 +109,18 @@ Game.prototype.populateLevel = function(levelNum) {
   plus(dist * arenaRad, -dist * arenaRad);
   plus(-dist * arenaRad, -dist * arenaRad);
 
+  function enemy(x, y) {
+    game.addSprite(new EnemySprite(game.phy, x, y));
+  }
+  dist = 0.75;
+  enemy(dist * arenaRad, dist * arenaRad);
+  enemy(-dist * arenaRad, dist * arenaRad);
+  enemy(dist * arenaRad, -dist * arenaRad);
+  enemy(-dist * arenaRad, -dist * arenaRad);
+  enemy(dist * arenaRad, dist * arenaRad);
+  enemy(-dist * arenaRad, dist * arenaRad);
+  enemy(dist * arenaRad, -dist * arenaRad);
+  enemy(-dist * arenaRad, -dist * arenaRad);
 };
 
 Game.prototype.addSprites = function(sprites) {
