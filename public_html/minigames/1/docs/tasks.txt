@@ -1,0 +1,33 @@
+player weapon
+v attached to player, swings around
+v hold z to lock flail orientation
+v touch/hold x to fire bullet
+- bullets die when they hit stuff - walls, enemies, enemy bullets, rocks
+
+enemy health
+- flail and bullets hurt them
+- they die when health hits 0
+
+player health
+- touching enemies hurts you
+- death when health hits 0
+- Add a game death mode?
+
+enemy fire
+- enemies scan for player
+- shoot when player is seen
+- enemy bullets stopped by whatevs.
+- hurts player
+
+enemy behaviors
+- avoid walls, boulders, and each other
+- get closer to player
+
+increasing difficulty
+- individual enemies get stronger over time
+ - enemies spawn at an increasing rate? or spawn with more initial strength?
+
+score
+- kill count.  More points for flail kill?  More points for stronger enemies?
+- Limited time game?  Interesting - let enemies get as powerful as possible before killing them,
+to mazimize score?

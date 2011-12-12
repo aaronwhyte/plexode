@@ -22,6 +22,7 @@ RectPainter.prototype.setColor = function(color) {
 
 RectPainter.prototype.paint = function(renderer, layer) {
   if (layer == Game.LAYER_MASSES) {
+    if (this.events.size() == 0) return;
     renderer.setFillStyle(this.color);
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);

@@ -160,6 +160,19 @@ Phy.prototype.getSprite = function(spriteId) {
 };
 
 /**
+ * @param {Sprite} sprite
+ * @return {number}
+ */
+Phy.prototype.getSpriteId = function(sprite) {
+  for (spriteId in this.sprites) {
+    if (this.sprites[spriteId] == sprite) {
+      return spriteId;
+    }
+  }
+  return null;
+};
+
+/**
  * Moves time forward.
  * @param {number} duration
  */

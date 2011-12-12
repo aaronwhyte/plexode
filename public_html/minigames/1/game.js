@@ -11,6 +11,7 @@ function Game(renderer, phy) {
 }
 
 Game.FPS = 45;
+Game.ZOOM = 0.35;
 
 Game.nextGroup = 1;
 
@@ -47,7 +48,7 @@ Game.COLLIDER_GROUP_PAIRS = [
   [Game.NO_HIT_GROUP, Game.EMPTY_GROUP]
 ];
 
-Game.LEVEL_RADIUS = 1000;
+Game.LEVEL_RADIUS = 1500;
 Game.CELL_SIZE = 100;
 
 // Ordered list of paint layers
@@ -76,9 +77,12 @@ Game.start = function(canvas) {
 };
 
 Game.prototype.populateLevel = function(levelNum) {
-  var playerSprite = new PlayerSprite(this.phy, 0, 0);
+  var playerSprite = new PlayerSprite(this.phy, 0, 60);
   this.addSprite(playerSprite);
   this.setPlayerSprite(playerSprite);
+  var flailSprite = new FlailSprite(this.phy, 0, -60);
+  this.addSprite(flailSprite);
+  playerSprite.setFlailSprite(flailSprite);
 
   var arenaRad = Game.LEVEL_RADIUS - 20;
   var wallRad = 15;
@@ -110,17 +114,15 @@ Game.prototype.populateLevel = function(levelNum) {
   plus(-dist * arenaRad, -dist * arenaRad);
 
   function enemy(x, y) {
-    game.addSprite(new EnemySprite(game.phy, x, y));
+    game.addSprite(new EnemySprite(game.phy, x + 200 * (Math.random() - 0.5), y  + 200 * (Math.random() - 0.5)));
   }
   dist = 0.75;
-  enemy(dist * arenaRad, dist * arenaRad);
-  enemy(-dist * arenaRad, dist * arenaRad);
-  enemy(dist * arenaRad, -dist * arenaRad);
-  enemy(-dist * arenaRad, -dist * arenaRad);
-  enemy(dist * arenaRad, dist * arenaRad);
-  enemy(-dist * arenaRad, dist * arenaRad);
-  enemy(dist * arenaRad, -dist * arenaRad);
-  enemy(-dist * arenaRad, -dist * arenaRad);
+  for (var e = 0; e < 25; e++) {
+    enemy(dist * arenaRad, dist * arenaRad);
+    enemy(-dist * arenaRad, dist * arenaRad);
+    enemy(dist * arenaRad, -dist * arenaRad);
+    enemy(-dist * arenaRad, -dist * arenaRad);
+  }
 };
 
 Game.prototype.addSprites = function(sprites) {
@@ -162,12 +164,14 @@ Game.prototype.clock = function() {
   var id, sprite;
   for (id in this.phy.sprites) {
     sprite = this.phy.sprites[id];
+    if (!sprite) continue;
     if (sprite.mass != Infinity) {
       sprite.invalidateSledge();
     }
     sprite.act(this.phy, this);
   }
   for (id in this.phy.sprites) {
+    if (!sprite) continue;
     sprite = this.phy.sprites[id];
     sprite.affect();
   }
@@ -181,7 +185,7 @@ Game.prototype.draw = function() {
   var i, painter;
   var now = this.getNow();
   this.renderer.clear();
-  this.renderer.setZoom(0.4);
+  this.renderer.setZoom(Game.ZOOM);
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);
   }

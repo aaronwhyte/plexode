@@ -3,14 +3,13 @@
  * @extends {Sprite}
  */
 function EnemySprite(phy, px, py) {
-  var radius = 20;
   function r(n) {
     return Math.floor(Math.random() * n);
   }
-  var rad = 15 + r(10);
+  var rad = 10 + r(20);
   Sprite.call(this, phy,
       new RectPainter(
-          "rgb(" + [200 + r(56), 200 + r(56), 200 + r(56)].join(",") + ")"),
+          "rgb(" + [100 + r(156), 200 + r(56), 100 + r(156)].join(",") + ")"),
       px, py,
       0, 0, // vel
       rad, rad, // size
@@ -28,7 +27,7 @@ function EnemySprite(phy, px, py) {
 EnemySprite.prototype = new Sprite();
 EnemySprite.prototype.constructor = EnemySprite;
 
-EnemySprite.ACCEL = 3;
+EnemySprite.FORCE = 100;
 
 EnemySprite.prototype.act = function() {
   // move
@@ -39,12 +38,12 @@ EnemySprite.prototype.act = function() {
   workVec.scale(-Phy.FRICTION);
 
   // thrust in facing direction
-  this.turning += (Math.random() - 0.5) * 0.5;
+  this.turning += (Math.random() - 0.5) * 0.2;
   this.facing += this.turning;
   this.turning *= 0.9;
   workVec.addXY(
-      EnemySprite.ACCEL * Math.sin(this.facing),
-      EnemySprite.ACCEL * -Math.cos(this.facing));
+      EnemySprite.FORCE / this.mass * Math.sin(this.facing),
+      EnemySprite.FORCE / this.mass * -Math.cos(this.facing));
 
   this.accelerateXY(workVec.x, workVec.y);
   Vec2d.free(workVec);
