@@ -47,6 +47,7 @@ Game.COLLIDER_GROUP_PAIRS = [
   [Game.NO_HIT_GROUP, Game.EMPTY_GROUP]
 ];
 
+Game.LEVEL_RADIUS = 500;
 Game.CELL_SIZE = 100;
 
 // Ordered list of paint layers
@@ -56,26 +57,26 @@ Game.LAYERS = [
   Game.LAYER_SUPERSPARKS = 'oversparks'
 ];
 
-Game.start = function(levelBuilder, canvas, opt_camera) {
-  var camera = opt_camera || new Camera();
-  var renderer = new Renderer(canvas, camera);
+Game.start = function(canvas) {
+  var renderer = new Renderer(canvas, new Camera());
   var now = 1;
-  var collider = new CellCollider(levelBuilder.getBoundingRect(Game.CELL_SIZE),
-      Game.CELL_SIZE, Game.COLLIDER_GROUP_PAIRS, now);
+  var levelBoundingRect = {
+    x0: -Game.LEVEL_RADIUS, y0: -Game.LEVEL_RADIUS,
+    x1: Game.LEVEL_RADIUS, y1: Game.LEVEL_RADIUS
+  };
+  var collider = new CellCollider(
+      levelBoundingRect, Game.CELL_SIZE, Game.COLLIDER_GROUP_PAIRS, now);
   var wham = new GameWham();
   var phy = new Phy(collider, wham, now);
   var game = new Game(renderer, phy);
 
-  var prefabs = levelBuilder.getPrefabs();
-  for (var i = 0; i < prefabs.length; i++) {
-    var prefab = prefabs[i];
-    var sprites = prefab.createSprites(game);
-    game.addSprites(sprites);
-    if (prefab instanceof PlayerPrefab) {
-      game.setPlayerSprite(sprites[0]);
-    }
-  }
+  game.populateLevel(1);
+
   GU_start(function(){game.clock();}, Game.FPS);
+};
+
+Game.prototype.populateLevel = function(levelNum) {
+  this.addSprite(new PlayerSprite(this.phy, 0, 0));
 };
 
 Game.prototype.addSprites = function(sprites) {
@@ -92,9 +93,6 @@ Game.prototype.addSprite = function(sprite) {
   var painter = sprite.getPainter();
   if (painter) {
     this.addPainter(painter);
-  }
-  if (sprite instanceof PortalSprite) {
-    this.portals.push(sprite);
   }
 };
 
@@ -150,11 +148,12 @@ Game.prototype.draw = function() {
   for (i = 0; i < this.painters.length; i++) {
     painter = this.painters[i];
     if (painter.isKaput()) {
+      // remove it
       var popped = this.painters.pop();
       if (i < this.painters.length) {
         this.painters[i] = popped;
         i--;
-      } // else we're trying to remove the final one
+      }
     } else {
       painter.advance(now);
     }
@@ -203,19 +202,4 @@ Game.prototype.exitToUrl = function(url) {
 
 Game.prototype.removeSprite = function(id) {
   this.phy.removeSprite(id);
-};
-
-Game.prototype.killPlayer = function() {
-  // init dead player using live player's data
-  var deadPlayerPrefab = new DeadPlayerPrefab(
-      this.playerSprite.px,
-      this.playerSprite.py);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this);
-  this.addSprites(deadPlayerSprites);
-
-  // remove normal player sprite
-  this.playerSprite.die();
-  this.removeSprite(this.playerSprite.id);
-
-  this.playerSprite = deadPlayerSprites[0];
 };
