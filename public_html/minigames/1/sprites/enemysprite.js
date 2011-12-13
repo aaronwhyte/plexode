@@ -6,14 +6,14 @@ function EnemySprite(phy, px, py) {
   function r(n) {
     return Math.floor(Math.random() * n);
   }
-  var rad = 10 + r(20);
+  var radius = 20 + r(20);
   Sprite.call(this, phy,
       new RectPainter(
           "rgb(" + [100 + r(156), 200 + r(56), 100 + r(156)].join(",") + ")"),
       px, py,
       0, 0, // vel
-      rad, rad, // size
-      rad * 4, // mass
+      radius, radius, // size
+      radius * radius * 4, // mass
       Game.ENEMY_GROUP,
       1.01);
   
@@ -21,13 +21,14 @@ function EnemySprite(phy, px, py) {
   this.vel = new Vec2d();
   this.facing = Math.random() * 2 * Math.PI;
   this.turning = 0;
+  this.health = 1;
 
   this.acceleration = new Vec2d();
 }
 EnemySprite.prototype = new Sprite();
 EnemySprite.prototype.constructor = EnemySprite;
 
-EnemySprite.FORCE = 100;
+EnemySprite.FORCE = 2000;
 
 EnemySprite.prototype.act = function() {
   // move
@@ -47,4 +48,15 @@ EnemySprite.prototype.act = function() {
 
   this.accelerateXY(workVec.x, workVec.y);
   Vec2d.free(workVec);
+};
+
+
+EnemySprite.prototype.onSpriteHit = function(hitSprite) {
+  if (hitSprite instanceof PlayerBulletSprite || hitSprite instanceof FlailSprite) {
+    this.health--;
+  }
+  if (this.health <= 0) {
+    this.phy.removeSprite(this.phy.getSpriteId(this));
+    this.painter.setKaput(true);
+  }
 };

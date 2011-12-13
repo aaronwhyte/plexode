@@ -4,13 +4,13 @@
  */
 function PlayerBulletSprite(phy, game, px, py, vx, vy) {
   this.game = game;
-  var radius = 6;
+  var radius = 10;
   Sprite.call(this, phy,
       new RectPainter("#0f8"),
       px, py,
       vx, vy,
       radius, radius, // size
-      radius * 4, // mass
+      2 * radius * radius * 4, // mass
       Game.PLAYER_FIRE_GROUP,
       Infinity);
   

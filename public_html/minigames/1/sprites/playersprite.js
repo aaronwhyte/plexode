@@ -9,7 +9,7 @@ function PlayerSprite(phy, px, py) {
       px, py,
       0, 0, // vel
       radius, radius, // size
-      radius * 4, // mass
+      radius * radius * 4, // mass
       Game.PLAYER_GROUP,
       1.01);
   
@@ -24,15 +24,19 @@ function PlayerSprite(phy, px, py) {
   this.flail = null;
   this.isStiff = false;
   this.stiffPose = new Vec2d();
-  this.lastFireTime = 0;
+  this.fireDelay = 0;
 }
 PlayerSprite.prototype = new Sprite();
 PlayerSprite.prototype.constructor = PlayerSprite;
 
-PlayerSprite.GRIP_RANGE = 100;
-PlayerSprite.FIRE_DELAY = 10;
+PlayerSprite.GRIP_RANGE = 140;
+PlayerSprite.FIRE_DELAY = 40;
+PlayerSprite.BULLET_SPEED = 60;
 
 PlayerSprite.ACCEL = 3;
+
+PlayerSprite.FORCE = 9;
+PlayerSprite.KICK = 40000;
 
 PlayerSprite.prototype.setFlailSprite = function(s) {
   this.flail = s;
@@ -63,12 +67,16 @@ PlayerSprite.prototype.act = function(phy, game) {
     this.looseForce();
   }
 
-  if (this.fireKeyDown() &&
-      game.getNow() >= this.lastFireTime + PlayerSprite.FIRE_DELAY) {
-    this.fireBullet(phy, game);
+  this.fireDelay = Math.max(0, --this.fireDelay);
+  if (this.fireKeyDown() && !this.fireDelay) {
+    this.fire(phy, game);
   }
 };
 
+PlayerSprite.prototype.getForceMultiplier = function() {
+  var m = Math.max(0, (PlayerSprite.FIRE_DELAY - this.fireDelay) / PlayerSprite.FIRE_DELAY);
+  return m * m;
+};
 
 PlayerSprite.prototype.looseForce = function() {
   var dx = this.px - this.flail.px;
@@ -76,13 +84,14 @@ PlayerSprite.prototype.looseForce = function() {
   var dist = Math.sqrt(dx * dx + dy * dy);
 
   var aimUnit = Vec2d.alloc(dx / dist, dy / dist);
-  var pull = (dist - PlayerSprite.GRIP_RANGE) * 6;
+  var pull = 7 * (dist - PlayerSprite.GRIP_RANGE);
   var dVel = Vec2d.alloc(this.vx - this.flail.vx, this.vy - this.flail.vy);
   var dPos = Vec2d.alloc(dx, dy);
+  dPos.scaleToLength(1);
   var dot = dVel.dot(dPos);
-  var damp = dot * 0.1;
-  var fx = aimUnit.x * (pull + damp);
-  var fy = aimUnit.y * (pull + damp);
+  var damp = dot * 15;
+  var fx = this.getForceMultiplier() * PlayerSprite.FORCE * (aimUnit.x * (pull + damp));
+  var fy = this.getForceMultiplier() * PlayerSprite.FORCE * (aimUnit.y * (pull + damp));
   this.accelerateXY(-fx / this.mass, -fy / this.mass);
   this.flail.accelerateXY(fx / this.flail.mass, fy / this.flail.mass);
   Vec2d.free(aimUnit);
@@ -105,27 +114,32 @@ PlayerSprite.prototype.stiffForce = function() {
   var dx = this.flail.px - (this.px + this.stiffPose.x);
   var dy = this.flail.py - (this.py + this.stiffPose.y);
   var dVel = Vec2d.alloc(this.vx - this.flail.vx, this.vy - this.flail.vy);
-  var damp = 20;
-  var pull = 10;
-  var fx = damp * dVel.x - pull * dx;
-  var fy = damp * dVel.y - pull * dy;
+  var damp = 15;
+  var pull = 6;
+  var fx = this.getForceMultiplier() * PlayerSprite.FORCE * (damp * dVel.x - pull * dx);
+  var fy = this.getForceMultiplier() * PlayerSprite.FORCE * (damp * dVel.y - pull * dy);
   this.accelerateXY(-fx / this.mass, -fy / this.mass);
   this.flail.accelerateXY(fx / this.flail.mass, fy / this.flail.mass);
   Vec2d.free(dVel);
 };
 
-PlayerSprite.prototype.fireBullet = function(phy, game) {
-  this.lastFireTime = game.getNow();
+PlayerSprite.prototype.fire = function(phy, game) {
+  this.fireDelay = PlayerSprite.FIRE_DELAY;
   var dx = this.flail.px - this.px;
   var dy = this.flail.py - this.py;
   var dist = Math.sqrt(dx * dx + dy * dy);
 
-  var speed = 60;
-  var bullet = new PlayerBulletSprite(
-      phy, game,
-      this.flail.px, this.flail.py,
-      this.flail.vx + speed * dx / dist, this.flail.vy + speed * dy / dist);
-  game.addSprite(bullet);
+  var flailAcc = PlayerSprite.KICK / this.flail.mass;
+  this.flail.accelerateXY(flailAcc * dx / dist, flailAcc * dy / dist);
+  var plrAcc = -PlayerSprite.KICK / this.mass;
+  this.accelerateXY(plrAcc * dx / dist, plrAcc * dy / dist);
+
+//  var bullet = new PlayerBulletSprite(
+//      phy, game,
+//      this.flail.px, this.flail.py,
+//      this.flail.vx + PlayerSprite.BULLET_SPEED * dx / dist,
+//      this.flail.vy + PlayerSprite.BULLET_SPEED * dy / dist);
+//  game.addSprite(bullet);
 };
 
 /**

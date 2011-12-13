@@ -10,7 +10,7 @@ function Game(renderer, phy) {
   this.painters = [];
 }
 
-Game.FPS = 45;
+Game.FPS = 50;
 Game.ZOOM = 0.35;
 
 Game.nextGroup = 1;
@@ -48,7 +48,7 @@ Game.COLLIDER_GROUP_PAIRS = [
   [Game.NO_HIT_GROUP, Game.EMPTY_GROUP]
 ];
 
-Game.LEVEL_RADIUS = 1500;
+Game.LEVEL_RADIUS = 1300;
 Game.CELL_SIZE = 100;
 
 // Ordered list of paint layers
