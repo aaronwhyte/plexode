@@ -1,0 +1,5 @@
+powerups respawn and that's the only way to fire
+player can only fire when near certain objects.
+player carries lens for transforming harmless particles into bullets.
+several fire buttons, all with different wacky magic powers
+player shoots flamable gas, has spark thrower

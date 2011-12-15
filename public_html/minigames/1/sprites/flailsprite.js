@@ -23,8 +23,8 @@ FlailSprite.prototype.constructor = FlailSprite;
 
 FlailSprite.prototype.act = function() {
   // friction
-  var green = Math.floor(Math.random() * 100) + 156;
-  this.painter.setColor("rgb(0, " + green + ", 100)");
+  var r = Math.floor(Math.random() * 100) + 156;
+  this.painter.setColor("rgb(0, " + r + ", 100)");
   this.getVel(this.workVec);
   this.workVec.scale(-Phy.FRICTION * 0.75);
   this.accelerate(this.workVec);

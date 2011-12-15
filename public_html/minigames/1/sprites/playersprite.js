@@ -24,19 +24,21 @@ function PlayerSprite(phy, px, py) {
   this.flail = null;
   this.isStiff = false;
   this.stiffPose = new Vec2d();
-  this.fireDelay = 0;
+  this.hurlDelay = 0;
+  this.health = 1;
 }
 PlayerSprite.prototype = new Sprite();
 PlayerSprite.prototype.constructor = PlayerSprite;
 
-PlayerSprite.GRIP_RANGE = 140;
-PlayerSprite.FIRE_DELAY = 40;
-PlayerSprite.BULLET_SPEED = 60;
+PlayerSprite.GRIP_RANGE = 150;
+PlayerSprite.HURL_DELAY = 30;
+PlayerSprite.BULLET_SPEED = 5;
+PlayerSprite.BULLET_DURATION = 10;
 
 PlayerSprite.ACCEL = 3;
 
-PlayerSprite.FORCE = 9;
-PlayerSprite.KICK = 40000;
+PlayerSprite.GRIP_FORCE = 8;
+PlayerSprite.KICK = 50000;
 
 PlayerSprite.prototype.setFlailSprite = function(s) {
   this.flail = s;
@@ -47,62 +49,64 @@ PlayerSprite.prototype.act = function(phy, game) {
   var workVec = Vec2d.alloc(0, 0);
   this.getVel(workVec);
   workVec.scale(-Phy.FRICTION);
-  GU_copyKeysVec(this.keysVec);
-  if (this.keysVec.x || this.keysVec.y) {
-    workVec.add(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
+  if (this.health > 0) {
+    GU_copyKeysVec(this.keysVec);
+    if (this.keysVec.x || this.keysVec.y) {
+      workVec.add(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
+    }
   }
   this.accelerateXY(workVec.x, workVec.y);
   Vec2d.free(workVec);
 
-  if (!this.isStiff && this.gripKeyDown()) {
-    this.initStiffPose();
-    this.isStiff = true;
+  if (this.health > 0) {
+    this.doFlailStuff(phy, game);
   }
-  if (this.isStiff && !this.gripKeyDown()) {
-    this.isStiff = false;
-  }
-  if (this.isStiff) {
-    this.stiffForce();
-  } else {
-    this.looseForce();
-  }
+};
 
-  this.fireDelay = Math.max(0, --this.fireDelay);
-  if (this.fireKeyDown() && !this.fireDelay) {
-    this.fire(phy, game);
+PlayerSprite.prototype.doFlailStuff = function(phy, game) {
+  GU_copyKeysVec(this.keysVec);
+  if (this.keysVec.x || this.keysVec.y) {
+    this.keysVec.scaleToLength(PlayerSprite.GRIP_RANGE);
+    this.initStiffPose(this.keysVec.x, this.keysVec.y);
+  }
+  this.stiffForce();
+  this.hurlDelay = Math.max(0, --this.hurlDelay);
+  if (this.hurlKeyDown() && !this.hurlDelay) {
+    this.hurl(phy, game);
+  }
+  var dx = this.px - this.flail.px;
+  var dy = this.py - this.flail.py;
+  var randAngle = 2 * Math.PI * Math.random();
+  var randDist = Math.random() * 5;
+  var cx = Math.sin(randAngle) * randDist;
+  var cy = Math.cos(randAngle) * randDist;
+  var dist = Math.sqrt(dx * dx + dy * dy);
+  var bullet = new PlayerBulletSprite(
+      phy, game,
+      this.flail.px, this.flail.py,
+      this.flail.vx - PlayerSprite.BULLET_SPEED * dx / dist + cx,
+      this.flail.vy - PlayerSprite.BULLET_SPEED * dy / dist + cy,
+      PlayerSprite.BULLET_DURATION);
+  game.addSprite(bullet);
+};
+
+PlayerSprite.prototype.onSpriteHit = function(hitSprite) {
+  if (this.health <= 0) return;
+  if (hitSprite instanceof EnemySprite && hitSprite.health > 0) {
+    this.health--;
+    if (this.health <= 0) {
+      this.painter.setColor("#222");
+    }
   }
 };
 
 PlayerSprite.prototype.getForceMultiplier = function() {
-  var m = Math.max(0, (PlayerSprite.FIRE_DELAY - this.fireDelay) / PlayerSprite.FIRE_DELAY);
+  var m = Math.max(0, (PlayerSprite.HURL_DELAY - this.hurlDelay) / PlayerSprite.HURL_DELAY);
   return m * m;
 };
 
-PlayerSprite.prototype.looseForce = function() {
-  var dx = this.px - this.flail.px;
-  var dy = this.py - this.flail.py;
-  var dist = Math.sqrt(dx * dx + dy * dy);
 
-  var aimUnit = Vec2d.alloc(dx / dist, dy / dist);
-  var pull = 7 * (dist - PlayerSprite.GRIP_RANGE);
-  var dVel = Vec2d.alloc(this.vx - this.flail.vx, this.vy - this.flail.vy);
-  var dPos = Vec2d.alloc(dx, dy);
-  dPos.scaleToLength(1);
-  var dot = dVel.dot(dPos);
-  var damp = dot * 15;
-  var fx = this.getForceMultiplier() * PlayerSprite.FORCE * (aimUnit.x * (pull + damp));
-  var fy = this.getForceMultiplier() * PlayerSprite.FORCE * (aimUnit.y * (pull + damp));
-  this.accelerateXY(-fx / this.mass, -fy / this.mass);
-  this.flail.accelerateXY(fx / this.flail.mass, fy / this.flail.mass);
-  Vec2d.free(aimUnit);
-  Vec2d.free(dVel);
-  Vec2d.free(dPos);
-};
-
-
-PlayerSprite.prototype.initStiffPose = function() {
-  var dx = this.flail.px - this.px;
-  var dy = this.flail.py - this.py;
+PlayerSprite.prototype.initStiffPose = function(dx, dy) {
   var dist = Math.sqrt(dx * dx + dy * dy);
   this.stiffPose.setXY(
       PlayerSprite.GRIP_RANGE * dx / dist,
@@ -116,15 +120,15 @@ PlayerSprite.prototype.stiffForce = function() {
   var dVel = Vec2d.alloc(this.vx - this.flail.vx, this.vy - this.flail.vy);
   var damp = 15;
   var pull = 6;
-  var fx = this.getForceMultiplier() * PlayerSprite.FORCE * (damp * dVel.x - pull * dx);
-  var fy = this.getForceMultiplier() * PlayerSprite.FORCE * (damp * dVel.y - pull * dy);
+  var fx = this.getForceMultiplier() * PlayerSprite.GRIP_FORCE * (damp * dVel.x - pull * dx);
+  var fy = this.getForceMultiplier() * PlayerSprite.GRIP_FORCE * (damp * dVel.y - pull * dy);
   this.accelerateXY(-fx / this.mass, -fy / this.mass);
   this.flail.accelerateXY(fx / this.flail.mass, fy / this.flail.mass);
   Vec2d.free(dVel);
 };
 
-PlayerSprite.prototype.fire = function(phy, game) {
-  this.fireDelay = PlayerSprite.FIRE_DELAY;
+PlayerSprite.prototype.hurl = function(phy, game) {
+  this.hurlDelay = PlayerSprite.HURL_DELAY;
   var dx = this.flail.px - this.px;
   var dy = this.flail.py - this.py;
   var dist = Math.sqrt(dx * dx + dy * dy);
@@ -133,26 +137,12 @@ PlayerSprite.prototype.fire = function(phy, game) {
   this.flail.accelerateXY(flailAcc * dx / dist, flailAcc * dy / dist);
   var plrAcc = -PlayerSprite.KICK / this.mass;
   this.accelerateXY(plrAcc * dx / dist, plrAcc * dy / dist);
-
-//  var bullet = new PlayerBulletSprite(
-//      phy, game,
-//      this.flail.px, this.flail.py,
-//      this.flail.vx + PlayerSprite.BULLET_SPEED * dx / dist,
-//      this.flail.vy + PlayerSprite.BULLET_SPEED * dy / dist);
-//  game.addSprite(bullet);
 };
 
 /**
  * @return {boolean}
  */
-PlayerSprite.prototype.gripKeyDown = function() {
-  return GU_keys[VK_Z] || GU_keys[VK_SEMICOLON];
-};
-
-/**
- * @return {boolean}
- */
-PlayerSprite.prototype.fireKeyDown = function() {
+PlayerSprite.prototype.hurlKeyDown = function() {
   return GU_keys[VK_X] || GU_keys[VK_Q];
 };
 

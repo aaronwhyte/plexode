@@ -12,28 +12,16 @@ flail bounce
 v flail kinda bounces hard when it hits something.
 
 player health
-- touching enemies hurts you
-- death when health hits 0
-- Add a game death mode which is less fun than being alive.
+v touching enemies hurts you
+v death when health hits 0
+v being dead is less fun than being alive.
 
-enemy fire
-- enemies shoot randomly at first, for fun
-- enemy bullets stopped by whatevs.
-- hurts player
-
-enemy behaviors
-- avoid walls, boulders, and each other
-- get closer to player
-- scan for player and shoot when player is within scanning sweep
-
-increasing difficulty
-- individual enemies get stronger over time
- - enemies spawn at an increasing rate? or spawn with more initial strength?
-
-score
-- kill count.  More points for flail kill?  More points for stronger enemies?
-- Limited time game?  Interesting - let enemies get as powerful as possible before killing them,
-to mazimize score?
+more crazy flail experiments!
+v fast waving around
+v fencing mode
+v throwing
+v defensive shield
+v ON FUCKING FIRE - good one actually
 
 cool graphics
 

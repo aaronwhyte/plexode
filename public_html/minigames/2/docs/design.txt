@@ -1,0 +1,31 @@
+
+HYPERFLAIL
+- Like burning flail except only collides w walls.
+- Not throwable, but when you press fire, it become solid and supermassive,
+  and you build up shot power. So it's a shield and, when you release, it can be a cannon.
+  It fires opposite from where the player is
+- only collides with walls
+- constantly fires in direction of travel, throwing bullets w velocity of travel
+- Swipe it around to surround self w deadly stuff
+- Touch it to phase out for a sec?
+- Hold fire to freeze it in place (absolute pos) and prep to fire away from player. Move plr to aim.
+- Release fire to launch blast of accumulated energy. hold-time controls fire type?
+
+enemy fire
+- enemies shoot randomly at first, for fun
+- enemy bullets stopped by whatevs.
+- hurts player
+
+enemy behaviors
+- avoid walls, boulders, and each other
+- get closer to player
+- scan for player and shoot when player is within scanning sweep
+
+increasing difficulty
+- individual enemies get stronger over time
+ - enemies spawn at an increasing rate? or spawn with more initial strength?
+
+score
+- kill count.  More points for flail kill?  More points for stronger enemies?
+- Limited time game?  Interesting - let enemies get as powerful as possible before killing them,
+to mazimize score?

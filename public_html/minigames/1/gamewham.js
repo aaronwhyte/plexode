@@ -23,13 +23,13 @@ GameWham.prototype.spriteHit = function(phy, spriteId1, spriteId2, xTime, yTime,
   var s1 = phy.getSprite(spriteId1);
   var s2 = phy.getSprite(spriteId2);
 
+  if (this.isStrikeHit(s1, s2) || this.isStrikeHit(s2, s1)) {
+    this.calcStrikeAcceleration(s1, s2, this.accelerationsOut);
+  }
   if (overlapping) {
     this.calcRepulsion(s1, s2, this.accelerationsOut);
   } else {
     this.calcAcceleration(s1, s2, xTime, yTime, 0.5, this.accelerationsOut);
-  }
-  if (this.isStrikeHit(s1, s2) || this.isStrikeHit(s2, s1)) {
-    this.addRepulsionBoost(s1, s2, this.accelerationsOut);
   }
   var a1 = this.accelerationsOut[0];
   var a2 = this.accelerationsOut[1];
@@ -39,7 +39,7 @@ GameWham.prototype.spriteHit = function(phy, spriteId1, spriteId2, xTime, yTime,
   s2.onSpriteHit(s1);
 };
 
-GameWham.prototype.addRepulsionBoost = function(s1, s2, vecsOut) {
+GameWham.prototype.calcStrikeAcceleration = function(s1, s2, vecsOut) {
   var f = Vec2d.alloc(s1.px, s1.py);
   f.addXY(-s2.px, -s2.py);
   f.scaleToLength(20000);
