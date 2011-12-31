@@ -9,10 +9,10 @@ function PlayerAssemblerPrefab(x, y, facing, isEntrance) {
   this.isEntrance = isEntrance;
 }
 
-PlayerAssemblerPrefab.prototype.createSprites = function(vorp) {
+PlayerAssemblerPrefab.prototype.createSprites = function(clock) {
   var thickness = 0.5;
   var width = 2;
-  var a = new PlayerAssemblerSprite(vorp.phy, new PlayerAssemblerPainter(),
+  var a = new PlayerAssemblerSprite(clock, new PlayerAssemblerPainter(),
       this.x + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.x,
       this.y + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.y,
       0, 0,

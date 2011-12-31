@@ -6,10 +6,9 @@ function DeadPlayerPrefab(x, y) {
   this.y = y;
 }
 
-DeadPlayerPrefab.prototype.createSprites = function(vorp) {
+DeadPlayerPrefab.prototype.createSprites = function(clock) {
   var r = Prefab.BOX_RADIUS;
-  var a = new DeadPlayerSprite(vorp.phy, new DeadPlayerPainter('rgb(255, 255, 255)'),
+  var a = new DeadPlayerSprite(clock, new DeadPlayerPainter('rgb(255, 255, 255)'),
       this.x, this.y, 0, 0, r, r);
-  a.setVorp(vorp);
   return [a];
 };

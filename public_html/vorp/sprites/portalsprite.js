@@ -2,8 +2,8 @@
  * @constructor
  * @extends {Sprite}
  */
-function PortalSprite(phy, painter, px, py, vx, vy, rx, ry, mass) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, Vorp.PORTAL_GROUP, 1.01);
+function PortalSprite(clock, painter, px, py, vx, vy, rx, ry, mass) {
+  Sprite.call(this, clock, painter, px, py, vx, vy, rx, ry, mass, Vorp.PORTAL_GROUP, 1.01);
   this.vorp = null;
   this.targetSprite = this;
   this.pos = new Vec2d();
@@ -25,12 +25,13 @@ PortalSprite.prototype.setTargetSprite = function(targetSprite) {
 PortalSprite.prototype.act = function() {
   var workVec = Vec2d.alloc(0, 0);
   this.getVel(workVec);
-  workVec.scale(-Phy.FRICTION);
+  workVec.scale(-Vorp.FRICTION);
   this.accelerateXY(workVec.x, workVec.y);
   Vec2d.free(workVec);
 };
 
-PortalSprite.prototype.onSpriteHit = function(hitSprite, thisAcc, hitAcc, xTime, yTime, overlapping) {
+PortalSprite.prototype.onSpriteHit = function(
+    hitSprite, vorp, thisAcc, hitAcc, xTime, yTime, overlapping) {
   if (!this.targetSprite ||
       hitSprite == this.targetSprite ||
       hitSprite.mass == Infinity ||
@@ -59,11 +60,10 @@ PortalSprite.prototype.onSpriteHit = function(hitSprite, thisAcc, hitAcc, xTime,
         targetPos.x, targetPos.y,
         destX, destY,
         hitSprite.rx * 1.01, hitSprite.ry * 1.01);  // fudge factor
-    this.phy.rayScan(rayScan, Vorp.PORTAL_PROBE_GROUP);
-    var sledgeId = rayScan.hitSledgeId;
+    var otherSideSpriteId = vorp.rayScan(rayScan, Vorp.PORTAL_PROBE_GROUP);
     RayScan.free(rayScan);
-    if (sledgeId) {
-      var otherSideSprite = this.phy.getSpriteBySledgeId(sledgeId);
+    if (otherSideSpriteId) {
+      var otherSideSprite = vorp.getSprite(otherSideSpriteId);
       if (otherSideSprite && (
           otherSideSprite.mass == Infinity || 
           otherSideSprite == hitSprite || 

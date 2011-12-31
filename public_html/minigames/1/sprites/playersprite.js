@@ -22,8 +22,7 @@ function PlayerSprite(phy, px, py) {
   this.acceleration = new Vec2d();
 
   this.flail = null;
-  this.isStiff = false;
-  this.stiffPose = new Vec2d();
+  this.stiffPose = new Vec2d(0, -PlayerSprite.GRIP_RANGE);
   this.hurlDelay = 0;
   this.health = 1;
 }

@@ -7,9 +7,10 @@
  * This tells the collider to compare sledges in 2 groups for collisions.
  * The two IDs of a pair may be the same, to make
  * a group's sledges collide with each other.
+ * @param {GameClock} clock
  * @constructor
  */
-function CellCollider(brect, cellSize, groupPairs, now) {
+function CellCollider(brect, cellSize, groupPairs, clock) {
   FLAGS && FLAGS.set('debugRayScans', false);
 
   var width = brect.x1 - brect.x0;
@@ -22,7 +23,7 @@ function CellCollider(brect, cellSize, groupPairs, now) {
   this.cellHeight = height / this.yCells;
 
   this.groupPairs = groupPairs;
-  this.now = now;
+  this.clock = clock;
 
   this.marks = [];
 
@@ -105,7 +106,7 @@ CellCollider.prototype.addSledgeInGroup = function(sledge, group) {
   var sledgeId = this.nextId++;
   this.sledges[sledgeId] = sledge;
   sledge.group = group;
-  sledge.moveToTime(this.now);
+  sledge.moveToTime(this.clock.getTime());
 
   // Add next sledge entry times to cellEntries
   this.initSledgeCellTimes(sledge);
@@ -167,10 +168,11 @@ CellCollider.prototype.addSledgeToCells = function(
 /**
  * Sticks the next x and y cell entry times into the sledge,
  * and caches intermediate calc data if needed.
- * @param {Sledge} sledge  a sledge that is already moved to this.now.
+ * @param {Sledge} sledge  a sledge that is already moved to now.
  * @private
  */
 CellCollider.prototype.initSledgeCellTimes = function(sledge) {
+  var now = this.clock.getTime();
   // Sledge's cell time data hasn't been initialized, so do it now.
   var wall, positive, front, back, cellIndex, time;
   if (sledge.vx) {
@@ -183,9 +185,9 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
     cellIndex = this.getCellIndexX(front);
     sledge.frontCellIndexX = cellIndex;
     wall = this.x + this.cellWidth * (cellIndex + (positive ? 1 : 0));
-    time = this.now + (wall - front) / sledge.vx;
-    if (time < this.now) {
-      throw Error(time + " < " + this.now);
+    time = now + (wall - front) / sledge.vx;
+    if (time < now) {
+      throw Error(time + " < " + now);
     }
     sledge.cellEntryTimeX = time;
   }
@@ -199,9 +201,9 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
     cellIndex = this.getCellIndexY(front);
     sledge.frontCellIndexY = cellIndex;
     wall = this.y + this.cellHeight * (cellIndex + (positive ? 1 : 0));
-    time = this.now + (wall - front) / sledge.vy;
-    if (time < this.now) {
-      throw Error(time + " < " + this.now);
+    time = now + (wall - front) / sledge.vy;
+    if (time < now) {
+      throw Error(time + " < " + now);
     }
     sledge.cellEntryTimeY = time;
   }
@@ -216,7 +218,7 @@ CellCollider.prototype.calcHit = function(id1, id2) {
   var sledge1 = this.sledges[id1];
   var sledge2 = this.sledges[id2];
   var out = this.hitOut;
-  sledge1.calcHitTime(sledge2, out, this.now);
+  sledge1.calcHitTime(sledge2, out, this.clock.getTime());
   var time = out.xTime || out.yTime;
   if (time && time < Math.min(sledge1.expiration, sledge2.expiration)) {
     var hit = Hit.alloc(out.xTime, out.yTime, out.overlapping, id1, id2);
@@ -229,7 +231,7 @@ CellCollider.prototype.removeSledge = function(sledgeId) {
 };
 
 /**
- * Returns the next collision on or after 'this.now' but before 'beforeTime',
+ * Returns the next collision on or after 'now' but before 'beforeTime',
  * or null if there isn't any.
  * @return {?Hit}
  */
@@ -300,23 +302,16 @@ CellCollider.prototype.getNextCollisionBeforeTime = function(beforeTime) {
 };
 
 CellCollider.prototype.isHitValid = function(hit) {
-  return hit.time >= this.now &&
+  return hit.time >= this.clock.getTime() &&
       !!this.sledges[hit.sledgeId1] &&
       !!this.sledges[hit.sledgeId2];
 };
 
 CellCollider.prototype.isCellEntryValid = function(entry) {
-  if (entry.time < this.now) {
-    throw 'entry.time < this.now';
+  if (entry.time < this.clock.getTime()) {
+    throw 'entry.time < now';
   }
   return !!this.sledges[entry.sledgeId];
-};
-
-CellCollider.prototype.advanceToTime = function(t) {
-  if (t < this.now) {
-    throw 'Cannot go back in time from ' + this.now + ' to ' + t;
-  }
-  this.now = t;
 };
 
 /**
@@ -452,7 +447,7 @@ CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
         this.getWorldXForIndexX(x + 1), this.getWorldYForIndexY(y + 1)));
   }
   var hitSledgeId = null;
-  var now = this.now;
+  var now = this.clock.getTime();
 
   var cell = this.getGrid()[x][y];
   // For every group the rayScan can collide with...

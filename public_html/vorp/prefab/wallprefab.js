@@ -24,12 +24,11 @@ WallPrefab.createChain = function(coords) {
   return a;
 };
 
-WallPrefab.prototype.createSprites = function(vorp) {
+WallPrefab.prototype.createSprites = function(clock) {
   var x0 = this.x0;
   var y0 = this.y0;
   var x1 = this.x1;
   var y1 = this.y1;
-  var phy = vorp.phy;
   var r = Prefab.WALL_RADIUS;
   function mid(a, b) {
     return (a + b) / 2;
@@ -38,14 +37,14 @@ WallPrefab.prototype.createSprites = function(vorp) {
     return Math.abs(a - b) / 2 + r;
   }
   if (this.solid || rad(x0, x1) < 2 * r || rad(y0, y1) < 2 * r) {
-    return [new WallSprite(phy, new RectPainter("rgb(80,48,176)"),
+    return [new WallSprite(clock, new RectPainter("rgb(80,48,176)"),
         mid(x0, x1), mid(y0, y1), rad(x0, x1), rad(y0, y1))];
   } else {
     return [
-      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y0, rad(x0, x1), r),
-      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y1, rad(x0, x1), r),
-      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), x0, mid(y0, y1), r, rad(y0, y1)),
-      new WallSprite(phy, new RectPainter("rgb(80,48,176)"), x1, mid(y0, y1), r, rad(y0, y1))
+      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y0, rad(x0, x1), r),
+      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y1, rad(x0, x1), r),
+      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), x0, mid(y0, y1), r, rad(y0, y1)),
+      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), x1, mid(y0, y1), r, rad(y0, y1))
     ];
   }
 };

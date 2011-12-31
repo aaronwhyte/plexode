@@ -2,12 +2,12 @@
  * @constructor
  * @extends {Sprite}
  */
-function ButtonSprite(phy, painter, px, py, vx, vy, rx, ry, mass, group) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, group, Infinity);
+function ButtonSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
   this.onClick = null;
   this.lastClickTime = -Infinity;
 }
-ButtonSprite.prototype = new Sprite();
+ButtonSprite.prototype = new Sprite(null);
 ButtonSprite.prototype.constructor = ButtonSprite;
 
 ButtonSprite.DEBOUNCE = 15;

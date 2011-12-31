@@ -8,10 +8,10 @@ function ButtonPrefab(x, y, facing, onClick) {
   this.onClick= onClick;
 }
 
-ButtonPrefab.prototype.createSprites = function(vorp) {
+ButtonPrefab.prototype.createSprites = function(clock) {
   var thickness = 0.3;
   var width = 0.9;
-  var a = new ButtonSprite(vorp.phy, new ButtonPainter(),
+  var a = new ButtonSprite(clock, new ButtonPainter(),
       this.x + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.x,
       this.y + (Prefab.WALL_RADIUS * thickness + Prefab.WALL_RADIUS) * this.facing.y,
       0, 0,

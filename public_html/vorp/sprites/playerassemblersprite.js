@@ -2,19 +2,19 @@
  * @constructor
  * @extends {Sprite}
  */
-function PlayerAssemblerSprite(phy, painter, px, py, vx, vy, rx, ry, mass, group) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, group, Infinity);
+function PlayerAssemblerSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
   
   /**
    * Spot where the player will be assembled
    */
-  this.targetPos = new Vec2d(px, py);
+  this.targetPos = this.getPos(new Vec2d());
 }
 
-PlayerAssemblerSprite.prototype = new Sprite();
+PlayerAssemblerSprite.prototype = new Sprite(null);
 PlayerAssemblerSprite.prototype.constructor = PlayerAssemblerSprite;
 
-PlayerAssemblerSprite.prototype.onPlayerAssembled = function(now) {
-  this.painter.createSparks(this.px, this.py, this.targetPos.x, this.targetPos.y, now);
+PlayerAssemblerSprite.prototype.onPlayerAssembled = function() {
+  this.painter.createSparks(this.px, this.py, this.targetPos.x, this.targetPos.y, this.now());
 };
 

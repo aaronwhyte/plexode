@@ -19,6 +19,18 @@ v grafModel allocates new IDs
 v grafModel.paste(grafModel) returns ID map
 v unit tests
 
+Refactor "phy" out of sprite constructors?
+- Wrap Phy methods/fields in Game:
+  v rayscan
+  - getSpriteBySledgeId - always follows rayscan... Make it automatic?
+  - FRICTION
+  - invalidateSledgeForSpriteId
+- Pass Game in where needed.
+  - act()
+  - onSpriteHit()
+- Remove Phy from concrete sprite types. Only access Game fields.
+- Remove Phy from gaam.Sprite
+
 Ved-to-Vorp transformer
 Reads GrafModel directly?
 - walls

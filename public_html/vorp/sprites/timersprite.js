@@ -2,8 +2,8 @@
  * @constructor
  * @extends {Sprite}
  */
-function TimerSprite(phy, painter, px, py, rx, ry) {
-  Sprite.call(this, phy, painter, px, py, 0, 0, rx, ry, Infinity, Vorp.WALL_GROUP, Infinity);
+function TimerSprite(clock, painter, px, py, rx, ry) {
+  Sprite.call(this, clock, painter, px, py, 0, 0, rx, ry, Infinity, Vorp.WALL_GROUP, Infinity);
   this.resetTime = -Infinity;
   this.timeoutLength = null;
   this.onTimeout = null;
@@ -25,7 +25,7 @@ TimerSprite.prototype.setOnTimeout = function(onTimeout) {
 };
 
 TimerSprite.prototype.isExpired = function() {
-  return this.phy.getNow() - this.timeoutLength >= this.resetTime;
+  return this.getNow() - this.timeoutLength >= this.resetTime;
 };
 
 TimerSprite.prototype.stop = function() {
@@ -44,13 +44,3 @@ TimerSprite.prototype.act = function() {
     this.onTimeout();
   }
 };
-
-///**
-// * @private
-// */
-//TimerSprite.prototype.fractionLeft = function() {
-//  if (this.resetTime == Infinity) return 1;
-//  var frac = 1 - (this.phy.getNow() - this.resetTime) / this.timeoutLength;
-//  return Math.min(1, Math.max(0, frac));
-//};
-

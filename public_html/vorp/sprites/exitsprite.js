@@ -2,25 +2,20 @@
  * @constructor
  * @extends {Sprite}
  */
-function ExitSprite(phy, painter, px, py, vx, vy, rx, ry, mass, group) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, group, Infinity);
-  this.vorp = null;
+function ExitSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
   this.url = null;
 }
 
-ExitSprite.prototype = new Sprite();
+ExitSprite.prototype = new Sprite(null);
 ExitSprite.prototype.constructor = ExitSprite;
-
-ExitSprite.prototype.setVorp = function(vorp) {
-  this.vorp = vorp;
-};
 
 ExitSprite.prototype.setUrl = function(url) {
   this.url = url;
 };
 
-ExitSprite.prototype.onSpriteHit = function(hitSprite) {
-  if (hitSprite == this.vorp.getPlayerSprite()) {
-    this.vorp.exitToUrl(this.url);
+ExitSprite.prototype.onSpriteHit = function(hitSprite, vorp) {
+  if (hitSprite == vorp.getPlayerSprite()) {
+    vorp.exitToUrl(this.url);
   }
 };

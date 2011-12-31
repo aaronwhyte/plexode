@@ -11,8 +11,8 @@
  * @constructor
  * @extends {Sprite}
  */
-function DoorSprite(phy, painter, x0, y0, x1, y1, thickness, closedness, topSpeed, accel) {
-  Sprite.call(this, phy, painter, x0, y0, 0, 0, 100, 100, Infinity, Vorp.WALL_GROUP, Infinity);
+function DoorSprite(spriteTemplate, x0, y0, x1, y1, thickness, closedness, topSpeed, accel) {
+  Sprite.call(this, spriteTemplate);
   this.x0 = x0;
   this.y0 = y0;
   this.x1 = x1;
@@ -30,20 +30,22 @@ DoorSprite.prototype = new Sprite();
 DoorSprite.prototype.constructor = DoorSprite;
 
 DoorSprite.prototype.setDimensions = function() {
+  var temp = Vec2d.alloc();
   if (this.x0 == this.x1) {
     // vertical
     var offY = this.closedness * (this.y1 - this.y0) * 0.5;
-    this.setPosXY(this.x0, this.y0 + offY);
-    this.setRadXY(this.thickness, Math.abs(offY));
+    this.setPos(temp.set(this.x0, this.y0 + offY));
+    this.setRad(temp.set(this.thickness, Math.abs(offY)));
   } else if (this.y0 == this.y1) {
     // horizontal
     var offX = this.closedness * (this.x1 - this.x0) * 0.5;
-    this.setPosXY(this.x0 + offX, this.y0);
-    this.setRadXY(Math.abs(offX), this.thickness);
+    this.setPos(temp.set(this.x0 + offX, this.y0));
+    this.setRad(temp.set(Math.abs(offX), this.thickness));
   } else {
     throw Error("Door is neither horizontal nor vertical. x0, y0, x1, y1: " + 
         [this.x0, this.y0, this.x1, this.y1]);
   }
+  Vec2d.free(temp);
 };
 
 DoorSprite.prototype.act = function() {

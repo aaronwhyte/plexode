@@ -6,34 +6,36 @@ Math.sgn = Math.sgn || function(n) {
 
 /**
  * @param {CellCollider} collider
- * @param {Wham} wham
- * @param {number} now
+ * @param {GameClock} gameClock
  * @constructor
  */
-function Phy(collider, wham, now) {
+function Phy(collider, gameClock, sledgeInvalidator) {
   this.collider = collider;
-  this.wham = wham;
-  this.now = now;
+  this.gameClock = gameClock;
+  this.sledgeInvalidator = sledgeInvalidator;
 
   this.sledgeIdToSpriteId = {};
   this.spriteIdToSledgeId = {};
-  this.sledgelessSpriteIds = {}; // a set implemented as a map with ID keys and all "true" values
   this.sprites = {}; // ID to object
   this.sledges = {}; // ID to object, doy
   this.nextSpriteId = 1;
   this.spriteTimeouts = new SkipQueue(100);
-
-  this.hitTimeVec = new Vec2d();
+  
+  this.onSpriteHitObj = null;
+  this.onSpriteHitFn = null;
 }
 
-Phy.FRICTION = 0.1;
+Phy.prototype.setOnSpriteHit = function(obj, fn) {
+  this.onSpriteHitObj = obj;
+  this.onSpriteHitFn = fn;
+};
 
 /**
  * @param {SpriteTimeout} spriteTimeout
  * @return {boolean}
  */
 Phy.prototype.isSpriteTimeoutValid = function(spriteTimeout) {
-  return spriteTimeout.time >= this.now &&
+  return spriteTimeout.time >= this.now() &&
       !!this.sprites[spriteTimeout.spriteId];
 };
 
@@ -48,7 +50,7 @@ Phy.prototype.addSprite = function(sprite) {
   sprite.id = spriteId;
   //console.log('addSprite assigns new ID ' + spriteId);
   this.sprites[spriteId] = sprite;
-  this.sledgelessSpriteIds[spriteId] = true;
+  this.sledgeInvalidator.add(spriteId);
   return spriteId;
 };
 
@@ -63,12 +65,11 @@ Phy.prototype.removeSprite = function(spriteId) {
   var sledgeId = this.spriteIdToSledgeId[spriteId];
   if (sledgeId) {
     this.removeSledge(sledgeId);
-  } else if (!this.sledgelessSpriteIds[spriteId]) {
+  } else if (!this.sledgeInvalidator.contains(spriteId)) {
     throw 'no sledge and no sledgeless entry for sprite ' + sprite;
-  } else {
-    delete this.sledgelessSpriteIds[spriteId];
   }
   delete this.sprites[spriteId];
+  this.sledgeInvalidator.remove(spriteId);
 };
 
 /**
@@ -93,7 +94,7 @@ Phy.prototype.bindSledgeToSpriteId = function(sledge, spriteId) {
   var sledgeId = this.collider.addSledgeInGroup(sledge, sprite.group);
   this.sledgeIdToSpriteId[sledgeId] = spriteId;
   this.spriteIdToSledgeId[spriteId] = sledgeId;
-  delete this.sledgelessSpriteIds[spriteId];
+  this.sledgeInvalidator.remove(spriteId);
   return sledgeId;
 };
 
@@ -104,37 +105,35 @@ Phy.prototype.bindSledgeToSpriteId = function(sledge, spriteId) {
  * @private
  */
 Phy.prototype.removeSledge = function(sledgeId) {
-  if (!sledgeId) throw "no sledgeId";
+  if (!sledgeId) throw 'no sledgeId';
   var spriteId = this.sledgeIdToSpriteId[sledgeId];
-  if (!spriteId) throw "no spriteId for sledgeId: " + sledgeId;
+  if (!spriteId) throw 'no spriteId for sledgeId: ' + sledgeId;
   if (!this.spriteIdToSledgeId[spriteId]) throw 'blarg';
+
   delete this.spriteIdToSledgeId[spriteId];
   delete this.sledgeIdToSpriteId[sledgeId];
-  if (this.sledgelessSpriteIds[spriteId]) {
-    throw 'deleting sledge for supposedly sledgeless sprite id ' + spriteId;
-  }
   this.collider.removeSledge(sledgeId);
-};
-
-/**
- * @param spriteId
- */
-Phy.prototype.invalidateSledgeForSpriteId = function(spriteId) {
-  if (!this.sprites[spriteId]) return;
-  var sledgeId = this.spriteIdToSledgeId[spriteId];
-  if (sledgeId) {
-    this.removeSledge(sledgeId);
-  }
-  this.sledgelessSpriteIds[spriteId] = true;
+  // Don't remove the sprite from the invalidator here. Only do that if the
+  // sprite is being removed, or if a valid new sledge is created.
 };
 
 /**
  * @private
  */
-Phy.prototype.addMissingSledges = function() {
-  for (var spriteId in this.sledgelessSpriteIds) {
+Phy.prototype.updateSledges = function() {
+  var spriteId;
+  // remove invalid sledges
+  for (spriteId in this.sledgeInvalidator.spriteIds) {
+    var sledgeId = this.spriteIdToSledgeId[spriteId];
+    if (sledgeId) {
+      this.removeSledge(sledgeId);
+    }
+  }
+  // create new sledges for sprites
+  for (spriteId in this.sledgeInvalidator.spriteIds) {
     if (this.spriteIdToSledgeId[spriteId]) {
-      throw 'sledgelessSprite id ' + spriteId+ ' has a sledge id ' + this.spriteIdToSledgeId[spriteId];
+      throw 'sledgelessSprite id ' + spriteId + ' has a sledge id ' +
+          this.spriteIdToSledgeId[spriteId];
     }
     var sprite = this.sprites[spriteId];
     var sledge = sprite.createSledge();
@@ -164,7 +163,7 @@ Phy.prototype.getSprite = function(spriteId) {
  * @return {number}
  */
 Phy.prototype.getSpriteId = function(sprite) {
-  for (spriteId in this.sprites) {
+  for (var spriteId in this.sprites) {
     if (this.sprites[spriteId] == sprite) {
       return spriteId;
     }
@@ -177,7 +176,7 @@ Phy.prototype.getSpriteId = function(sprite) {
  * @param {number} duration
  */
 Phy.prototype.clock = function(duration) {
-  var endTime = this.now + duration;
+  var endTime = this.now() + duration;
   var hit = this.getNextCollisionBeforeTime(endTime);
   var spriteTimeout = this.getFirstSpriteTimeoutBeforeTime(endTime);
   while (hit != null || spriteTimeout != null) {
@@ -187,15 +186,15 @@ Phy.prototype.clock = function(duration) {
       // hit is before timeout
 
       // advance time to this collision
-      this.now = hit.time;
-      this.collider.advanceToTime(this.now);
+      this.gameClock.setTime(hit.time);
       // sledge/sledge hit
       var spriteId1 = this.sledgeIdToSpriteId[hit.sledgeId1];
       var spriteId2 = this.sledgeIdToSpriteId[hit.sledgeId2];
-      this.wham.spriteHit(this, spriteId1, spriteId2, hit.xTime, hit.yTime, hit.overlapping);
+      this.onSpriteHitFn.call(this.onSpriteHitObj,
+          spriteId1, spriteId2, hit.xTime, hit.yTime, hit.overlapping);
     } else {
       // timeout is before hit
-      this.now = spriteTimeout.time;
+      this.gameClock.setTime(spriteTimeout.time);
       this.sprites[spriteTimeout.spriteId].onTimeout(spriteTimeout, this);
       SpriteTimeout.free(this.spriteTimeouts.removeFirst());
     }
@@ -203,10 +202,9 @@ Phy.prototype.clock = function(duration) {
     spriteTimeout = this.getFirstSpriteTimeoutBeforeTime(endTime);
     hit = this.getNextCollisionBeforeTime(endTime);
   }
-  this.collider.advanceToTime(endTime);
 
   // advance time to the end of this frame
-  this.now = endTime;
+  this.gameClock.setTime(endTime);
 };
 
 /**
@@ -215,7 +213,7 @@ Phy.prototype.clock = function(duration) {
  * @private
  */
 Phy.prototype.getNextCollisionBeforeTime = function(beforeTime) {
-  this.addMissingSledges();
+  this.updateSledges();
   return this.collider.getNextCollisionBeforeTime(beforeTime);
 };
 
@@ -242,8 +240,8 @@ Phy.prototype.getFirstSpriteTimeoutBeforeTime = function(beforeTime) {
 /**
  * @return {number}
  */
-Phy.prototype.getNow = function() {
-  return this.now;
+Phy.prototype.now = function() {
+  return this.gameClock.getTime();
 };
 
 /**
@@ -258,6 +256,6 @@ Phy.prototype.addSpriteTimeout = function(spriteTimeout) {
  * @param {number} group
  */
 Phy.prototype.rayScan = function(rayScan, group) {
-  this.addMissingSledges();
+  this.updateSledges();
   this.collider.rayScan(rayScan, group);
 };

@@ -140,7 +140,7 @@ Vec2d.prototype.scaleToLength = function(length) {
 };
 
 Vec2d.prototype.equals = function(v) {
-  return (this.x==v.x && this.y==v.y);
+  return (this.x == v.x && this.y == v.y);
 };
 
 Vec2d.prototype.toString = function() {

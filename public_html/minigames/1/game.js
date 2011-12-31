@@ -59,6 +59,7 @@ Game.LAYERS = [
 ];
 
 Game.start = function(canvas) {
+  var clock = new GameClock(1);
   var renderer = new Renderer(canvas, new Camera());
   var now = 1;
   var levelBoundingRect = {
@@ -66,9 +67,9 @@ Game.start = function(canvas) {
     x1: Game.LEVEL_RADIUS, y1: Game.LEVEL_RADIUS
   };
   var collider = new CellCollider(
-      levelBoundingRect, Game.CELL_SIZE, Game.COLLIDER_GROUP_PAIRS, now);
+      levelBoundingRect, Game.CELL_SIZE, Game.COLLIDER_GROUP_PAIRS, clock);
   var wham = new GameWham();
-  var phy = new Phy(collider, wham, now);
+  var phy = new Phy(collider, wham, clock);
   var game = new Game(renderer, phy);
 
   game.populateLevel(1);
@@ -183,7 +184,7 @@ Game.prototype.clock = function() {
  */
 Game.prototype.draw = function() {
   var i, painter;
-  var now = this.getNow();
+  var now = this.now();
   this.renderer.clear();
   this.renderer.setZoom(Game.ZOOM);
   if (this.playerSprite) {
@@ -236,8 +237,8 @@ Game.prototype.drawWorld = function(opt_drawColliderDebugging) {
   this.renderer.transformEnd();
 };
 
-Game.prototype.getNow = function() {
-  return this.phy.now;
+Game.prototype.now = function() {
+  return this.clock.getTime();
 };
 
 Game.prototype.getPlayerSprite = function() {

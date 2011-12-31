@@ -18,12 +18,11 @@ DoorPrefab.TOP_SPEED = 0.3;
 DoorPrefab.ACCEL = 0.02;
 DoorPrefab.MIN_CLOSEDNESS = 0.03;
 
-DoorPrefab.prototype.createSprites = function(vorp) {
+DoorPrefab.prototype.createSprites = function(clock) {
   var x0 = this.x0;
   var y0 = this.y0;
   var x1 = this.x1;
   var y1 = this.y1;
-  var phy = vorp.phy;
 
   var thickness = Prefab.WALL_RADIUS * 0.4;
   var closedness = this.closed ? 1 : DoorPrefab.MIN_CLOSEDNESS;
@@ -32,18 +31,18 @@ DoorPrefab.prototype.createSprites = function(vorp) {
   }
   if (x0 == x1) {
     // vertical
-    this.door0 = new DoorSprite(phy, new RectPainter("#aaa"),
+    this.door0 = new DoorSprite(clock, new RectPainter("#aaa"),
         x0, y0 + Prefab.WALL_RADIUS, x0, mid(y0, y1), thickness, closedness,
         DoorPrefab.TOP_SPEED, DoorPrefab.ACCEL);
-    this.door1 = new DoorSprite(phy, new RectPainter("#aaa"),
+    this.door1 = new DoorSprite(clock, new RectPainter("#aaa"),
         x1, y1 - Prefab.WALL_RADIUS, x1, mid(y0, y1), thickness, closedness,
         DoorPrefab.TOP_SPEED, DoorPrefab.ACCEL);
   } else {
     // horizontal
-    this.door0 = new DoorSprite(phy, new RectPainter("#aaa"),
+    this.door0 = new DoorSprite(clock, new RectPainter("#aaa"),
         x0 + Prefab.WALL_RADIUS, y0, mid(x0, x1), y0, thickness, closedness,
         DoorPrefab.TOP_SPEED, DoorPrefab.ACCEL);
-    this.door1 = new DoorSprite(phy, new RectPainter("#aaa"),
+    this.door1 = new DoorSprite(clock, new RectPainter("#aaa"),
         x1 - Prefab.WALL_RADIUS, y1, mid(x0, x1), y1, thickness, closedness,
         DoorPrefab.TOP_SPEED, DoorPrefab.ACCEL);
   }

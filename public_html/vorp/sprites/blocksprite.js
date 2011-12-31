@@ -2,17 +2,13 @@
  * @constructor
  * @extends {Sprite}
  */
-function BlockSprite(phy, painter, px, py, vx, vy, rx, ry, mass, group) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, group, 1.01);
+function BlockSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
 }
 
-BlockSprite.prototype = new Sprite();
+BlockSprite.prototype = new Sprite(null);
 BlockSprite.prototype.constructor = BlockSprite;
 
 BlockSprite.prototype.act = function() {
-  var workVec = Vec2d.alloc();
-  this.getVel(workVec);
-  workVec.scale(-Phy.FRICTION);
-  this.accelerate(workVec);
-  Vec2d.free(workVec);
+  this.addFriction(Vorp.FRICTION);
 };

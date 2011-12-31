@@ -1,10 +1,12 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy) {
+function Vorp(renderer, phy, wham, gameClock) {
   FLAGS && FLAGS.init('portalScry', true);
   this.renderer = renderer;
   this.phy = phy;
+  this.wham = wham;
+  this.gameClock = gameClock;
 
   this.playerSprite = null;
   this.cameraPos = new Vec2d();
@@ -14,9 +16,14 @@ function Vorp(renderer, phy) {
   this.portals = [];
   this.portalPos1 = new Vec2d();
   this.portalPos2 = new Vec2d();
+
+  this.accelerationsOut = [new Vec2d(), new Vec2d()];
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
+
+Vorp.FRICTION = 0.1;
+
 
 // Target frames per second.
 Vorp.FPS = 45;
@@ -70,18 +77,19 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var camera = opt_camera || new Camera();
   var renderer = new Renderer(canvas, camera);
   window.FLAGS = new Flags(flagsDiv);
-  var now = 1;
+  var gameClock = new GameClock(1);
   var collider = new CellCollider(levelBuilder.getBoundingRect(),
-      Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, now);
+      Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
-  var phy = new Phy(collider, wham, now);
-  var vorp = new Vorp(renderer, phy);
+  var phy = new Phy(collider, gameClock);
+  var vorp = new Vorp(renderer, phy, wham, gameClock);
+  phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
 
   var prefabs = levelBuilder.getPrefabs();
   var playerPrefab = null;
   for (var i = 0; i < prefabs.length; i++) {
     var prefab = prefabs[i];
-    var sprites = prefab.createSprites(vorp);
+    var sprites = prefab.createSprites(gameClock);
     vorp.addSprites(sprites);
     if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
       if (playerPrefab) throw Error('player prefab already defined');
@@ -140,11 +148,11 @@ Vorp.prototype.clock = function() {
     if (sprite.mass != Infinity) {
       sprite.invalidateSledge();
     }
-    sprite.act(this.phy, this);
+    sprite.act(this);
   }
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
-    sprite.affect();
+    sprite.affect(this);
   }
   this.draw();
 };
@@ -153,7 +161,7 @@ Vorp.prototype.clock = function() {
  * Draws to the canvas.
  */
 Vorp.prototype.draw = function() {
-  var now = this.getNow();
+  var now = this.now();
   this.renderer.clear();
   this.renderer.setZoom(0.37);
   if (this.playerSprite) {
@@ -250,8 +258,8 @@ Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos
   this.renderer.transformEnd();
 };
 
-Vorp.prototype.getNow = function() {
-  return this.phy.now;
+Vorp.prototype.now = function() {
+  return this.gameClock.getTime();
 };
 
 Vorp.prototype.getPlayerSprite = function() {
@@ -271,7 +279,7 @@ Vorp.prototype.killPlayer = function() {
   var deadPlayerPrefab = new DeadPlayerPrefab(
       this.playerSprite.px,
       this.playerSprite.py);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this);
+  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.gameClock);
   this.addSprites(deadPlayerSprites);
   
   // remove normal player sprite
@@ -287,8 +295,69 @@ Vorp.prototype.assemblePlayer = function() {
   }
   var target = this.playerAssembler.targetPos;
   var playerPrefab = new PlayerPrefab(target.x, target.y);
-  var playerSprites = playerPrefab.createSprites(this);
+  var playerSprites = playerPrefab.createSprites(this.gameClock);
   this.playerSprite = playerSprites[0];
   this.addSprites(playerSprites);
-  this.playerAssembler.onPlayerAssembled(this.getNow());
+  this.playerAssembler.onPlayerAssembled();
 };
+
+/**
+ * Performs a rayscan, and sets rayscan.hitSpriteId to the sprite ID or null
+ * if there wasn't any.
+ * @param {RayScan} rayScan
+ * @param {number} group
+ * @return the hitSpriteId, or null if there wasn't any.
+ */
+Vorp.prototype.rayScan = function(rayScan, group) {
+  this.phy.rayScan(rayScan, group);
+  rayScan.hitSpriteId = rayScan.hitSledgeId
+      ? this.phy.getSpriteBySledgeId(rayScan.hitSledgeId)
+      : null;
+  return rayScan.hitSpriteId;
+};
+
+Vorp.prototype.getSprite = function(id) {
+  return this.phy.getSprite(id);
+};
+
+
+Vorp.GRIP = 0.5;
+Vorp.ELASTICITY = 0.8;
+
+/**
+ * Mutates sprites.
+ * @param spriteId1
+ * @param spriteId2
+ * @param xTime
+ * @param yTime
+ * @param overlapping
+ */
+Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overlapping) {
+  var s1 = this.getSprite(spriteId1);
+  var s2 = this.getSprite(spriteId2);
+
+  if (overlapping) {
+    this.wham.calcRepulsion(s1, s2, this.accelerationsOut);
+  } else {
+    this.wham.calcAcceleration(s1, s2, xTime, yTime,
+        VOrp.GRIP, VOrp.ELASTICITY,
+        this.accelerationsOut);
+  }
+  var a1 = this.accelerationsOut[0];
+  var a2 = this.accelerationsOut[1];
+
+  var handled = false;
+  if (!handled && s1 instanceof PortalSprite && !(s2 instanceof PortalSprite)) {
+    handled = s1.onSpriteHit(s2, this, a1, a2, xTime, yTime, overlapping);
+  }
+  if (!handled && s2 instanceof PortalSprite && !(s1 instanceof PortalSprite)) {
+    handled = s2.onSpriteHit(s1, this, a2, a1, xTime, yTime, overlapping);
+  }
+  if (!handled) {
+    s1.addVelXY(a1.x, a1.y);
+    s2.addVelXY(a2.x, a2.y);
+    s1.onSpriteHit(s2, this);
+    s2.onSpriteHit(s1, this);
+  }
+};
+

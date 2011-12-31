@@ -1,80 +1,78 @@
 /**
  * A Sprite is an object in the game world.
- * @param {Phy} phy
- * @param {Painter} painter
- * @param {number} px
- * @param {number} py
- * @param {number} vx
- * @param {number} vy
- * @param {number} rx
- * @param {number} ry
- * @param {number} mass
- * @param {number} group
- * @param {number} sledgeDuration
+ * @param {?SpriteTemplate} spriteTemplate, null for new prototype sprites
  * @constructor
  */
-function Sprite(phy, painter, px, py, vx, vy, rx, ry, mass, group, sledgeDuration) {
+function Sprite(spriteTemplate) {
   this.acceleration = new Vec2d();
-  this.reset(phy, painter, px, py, vx, vy, rx, ry, mass, group, sledgeDuration);
+  this.pos0 = new Vec2d();
+  this.vel = new Vec2d();
+  this.rad = new Vec2d();
+  this.reset(spriteTemplate);
 }
 
 /**
- * @param {Phy} phy
- * @param {Painter} painter
- * @param {number} px
- * @param {number} py
- * @param {number} vx
- * @param {number} vy
- * @param {number} rx
- * @param {number} ry
- * @param {number} mass
- * @param {number} sledgeDuration
+ * @param {?SpriteTemplate} spriteTemplate
  */
-Sprite.prototype.reset = function(phy, painter, px, py, vx, vy, rx, ry, mass, group, sledgeDuration) {
-  this.phy = phy;
-  this.painter = painter;
-  this.px = px;
-  this.py = py;
-  this.vx = vx;
-  this.vy = vy;
-  this.rx = rx;
-  this.ry = ry;
-  this.mass = mass;
-  this.group = group;
-  this.sledgeDuration = sledgeDuration;
-
+Sprite.prototype.reset = function(spriteTemplate) {
+  if (spriteTemplate) {
+    this.gameClock = spriteTemplate.gameClock;
+    this.painter = spriteTemplate.painter;
+    this.sledgeInvalidator = spriteTemplate.sledgeInvalidator;
+    // pos0 is the position at time t0. Use getPos() to get the current position.
+    this.pos0.set(spriteTemplate.pos);
+    this.vel.set(spriteTemplate.vel);
+    this.rad.set(spriteTemplate.rad);
+    this.mass = spriteTemplate.mass;
+    this.group = spriteTemplate.group;
+    this.sledgeDuration = spriteTemplate.sledgeDuration;
+  }
   /** @type {number} */
   this.t0 = this.now();
-
   this.id = -1;
-
   this.acceleration.setXY(0, 0);
 };
 
 /**
- * Override this to make cool stuff happen.
+ * This is where sprites rayscan, set acceleration, and plan to spawn or remove
+ * other sprites, etc.
+ * @return commands for the game to consume, like killPlayer, exitToUrl, etc.
  */
-Sprite.prototype.act = function(game) {};
+Sprite.prototype.act = function() {
+  return null;
+};
+
 
 /**
- * Override this to make cool stuff happen.
+ * Friction utility.
+ * @param {number} friction, like 0.1 for 10% friction.
  */
-Sprite.prototype.affect = function(game) {
-  this.addVelXY(this.acceleration.x, this.acceleration.y);
+Sprite.prototype.addFriction = function(friction) {
+  var accel = this.getVel(Vec2d.alloc());
+  accel.scale(-friction);
+  this.accelerate(accel);
+  Vec2d.free(accel);
+};
+
+
+/**
+ * This is where sprites apply their acceleration and other changes.
+ */
+Sprite.prototype.affect = function() {
+  this.vel.add(this.acceleration);
   this.acceleration.setXY(0, 0);
 };
 
+/**
+ * Convenience func to add acceleration.
+ * @param {Vec2d} v
+ */
 Sprite.prototype.accelerate = function(v) {
   this.acceleration.add(v);
 };
 
-Sprite.prototype.accelerateXY = function(x, y) {
-  this.acceleration.addXY(x, y);
-};
-
 /**
- * Inject a painter into your sprite constructor and call it "painter".
- * @return {Painter?} Might be null, if the sprite isn't using painters yet.
+ * @return {Painter}
  */
 Sprite.prototype.getPainter = function() {
   return this.painter;
@@ -82,74 +80,63 @@ Sprite.prototype.getPainter = function() {
 
 /**
  * @param {SpriteTimeout} spriteTimeout
+ * @return game commands
  */
-Sprite.prototype.onTimeout = function(spriteTimeout) {};
+Sprite.prototype.onTimeout = function(spriteTimeout) {
+  return null;
+};
 
 /**
  * @param {Sprite} hitSprite
+ * @return game commands
  */
-Sprite.prototype.onSpriteHit = function(hitSprite) {};
+Sprite.prototype.onSpriteHit = function(hitSprite) {
+  return null;
+};
 
-/**
- * @param {number} x
- * @param {number} y
- */
-Sprite.prototype.setVelXY = function(x, y) {
+Sprite.prototype.setVel = function(vec) {
+  if (this.vel.equals(vec)) return;
   var now = this.now();
-  if (this.vx == x && this.vy == y) return;
   if (this.t0 != now) {
-    this.px = this.px + (now - this.t0) * this.vx;
-    this.py = this.py + (now - this.t0) * this.vy;
+    // Move position along path, to the current time.
+    var temp = Vec2d.alloc();
+    temp.set(this.vel).scale(now - this.t0);
+    this.pos0.add(temp);
+    Vec2d.free(temp);
+    this.t0 = now;
   }
-  this.vx = x;
-  this.vy = y;
-  this.t0 = now;
+  this.vel.set(vec);
   this.invalidateSledge();
 };
 
 /**
- * @param {number} x
- * @param {number} y
- */
-Sprite.prototype.addVelXY = function(x, y) {
-  this.setVelXY(this.vx + x, this.vy + y);
-};
-
-/**
+ * Directly add velocity.
+ * Call from onSpriteHit(), but not from act() or affect().
  * @param {Vec2d} vec
  */
 Sprite.prototype.addVel = function(vec) {
-  this.setVelXY(this.vx + vec.x, this.vy + vec.y);
+  var temp = Vec2d.alloc();
+  temp.set(vec).add(this.vel);
+  this.setVel(temp);
+  Vec2d.free(temp);
 };
 
 /**
- * @param {Vector2d} vec
+ * Directly change position.
+ * Call from onSpriteHit(), but not from act() or affect().
+ * @param {Vec2d} vec
  */
 Sprite.prototype.setPos = function(vec) {
-  this.px = vec.x;
-  this.py = vec.y;
+  this.pos0.set(vec);
   this.t0 = this.now();
   this.invalidateSledge();
 };
 
 /**
- * @param {number} x
- * @param {number} y
+ * Directly change radius.
  */
-Sprite.prototype.setPosXY = function(x, y) {
-  this.px = x;
-  this.py = y;
-  this.t0 = this.now();
-  this.invalidateSledge();
-};
-
-/**
- * @param {number} x
- * @param {number} y
- */
-Sprite.prototype.setRadXY = function(x, y) {
-  this.rx = x;
-  this.ry = y;
+Sprite.prototype.setRad = function(vec) {
+  this.rad.set(vec);
   this.invalidateSledge();
 };
 
@@ -158,10 +145,10 @@ Sprite.prototype.setRadXY = function(x, y) {
  * @returns {Vec2d}
  */
 Sprite.prototype.getPos = function(vecOut) {
-  var time = this.now();
-  vecOut.x = this.px + (time - this.t0 )* this.vx;
-  vecOut.y = this.py + (time - this.t0 )* this.vy;
-  return vecOut;
+  return vecOut
+      .set(this.vel)
+      .scale(this.now() - this.t0)
+      .add(this.pos0);
 };
 
 /**
@@ -169,9 +156,7 @@ Sprite.prototype.getPos = function(vecOut) {
  * @returns {Vec2d}
  */
 Sprite.prototype.getVel = function(vecOut) {
-  vecOut.x = this.vx;
-  vecOut.y = this.vy;
-  return vecOut;
+  return vecOut.set(this.vel);
 };
 
 /**
@@ -179,20 +164,27 @@ Sprite.prototype.getVel = function(vecOut) {
  * @returns {Vec2d}
  */
 Sprite.prototype.getRad = function(vecOut) {
-  vecOut.x = this.rx;
-  vecOut.y = this.ry;
-  return vecOut;
-};
-
-Sprite.prototype.invalidateSledge = function() {
-  this.phy.invalidateSledgeForSpriteId(this.id);
+  return vecOut.set(this.rad);
 };
 
 /**
+ * Notifies physics system that this sprite's sledge is invalid.
+ */
+Sprite.prototype.invalidateSledge = function() {
+  this.sledgeInvalidator.add(this.id);
+};
+
+/**
+ * Allocates and returns a new sledge.
+ * Also logs a paint event.
  * @return {Sledge}
  */
 Sprite.prototype.createSledge = function() {
-  var sledge = Sledge.alloc(this.px, this.py, this.vx, this.vy, this.rx, this.ry, this.t0,
+  var sledge = Sledge.alloc(
+      this.pos0.x, this.pos0.y,
+      this.vel.x, this.vel.y,
+      this.rad.x, this.rad.y,
+      this.t0,
       this.now() + this.sledgeDuration);
 
   if (this.painter) {
@@ -211,15 +203,5 @@ Sprite.prototype.createSledge = function() {
  * @return {number}
  */
 Sprite.prototype.now = function() {
-  return this.phy ? this.phy.getNow() : 0;
-};
-
-Sprite.prototype.overlaps = function(that) {
-  var thisPos = this.getPos(Vec2d.alloc());
-  var thatPos = that.getPos(Vec2d.alloc());
-  var retval = Math.abs(thisPos.x - thatPos.x) < this.rx + that.rx &&
-      Math.abs(thisPos.y - thatPos.y) < this.ry + that.ry;
-  Vec2d.free(thisPos);
-  Vec2d.free(thatPos);
-  return retval;
+  return this.gameClock.getTime();
 };

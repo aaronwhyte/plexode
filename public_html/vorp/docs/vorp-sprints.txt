@@ -282,12 +282,12 @@ v Cool Graphics
   v assembler
 v push it!
 
-compile JS
+2011 compile JS
 v python function to find and compile all Vorp JS deps into filename passed in
   v create file manifest by searching some root dirs for JS files
   v make it dump jscomp warnings to stdout and/or a file
 
-deploy compiled JS, optionally
+2011 deploy compiled JS
 v Write make.py parallel to make.sh.
   v Compare output of make.sh and make.py as a test.
 x Add -vorp_jscomp [off,warnings,deploy_readable,deploy_opt] flag to make.py.
@@ -298,13 +298,14 @@ HUGE BREAK FOR LEVEL EDITOR, "VED".
 (Hey, I edited this file right in GitHub.  Pretty great!)
 Did not finish yet but we're back for some saw sharpening...
 
-Rejigger Vorp to use DepInj
-- make collider injectable
-  - make levelBuilder..Provider?... injectable.
-  - make colliderGroupPairs injectable
-- make phy injectable
-- remove static Vorp.start()
-- redo all levels to use that stuff.
+2011.12.?? refactor like a software engineer
+v remove phy from sprite constructors
+- convert sprites to use SpriteTemplate and more Vec2d.
+- convert prefabs too
+
+More refactoring
+- Remove vorp/game from act() and onSpriteHit(). Return commands instead.
+
 
 teleport sparks
 - implode

@@ -6,37 +6,32 @@
 function Wham() {
   this.v1 = new Vec2d();
   this.v2 = new Vec2d();
-  this.accelerationsOut = [new Vec2d(), new Vec2d()];
 }
 
-Wham.GRIP = 0.6;
-
-/**
- * Mutates sprite velocities
- * @param phy
- * @param spriteId1
- * @param spriteId2
- * @param xTime
- * @param yTime
- */
-Wham.prototype.spriteHit = function(phy, spriteId1, spriteId2, xTime, yTime) {
-  var sprite1 = phy.getSprite(spriteId1);
-  var sprite2 = phy.getSprite(spriteId2);
-  this.calcAcceleration(sprite1, sprite2, xTime, yTime, Wham.GRIP, this.accelerationsOut);
-  var a1 = this.accelerationsOut[0];
-  var a2 = this.accelerationsOut[1];
-  sprite1.addVelXY(a1.x, a1.y);
-  sprite2.addVelXY(a2.x, a2.y);
-  sprite1.onSpriteHit(sprite2);
-  sprite2.onSpriteHit(sprite1);
-};
-
-Wham.ELASTICITY = 0.8;
+///**
+// * Mutates sprite velocities
+// * @param game
+// * @param spriteId1
+// * @param spriteId2
+// * @param xTime
+// * @param yTime
+// */
+//Wham.prototype.spriteHit = function(game, spriteId1, spriteId2, xTime, yTime) {
+//  var sprite1 = game.getSprite(spriteId1);
+//  var sprite2 = game.getSprite(spriteId2);
+//  this.calcAcceleration(sprite1, sprite2, xTime, yTime, Wham.GRIP, this.accelerationsOut);
+//  var a1 = this.accelerationsOut[0];
+//  var a2 = this.accelerationsOut[1];
+//  sprite1.addVelXY(a1.x, a1.y);
+//  sprite2.addVelXY(a2.x, a2.y);
+//  sprite1.onSpriteHit(sprite2, game);
+//  sprite2.onSpriteHit(sprite1, game);
+//};
 
 /**
  * Calculates acelerations without altering anything except the out vecs.
  */
-Wham.prototype.calcAcceleration = function(sprite1, sprite2, xTime, yTime, grip, out) {
+Wham.prototype.calcAcceleration = function(sprite1, sprite2, xTime, yTime, grip, elasticity, out) {
   if (xTime && yTime) {
     throw 'xTime, yTime both set: ' + xTime + ', ' + yTime;
   }
@@ -45,8 +40,8 @@ Wham.prototype.calcAcceleration = function(sprite1, sprite2, xTime, yTime, grip,
   var v1 = sprite1.getVel(this.v1);
   var v2 = sprite2.getVel(this.v2);
   var elasticity = Math.min(
-      sprite1.elasticity || Wham.ELASTICITY,
-      sprite2.elasticity || Wham.ELASTICITY);
+      sprite1.elasticity || elasticity,
+      sprite2.elasticity || elasticity);
 
   // initial acceleration
   var a1 = out[0];

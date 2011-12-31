@@ -6,9 +6,8 @@ function PlayerPrefab(x, y) {
   this.y = y;
 }
 
-PlayerPrefab.prototype.createSprites = function(vorp) {
+PlayerPrefab.prototype.createSprites = function(clock) {
   var r = Prefab.BOX_RADIUS;
-  var a = new PlayerSprite(vorp.phy, new PlayerPainter(), this.x, this.y, 0, 0, r, r, 1);
-  vorp.setPlayerSprite(a);
+  var a = new PlayerSprite(clock, new PlayerPainter(), this.x, this.y, 0, 0, r, r, 1);
   return [a];
 };

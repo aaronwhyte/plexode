@@ -154,16 +154,16 @@ Sledge.prototype.calcHitTime = function(that, out, now) {
   }
 };
 
-/**
- * Determines whether two sledges overlap at 'time'.
- * Treats radius as inclusive.
- */
-Sledge.prototype.overlaps = function(that, time) {
-  this.moveToTime(time);
-  that.moveToTime(time);
-  return Math.abs(this.px - that.px) <= this.rx + that.rx &&
-      Math.abs(this.py - that.py) <= this.ry + that.ry;
-};
+///**
+// * Determines whether two sledges overlap at 'time'.
+// * Treats radius as inclusive.
+// */
+//Sledge.prototype.overlaps = function(that, time) {
+//  this.moveToTime(time);
+//  that.moveToTime(time);
+//  return Math.abs(this.px - that.px) <= this.rx + that.rx &&
+//      Math.abs(this.py - that.py) <= this.ry + that.ry;
+//};
 
 Sledge.pool = [];
 Sledge.poolSize = 0;

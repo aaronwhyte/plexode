@@ -25,6 +25,5 @@ ZapperPainter.prototype.paint = function(renderer, layer) {
 };
 
 ZapperPainter.prototype.isKaput = function() {
-  // I promise: I will never die.
-  return false;
+  return !this.active;
 };

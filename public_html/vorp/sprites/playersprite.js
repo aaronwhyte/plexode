@@ -2,8 +2,13 @@
  * @constructor
  * @extends {Sprite}
  */
-function PlayerSprite(phy, painter, px, py, vx, vy, rx, ry, mass) {
-  Sprite.call(this, phy, painter, px, py, vx, vy, rx, ry, mass, Vorp.PLAYER_GROUP, 1.01);
+
+//YOU ARE HERE
+//- Convert constructor to use spriteTemplate
+//- Change to Vec2d style pos, vel, and rad.
+
+function PlayerSprite(clock, painter, px, py, vx, vy, rx, ry, mass) {
+  Sprite.call(this, clock, painter, px, py, vx, vy, rx, ry, mass, Vorp.PLAYER_GROUP, 1.01);
   
   this.pos = new Vec2d();
   this.vel = new Vec2d();
@@ -41,12 +46,12 @@ PlayerSprite.KICK_DECAY = 0.4;
 PlayerSprite.ACCEL = 2.5;
 PlayerSprite.BRAKE = 0.10;
 
-PlayerSprite.prototype.act = function() {
+PlayerSprite.prototype.act = function(vorp) {
   this.painter.clearRayScans();
   // move
   var workVec = Vec2d.alloc(0, 0);
   this.getVel(workVec);
-  workVec.scale(-Phy.FRICTION);
+  workVec.scale(-Vorp.FRICTION);
   //GU_copyCustomKeysVec(this.keysVec, VK_I, VK_L, VK_K, VK_J);
   GU_copyKeysVec(this.keysVec);
   if (this.keysVec.x || this.keysVec.y) {
@@ -66,22 +71,22 @@ PlayerSprite.prototype.act = function() {
     if (!this.gripKeyDown()) {
       this.canGrip = true;
     } else if (this.canGrip) {
-      this.gripScan();
+      this.gripScan(vorp);
     }
   } else if (this.grip == PlayerSprite.Grip.LOOSE) {
     this.kickPow *= (1 - PlayerSprite.KICK_DECAY);
     if (this.gripKeyDown()) {
-      this.initStiffPose();
+      this.initStiffPose(vorp);
     } else {
-      this.looseForce();
+      this.looseForce(vorp);
     }
   } else if (this.grip == PlayerSprite.Grip.STIFF) {
     if (this.gripKeyDown()) {
       this.kickPow = Math.min(++(this.kickPow), PlayerSprite.MAX_KICK_POW);
-      this.stiffForce();
+      this.stiffForce(vorp);
     } else {
       this.grip = PlayerSprite.Grip.LOOSE;
-      this.looseForce();
+      this.looseForce(vorp);
     }
   }
   this.painter.setHolderPos(this.getPos(this.pos));
@@ -106,27 +111,28 @@ PlayerSprite.prototype.kickKeyDown = function() {
   return GU_keys[VK_X] || GU_keys[VK_Q];
 };
 
-PlayerSprite.prototype.gripScan = function() {
+PlayerSprite.prototype.gripScan = function(vorp) {
   GU_copyKeysVec(this.keysVec);
 
   if (this.keysVec.x || this.keysVec.y) {
     // long-range directional seek
     this.scanInitVec.set(this.keysVec).scaleToLength(5 * PlayerSprite.GRIP_RANGE);
-    this.gripScanSweep(this.scanInitVec, 1/8, 16);
+    this.gripScanSweep(vorp, this.scanInitVec, 1/8, 16);
   } else {  
     // short-range circular seek
     this.scanInitVec.setXY(PlayerSprite.GRIP_RANGE, 0);
-    this.gripScanSweep(this.scanInitVec, 1 , 16);
+    this.gripScanSweep(vorp, this.scanInitVec, 1 , 16);
   }
 };
 
 /**
+ * @param {Vorp} vorp
  * @param {Vec2d} vec  line down the center of the scan arc
  * @param {number} arc  number from 0 to 1 indicating
  * what fraction of the circle to cover.  1 means a full circle.
  * @param {number} scans  number of steps in the scan sweep.
  */
-PlayerSprite.prototype.gripScanSweep = function(vec, arc, scans) {
+PlayerSprite.prototype.gripScanSweep = function(vorp, vec, arc, scans) {
   var p = this.getPos(this.pos);
   var minTime = Infinity;
   for (var i = 0; i < scans; i++) {
@@ -137,10 +143,9 @@ PlayerSprite.prototype.gripScanSweep = function(vec, arc, scans) {
         p.x, p.y,
         p.x + this.scanVec.x, p.y + this.scanVec.y,
         5, 5);
-    this.phy.rayScan(rayScan, Vorp.GENERAL_GROUP);
-    
-    if (rayScan.hitSledgeId && rayScan.time < minTime) {
-      var sprite = this.phy.getSpriteBySledgeId(rayScan.hitSledgeId);
+    var hitSpriteId = vorp.rayScan(rayScan, Vorp.GENERAL_GROUP);
+    if (hitSpriteId && rayScan.time < minTime) {
+      var sprite = vorp.getSprite(hitSpriteId);
       if (sprite.mass < Infinity) {
         this.heldSprite = sprite;
         this.grip = PlayerSprite.Grip.LOOSE;
@@ -184,11 +189,11 @@ PlayerSprite.prototype.kick = function() {
   Vec2d.free(pushVec);
 };
 
-PlayerSprite.prototype.looseForce = function() {
+PlayerSprite.prototype.looseForce = function(vorp) {
   var dx = this.px - this.heldSprite.px;
   var dy = this.py - this.heldSprite.py;
   var dist = Math.sqrt(dx * dx + dy * dy);
-  if (this.maybeBreakGrip(dist)) return;
+  if (this.maybeBreakGrip(vorp, dist)) return;
 
   var aimUnit = Vec2d.alloc(dx / dist, dy / dist);
   var pull = (dist - PlayerSprite.GRIP_RANGE) * 0.15;
@@ -224,11 +229,11 @@ PlayerSprite.prototype.initStiffPose = function() {
 };
 
 
-PlayerSprite.prototype.stiffForce = function() {
+PlayerSprite.prototype.stiffForce = function(vorp) {
   var dx = this.heldSprite.px - (this.px + this.stiffPose.x);
   var dy = this.heldSprite.py - (this.py + this.stiffPose.y);
   var dist = Math.sqrt(dx * dx + dy * dy);
-  if (this.maybeBreakGrip(dist)) return;
+  if (this.maybeBreakGrip(vorp, dist)) return;
 
   var dVel = Vec2d.alloc(this.vx - this.heldSprite.vx, this.vy - this.heldSprite.vy);
   var DAMP = 0.3;
@@ -245,7 +250,7 @@ PlayerSprite.prototype.stiffForce = function() {
 };
 
 
-PlayerSprite.prototype.maybeBreakGrip = function(dist) {
+PlayerSprite.prototype.maybeBreakGrip = function(vorp, dist) {
    // distance check
   if (dist > PlayerSprite.GRIP_RANGE * 5.1) {
     this.breakGrip();
@@ -258,9 +263,9 @@ PlayerSprite.prototype.maybeBreakGrip = function(dist) {
       p.x, p.y,
       h.x, h.y,
       1, 1);
-  this.phy.rayScan(rayScan, Vorp.GRIP_BLOCKER_GROUP);
+  var hitSpriteId = vorp.rayScan(rayScan, Vorp.GRIP_BLOCKER_GROUP);
   RayScan.free(rayScan);
-  if (rayScan.hitSledgeId) {
+  if (hitSpriteId) {
     this.breakGrip();
     return true;
   }

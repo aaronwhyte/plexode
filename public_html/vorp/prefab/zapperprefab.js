@@ -15,9 +15,7 @@ function ZapperPrefab(x0, y0, x1, y1, active) {
   this.vorp = null;
 }
 
-ZapperPrefab.prototype.createSprites = function(vorp) {
-  this.vorp = vorp;
-  var phy = vorp.phy;
+ZapperPrefab.prototype.createSprites = function(clock) {
   var x0 = this.x0;
   var y0 = this.y0;
   var x1 = this.x1;
@@ -35,38 +33,36 @@ ZapperPrefab.prototype.createSprites = function(vorp) {
   if (x0 == x1) {
     // vertical zapper
     retval = [
-      new WallSprite(phy, new RectPainter("#88f"), x0, y0 + 1.25*r, 0.5*r, 0.25*r),
-      new WallSprite(phy, new RectPainter("#88f"), x0, y1 - 1.25*r, 0.5*r, 0.25*r)
+      new WallSprite(clock, new RectPainter("#88f"), x0, y0 + 1.25*r, 0.5*r, 0.25*r),
+      new WallSprite(clock, new RectPainter("#88f"), x0, y1 - 1.25*r, 0.5*r, 0.25*r)
     ];
-    this.zapperSprite = new ZapperSprite(phy, this.zapperPainter,
+    this.zapperSprite = new ZapperSprite(clock, this.zapperPainter,
         x0, mid(y0, y1), 0, 0, 0.25*r, rad(y0, y1), Infinity);
   } else {
     // horizontal zapper
     retval = [
-      new WallSprite(phy, new RectPainter("#88f"), x0 + 1.25*r, y0, 0.25*r, 0.5*r),
-      new WallSprite(phy, new RectPainter("#88f"), x1 - 1.25*r, y0, 0.25*r, 0.5*r)
+      new WallSprite(clock, new RectPainter("#88f"), x0 + 1.25*r, y0, 0.25*r, 0.5*r),
+      new WallSprite(clock, new RectPainter("#88f"), x1 - 1.25*r, y0, 0.25*r, 0.5*r)
     ];
-    this.zapperSprite = new ZapperSprite(phy, this.zapperPainter,
+    this.zapperSprite = new ZapperSprite(clock, this.zapperPainter,
         mid(x0, x1), y0, 0, 0, rad(x0, x1), 0.25*r, Infinity);
   }
-  this.zapperSprite.setVorp(vorp);
   if (this.active) {
     retval.push(this.zapperSprite);
   }
   return retval;
 };
 
-ZapperPrefab.prototype.setActive = function(active) {
+ZapperPrefab.prototype.setActive = function(active, vorp) {
   active = !!active;
   if (active == this.active) return; // no change
   this.active = active;
   this.zapperPainter.setActive(active);
   
-  var phy = this.vorp && this.vorp.phy;
-  if (!phy) return;
-  if (phy && active) {
-    phy.addSprite(this.zapperSprite);
+  if (!vorp) return;
+  if (active) {
+    vorp.addSprite(this.zapperSprite);
   } else {
-    phy.removeSprite(this.zapperSprite.id);
+    vorp.removeSprite(this.zapperSprite.id);
   }
 };
