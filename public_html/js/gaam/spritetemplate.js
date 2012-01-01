@@ -42,6 +42,21 @@ SpriteTemplate.prototype.setRad = function(rad) {
   return this;
 };
 
+SpriteTemplate.prototype.setPosXY = function(x, y) {
+  this.pos.setXY(x, y);
+  return this;
+};
+
+SpriteTemplate.prototype.setVelXY = function(x, y) {
+  this.vel.setXY(x, y);
+  return this;
+};
+
+SpriteTemplate.prototype.setRadXY = function(x, y) {
+  this.rad.setXY(x, y);
+  return this;
+};
+
 SpriteTemplate.prototype.setMass = function(mass) {
   this.mass = mass;
   return this;

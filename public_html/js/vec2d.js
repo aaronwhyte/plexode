@@ -139,8 +139,23 @@ Vec2d.prototype.scaleToLength = function(length) {
   return this;
 };
 
+/**
+ * If the magnitude is over the max, this scales it down.
+ */
+Vec2d.prototype.clipToMaxLength = function(maxLength) {
+  var m = this.magnitude();
+  if (m > maxLength) {
+    this.scale(maxLength / m);
+  }
+  return this;
+};
+
 Vec2d.prototype.equals = function(v) {
   return (this.x == v.x && this.y == v.y);
+};
+
+Vec2d.prototype.isZero = function() {
+  return this.x == 0 && this.y == 0;
 };
 
 Vec2d.prototype.toString = function() {

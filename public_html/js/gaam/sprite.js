@@ -205,3 +205,10 @@ Sprite.prototype.createSledge = function() {
 Sprite.prototype.now = function() {
   return this.gameClock.getTime();
 };
+
+/**
+ * @return {number}
+ */
+Sprite.prototype.area = function() {
+  return this.rad.x * this.rad.y;
+};

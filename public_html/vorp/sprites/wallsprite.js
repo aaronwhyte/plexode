@@ -2,8 +2,8 @@
  * @constructor
  * @extends {Sprite}
  */
-function WallSprite(clock, painter, px, py, rx, ry) {
-  Sprite.call(this, clock, painter, px, py, 0, 0, rx, ry, Infinity, Vorp.WALL_GROUP, Infinity);
+function WallSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
 }
 
 WallSprite.prototype = new Sprite();

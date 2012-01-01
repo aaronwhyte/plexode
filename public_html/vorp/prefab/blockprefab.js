@@ -7,9 +7,13 @@ function BlockPrefab(x, y, size) {
   this.size = size || 1;
 }
 
-BlockPrefab.prototype.createSprites = function(clock) {
+BlockPrefab.prototype.createSprites = function(gameClock, sledgeInvalidator) {
   var r = Prefab.BOX_RADIUS * this.size;
-  var a = new BlockSprite(clock, new RectPainter("#dd4"),
-      this.x, this.y, 0, 0, r, r, this.size * this.size, Vorp.GENERAL_GROUP);
+  var a = new BlockSprite(
+      Prefab.createMovableSpriteTemplate(gameClock, sledgeInvalidator)
+        .setPainter(new RectPainter("#dd4"))
+        .setPosXY(this.x, this.y)
+        .setRadXY(r, r)
+        .setMass(this.size * this.size));
   return [a];
 };

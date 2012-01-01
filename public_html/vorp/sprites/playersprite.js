@@ -2,13 +2,8 @@
  * @constructor
  * @extends {Sprite}
  */
-
-//YOU ARE HERE
-//- Convert constructor to use spriteTemplate
-//- Change to Vec2d style pos, vel, and rad.
-
-function PlayerSprite(clock, painter, px, py, vx, vy, rx, ry, mass) {
-  Sprite.call(this, clock, painter, px, py, vx, vy, rx, ry, mass, Vorp.PLAYER_GROUP, 1.01);
+function PlayerSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
   
   this.pos = new Vec2d();
   this.vel = new Vec2d();
@@ -52,14 +47,15 @@ PlayerSprite.prototype.act = function(vorp) {
   var workVec = Vec2d.alloc(0, 0);
   this.getVel(workVec);
   workVec.scale(-Vorp.FRICTION);
+  this.accelerate(workVec);
   //GU_copyCustomKeysVec(this.keysVec, VK_I, VK_L, VK_K, VK_J);
   GU_copyKeysVec(this.keysVec);
-  if (this.keysVec.x || this.keysVec.y) {
-    workVec.add(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
+  if (!this.keysVec.isZero()) {
+    workVec.set(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
   } else {
-    workVec.addXY(-PlayerSprite.BRAKE * this.vx, -PlayerSprite.BRAKE * this.vy);
+    workVec.set(this.vel).scale(-PlayerSprite.BRAKE);
   }
-  this.accelerateXY(workVec.x, workVec.y);
+  this.accelerate(workVec);
   Vec2d.free(workVec);
 
   // gripper
@@ -114,7 +110,7 @@ PlayerSprite.prototype.kickKeyDown = function() {
 PlayerSprite.prototype.gripScan = function(vorp) {
   GU_copyKeysVec(this.keysVec);
 
-  if (this.keysVec.x || this.keysVec.y) {
+  if (!this.keysVec.isZero()) {
     // long-range directional seek
     this.scanInitVec.set(this.keysVec).scaleToLength(5 * PlayerSprite.GRIP_RANGE);
     this.gripScanSweep(vorp, this.scanInitVec, 1/8, 16);
@@ -164,89 +160,81 @@ PlayerSprite.prototype.gripScanSweep = function(vorp, vec, arc, scans) {
 };
 
 PlayerSprite.prototype.calcKickPower = function() {
-  var kick = this.kickPow * 1.6;
-  //kick = Math.max(0, kick - 10);
-  //kick = Math.min(kick, 50);
-  return kick;
+  return this.kickPow * 1.6;
 };
 
 PlayerSprite.prototype.kick = function() {
+  if (!this.heldSprite) return;
   var kick = this.calcKickPower();
   this.kickPow = 0;
-  if (!this.heldSprite) return;
-
-  var dx = this.px - this.heldSprite.px;
-  var dy = this.py - this.heldSprite.py;
-  var dist = Math.sqrt(dx * dx + dy * dy);
-  var pushVec = Vec2d.alloc(dx / dist, dy / dist);
-  pushVec.scale(kick);
-  this.accelerateXY(pushVec.x, pushVec.y);
+  var heldPos = this.heldSprite.getPos(Vec2d.alloc());
+  var pushVec = this.getPos(Vec2d.alloc()).subtract(heldPos).scaleToLength(kick);
+  this.accelerate(pushVec);
   var massRatio = this.mass / this.heldSprite.mass;
-  this.heldSprite.accelerateXY(
-      -pushVec.x * massRatio,
-      -pushVec.y * massRatio);
+  this.heldSprite.accelerate(pushVec.scale(-massRatio));
   this.breakGrip(kick);
   Vec2d.free(pushVec);
+  Vec2d.free(heldPos);
 };
 
 PlayerSprite.prototype.looseForce = function(vorp) {
-  var dx = this.px - this.heldSprite.px;
-  var dy = this.py - this.heldSprite.py;
-  var dist = Math.sqrt(dx * dx + dy * dy);
-  if (this.maybeBreakGrip(vorp, dist)) return;
-
-  var aimUnit = Vec2d.alloc(dx / dist, dy / dist);
+  var heldPos = this.heldSprite.getPos(Vec2d.alloc());
+  var dPos = this.getPos(Vec2d.alloc()).subtract(heldPos);
+  var dist = dPos.magnitude();
+  if (this.maybeBreakGrip(vorp, dist)) {
+    Vec2d.free(heldPos);
+    Vec2d.free(dPos);
+    return;
+  }
+  var aimUnit = Vec2d.alloc().set(dPos).scale(1 / dist);
   var pull = (dist - PlayerSprite.GRIP_RANGE) * 0.15;
-  //pull = Math.min(pull, 3);
-  //pull = Math.max(pull, -3);
-  var dVel = Vec2d.alloc(this.vx - this.heldSprite.vx, this.vy - this.heldSprite.vy);
-  var dPos = Vec2d.alloc(dx, dy);
+  var dVel = Vec2d.alloc().set(this.vel).subtract(this.heldSprite.vel);
   var dot = dVel.dot(dPos);
   var damp = dot * 0.003;
-  var dvx = aimUnit.x * (pull + damp);
-  var dvy = aimUnit.y * (pull + damp);
-  var MAX = 5;
-  dvx = Math.min(MAX, Math.max(-MAX, dvx * this.heldSprite.mass));
-  dvy = Math.min(MAX, Math.max(-MAX, dvy * this.heldSprite.mass));
-  this.accelerateXY(-dvx, -dvy);
+  var accel = aimUnit.scale(pull + damp).clipToMaxLength(5);
+  this.accelerate(accel);
   var massRatio = this.mass / this.heldSprite.mass;
-  this.heldSprite.accelerateXY(dvx * massRatio, dvy * massRatio);
+  this.heldSprite.accelerate(accel.scale(massRatio));
+  Vec2d.free(heldPos);
+  Vec2d.free(dPos);
   Vec2d.free(aimUnit);
   Vec2d.free(dVel);
-  Vec2d.free(dPos);
 };
 
 
 PlayerSprite.prototype.initStiffPose = function() {
-  var dx = this.heldSprite.px - this.px;
-  var dy = this.heldSprite.py - this.py;
-  var dist = Math.sqrt(dx * dx + dy * dy);
-  this.stiffPose.setXY(
-      PlayerSprite.GRIP_RANGE * dx / dist,
-      PlayerSprite.GRIP_RANGE * dy / dist);
+  var heldPos = this.heldSprite.getPos(Vec2d.alloc());
+  var dPos = this.getPos(Vec2d.alloc()).subtract(heldPos);
+  this.stiffPose.set(dPos).scaleToLength(PlayerSprite.GRIP_RANGE);
   this.grip = PlayerSprite.Grip.STIFF;
-  //console.log('stiffPose: ' + this.stiffPose)
+  Vec2d.free(heldPos);
+  Vec2d.free(dPos);
 };
 
 
 PlayerSprite.prototype.stiffForce = function(vorp) {
-  var dx = this.heldSprite.px - (this.px + this.stiffPose.x);
-  var dy = this.heldSprite.py - (this.py + this.stiffPose.y);
-  var dist = Math.sqrt(dx * dx + dy * dy);
-  if (this.maybeBreakGrip(vorp, dist)) return;
-
-  var dVel = Vec2d.alloc(this.vx - this.heldSprite.vx, this.vy - this.heldSprite.vy);
+  var heldSpritePos = this.heldSprite.getPos(Vec2d.alloc());
+  var thisPos = this.getPos(Vec2d.alloc());
+  var dPos = heldSpritePos.subtract(thisPos).subtract(this.stiffPose);
+  var dist = dPos.magnitude();
+  if (this.maybeBreakGrip(vorp, dist)) {
+    Vec2d.free(heldSpritePos);
+    Vec2d.free(thisPos);
+    return;
+  }
+  var dVel = this.getVel(Vec2d.alloc()).subtract(this.heldSprite.vel);
   var DAMP = 0.3;
   var PULL = 0.07;
-  var dvx = DAMP * dVel.x - PULL * dx;
-  var dvy = DAMP * dVel.y - PULL * dy;
-  var MAX = 5;
-  dvx = Math.min(MAX, Math.max(-MAX, dvx * this.heldSprite.mass));
-  dvy = Math.min(MAX, Math.max(-MAX, dvy * this.heldSprite.mass));
-  this.accelerateXY(-dvx, -dvy);
+  var accel = Vec2d.alloc().set(dVel).scale(-DAMP);
+  accel.add(dPos.scale(PULL));
+  accel.clipToMaxLength(5);
+  this.accelerate(accel);
   var massRatio = this.mass / this.heldSprite.mass;
-  this.heldSprite.accelerateXY(dvx * massRatio, dvy * massRatio);
+  this.heldSprite.accelerate(accel.scale(-massRatio));
+  Vec2d.free(heldSpritePos);
+  Vec2d.free(thisPos);
   Vec2d.free(dVel);
+  Vec2d.free(accel);
 };
 
 

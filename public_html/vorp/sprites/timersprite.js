@@ -2,8 +2,8 @@
  * @constructor
  * @extends {Sprite}
  */
-function TimerSprite(clock, painter, px, py, rx, ry) {
-  Sprite.call(this, clock, painter, px, py, 0, 0, rx, ry, Infinity, Vorp.WALL_GROUP, Infinity);
+function TimerSprite(spriteTemplate) {
+  Sprite.call(this, spriteTemplate);
   this.resetTime = -Infinity;
   this.timeoutLength = null;
   this.onTimeout = null;
