@@ -1,13 +1,15 @@
 /**
  * @constructor
  */
-function WallPrefab(x0, y0, x1, y1, opt_solid) {
+function WallPrefab(x0, y0, x1, y1) {
+  Prefab.call(this);
   this.x0 = x0;
   this.y0 = y0;
   this.x1 = x1;
   this.y1 = y1;
-  this.solid = opt_solid || false;
 }
+WallPrefab.prototype = new Prefab();
+WallPrefab.prototype.constructor = Prefab;
 
 WallPrefab.createChain = function(coords) {
   var a = [];
@@ -24,7 +26,8 @@ WallPrefab.createChain = function(coords) {
   return a;
 };
 
-WallPrefab.prototype.createSprites = function(clock) {
+WallPrefab.prototype.createSprites = function(baseSpriteTemplate) {
+  this.baseSpriteTemplate = baseSpriteTemplate;
   var x0 = this.x0;
   var y0 = this.y0;
   var x1 = this.x1;
@@ -36,15 +39,8 @@ WallPrefab.prototype.createSprites = function(clock) {
   function rad(a, b) {
     return Math.abs(a - b) / 2 + r;
   }
-  if (this.solid || rad(x0, x1) < 2 * r || rad(y0, y1) < 2 * r) {
-    return [new WallSprite(clock, new RectPainter("rgb(80,48,176)"),
-        mid(x0, x1), mid(y0, y1), rad(x0, x1), rad(y0, y1))];
-  } else {
-    return [
-      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y0, rad(x0, x1), r),
-      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), mid(x0, x1), y1, rad(x0, x1), r),
-      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), x0, mid(y0, y1), r, rad(y0, y1)),
-      new WallSprite(clock, new RectPainter("rgb(80,48,176)"), x1, mid(y0, y1), r, rad(y0, y1))
-    ];
-  }
+  return [new WallSprite(this.createImmovableSpriteTemplate()
+      .setPainter(new RectPainter("rgb(80,48,176)"))
+      .setPosXY(mid(x0, x1), mid(y0, y1))
+      .setRadXY(rad(x0, x1), rad(y0, y1)))];
 };

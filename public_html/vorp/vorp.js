@@ -77,19 +77,24 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var camera = opt_camera || new Camera();
   var renderer = new Renderer(canvas, camera);
   window.FLAGS = new Flags(flagsDiv);
+
   var gameClock = new GameClock(1);
+  var sledgeInvalidator = new SledgeInvalidator();
   var collider = new CellCollider(levelBuilder.getBoundingRect(),
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
-  var phy = new Phy(collider, gameClock);
+  var phy = new Phy(collider, gameClock, sledgeInvalidator);
   var vorp = new Vorp(renderer, phy, wham, gameClock);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
 
   var prefabs = levelBuilder.getPrefabs();
   var playerPrefab = null;
+  var baseSpriteTemplate = new SpriteTemplate()
+  		.setGameClock(gameClock)
+  		.setSledgeInvalidator(sledgeInvalidator);
   for (var i = 0; i < prefabs.length; i++) {
     var prefab = prefabs[i];
-    var sprites = prefab.createSprites(gameClock);
+    var sprites = prefab.createSprites(baseSpriteTemplate);
     vorp.addSprites(sprites);
     if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
       if (playerPrefab) throw Error('player prefab already defined');

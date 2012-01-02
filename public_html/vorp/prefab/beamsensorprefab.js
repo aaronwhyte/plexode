@@ -2,6 +2,7 @@
  * @constructor
  */
 function BeamSensorPrefab(x0, y0, x1, y1, onChange) {
+  Prefab.call(this);
   if (x0 != x1 && y0 != y1) {
     throw Error("Illegal arguments for BeamSensorPrefab: '" +
         [x0, y0, x1, y1].join() +
@@ -13,8 +14,11 @@ function BeamSensorPrefab(x0, y0, x1, y1, onChange) {
   this.y1 = y1;
   this.onChange = onChange;
 }
+BeamSensorPrefab.prototype = new Prefab();
+BeamSensorPrefab.prototype.constructor = Prefab;
 
-BeamSensorPrefab.prototype.createSprites = function(gameClock, sledgeInvalidator) {
+BeamSensorPrefab.prototype.createSprites = function(baseSpriteTemplate) {
+  this.baseSpriteTemplate = baseSpriteTemplate;
   var x0 = this.x0;
   var y0 = this.y0;
   var x1 = this.x1;
@@ -22,10 +26,10 @@ BeamSensorPrefab.prototype.createSprites = function(gameClock, sledgeInvalidator
   var r = Prefab.WALL_RADIUS;
   var sgn;
   var beamerTemplate =
-      Prefab.createImmovableSpriteTemplate(gameClock, sledgeInvalidator)
+      this.createImmovableSpriteTemplate()
           .setPainter(new BeamerPainter());
   var sensorTemplate =
-      Prefab.createImmovableSpriteTemplate(gameClock, sledgeInvalidator)
+      this.createImmovableSpriteTemplate()
           .setPainter(new RectPainter("#888"));
   if (x0 == x1) {
     // vertical    

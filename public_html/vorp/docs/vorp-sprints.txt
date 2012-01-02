@@ -298,13 +298,23 @@ HUGE BREAK FOR LEVEL EDITOR, "VED".
 (Hey, I edited this file right in GitHub.  Pretty great!)
 Did not finish yet but we're back for some saw sharpening...
 
-2011.12.?? refactor like a software engineer
+2011.12.?? - 2012.01.02 refactor like a software engineer
 v remove phy from sprite constructors
-- convert sprites to use SpriteTemplate and more Vec2d.
-- convert prefabs too
+v convert sprites to use SpriteTemplate and more Vec2d.
+v convert prefabs too
+v Write proper Prefab superclass.
+v Change Prefab.createXXX statics to methods.
+v Pass a partially filled out SpriteTemplate to the prefab.
+x Add a "copyFrom()" method to SpriteTemplate, and use it in the Prefab.createXXX methods
+- update LevelBuilder.
+- get Vorp running again
 
-More refactoring
-- Remove vorp/game from act() and onSpriteHit(). Return commands instead.
+Rewrite minigame 1
+
+Remove vorp/game from act() and onSpriteHit().
+- Return commands instead of making calls
+- Inject rayscanner.
+- Replace vorp.rayscan with rayscanner.rayscan
 
 
 teleport sparks
