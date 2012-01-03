@@ -1,5 +1,5 @@
 /**
- * @param {object} brect  Collision space bounding rect,
+ * @param {Object} brect  Collision space bounding rect,
  * with members x0, y0, x1, y1
  * @param {number} cellSize  max height and width for each cell in the
  * collider. The actual may be a little smaller.

@@ -1,6 +1,6 @@
 /**
  * @constructor
- * @extends {VorpWham}
+ * @extends {Wham}
  */
 function VorpWham() {
   Wham.call(this);

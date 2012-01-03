@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function GripPrefab(x, y, facing, onChange) {
   Prefab.call(this);

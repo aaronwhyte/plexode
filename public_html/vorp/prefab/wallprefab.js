@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function WallPrefab(x0, y0, x1, y1) {
   Prefab.call(this);
@@ -27,6 +28,7 @@ WallPrefab.createChain = function(coords) {
 };
 
 WallPrefab.prototype.createSprites = function(baseSpriteTemplate) {
+  console.log(baseSpriteTemplate);
   this.baseSpriteTemplate = baseSpriteTemplate;
   var x0 = this.x0;
   var y0 = this.y0;

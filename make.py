@@ -70,11 +70,11 @@ def buildPlexode(bdir):
     '../../tools/closure-compiler',
     getJsCompFlags(bdir, getVorpJsFileNames(), "vorp/" + vorpJsName))
 
-  print "compiling minigames/1 JS"
-  minigame1JsName = 'mg1_%s.js' % str(int(time.time() * 1000))
-  compileJs(
-    '../../tools/closure-compiler',
-    getJsCompFlags(bdir, getMinigame1JsFileNames(), "minigames/1/" + minigame1JsName))
+#  print "compiling minigames/1 JS"
+#  minigame1JsName = 'mg1_%s.js' % str(int(time.time() * 1000))
+#  compileJs(
+#    '../../tools/closure-compiler',
+#    getJsCompFlags(bdir, getMinigame1JsFileNames(), "minigames/1/" + minigame1JsName))
 
   print "generating index.html files"
   writePublicHtml(bdir,'', mainpage.formatMain())
@@ -91,8 +91,8 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, '/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml(bdir, '/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  writePublicHtml(bdir, '/minigames', minigames.formatMinigames())
-  writePublicHtml(bdir, '/minigames/1', minigames.formatMinigame1(minigame1JsName))
+#  writePublicHtml(bdir, '/minigames', minigames.formatMinigames())
+#  writePublicHtml(bdir, '/minigames/1', minigames.formatMinigame1(minigame1JsName))
   writePublicHtml(bdir, '/chordo', chordo.formatChordo())
 
   print "DONE building plexode"

@@ -17,6 +17,10 @@ Vec2d.prototype.reset = function(x, y) {
   this.y = y || 0;
 };
 
+/**
+ * @param {number=} x
+ * @param {number=} y
+ */
 Vec2d.alloc = function(x, y) {
   var retval;
   if (Vec2d.poolSize) {

@@ -7,5 +7,5 @@ function SensorSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
 }
 
-SensorSprite.prototype = new Sprite();
+SensorSprite.prototype = new Sprite(null);
 SensorSprite.prototype.constructor = SensorSprite;

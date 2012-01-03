@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function PlayerPrefab(x, y) {
   Prefab.call(this);

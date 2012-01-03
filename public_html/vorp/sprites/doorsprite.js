@@ -26,7 +26,7 @@ function DoorSprite(spriteTemplate, x0, y0, x1, y1, thickness, closedness, topSp
   this.setDimensions();
 }
 
-DoorSprite.prototype = new Sprite();
+DoorSprite.prototype = new Sprite(null);
 DoorSprite.prototype.constructor = DoorSprite;
 
 DoorSprite.prototype.setDimensions = function() {

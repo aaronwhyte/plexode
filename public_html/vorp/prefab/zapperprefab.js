@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function ZapperPrefab(x0, y0, x1, y1, active) {
   Prefab.call(this);

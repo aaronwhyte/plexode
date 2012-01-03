@@ -24,7 +24,7 @@ TractorBeamPainter.prototype = new Painter(1);
 TractorBeamPainter.prototype.constructor = TractorBeamPainter;
 
 /**
- * @enum {string}
+ * @enum {number}
  */
 TractorBeamPainter.State = {
   EMPTY: 0,

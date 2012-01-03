@@ -1,6 +1,7 @@
 /**
  * @param {boolean} isEntrance  Whether this is the initial entrance to the level.
  * @constructor
+ * @extends {Prefab}
  */
 function PlayerAssemblerPrefab(x, y, facing, isEntrance) {
   Prefab.call(this);

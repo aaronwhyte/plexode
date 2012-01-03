@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function PortalPairPrefab(x0, y0, x1, y1) {
   Prefab.call(this);

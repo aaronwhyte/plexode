@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function DoorPrefab(x0, y0, x1, y1, closed) {
   Prefab.call(this);
@@ -33,13 +34,9 @@ DoorPrefab.prototype.createSprites = function(baseSpriteTemplate) {
   function mid(a, b) {
     return (a + b) / 2;
   }
-  var spriteTemplate = new SpriteTemplate()
-      .setGameClock(gameClock)
-      .setSledgeInvalidator(sledgeInvalidator)
-      .setMass(Infinity)
-      .setGroup(Vorp.WALL_GROUP)
+  var spriteTemplate = this.createImmovableSpriteTemplate()
       .setSledgeDuration(1.01);
-  
+
   function createDoorSprite(x0, y0, x1, y1) {
     spriteTemplate.setPainter(new RectPainter("#aaa"));
     return new DoorSprite(spriteTemplate, x0, y0, x1, y1, thickness, closedness,

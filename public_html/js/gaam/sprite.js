@@ -1,6 +1,6 @@
 /**
  * A Sprite is an object in the game world.
- * @param {?SpriteTemplate} spriteTemplate, null for new prototype sprites
+ * @param {SpriteTemplate=} spriteTemplate, null for new prototype sprites
  * @constructor
  */
 function Sprite(spriteTemplate) {
@@ -12,7 +12,7 @@ function Sprite(spriteTemplate) {
 }
 
 /**
- * @param {?SpriteTemplate} spriteTemplate
+ * @param {SpriteTemplate=} spriteTemplate
  */
 Sprite.prototype.reset = function(spriteTemplate) {
   if (spriteTemplate) {
@@ -26,9 +26,10 @@ Sprite.prototype.reset = function(spriteTemplate) {
     this.mass = spriteTemplate.mass;
     this.group = spriteTemplate.group;
     this.sledgeDuration = spriteTemplate.sledgeDuration;
+
+    /** @type {number} */
+    this.t0 = this.now();
   }
-  /** @type {number} */
-  this.t0 = this.now();
   this.id = -1;
   this.acceleration.setXY(0, 0);
 };

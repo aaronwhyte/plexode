@@ -10,7 +10,7 @@ function PortalSprite(spriteTemplate) {
   this.targetPos = new Vec2d();
 }
 
-PortalSprite.prototype = new Sprite();
+PortalSprite.prototype = new Sprite(null);
 PortalSprite.prototype.constructor = PortalSprite;
 
 PortalSprite.prototype.setTargetSprite = function(targetSprite) {
@@ -43,7 +43,7 @@ PortalSprite.prototype.onSpriteHit = function(
   if (teleportOK) {
     var rayScan = RayScan.alloc(
         targetPos.x, targetPos.y,
-        destX, destY,
+        dest.x, dest.y,
         hitSprite.rad.x * 1.01, hitSprite.rad.y * 1.01);  // fudge factor
     var otherSideSpriteId = vorp.rayScan(rayScan, Vorp.PORTAL_PROBE_GROUP);
     RayScan.free(rayScan);

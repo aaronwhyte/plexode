@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function DeadPlayerPrefab(x, y) {
   Prefab.call(this);

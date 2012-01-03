@@ -17,7 +17,7 @@ function GripSprite(spriteTemplate) {
   this.scanInitVec = new Vec2d();
 }
 
-GripSprite.prototype = new Sprite();
+GripSprite.prototype = new Sprite(null);
 GripSprite.prototype.constructor = GripSprite;
 
 GripSprite.prototype.setTargetPos = function(vec) {

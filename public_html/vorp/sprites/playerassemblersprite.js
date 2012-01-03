@@ -15,6 +15,8 @@ PlayerAssemblerSprite.prototype = new Sprite(null);
 PlayerAssemblerSprite.prototype.constructor = PlayerAssemblerSprite;
 
 PlayerAssemblerSprite.prototype.onPlayerAssembled = function() {
-  this.painter.createSparks(this.px, this.py, this.targetPos.x, this.targetPos.y, this.now());
+  var pos = this.getPos(Vec2d.alloc());
+  this.painter.createSparks(pos.x, pos.y, this.targetPos.x, this.targetPos.y, this.now());
+  Vec2d.free(pos);
 };
 

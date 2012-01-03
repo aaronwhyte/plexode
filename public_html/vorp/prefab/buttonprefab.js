@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function ButtonPrefab(x, y, facing, onClick) {
   Prefab.call(this);

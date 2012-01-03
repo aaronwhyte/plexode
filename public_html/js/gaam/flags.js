@@ -1,5 +1,5 @@
 /**
- * @constuctor
+ * @constructor
  */
 function Flags(element) {
   this.element = element;

@@ -6,11 +6,11 @@ function TimerSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.resetTime = -Infinity;
   this.timeoutLength = null;
-  this.onTimeout = null;
+  this.onTimeoutFn = null;
   this.oldExpired = true;
 }
 
-TimerSprite.prototype = new Sprite();
+TimerSprite.prototype = new Sprite(null);
 TimerSprite.prototype.constructor = TimerSprite;
 
 /**
@@ -20,12 +20,12 @@ TimerSprite.prototype.setTimeoutLength = function(timeoutLength) {
   this.timeoutLength = timeoutLength;
 };
 
-TimerSprite.prototype.setOnTimeout = function(onTimeout) {
-  this.onTimeout = onTimeout;
+TimerSprite.prototype.setOnTimeout = function(onTimeoutFn) {
+  this.onTimeoutFn = onTimeoutFn;
 };
 
 TimerSprite.prototype.isExpired = function() {
-  return this.getNow() - this.timeoutLength >= this.resetTime;
+  return this.now() - this.timeoutLength >= this.resetTime;
 };
 
 TimerSprite.prototype.stop = function() {
@@ -40,7 +40,8 @@ TimerSprite.prototype.act = function() {
   var expired = this.isExpired();
   var timeout = expired && !this.oldExpired;
   this.oldExpired = expired;
+  // to
   if (timeout && this.onTimeout) {
-    this.onTimeout();
+    this.onTimeoutFn();
   }
 };

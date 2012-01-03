@@ -97,7 +97,7 @@ CircularQueue.prototype.size = function() {
 
 
 /**
- * @param {number} gets the nth index from the tail.  Does not dequeue.
+ * @param {number} index gets the nth index from the tail.  Does not dequeue.
  */
 CircularQueue.prototype.getFromTail = function(index) {
   if (index < 0) {
@@ -115,7 +115,7 @@ CircularQueue.prototype.getFromTail = function(index) {
 };
 
 /**
- * @param {number} gets the nth index from the head.  Does not dequeue.
+ * @param {number} index gets the nth index from the head.  Does not dequeue.
  */
 CircularQueue.prototype.getFromHead = function(index) {
   if (index < 0) {

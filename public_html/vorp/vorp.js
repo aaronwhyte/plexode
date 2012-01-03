@@ -1,12 +1,13 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy, wham, gameClock) {
+function Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate) {
   FLAGS && FLAGS.init('portalScry', true);
   this.renderer = renderer;
   this.phy = phy;
   this.wham = wham;
   this.gameClock = gameClock;
+  this.baseSpriteTemplate = baseSpriteTemplate;
 
   this.playerSprite = null;
   this.cameraPos = new Vec2d();
@@ -84,14 +85,14 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
-  var vorp = new Vorp(renderer, phy, wham, gameClock);
+  var baseSpriteTemplate = new SpriteTemplate()
+	.setGameClock(gameClock)
+	.setSledgeInvalidator(sledgeInvalidator);
+  var vorp = new Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
 
   var prefabs = levelBuilder.getPrefabs();
   var playerPrefab = null;
-  var baseSpriteTemplate = new SpriteTemplate()
-  		.setGameClock(gameClock)
-  		.setSledgeInvalidator(sledgeInvalidator);
   for (var i = 0; i < prefabs.length; i++) {
     var prefab = prefabs[i];
     var sprites = prefab.createSprites(baseSpriteTemplate);
@@ -232,6 +233,10 @@ Vorp.prototype.draw = function() {
   this.renderer.stats();
 };
 
+/**
+ * @param {boolean=} opt_drawColliderDebugging
+ * @param {Vec2d=} opt_portalClipPos
+ */
 Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos) {
   this.renderer.transformStart();
 
@@ -282,8 +287,8 @@ Vorp.prototype.removeSprite = function(id) {
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var deadPlayerPrefab = new DeadPlayerPrefab(
-      this.playerSprite.px,
-      this.playerSprite.py);
+      this.playerSprite.pos.x,
+      this.playerSprite.pos.y);
   var deadPlayerSprites = deadPlayerPrefab.createSprites(this.gameClock);
   this.addSprites(deadPlayerSprites);
   
@@ -300,7 +305,7 @@ Vorp.prototype.assemblePlayer = function() {
   }
   var target = this.playerAssembler.targetPos;
   var playerPrefab = new PlayerPrefab(target.x, target.y);
-  var playerSprites = playerPrefab.createSprites(this.gameClock);
+  var playerSprites = playerPrefab.createSprites(this.baseSpriteTemplate);
   this.playerSprite = playerSprites[0];
   this.addSprites(playerSprites);
   this.playerAssembler.onPlayerAssembled();
@@ -345,7 +350,7 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
     this.wham.calcRepulsion(s1, s2, this.accelerationsOut);
   } else {
     this.wham.calcAcceleration(s1, s2, xTime, yTime,
-        VOrp.GRIP, VOrp.ELASTICITY,
+        Vorp.GRIP, Vorp.ELASTICITY,
         this.accelerationsOut);
   }
   var a1 = this.accelerationsOut[0];
@@ -359,8 +364,8 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
     handled = s2.onSpriteHit(s1, this, a2, a1, xTime, yTime, overlapping);
   }
   if (!handled) {
-    s1.addVelXY(a1.x, a1.y);
-    s2.addVelXY(a2.x, a2.y);
+    s1.addVel(a1);
+    s2.addVel(a2);
     s1.onSpriteHit(s2, this);
     s2.onSpriteHit(s1, this);
   }

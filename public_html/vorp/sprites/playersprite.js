@@ -22,7 +22,7 @@ function PlayerSprite(spriteTemplate) {
   this.canGrip = true;
 }
 
-PlayerSprite.prototype = new Sprite();
+PlayerSprite.prototype = new Sprite(null);
 PlayerSprite.prototype.constructor = PlayerSprite;
 
 /**
@@ -72,7 +72,7 @@ PlayerSprite.prototype.act = function(vorp) {
   } else if (this.grip == PlayerSprite.Grip.LOOSE) {
     this.kickPow *= (1 - PlayerSprite.KICK_DECAY);
     if (this.gripKeyDown()) {
-      this.initStiffPose(vorp);
+      this.initStiffPose();
     } else {
       this.looseForce(vorp);
     }
@@ -260,6 +260,9 @@ PlayerSprite.prototype.maybeBreakGrip = function(vorp, dist) {
   return false;
 };
 
+/**
+ * @param {number=} opt_kick
+ */
 PlayerSprite.prototype.breakGrip = function(opt_kick) {
   if (this.grip == PlayerSprite.Grip.NONE) return;
   this.grip = PlayerSprite.Grip.NONE;

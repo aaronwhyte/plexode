@@ -1,7 +1,7 @@
 /**
  * @constructor
  */
-DepInj = function() {
+function DepInj() {
   this.scopedInstances = {};
   this.ctrScopes = {};
   this.inScopes = {};
@@ -57,7 +57,7 @@ DepInj.prototype.exitScope = function(scope) {
   this.assertInScope(scope);
   delete this.inScopes[scope];
   var instances = this.scopedInstances[scope];
-  for (key in instances) {
+  for (var key in instances) {
     delete instances[key];
   }
 };

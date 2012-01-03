@@ -1,7 +1,5 @@
 /**
  * @constructor
- * @param {SpriteTemplate} partialSpriteTemplate contains common deps like the
- * GameClock, SpriteInvalidator, RayscanService, etc.
  */
 function Prefab() {
   this.baseSpriteTemplate = null;
@@ -21,13 +19,13 @@ Prefab.prototype.createImmovableSpriteTemplate = function() {
       .setSledgeDuration(Infinity);
 };
 
-Prefab.createMovableSpriteTemplate = function() {
+Prefab.prototype.createMovableSpriteTemplate = function() {
   return this.createBaseTemplate()
       .setGroup(Vorp.GENERAL_GROUP)
       .setSledgeDuration(1.01);
 };
 
-Prefab.createBaseTemplate = function() {
+Prefab.prototype.createBaseTemplate = function() {
   return new SpriteTemplate()
       .setGameClock(this.baseSpriteTemplate.gameClock)
       .setSledgeInvalidator(this.baseSpriteTemplate.sledgeInvalidator);

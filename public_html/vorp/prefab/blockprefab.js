@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function BlockPrefab(x, y, size) {
   Prefab.call(this);

@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function TimerPrefab(x, y, timeoutLength, onTimeout) {
   Prefab.call(this);

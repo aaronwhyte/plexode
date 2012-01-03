@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function ExitPrefab(x, y, url) {
   Prefab.call(this);

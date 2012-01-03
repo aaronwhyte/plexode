@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @extends {Prefab}
  */
 function BeamSensorPrefab(x0, y0, x1, y1, onChange) {
   Prefab.call(this);
