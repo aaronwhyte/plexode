@@ -151,6 +151,14 @@ Phy.prototype.getSpriteBySledgeId = function(sledgeId) {
 };
 
 /**
+ * @param sledgeId
+ * @return {number?}
+ */
+Phy.prototype.getSpriteIdBySledgeId = function(sledgeId) {
+  return this.sledgeIdToSpriteId[sledgeId];
+};
+
+/**
  * @param spriteId
  * @return {Sprite}
  */

@@ -18,14 +18,13 @@ VorpWham.prototype.calcRepulsion = function(s1, s2, accOut) {
   var lowMass = Math.min(s1.mass, s2.mass);
   var ACC = 1;
   var f = lowMass * ACC;
-  var maxRx = Math.max(s1.rx, s2.rx);
-  var maxRy = Math.max(s1.ry, s2.ry);
+  var maxRx = Math.max(s1.rad.x, s2.rad.x);
+  var maxRy = Math.max(s1.rad.y, s2.rad.y);
   if (maxRx > maxRy) {
     p1p2.x = 0;
   } else if (maxRx < maxRy) {
     p1p2.y = 0;
   }
-  p1p2.scaleToLength(1);
-  accOut[0].set(p1p2).scale(-f / s1.mass); 
-  accOut[1].set(p1p2).scale(f / s2.mass); 
+  accOut[0].set(p1p2).scaleToLength(-f / s1.mass);
+  accOut[1].set(p1p2).scaleToLength(f / s2.mass);
 };

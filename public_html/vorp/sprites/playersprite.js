@@ -4,9 +4,8 @@
  */
 function PlayerSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
-  
+
   this.pos = new Vec2d();
-  this.vel = new Vec2d();
 
   this.scanVec = new Vec2d();
   this.scanInitVec = new Vec2d();
@@ -14,14 +13,12 @@ function PlayerSprite(spriteTemplate) {
   this.heldPos = new Vec2d();
   this.keysVec = new Vec2d();
 
-  this.acceleration = new Vec2d();
   this.grip = PlayerSprite.Grip.NONE;
   this.heldSprite = null;
   this.stiffPose = new Vec2d();
   this.kickPow = 0;
   this.canGrip = true;
 }
-
 PlayerSprite.prototype = new Sprite(null);
 PlayerSprite.prototype.constructor = PlayerSprite;
 
@@ -43,21 +40,13 @@ PlayerSprite.BRAKE = 0.10;
 
 PlayerSprite.prototype.act = function(vorp) {
   this.painter.clearRayScans();
-  // move
-  var workVec = Vec2d.alloc(0, 0);
-  this.getVel(workVec);
-  workVec.scale(-Vorp.FRICTION);
-  this.accelerate(workVec);
-  //GU_copyCustomKeysVec(this.keysVec, VK_I, VK_L, VK_K, VK_J);
+  this.addFriction(Vorp.FRICTION);
   GU_copyKeysVec(this.keysVec);
   if (!this.keysVec.isZero()) {
-    workVec.set(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
+    this.accelerate(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
   } else {
-    workVec.set(this.vel).scale(-PlayerSprite.BRAKE);
+    this.addFriction(PlayerSprite.BRAKE);
   }
-  this.accelerate(workVec);
-  Vec2d.free(workVec);
-
   // gripper
   var kickDown = this.kickKeyDown();
   if (kickDown) {

@@ -289,7 +289,7 @@ Vorp.prototype.killPlayer = function() {
   var deadPlayerPrefab = new DeadPlayerPrefab(
       this.playerSprite.pos.x,
       this.playerSprite.pos.y);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.gameClock);
+  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.baseSpriteTemplate);
   this.addSprites(deadPlayerSprites);
   
   // remove normal player sprite
@@ -321,7 +321,7 @@ Vorp.prototype.assemblePlayer = function() {
 Vorp.prototype.rayScan = function(rayScan, group) {
   this.phy.rayScan(rayScan, group);
   rayScan.hitSpriteId = rayScan.hitSledgeId
-      ? this.phy.getSpriteBySledgeId(rayScan.hitSledgeId)
+      ? this.phy.getSpriteIdBySledgeId(rayScan.hitSledgeId)
       : null;
   return rayScan.hitSpriteId;
 };

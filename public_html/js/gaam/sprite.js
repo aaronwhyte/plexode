@@ -60,8 +60,10 @@ Sprite.prototype.addFriction = function(friction) {
  * This is where sprites apply their acceleration and other changes.
  */
 Sprite.prototype.affect = function() {
-  this.vel.add(this.acceleration);
-  this.acceleration.setXY(0, 0);
+  if (!this.acceleration.isZero()) {
+    this.addVel(this.acceleration);
+    this.acceleration.setXY(0, 0);
+  }
 };
 
 /**

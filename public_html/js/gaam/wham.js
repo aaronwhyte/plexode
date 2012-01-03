@@ -46,8 +46,8 @@ Wham.prototype.calcAcceleration = function(sprite1, sprite2, xTime, yTime, grip,
   // initial acceleration
   var a1 = out[0];
   var a2 = out[1];
-  a1.setXY(0,0);
-  a2.setXY(0,0);
+  a1.setXY(0, 0);
+  a2.setXY(0, 0);
 
   if (m1 == Infinity && m2 != Infinity) {
     if (xTime) {
