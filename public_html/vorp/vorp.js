@@ -89,6 +89,8 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
 	.setGameClock(gameClock)
 	.setSledgeInvalidator(sledgeInvalidator);
   var vorp = new Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate);
+  // TODO: Arg, circular dep. Remove when level prefabs aren't used for wiring buttons to zappers.
+  vorp.baseSpriteTemplate.setWorld(vorp);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
 
   var prefabs = levelBuilder.getPrefabs();
@@ -286,9 +288,8 @@ Vorp.prototype.removeSprite = function(id) {
 
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
-  var deadPlayerPrefab = new DeadPlayerPrefab(
-      this.playerSprite.pos.x,
-      this.playerSprite.pos.y);
+  var playerPos = this.playerSprite.getPos(new Vec2d());
+  var deadPlayerPrefab = new DeadPlayerPrefab(playerPos.x, playerPos.y);
   var deadPlayerSprites = deadPlayerPrefab.createSprites(this.baseSpriteTemplate);
   this.addSprites(deadPlayerSprites);
   
@@ -358,10 +359,10 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
 
   var handled = false;
   if (!handled && s1 instanceof PortalSprite && !(s2 instanceof PortalSprite)) {
-    handled = s1.onSpriteHit(s2, this, a1, a2, xTime, yTime, overlapping);
+    handled = s1.onSpriteHit(s2, a1, a2, xTime, yTime, overlapping);
   }
   if (!handled && s2 instanceof PortalSprite && !(s1 instanceof PortalSprite)) {
-    handled = s2.onSpriteHit(s1, this, a2, a1, xTime, yTime, overlapping);
+    handled = s2.onSpriteHit(s1, a2, a1, xTime, yTime, overlapping);
   }
   if (!handled) {
     s1.addVel(a1);

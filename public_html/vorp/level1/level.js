@@ -1,6 +1,6 @@
 window['main'] = function() {
   var b = new LevelBuilder();
-  b.mark(0, 0, 2000, 2000).wall();
+  b.mark(0, 0).markX(2000).markY(2000).markX(0).markY(0).wall();
   b.mark(1000, 500).markY(1500).wall();
   b.mark(500, 1000).markX(1500).wall();
   b.mark(300, 500, 500, 300).portals();

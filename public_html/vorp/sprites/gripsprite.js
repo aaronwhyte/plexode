@@ -29,13 +29,13 @@ GripSprite.prototype.setOnChange = function(fn) {
   this.onChange = fn;
 };
 
-GripSprite.prototype.act = function(vorp) {
+GripSprite.prototype.act = function() {
   this.painter.clearRayScans();
   var p = this.getPos(this.pos);
   this.painter.setHolderPos(p);
   if (!this.heldSprite) {
     for (var i = 0; !this.heldSprite && i < 2; i++) {
-      this.gripScan(vorp);
+      this.gripScan();
     }
   } else if (this.maybeBreakGrip()) {
     // grip broken
@@ -46,23 +46,22 @@ GripSprite.prototype.act = function(vorp) {
   }
 };
 
-GripSprite.prototype.gripScan = function(vorp) {
+GripSprite.prototype.gripScan = function() {
   if (!this.targetPos) return;
   this.scanInitVec.set(this.targetPos).subtract(this.getPos(this.pos)).scale(1.5);
-  this.gripScanSweep(vorp, this.scanInitVec, 1/8, 1);
+  this.gripScanSweep(this.scanInitVec, 1/8, 1);
   if (this.heldSprite && this.onChange) {
     this.onChange(true);
   }
 };
 
 /**
- * @param {Vorp} vorp
  * @param {Vec2d} vec  line down the center of the scan arc
  * @param {number} arc  number from 0 to 1 indicating
  * what fraction of the circle to cover.  1 means a full circle.
  * @param {number} scans  number of steps in the scan sweep.
  */
-GripSprite.prototype.gripScanSweep = function(vorp, vec, arc, scans) {
+GripSprite.prototype.gripScanSweep = function(vec, arc, scans) {
   var p = this.getPos(this.pos);
   var minTime = Infinity;
   for (var i = 0; i < scans; i++) {
@@ -73,9 +72,9 @@ GripSprite.prototype.gripScanSweep = function(vorp, vec, arc, scans) {
         p.x, p.y,
         p.x + this.scanVec.x, p.y + this.scanVec.y,
         1, 1);
-    var hitSpriteId = vorp.rayScan(rayScan, Vorp.GENERAL_GROUP);
+    var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
     if (hitSpriteId && rayScan.time < minTime) {
-      var sprite = vorp.getSprite(hitSpriteId);
+      var sprite = this.world.getSprite(hitSpriteId);
       if (sprite.mass < Infinity) {
         this.heldSprite = sprite;
         this.painter.clearRayScans();

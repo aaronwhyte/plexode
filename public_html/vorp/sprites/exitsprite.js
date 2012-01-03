@@ -14,8 +14,8 @@ ExitSprite.prototype.setUrl = function(url) {
   this.url = url;
 };
 
-ExitSprite.prototype.onSpriteHit = function(hitSprite, vorp) {
-  if (hitSprite == vorp.getPlayerSprite()) {
-    vorp.exitToUrl(this.url);
+ExitSprite.prototype.onSpriteHit = function(hitSprite) {
+  if (hitSprite == this.world.getPlayerSprite()) {
+    this.world.exitToUrl(this.url);
   }
 };

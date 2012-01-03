@@ -11,6 +11,7 @@ ZapperPainter.prototype = new Painter(1);
 ZapperPainter.prototype.constructor = ZapperPainter;
 
 ZapperPainter.prototype.setActive = function(active) {
+  console.log("setActive: " + active);
   this.active = active;
 };
 

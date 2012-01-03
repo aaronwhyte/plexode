@@ -306,16 +306,16 @@ v Write proper Prefab superclass.
 v Change Prefab.createXXX statics to methods.
 v Pass a partially filled out SpriteTemplate to the prefab.
 x Add a "copyFrom()" method to SpriteTemplate, and use it in the Prefab.createXXX methods
-- update LevelBuilder.
+v update LevelBuilder.
 - get Vorp running again
-
-Rewrite minigame 1
-
-Remove vorp/game from act() and onSpriteHit().
-- Return commands instead of making calls
-- Inject rayscanner.
-- Replace vorp.rayscan with rayscanner.rayscan
-
+  v fix acceleration
+  v fix level 1 and 2 walls
+  v fix zapper hitting non-player stuff
+  v fix zapper sprite removal for level 3
+  v fix tractorbeam forces
+  v fix teleportation acceleration
+  - fix random teleport-to-nowhere
+  - debug doors
 
 teleport sparks
 - implode

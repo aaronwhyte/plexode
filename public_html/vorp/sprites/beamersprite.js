@@ -20,7 +20,7 @@ BeamerSprite.prototype.setOnChange = function(f) {
   this.onChange = f;
 };
 
-BeamerSprite.prototype.act = function(vorp) {
+BeamerSprite.prototype.act = function() {
   if (this.targetSprite == null) return;
   var pos = this.getPos(Vec2d.alloc());
   var targetPos = this.targetSprite.getPos(Vec2d.alloc());
@@ -28,7 +28,7 @@ BeamerSprite.prototype.act = function(vorp) {
       pos.x, pos.y,
       targetPos.x, targetPos.y,
       1, 1);
-  var hitSpriteId = vorp.rayScan(rayScan, Vorp.GENERAL_GROUP);
+  var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
   if (hitSpriteId) {
     this.painter.setBeamEndXY(
         pos.x + rayScan.time * (targetPos.x - pos.x),

@@ -33,6 +33,9 @@ ZapperPrefab.prototype.createSprites = function(baseSpriteTemplate) {
   }
   var retval;
   this.zapperPainter = new ZapperPainter(this.active);
+  var zapperSpriteTemplate = this.createImmovableSpriteTemplate()
+        .setPainter(this.zapperPainter)
+        .setGroup(Vorp.ZAPPER_GROUP)
   if (x0 == x1) {
     // vertical zapper
     retval = [
@@ -45,8 +48,7 @@ ZapperPrefab.prototype.createSprites = function(baseSpriteTemplate) {
           .setPosXY(x0, y1 - 1.25 * r)
           .setRadXY(0.5 * r, 0.25 * r))
     ];
-    this.zapperSprite = new ZapperSprite(this.createImmovableSpriteTemplate()
-        .setPainter(this.zapperPainter)
+    this.zapperSprite = new ZapperSprite(zapperSpriteTemplate
         .setPosXY(x0, mid(y0, y1))
         .setRadXY(0.25*r, rad(y0, y1)));
   } else {
@@ -61,8 +63,7 @@ ZapperPrefab.prototype.createSprites = function(baseSpriteTemplate) {
           .setPosXY(x1 - 1.25 * r, y0)
           .setRadXY(0.25 * r, 0.5 * r))
     ];
-    this.zapperSprite = new ZapperSprite(this.createImmovableSpriteTemplate()
-        .setPainter(this.zapperPainter)
+    this.zapperSprite = new ZapperSprite(zapperSpriteTemplate
         .setPosXY(mid(x0, x1), y0)
         .setRadXY(rad(x0, x1), 0.25 * r));
   }
@@ -72,16 +73,18 @@ ZapperPrefab.prototype.createSprites = function(baseSpriteTemplate) {
   return retval;
 };
 
-ZapperPrefab.prototype.setActive = function(active, vorp) {
+ZapperPrefab.prototype.setActive = function(active) {
+  console.log(active);
   active = !!active;
   if (active == this.active) return; // no change
   this.active = active;
   this.zapperPainter.setActive(active);
-  
-  if (!vorp) return;
+
+  var world = this.getWorld();
+  if (!world) return;
   if (active) {
-    vorp.addSprite(this.zapperSprite);
+    world.addSprite(this.zapperSprite);
   } else {
-    vorp.removeSprite(this.zapperSprite.id);
+    world.removeSprite(this.zapperSprite.id);
   }
 };

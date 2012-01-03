@@ -7,7 +7,7 @@ function ButtonPrefab(x, y, facing, onClick) {
   this.x = x;
   this.y = y;
   this.facing = facing;
-  this.onClick= onClick;
+  this.onClick = onClick;
 }
 ButtonPrefab.prototype = new Prefab();
 ButtonPrefab.prototype.constructor = Prefab;

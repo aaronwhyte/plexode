@@ -22,7 +22,7 @@ PortalSprite.prototype.act = function() {
 };
 
 PortalSprite.prototype.onSpriteHit = function(
-    hitSprite, vorp, thisAcc, hitAcc, xTime, yTime, overlapping) {
+    hitSprite, thisAcc, hitAcc, xTime, yTime, overlapping) {
   if (!this.targetSprite ||
       hitSprite == this.targetSprite ||
       hitSprite.mass == Infinity ||
@@ -45,10 +45,10 @@ PortalSprite.prototype.onSpriteHit = function(
         targetPos.x, targetPos.y,
         dest.x, dest.y,
         hitSprite.rad.x * 1.01, hitSprite.rad.y * 1.01);  // fudge factor
-    var otherSideSpriteId = vorp.rayScan(rayScan, Vorp.PORTAL_PROBE_GROUP);
+    var otherSideSpriteId = this.world.rayScan(rayScan, Vorp.PORTAL_PROBE_GROUP);
     RayScan.free(rayScan);
     if (otherSideSpriteId) {
-      var otherSideSprite = vorp.getSprite(otherSideSpriteId);
+      var otherSideSprite = this.world.getSprite(otherSideSpriteId);
       if (otherSideSprite && (
           otherSideSprite.mass == Infinity || 
           otherSideSprite == hitSprite || 
@@ -59,15 +59,18 @@ PortalSprite.prototype.onSpriteHit = function(
   }
 
   if (teleportOK) {
-    var dVel = hitSprite.getVel(Vec2d.alloc()).subtract(this.vel);
-    var accel = Vec2d.alloc().set(this.vel).scale(-0.1);
-    this.addVel(accel);
-    accel.set(this.targetSprite.vel).scale(-0.1);
-    this.targetSprite.addVel(accel);
+    var dVel = this.targetSprite.getVel(Vec2d.alloc()).subtract(this.vel);
+
+//    var accel = Vec2d.alloc().set(this.vel).scale(-0.1);
+//    this.addVel(accel);
+//    accel.set(this.targetSprite.vel).scale(-0.1);
+//    this.targetSprite.addVel(accel);
+//    Vec2d.free(accel);
+
     hitSprite.setPos(dest);
     hitSprite.addVel(dVel);
+
     Vec2d.free(dVel);
-    Vec2d.free(accel);
   } else {
     hitSprite.addVel(hitAcc.subtract(thisAcc));
   }

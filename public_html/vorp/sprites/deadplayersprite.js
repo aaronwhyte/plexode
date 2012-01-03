@@ -11,11 +11,11 @@ DeadPlayerSprite.prototype.constructor = DeadPlayerSprite;
 
 DeadPlayerSprite.REASSEMBLY_TIMEOUT = 45;
 
-DeadPlayerSprite.prototype.act = function(vorp) {
+DeadPlayerSprite.prototype.act = function() {
   if (!this.startTime) {
     this.startTime = this.now();
   }
   if (this.startTime + DeadPlayerSprite.REASSEMBLY_TIMEOUT < this.now()) {
-    vorp.assemblePlayer();
+    this.world.assemblePlayer();
   }
 };

@@ -3,6 +3,8 @@
  */
 function SpriteTemplate() {
   this.gameClock = null;
+  this.sledgeInvalidator = null;
+  this.world = null;
   this.painter = null;
   this.pos = new Vec2d();
   this.vel = new Vec2d();
@@ -19,6 +21,11 @@ SpriteTemplate.prototype.setGameClock = function(gameClock) {
 
 SpriteTemplate.prototype.setSledgeInvalidator = function(sledgeInvalidator) {
   this.sledgeInvalidator = sledgeInvalidator;
+  return this;
+};
+
+SpriteTemplate.prototype.setWorld = function(world) {
+  this.world = world;
   return this;
 };
 

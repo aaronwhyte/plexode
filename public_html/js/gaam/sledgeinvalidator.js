@@ -6,7 +6,7 @@ function SledgeInvalidator() {
 }
 
 SledgeInvalidator.prototype.add = function(spriteId) {
-  this.spriteIds[spriteId] = true;
+  if (spriteId) this.spriteIds[spriteId] = true;
 };
 
 SledgeInvalidator.prototype.contains = function(spriteId) {

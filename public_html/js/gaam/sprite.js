@@ -19,6 +19,7 @@ Sprite.prototype.reset = function(spriteTemplate) {
     this.gameClock = spriteTemplate.gameClock;
     this.painter = spriteTemplate.painter;
     this.sledgeInvalidator = spriteTemplate.sledgeInvalidator;
+    this.world = spriteTemplate.world;
     // pos0 is the position at time t0. Use getPos() to get the current position.
     this.pos0.set(spriteTemplate.pos);
     this.vel.set(spriteTemplate.vel);
@@ -30,7 +31,7 @@ Sprite.prototype.reset = function(spriteTemplate) {
     /** @type {number} */
     this.t0 = this.now();
   }
-  this.id = -1;
+  this.id = null;
   this.acceleration.setXY(0, 0);
 };
 
