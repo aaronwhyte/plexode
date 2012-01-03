@@ -59,7 +59,7 @@ Phy.prototype.addSprite = function(sprite) {
  * @param spriteId
  */
 Phy.prototype.removeSprite = function(spriteId) {
-  //console.log('removeSprite ' + spriteId);
+  console.log('removeSprite ' + spriteId);
   var sprite = this.sprites[spriteId];
   if (!sprite) throw "no sprite with id: " + spriteId;
   var sledgeId = this.spriteIdToSledgeId[spriteId];
