@@ -3,3 +3,9 @@ player can only fire when near certain objects.
 player carries lens for transforming harmless particles into bullets.
 several fire buttons, all with different wacky magic powers
 player shoots flamable gas, has spark thrower
+
+Player can only see fired particles. Vision-chaingun, vision-grenades
+
+Robots forever. Experiment with robot behaviors, esp. group behaviors.
+
+Symbiosis: player produces something ally needs and vice versa.

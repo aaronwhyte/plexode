@@ -33,13 +33,13 @@ DoorSprite.prototype.setDimensions = function() {
   if (this.x0 == this.x1) {
     // vertical
     var offY = this.closedness * (this.y1 - this.y0) * 0.5;
-    this.setPos(temp.set(this.x0, this.y0 + offY));
-    this.setRad(temp.set(this.thickness, Math.abs(offY)));
+    this.setPos(temp.setXY(this.x0, this.y0 + offY));
+    this.setRad(temp.setXY(this.thickness, Math.abs(offY)));
   } else if (this.y0 == this.y1) {
     // horizontal
     var offX = this.closedness * (this.x1 - this.x0) * 0.5;
-    this.setPos(temp.set(this.x0 + offX, this.y0));
-    this.setRad(temp.set(Math.abs(offX), this.thickness));
+    this.setPos(temp.setXY(this.x0 + offX, this.y0));
+    this.setRad(temp.setXY(Math.abs(offX), this.thickness));
   } else {
     throw Error("Door is neither horizontal nor vertical. x0, y0, x1, y1: " + 
         [this.x0, this.y0, this.x1, this.y1]);

@@ -298,7 +298,7 @@ HUGE BREAK FOR LEVEL EDITOR, "VED".
 (Hey, I edited this file right in GitHub.  Pretty great!)
 Did not finish yet but we're back for some saw sharpening...
 
-2011.12.?? - 2012.01.02 refactor like a software engineer
+2011.12.?? - 2012.01.03 refactor like a horse running backwards
 v remove phy from sprite constructors
 v convert sprites to use SpriteTemplate and more Vec2d.
 v convert prefabs too
@@ -307,15 +307,17 @@ v Change Prefab.createXXX statics to methods.
 v Pass a partially filled out SpriteTemplate to the prefab.
 x Add a "copyFrom()" method to SpriteTemplate, and use it in the Prefab.createXXX methods
 v update LevelBuilder.
-- get Vorp running again
+v get Vorp running again
   v fix acceleration
   v fix level 1 and 2 walls
   v fix zapper hitting non-player stuff
   v fix zapper sprite removal for level 3
   v fix tractorbeam forces
   v fix teleportation acceleration
-  - fix random teleport-to-nowhere
-  - debug doors
+  v fix random teleport-to-nowhere
+  v debug doors
+
+... off for another stab at Ved ...
 
 teleport sparks
 - implode

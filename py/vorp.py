@@ -20,25 +20,21 @@ HTML5 &lt;canvas&gt; element to render all the graphics.
 There are no sound effects yet.
 <p>
 It works well in <a href="http://www.google.com/chrome/">Chrome</a>, 
-<a href="http://www.google.com/search?q=firefox+4">Firefox 4</a>, Safari, and
-<a href="http://www.opera.com/">Opera</a>.
+<a href="http://www.mozilla.org/firefox">Firefox</a>,
+<a href="http://www.apple.com/safari/">Safari</a>, and
+<a href="http://www.opera.com/browser">Opera</a>.
 <br>
-It's slow in Firefox 3, but it works.
-<br>
-<a href="http://www.google.com/search?q=internet+explorer+9">IE 9</a>
-might work. IE 8 and lower don't have &lt;canvas&gt; support, so they won't work on their own,
-but they might if you install the <a href="http://code.google.com/chrome/chromeframe/">Chrome Frame</a> plugin.
+<a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up
+might work, but I haven't tested it.
 
 <h1>Controls</h1>
 Use the arrow keys to move.
 <p>
-Press Z to pick things up with your tractor beam.<br>
-Press X to drop or throw things.<br>
+Push Z to grip things your tractor beam. Arrow keys aim.<br>
+Push X to drop stuff.<br>
+Hold Z down for a stiff grip, to keep it from swinging around.<br>
+While holding Z, push X to throw instead of dropping.<br>
 <small>(Dvorak nerds can use semicolon and Q.)</small>
-<p>
-After you pick something up, hold down the Z key for a stiff hold, or release it to drag or swing an object.<br>
-Holding Z down charges the tractor beam; if you press X when the beam is charged,
-you'll throw the object instead of dropping it.
 <p>
 
 <h1>Play it!</h1>

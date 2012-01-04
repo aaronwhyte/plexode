@@ -25,7 +25,6 @@ def formatChordo():
 // Global, for debugging.
 var chordo;
 function onLoadHandler() {
-  console.log('onload');
   chordo = new Chordo(
       new SongParser(),
       new SongRenderer(),

@@ -1,6 +1,6 @@
 /**
  * A Sprite is an object in the game world.
- * @param {SpriteTemplate=} spriteTemplate, null for new prototype sprites
+ * @param {SpriteTemplate=} spriteTemplate null for new prototype sprites
  * @constructor
  */
 function Sprite(spriteTemplate) {
@@ -47,7 +47,7 @@ Sprite.prototype.act = function() {
 
 /**
  * Friction utility.
- * @param {number} friction, like 0.1 for 10% friction.
+ * @param {number} friction like 0.1 for 10% friction.
  */
 Sprite.prototype.addFriction = function(friction) {
   var accel = this.getVel(Vec2d.alloc());

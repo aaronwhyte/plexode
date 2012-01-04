@@ -153,7 +153,7 @@ Vorp.prototype.clock = function() {
   }
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
-    if (sprite.mass != Infinity) {
+    if (sprite.sledgeDuration != Infinity) {
       sprite.invalidateSledge();
     }
     sprite.act(this);
@@ -367,8 +367,8 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
   if (!handled) {
     s1.addVel(a1);
     s2.addVel(a2);
-    s1.onSpriteHit(s2, this);
-    s2.onSpriteHit(s1, this);
+    s1.onSpriteHit(s2);
+    s2.onSpriteHit(s1);
   }
 };
 

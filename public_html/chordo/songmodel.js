@@ -68,7 +68,6 @@ SongModel.prototype.calcBestMatch = function(queryTokens) {
       bestKey = key;
     }
   }
-  console.log('queryTokens:', queryTokens, 'bestKey:', bestKey, 'bestScore:', bestScore);
   return bestScore > 500 ? bestKey : null;
 };
 

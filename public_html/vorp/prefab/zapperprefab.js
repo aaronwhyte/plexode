@@ -74,7 +74,6 @@ ZapperPrefab.prototype.createSprites = function(baseSpriteTemplate) {
 };
 
 ZapperPrefab.prototype.setActive = function(active) {
-  console.log(active);
   active = !!active;
   if (active == this.active) return; // no change
   this.active = active;

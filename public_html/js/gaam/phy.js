@@ -48,7 +48,6 @@ Phy.prototype.addSprite = function(sprite) {
   if (!sprite) throw "no sprite";
   var spriteId = this.nextSpriteId++;
   sprite.id = spriteId;
-  //console.log('addSprite assigns new ID ' + spriteId);
   this.sprites[spriteId] = sprite;
   this.sledgeInvalidator.add(spriteId);
   return spriteId;
@@ -59,7 +58,6 @@ Phy.prototype.addSprite = function(sprite) {
  * @param spriteId
  */
 Phy.prototype.removeSprite = function(spriteId) {
-  console.log('removeSprite ' + spriteId);
   var sprite = this.sprites[spriteId];
   if (!sprite) throw "no sprite with id: " + spriteId;
   var sledgeId = this.spriteIdToSledgeId[spriteId];
