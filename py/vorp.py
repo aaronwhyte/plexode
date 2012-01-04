@@ -32,8 +32,8 @@ Use the arrow keys to move.
 <p>
 Push Z to grip things your tractor beam. Arrow keys aim.<br>
 Push X to drop stuff.<br>
-Hold Z down for a stiff grip, to keep it from swinging around.<br>
-While holding Z, push X to throw instead of dropping.<br>
+Hold Z down for a stiff grip.<br>
+Push X while holding Z to throw.<br>
 <small>(Dvorak nerds can use semicolon and Q.)</small>
 <p>
 
@@ -49,7 +49,8 @@ Each level is a web page, and the exits are links between web pages.<br>
 To restart a level, hit "refresh" on your browser.  You can bookmark levels and send URLs to people,
 just like you can with any other web page.
 <p>
-Vorp is still under construction, so check back here for updates.
+Vorp is still under construction, so check back here for updates.<br>
+Or follow all Plexode changes on <a href="https://github.com/aaronwhyte/plexode">GitHub</a>!
 </div>
 """))
   h.append(format.footer())
@@ -68,8 +69,9 @@ def formatVorpLevel(jsName, title, description):
 <div id="levelCenter">
 
 <div id="game">
-""", description, """<br>
+<div class="levelheader"><a href="../">plexode:vorp</a> - """, description, """</div>
 <canvas id="canvas" width=600 height=600></canvas>
+<div class="minihelp">arrows move, Z grabs, and X drops. tap X while holding Z to throw.</div>
 </div>
 
 <div id="settings">
@@ -77,6 +79,8 @@ def formatVorpLevel(jsName, title, description):
 </div>
 
 </div>
+
+<div class="copyright">Copyright 2010 Aaron Whyte</div>
 </body>
 </html>
 """])

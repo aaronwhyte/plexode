@@ -62,7 +62,7 @@ Renderer.prototype.stats = function() {
   c.textBaseline = "top";
   c.textSize = "14pt";
   c.fontFamily = "monospace";
-  this.setFillStyle("rgb(128, 128, 128)");
+  this.setFillStyle("#444");
   c.fillText(this.fps + ' ' + GU_nextDelay, 2, 2);
 };
 

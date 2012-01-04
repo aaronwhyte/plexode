@@ -5,9 +5,9 @@ links = [
   ("eval2", "eval2/"),
   ("eval3", "eval3/"),
   ("fracas", "fracas/"),
-  ("minigames", "minigames/"),
+#  ("minigames", "minigames/"),
   ("vorp", "vorp/"),
-  ("chordo", "chordo/"),
+#  ("chordo", "chordo/"),
 ]
 
 def headStart(name, depth):

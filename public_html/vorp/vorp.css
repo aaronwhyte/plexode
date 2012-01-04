@@ -1,13 +1,22 @@
 body {
-  background: #000;
+  background: #111;
   color: #aaa;
   font-family:verdana, arial, sans-serif;
+}
+
+.levelheader {
+  color:#666;
+}
+
+.minihelp {
+  color:#444;
+  font-size:90%;
 }
 
 a {
   font-weight:bold;
   text-decoration:none;
-  color:#f88;
+  color:#85d;
 }
 
 a.nav {
@@ -21,7 +30,9 @@ div.center {
 }
 
 canvas {
-  border: 2px solid #444;
+  border: 2px solid #222;
+  margin: 0.6em;
+  background: #000;
 }
 
 #levelCenter {
@@ -36,10 +47,18 @@ canvas {
 }
 
 #settings {
+  display:none;
   text-align:left;
   vertical-align:top;
   float:right;
   padding: 1em;
+  font-size:small;
 }
 
-
+div.copyright {
+  position: absolute;
+  right: 2px;
+  top: 0px;
+  color:#444;
+  font-size: 70%;
+}

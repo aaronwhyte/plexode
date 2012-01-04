@@ -106,7 +106,7 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
     }
   }
   GU_start(function(){vorp.clock();}, Vorp.FPS);
-}
+};
 
 Vorp.prototype.addSprites = function(sprites) {
   for (var i = 0; i < sprites.length; i++) {
