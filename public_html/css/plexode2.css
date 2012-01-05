@@ -1,8 +1,6 @@
 body {
   font-family: verdana, arial, sans-serif;
   font-size: small;
-  xmargin: 0;
-  xpadding: 8px 12px;
 }
 
 code {
@@ -21,14 +19,6 @@ img.icon20x20 {
 div.top {
   margin-bottom: 1em;
   line-height: 1.6em;
-}
-
-div.copyright {
-  position: absolute;
-  right: 2px;
-  top: 0px;
-  color: silver;
-  font-size: 70%;
 }
 
 /* logo */
@@ -84,4 +74,14 @@ div.linkGroup a {
 
 div.linkGroup a:hover {
   text-decoration: underline;
+}
+
+div.copyright {
+  position: absolute;
+  right: 2px;
+  top: 0;
+  color: silver;
+  font-size: 70%;
+  line-height: 1.6em;
+
 }

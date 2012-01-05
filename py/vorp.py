@@ -61,25 +61,22 @@ def formatVorpLevel(jsName, title, description):
   return ''.join([
 """<!DOCTYPE HTML>
 <html><head><title>""", title, """</title>
+<link rel="stylesheet" type="text/css" href="../../css/plexode2.css">
 <link rel="stylesheet" type="text/css" href="../vorp.css">
 <script src="../""" + jsName + """"></script>
 <script src="./level.js"></script>
 </head>
 <body onload="main()">
 <div id="levelCenter">
-
 <div id="game">
 <div class="levelheader"><a href="../">plexode:vorp</a> - """, description, """</div>
 <canvas id="canvas" width=600 height=600></canvas>
 <div class="minihelp">arrows move, Z grabs, and X drops. tap X while holding Z to throw.</div>
 </div>
-
 <div id="settings">
 <div id="flags">flags</div>
 </div>
-
 </div>
-
 <div class="copyright">Copyright 2010 Aaron Whyte</div>
 </body>
 </html>
