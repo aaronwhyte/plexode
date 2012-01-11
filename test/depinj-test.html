@@ -14,7 +14,7 @@ addTest(function testDoubleBindError() {
   di.bind(Foo, scope);
   try {
     di.bind(Foo, scope);
-    fail("expectd exception to be thrown")
+    fail("expected exception to be thrown")
   } catch (e) {
     // yay
   }
@@ -26,7 +26,7 @@ addTest(function testEnterScopeTwice() {
   di.enterScope(scope);
   try {
     di.enterScope(Foo, scope);
-    fail("expectd exception to be thrown")
+    fail("expected exception to be thrown")
   } catch (e) {
     // yay
   }
@@ -37,7 +37,7 @@ addTest(function testExitWithoutEntry() {
   var di = new DepInj();
   try {
     di.exitScope(Foo, scope);
-    fail("expectd exception to be thrown")
+    fail("expected exception to be thrown")
   } catch (e) {
     // yay
   }
