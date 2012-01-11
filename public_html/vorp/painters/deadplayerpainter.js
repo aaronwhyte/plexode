@@ -52,14 +52,8 @@ DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
   var size = Math.max(0.2, timeFrac) * Prefab.BOX_RADIUS;
-  //renderer.setFillStyle('rgba(255, 68, 221, ' + alpha + ')');
   renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
-//  renderer.setStrokeStyle('rgba(255, 255, 255, ' + alpha + ')');
-//  renderer.context.lineWidth = size * 2;
-//  var len = size + 1;
-//  var speed = spark.vel.magnitude();
-//  renderer.drawLineXYXY(spark.pos.x, spark.pos.y, spark.pos.x + spark.vel.x / speed * len, spark.pos.y + spark.vel.y / speed * len);
 };
 
 
@@ -118,7 +112,7 @@ DeadPlayerPainter.prototype.createSparks = function(px, py, now) {
   // slow-moving longer-lived smoke-sparks
   for (var a = 0; a < 2 * Math.PI; a += 2 * Math.PI / 30 + 2 * Math.PI / 30 * Math.random()) {
     this.sparkTemplate.startTime = now;
-    this.sparkTemplate.endTime = now + 30 + 25 * Math.random();
+    this.sparkTemplate.endTime = now + 30 + 45 * Math.random();
     this.sparkTemplate.pos.setXY(px, py);
     var speed = 3;
     this.sparkTemplate.vel.setXY(speed * Math.sin(a), speed * Math.cos(a));

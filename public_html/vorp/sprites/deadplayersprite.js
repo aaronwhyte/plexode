@@ -9,7 +9,7 @@ function DeadPlayerSprite(spriteTemplate) {
 DeadPlayerSprite.prototype = new Sprite(null);
 DeadPlayerSprite.prototype.constructor = DeadPlayerSprite;
 
-DeadPlayerSprite.REASSEMBLY_TIMEOUT = 45;
+DeadPlayerSprite.REASSEMBLY_TIMEOUT = 30;
 
 DeadPlayerSprite.prototype.act = function() {
   if (!this.startTime) {
