@@ -9,5 +9,6 @@ window['main'] = function() {
       function() {
         z.setActive(!z.active);
       });
-  Vorp.start(b, document.getElementById('canvas'), document.getElementById('flags'));
+  Vorp.startWithLevelBuilder(
+      b, document.getElementById('canvas'), document.getElementById('flags'));
 }

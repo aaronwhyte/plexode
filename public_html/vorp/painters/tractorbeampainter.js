@@ -33,7 +33,7 @@ TractorBeamPainter.State = {
 };
 
 TractorBeamPainter.prototype.addRayScan = function(rayScan) {
-  if (!FLAGS || !FLAGS.get('tractorSparksWhileSeeking')) return;
+  if (FLAGS && !FLAGS.get('tractorSparksWhileSeeking')) return;
   if (Math.random() < 0.4) return;
   var temp = this.sparkTemplate;
   var coef = Math.random() * 0.85;
@@ -87,7 +87,7 @@ TractorBeamPainter.prototype.advance = function(now) {
   }
 
   if (this.state == TractorBeamPainter.State.HOLDING &&
-      FLAGS && FLAGS.get('tractorSparksWhileHolding')) {
+      (!FLAGS || FLAGS.get('tractorSparksWhileHolding'))) {
     for (var i = 0; i < 4 + this.holdStrength; i++) {
       if (Math.random() > 0.01) continue;
       var temp = this.sparkTemplate;

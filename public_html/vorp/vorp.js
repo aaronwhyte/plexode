@@ -74,15 +74,19 @@ Vorp.LAYERS = [
   Vorp.LAYER_DEBUG = 'debug'
 ];
 
-Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
+Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var camera = opt_camera || new Camera();
-  var renderer = new Renderer(canvas, camera);
-  window.FLAGS = new Flags(flagsDiv);
+  var vorp = Vorp.create(levelBuilder.getBoundingRect(), canvas, camera);
+  vorp.addPrefabs(levelBuilder.getPrefabs());
+  vorp.startLoop();
+};
 
+Vorp.create = function(boundingRect, canvas, camera) {
+  var renderer = new Renderer(canvas, camera);
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();
-  var collider = new CellCollider(levelBuilder.getBoundingRect(),
-      Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
+  var collider = new CellCollider(boundingRect, Vorp.CELL_SIZE,
+      Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
   var baseSpriteTemplate = new SpriteTemplate()
@@ -92,20 +96,30 @@ Vorp.start = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   // TODO: Arg, circular dep. Remove when level prefabs aren't used for wiring buttons to zappers.
   vorp.baseSpriteTemplate.setWorld(vorp);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
+  return vorp;
+};
 
-  var prefabs = levelBuilder.getPrefabs();
+Vorp.prototype.startLoop = function() {
+  var vorp = this;
+  GU_start(
+      function() {
+        vorp.clock();
+      },
+      Vorp.FPS);
+};
+
+Vorp.prototype.addPrefabs = function(prefabs) {
   var playerPrefab = null;
   for (var i = 0; i < prefabs.length; i++) {
     var prefab = prefabs[i];
-    var sprites = prefab.createSprites(baseSpriteTemplate);
-    vorp.addSprites(sprites);
+    var sprites = prefab.createSprites(this.baseSpriteTemplate);
+    this.addSprites(sprites);
     if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
       if (playerPrefab) throw Error('player prefab already defined');
-      vorp.playerAssembler = sprites[0];
-      vorp.assemblePlayer();
+      this.playerAssembler = sprites[0];
+      this.assemblePlayer();
     }
   }
-  GU_start(function(){vorp.clock();}, Vorp.FPS);
 };
 
 Vorp.prototype.addSprites = function(sprites) {

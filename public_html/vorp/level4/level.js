@@ -23,5 +23,6 @@ window['main'] = function() {
  
   b.mark(0.5, 0.5).block();
   b.mark(5.5, 0.5).block();
-  Vorp.start(b, document.getElementById('canvas'), document.getElementById('flags'));
+  Vorp.startWithLevelBuilder(
+      b, document.getElementById('canvas'), document.getElementById('flags'));
 };

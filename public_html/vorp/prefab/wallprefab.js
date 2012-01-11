@@ -12,21 +12,6 @@ function WallPrefab(x0, y0, x1, y1) {
 WallPrefab.prototype = new Prefab();
 WallPrefab.prototype.constructor = Prefab;
 
-WallPrefab.createChain = function(coords) {
-  var a = [];
-  var ox = null, oy = null;
-  for (var i = 0; i < coords.length; i += 2) {
-    var x = coords[i];
-    var y = coords[i + 1];
-    if (ox != null && oy != null) {
-      a.push(new WallPrefab(ox, oy, x, y));
-    }
-    ox = x;
-    oy = y;
-  }
-  return a;
-};
-
 WallPrefab.prototype.createSprites = function(baseSpriteTemplate) {
   this.baseSpriteTemplate = baseSpriteTemplate;
   var x0 = this.x0;

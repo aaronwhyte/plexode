@@ -6,6 +6,8 @@ function Flags(element) {
   this.flags = {};
 }
 
+window.FLAGS = null;
+
 Flags.prototype.elementId = function(name) {
   return 'flag_' + name;
 };

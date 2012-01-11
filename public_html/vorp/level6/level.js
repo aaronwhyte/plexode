@@ -15,7 +15,8 @@ window['main'] = function() {
   placeRoom(7, 14, room3);
   placeRoom(10.5, 10, room4);
 
-  Vorp.start(b, document.getElementById('canvas'), document.getElementById('flags'));
+  Vorp.startWithLevelBuilder(
+      b, document.getElementById('canvas'), document.getElementById('flags'));
 };
 
 function room0(b) {
