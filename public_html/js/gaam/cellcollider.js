@@ -1,6 +1,4 @@
 /**
- * @param {Object} brect  Collision space bounding rect,
- * with members x0, y0, x1, y1
  * @param {number} cellSize  max height and width for each cell in the
  * collider. The actual may be a little smaller.
  * @param groupPairs an array of 2-element arrays with group IDs.
@@ -10,18 +8,10 @@
  * @param {GameClock} clock
  * @constructor
  */
-function CellCollider(brect, cellSize, groupPairs, clock) {
+function CellCollider(cellSize, groupPairs, clock) {
   FLAGS && FLAGS.set('debugRayScans', false);
 
-  var width = brect.x1 - brect.x0;
-  var height = brect.y1 - brect.y0;
-  this.x = brect.x0;
-  this.y = brect.y0;
-  this.xCells = Math.floor(width / cellSize);
-  this.yCells = Math.floor(height / cellSize);
-  this.cellWidth = width / this.xCells;
-  this.cellHeight = height / this.yCells;
-
+  this.cellSize = cellSize;
   this.groupPairs = groupPairs;
   this.clock = clock;
 
@@ -38,6 +28,10 @@ function CellCollider(brect, cellSize, groupPairs, clock) {
   this.hits = new SkipQueue(200);
 
   this.hitOut = Hit.alloc(0, 0, false, -1, -1);
+
+  // The grid is a hash of column number (x) to columns,
+  // and a columns is a hash from row (y) to a cell object.
+  this.grid = {};
 }
 
 /**
@@ -75,25 +69,22 @@ CellCollider.prototype.getGroupToGroups = function() {
 };
 
 /**
- * Lazy-inits the grid of cells.
+ * Lazy-creates and returns a grid cell.
+ * @param {number} x
+ * @param {number} y
  */
-CellCollider.prototype.getGrid = function() {
-  if (this.grid) {
-    return this.grid;
+CellCollider.prototype.getCell = function(x, y) {
+  if (!this.grid[x]) {
+    this.grid[x] = {};
   }
-  // Initialize the grid.
-  this.grid = [];
-  var groupToGroups = this.getGroupToGroups();
-  for (var x = 0; x < this.xCells; x++) {
-    this.grid[x] = [];
-    for (var y = 0; y < this.yCells; y++) {
-      var cell = this.grid[x][y] = {};
-      for (var group in groupToGroups) {
-        cell[group] = new CellGroup();
-      }
+  if (!this.grid[x][y]) {
+    var cell = this.grid[x][y] = {};
+    var groupToGroups = this.getGroupToGroups();
+    for (var group in groupToGroups) {
+      cell[group] = new CellGroup();
     }
   }
-  return this.grid;
+  return this.grid[x][y];
 };
 
 /**
@@ -136,14 +127,9 @@ CellCollider.prototype.addSledgeToCells = function(
     sledge, sledgeId, x0, y0, x1, y1) {
   var group = sledge.group;
   var collidesWithGroups = this.getGroupToGroups()[group];
-  x0 = Math.max(x0, 0);
-  x1 = Math.min(x1, this.xCells - 1);
-  y0 = Math.max(y0, 0);
-  y1 = Math.min(y1, this.yCells - 1);
-  var grid = this.getGrid();
   for (var x = x0; x <= x1; x++) {
     for (var y = y0; y <= y1; y++) {
-      var cell = grid[x][y];
+      var cell = this.getCell(x, y);
       // For every group the sledge can collide with...
       for (var g = 0; g < collidesWithGroups.length; g++) {
         var cellGroup = cell[collidesWithGroups[g]];
@@ -176,7 +162,7 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
   // Sledge's cell time data hasn't been initialized, so do it now.
   var wall, positive, front, back, cellIndex, time;
   if (sledge.vx) {
-    sledge.cellPeriodX = Math.abs(this.cellWidth / sledge.vx);
+    sledge.cellPeriodX = Math.abs(this.cellSize / sledge.vx);
     positive = sledge.vx > 0;
     // front entry
     front = sledge.px + (positive
@@ -184,7 +170,7 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
         : -sledge.rx - CellCollider.PAD);
     cellIndex = this.getCellIndexX(front);
     sledge.frontCellIndexX = cellIndex;
-    wall = this.x + this.cellWidth * (cellIndex + (positive ? 1 : 0));
+    wall = this.cellSize * (cellIndex + (positive ? 1 : 0));
     time = now + (wall - front) / sledge.vx;
     if (time < now) {
       throw Error(time + " < " + now);
@@ -192,7 +178,7 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
     sledge.cellEntryTimeX = time;
   }
   if (sledge.vy) {
-    sledge.cellPeriodY = Math.abs(this.cellHeight / sledge.vy);
+    sledge.cellPeriodY = Math.abs(this.cellSize / sledge.vy);
     positive = sledge.vy > 0;
     // front entry
     front = sledge.py + (positive
@@ -200,7 +186,7 @@ CellCollider.prototype.initSledgeCellTimes = function(sledge) {
         : -sledge.ry - CellCollider.PAD);
     cellIndex = this.getCellIndexY(front);
     sledge.frontCellIndexY = cellIndex;
-    wall = this.y + this.cellHeight * (cellIndex + (positive ? 1 : 0));
+    wall = this.cellSize * (cellIndex + (positive ? 1 : 0));
     time = now + (wall - front) / sledge.vy;
     if (time < now) {
       throw Error(time + " < " + now);
@@ -316,26 +302,24 @@ CellCollider.prototype.isCellEntryValid = function(entry) {
 
 /**
  * @returns the grid cell X index that corresponds with the x value.
- * Does not check to see if the value is on the grid.
  */
 CellCollider.prototype.getCellIndexX = function(x) {
-  return Math.floor((x - this.x) / this.cellWidth);
+  return Math.floor(x / this.cellSize);
 };
 
 /**
  * @returns the grid cell Y index that corresponds with the y value.
- * Does not check to see if the value is on the grid.
  */
 CellCollider.prototype.getCellIndexY = function(y) {
-  return Math.floor((y - this.y) / this.cellHeight);
+  return Math.floor(y / this.cellSize);
 };
 
 CellCollider.prototype.getWorldXForIndexX = function(ix) {
-  return this.x + this.cellWidth * ix;
+  return this.cellSize * ix;
 };
 
 CellCollider.prototype.getWorldYForIndexY = function(iy) {
-  return this.y + this.cellHeight * iy;
+  return this.cellSize * iy;
 };
 
 CellCollider.prototype.rayScan = function(rayScan, group) {
@@ -368,8 +352,8 @@ CellCollider.prototype.rayScan = function(rayScan, group) {
   var leadY = leadY0;
   var tailOffsetX = -2 * rx * dirX;
   var tailOffsetY = -2 * ry * dirY;
-  var periodX = dx ? Math.abs(this.cellWidth / dx) : 0;
-  var periodY = dy ? Math.abs(this.cellHeight / dy) : 0;
+  var periodX = dx ? Math.abs(this.cellSize / dx) : 0;
+  var periodY = dy ? Math.abs(this.cellSize / dy) : 0;
   var leadIndexX = this.getCellIndexX(leadX);
   var leadIndexY = this.getCellIndexY(leadY);
   var tailIndexX;
@@ -435,11 +419,6 @@ CellCollider.prototype.rayScan = function(rayScan, group) {
  * @return the earliest hit in this cell, or null if there isn't any.
  */
 CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
-  if (x < 0 || x >= this.xCells ||
-      y < 0 || y >= this.yCells) {
-    return null;
-  }
-
   if (FLAGS && FLAGS.get('debugRayScans')) {
     // mark cell walls
     this.marks.push(Mark.alloc(Mark.Type.DRAWRECT, '#808',
@@ -449,7 +428,7 @@ CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
   var hitSledgeId = null;
   var now = this.clock.getTime();
 
-  var cell = this.getGrid()[x][y];
+  var cell = this.getCell(x, y);
   // For every group the rayScan can collide with...
   var collidesWithGroups = this.getGroupToGroups()[group];
   for (var g = 0; g < collidesWithGroups.length; g++) {

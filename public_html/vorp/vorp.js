@@ -76,17 +76,17 @@ Vorp.LAYERS = [
 
 Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var camera = opt_camera || new Camera();
-  var vorp = Vorp.create(levelBuilder.getBoundingRect(), canvas, camera);
+  var vorp = Vorp.create(canvas, camera);
   vorp.addPrefabs(levelBuilder.getPrefabs());
   vorp.startLoop();
 };
 
-Vorp.create = function(boundingRect, canvas, camera) {
+Vorp.create = function(canvas, camera) {
   var renderer = new Renderer(canvas, camera);
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();
-  var collider = new CellCollider(boundingRect, Vorp.CELL_SIZE,
-      Vorp.COLLIDER_GROUP_PAIRS, gameClock);
+  var collider = new CellCollider(
+      Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
   var baseSpriteTemplate = new SpriteTemplate()
