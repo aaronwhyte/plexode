@@ -70,6 +70,12 @@ def buildPlexode(bdir):
     '../../tools/closure-compiler',
     getJsCompFlags(bdir, getVorpJsFileNames(), "vorp/" + vorpJsName))
 
+  print "compiling ved JS"
+  vedJsName = 'ved_%s.js' % str(int(time.time() * 1000))
+  compileJs(
+    '../../tools/closure-compiler',
+    getJsCompFlags(bdir, getVedJsFileNames(), "ved/" + vedJsName))
+
 #  print "compiling minigames/1 JS"
 #  minigame1JsName = 'mg1_%s.js' % str(int(time.time() * 1000))
 #  compileJs(
@@ -91,9 +97,10 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, '/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml(bdir, '/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
+  writePublicHtml(bdir, '/ved', ved.formatVed(vorpJsName, vedJsName))
+  writePublicHtml(bdir, '/chordo', chordo.formatChordo())
 #  writePublicHtml(bdir, '/minigames', minigames.formatMinigames())
 #  writePublicHtml(bdir, '/minigames/1', minigames.formatMinigame1(minigame1JsName))
-  writePublicHtml(bdir, '/chordo', chordo.formatChordo())
 
   print "DONE building plexode"
 
@@ -130,6 +137,19 @@ def getVorpJsFileNames():
   for dep in vorpJs:
     if dep[-8:] != 'level.js':
       js.append(dep)
+  return js
+
+
+def getVedJsFileNames():
+  # These are files above and beyond what Vorp requires.
+  # The compiled Vorp fils will be pulled in by Ved pages, too.
+  js = []
+  prefix = 'public_html/js/'
+  js.extend(getJsFileNamesInPath('%sgraf' % prefix))
+  miscDeps = []
+  for dep in miscDeps:
+    js.append('%s%s' % (prefix, dep))
+  js.extend(getJsFileNamesInPath('public_html/ved'))
   return js
 
 

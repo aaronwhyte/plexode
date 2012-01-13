@@ -77,7 +77,10 @@ Vorp.LAYERS = [
 Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera) {
   var camera = opt_camera || new Camera();
   var vorp = Vorp.create(canvas, camera);
-  vorp.addPrefabs(levelBuilder.getPrefabs());
+  var prefabs = levelBuilder.getPrefabs();
+  for (var i = 0; i < prefabs.length; i++) {
+    vorp.addPrefab(prefabs[i]);
+  }
   vorp.startLoop();
 };
 
@@ -108,17 +111,12 @@ Vorp.prototype.startLoop = function() {
       Vorp.FPS);
 };
 
-Vorp.prototype.addPrefabs = function(prefabs) {
-  var playerPrefab = null;
-  for (var i = 0; i < prefabs.length; i++) {
-    var prefab = prefabs[i];
-    var sprites = prefab.createSprites(this.baseSpriteTemplate);
-    this.addSprites(sprites);
-    if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
-      if (playerPrefab) throw Error('player prefab already defined');
-      this.playerAssembler = sprites[0];
-      this.assemblePlayer();
-    }
+Vorp.prototype.addPrefab = function(prefab) {
+  var sprites = prefab.createSprites(this.baseSpriteTemplate);
+  this.addSprites(sprites);
+  if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
+    this.playerAssembler = sprites[0];
+    this.assemblePlayer();
   }
 };
 

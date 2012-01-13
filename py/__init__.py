@@ -1,4 +1,5 @@
 __all__ = [
+  'chordo',
   'eval1',
   'eval2',
   'eval3',
@@ -7,6 +8,6 @@ __all__ = [
   'instahtml',
   'mainpage',
   'minigames',
+  'ved',
   'vorp',
-  'chordo',
   ]

@@ -8,13 +8,11 @@ function Renderer(canvas, camera) {
   this.context = canvas.getContext('2d');
   this.context.font = "bold 14px monospace";
   this.context.lineWidth = 2;
-  this.canvasWidth = this.canvas.width;
-  this.canvasHeight = this.canvas.height;
+  this.canvasWidth = this.canvas ? this.canvas.width : 0;
+  this.canvasHeight = this.canvas ? this.canvas.height : 0;
   this.lastTimeSec = (new Date()).getTime() / 1000;
   this.frameCount = 0;
   this.fps = 0;
-  this.posVec = new Vec2d();
-  this.radVec = new Vec2d();
 }
 
 Renderer.prototype.setCenter = function(x, y) {
@@ -28,7 +26,7 @@ Renderer.prototype.setZoom = function(zoom) {
 Renderer.prototype.clear = function() {
   var c = this.context;
   c.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-//  this.setFillStyle('rgb(0, 0, 0)');
+//  this.setFillStyle('rgba(0, 0, 0, 0.1)');
 //  c.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
   this.context.lineWidth = 100;
