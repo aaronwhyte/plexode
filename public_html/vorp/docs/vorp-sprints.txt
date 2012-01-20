@@ -317,36 +317,27 @@ v get Vorp running again
   v fix random teleport-to-nowhere
   v debug doors
 
-... off for another stab at Ved ...
+Vorp Logic
+- Addressable sprite input and output buffers
+- links between input and output buffers
+- link clocking to  and modified sprite clocking
+- link creation API in LevelBuilder
+- redo all levels using links and logic
+
+Plasma sprites:
+- plasma cannon
+- plasma itself
+- plasma switch
+
+Zombie sprites:
+- zombie
+- zombie assembler
 
 teleport sparks
 - implode
 - explode
 - light up the tube?
 
-Robot to collect portals on level 3
-- sprite, prefab, level builder
-- 
-
 Design some new levels
 - please enjoy hot plasma
 
-Stuff we're gonna need:
-- plasma cannon
-- plasma itself
-- plasma switch?
-
-Spawner 2
-- Generic spawner sprite/painter/prefab/levelbuilderfn
-- active spawner indicator
-
-Flags v2
-Redo flags to be set of singletons.
-Make flags
-
-
-Stat framework
-- Stat.foo++ - Increment stuff
-- Dump stats to innerHTML area somewhere?
-- Derived stats
-- Stat.

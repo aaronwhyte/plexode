@@ -31,6 +31,8 @@ x Pass Game in where needed.
 v Remove Phy from concrete sprite types. Only access Game fields.
 v Remove Phy from gaam.Sprite
 
+Block on Vorp Logic step...
+
 Ved-to-Vorp transformer
 Reads GrafModel directly?
 - walls
@@ -47,28 +49,6 @@ Reads GrafModel directly?
   - exit
   - portal
   - timer
-
-Ved Validate
-x design ved model on top of graf model
-- validate cluster, for every cluster type
-- validate link
-
-Play level written entirely with ved actions.
-
-Logic: Part I
-- design all logic parts needed for existing levels
-- ved commands
-- ved concequences
-
-Logic: Part II
-- vorp support for clocked logic parts
-- ved-to-vorp transformer support
-- rewrite a wiring test level
-
-Total Conversion:
-- Rewrite all levels as ved action JSON.
-- Redo all logic support in prefabs.
-- Delete levelbuilder.js.
 
 ============== VED UI ============
 Ved UI API:
