@@ -8,8 +8,12 @@ function Sprite(spriteTemplate) {
   this.pos0 = new Vec2d();
   this.vel = new Vec2d();
   this.rad = new Vec2d();
+  this.inputs = [];
+  this.outputs = [];
   this.reset(spriteTemplate);
 }
+
+Sprite.nextId = 1;
 
 /**
  * @param {SpriteTemplate=} spriteTemplate
@@ -31,8 +35,10 @@ Sprite.prototype.reset = function(spriteTemplate) {
     /** @type {number} */
     this.t0 = this.now();
   }
-  this.id = null;
+  this.id = Sprite.nextId++;
   this.acceleration.setXY(0, 0);
+  this.inputs.length = 0;
+  this.outputs.length = 0;
 };
 
 /**

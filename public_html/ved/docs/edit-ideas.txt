@@ -100,3 +100,9 @@ one or more control points with various constraints and natures
 
 Parts have painters.  They do NOT show the resulting sprites.  Just an AR overlay of data.
 The under-layer *is* the resulting sprites and their painters... but not a full Vorp.
+
+Link editing:
+Cluster parts are not sprites. A beam sensor is 2 sprites, but a single cluster part.
+Ved shows part jacks, coded into the built-in cluster clipboards.
+The transformer needs code to convert a cluster to a prefab.
+So, does the *prefab* need an API for addressing jacks?
