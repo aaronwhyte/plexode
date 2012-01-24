@@ -1,13 +1,13 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate) {
+function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   FLAGS && FLAGS.init('portalScry', true);
   this.renderer = renderer;
   this.phy = phy;
   this.wham = wham;
   this.gameClock = gameClock;
-  this.baseSpriteTemplate = baseSpriteTemplate;
+  this.sledgeInvalidator = sledgeInvalidator;
 
   this.playerSprite = null;
   this.cameraPos = new Vec2d();
@@ -74,9 +74,12 @@ Vorp.LAYERS = [
   Vorp.LAYER_DEBUG = 'debug'
 ];
 
-Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera) {
-  var camera = opt_camera || new Camera();
-  var vorp = Vorp.create(canvas, camera);
+Vorp.startWithLevelBuilder = function(levelBuilder, canvas) {
+  var camera = new Camera();
+  var renderer = new Renderer(canvas, camera);
+  var gameClock = new GameClock(1);
+  var sledgeInvalidator = new SledgeInvalidator();
+  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
   var prefabs = levelBuilder.getPrefabs();
   for (var i = 0; i < prefabs.length; i++) {
     vorp.addPrefab(prefabs[i]);
@@ -84,20 +87,12 @@ Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera
   vorp.startLoop();
 };
 
-Vorp.create = function(canvas, camera) {
-  var renderer = new Renderer(canvas, camera);
-  var gameClock = new GameClock(1);
-  var sledgeInvalidator = new SledgeInvalidator();
+Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
-  var baseSpriteTemplate = new SpriteTemplate()
-	.setGameClock(gameClock)
-	.setSledgeInvalidator(sledgeInvalidator);
-  var vorp = new Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate);
-  // TODO: Arg, circular dep. Remove when level prefabs aren't used for wiring buttons to zappers.
-  vorp.baseSpriteTemplate.setWorld(vorp);
+  var vorp = new Vorp(renderer, phy, wham, gameClock, sledgeInvalidator);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
   return vorp;
 };
@@ -111,8 +106,18 @@ Vorp.prototype.startLoop = function() {
       Vorp.FPS);
 };
 
+Vorp.prototype.getBaseSpriteTemplate = function() {
+  if (!this.baseSpriteTemplate) {
+    this.baseSpriteTemplate = new SpriteTemplate()
+	.setGameClock(this.gameClock)
+	.setSledgeInvalidator(this.sledgeInvalidator)
+        .setWorld(this);
+  }
+  return this.baseSpriteTemplate;
+}
+
 Vorp.prototype.addPrefab = function(prefab) {
-  var sprites = prefab.createSprites(this.baseSpriteTemplate);
+  var sprites = prefab.createSprites(this.getBaseSpriteTemplate());
   this.addSprites(sprites);
   if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
     this.playerAssembler = sprites[0];
@@ -302,7 +307,7 @@ Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var playerPos = this.playerSprite.getPos(new Vec2d());
   var deadPlayerPrefab = new DeadPlayerPrefab(playerPos.x, playerPos.y);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.baseSpriteTemplate);
+  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.getBaseSpriteTemplate());
   this.addSprites(deadPlayerSprites);
   
   // remove normal player sprite
@@ -318,7 +323,7 @@ Vorp.prototype.assemblePlayer = function() {
   }
   var target = this.playerAssembler.targetPos;
   var playerPrefab = new PlayerPrefab(target.x, target.y);
-  var playerSprites = playerPrefab.createSprites(this.baseSpriteTemplate);
+  var playerSprites = playerPrefab.createSprites(this.getBaseSpriteTemplate());
   this.playerSprite = playerSprites[0];
   this.addSprites(playerSprites);
   this.playerAssembler.onPlayerAssembled();

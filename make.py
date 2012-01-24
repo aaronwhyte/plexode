@@ -100,7 +100,7 @@ def buildPlexode(bdir):
           'js/testing.js',
           vorpJsPublicHtmlPath,
           vedJsPublicHtmlPath,
-          'ved/transformer-test.js',
+          'test/ved/transformer-test.js',
       ]))
 
   print "DONE building plexode"
