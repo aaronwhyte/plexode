@@ -59,13 +59,13 @@ Transformer.prototype.transformModel = function(model) {
   var id, cluster;
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.type == VedType.WALL) {
+    if (cluster.data.type == VedType.WALL) {
       this.transformWall(model.clusters[id]);
     }
   }
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.type != VedType.WALL) {
+    if (cluster.data.type != VedType.WALL) {
       this.transformCluster(model.clusters[id]);
     }
   }
@@ -92,8 +92,9 @@ Transformer.prototype.transformWall = function(cluster) {
   var y1 = parts[1].y;
   this.vorp.addSprite(new WallSprite(this.createImmovableSpriteTemplate()
       .setPainter(new RectPainter("rgb(80,48,176)"))
-      .setPosXY(mid(x0, x1), mid(y0, y1))
-      .setRadXY(rad(x0, x1), rad(y0, y1))));
+      .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
+      .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
+                this.rad(y0, y1, Transformer.WALL_RADIUS))));
 };
 
 /**

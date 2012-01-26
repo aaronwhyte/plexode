@@ -160,6 +160,17 @@ Vorp.prototype.setPlayerSprite = function(sprite) {
 };
 
 /**
+ * @return a new array with all sprites in it. Probably useful for tests.
+ */
+Vorp.prototype.getSprites = function() {
+  var sprites = [];
+  for (var id in this.phy.sprites) {
+    sprites.push(this.phy.sprites[id]);
+  }
+  return sprites;
+};
+
+/**
  * Moves time forward by one and then draws.
  */
 Vorp.prototype.clock = function() {
