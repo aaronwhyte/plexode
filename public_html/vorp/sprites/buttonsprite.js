@@ -4,26 +4,27 @@
  */
 function ButtonSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
-  this.onClick = null;
   this.lastClickTime = -Infinity;
 }
 ButtonSprite.prototype = new Sprite(null);
 ButtonSprite.prototype.constructor = ButtonSprite;
 
-ButtonSprite.DEBOUNCE = 15;
-
-ButtonSprite.prototype.setOnClick = function(f) {
-  this.onClick = f;
+ButtonSprite.prototype.outputIds = {
+  CLICKED: 0
 };
+
+ButtonSprite.DEBOUNCE = 15;
 
 ButtonSprite.prototype.isDebouncing = function() {
   return this.lastClickTime + ButtonSprite.DEBOUNCE - this.now() > 0;
 };
 
 ButtonSprite.prototype.onSpriteHit = function(hitSprite) {
+  var clicked = 0;
   if (!this.isDebouncing()) {
-    this.onClick && this.onClick.call();
+    clicked = 1;
     this.lastClickTime = this.now();
     this.painter.setLastClickTime(this.lastClickTime);
   }
+  this.outputs[this.outputIds.CLICKED] = clicked;
 };

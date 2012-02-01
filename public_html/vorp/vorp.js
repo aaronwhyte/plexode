@@ -19,6 +19,8 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   this.portalPos2 = new Vec2d();
 
   this.accelerationsOut = [new Vec2d(), new Vec2d()];
+
+  this.links = {};
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;

@@ -1,4 +1,4 @@
-addTest(function transformEmptyModel() {
+addTest(function testTransformEmptyModel() {
   var m = new GrafModel();
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();
@@ -7,7 +7,7 @@ addTest(function transformEmptyModel() {
   trans.transformModel(m);
 });
 
-addTest(function transformWall() {
+addTest(function testTransformWall() {
   var m = new GrafModel();
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();

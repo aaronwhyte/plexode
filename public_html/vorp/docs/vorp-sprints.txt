@@ -330,23 +330,28 @@ For now, expect output buffers to all be 0 or 1, and interpret input as true or
 false (non-zero or zero). But I can go all Braitenberg-Vehicles later.
 Tasks:
 - sprites
-  - addressable sprite input and output buffers
+  v addressable sprite input and output buffers
   - add addresses to all sprites that have them
+    v everything but zapper and door
+    v add DoorControlSprite
+    - add ZapperControlSprite
   - modified sprite clocking to read and/or write buffers
 - links
-  - vorp has links between input and output buffers
+  v logiclink class
+  - give vorp links between input and output buffers
   - addLink() method
   - link clocking in main loop
-- prefabs --> transformers
-  v Assign sprite ID at construction.
-  - Change hacky prefab orientation code to use vector math like rotation,
-    starting with a north-facing sprite model composed of a center vec
-    and a radius vec. Wall-hugger placement is informed by a hugPoint and a
-    facingVec.
-    Double wallhuggers (beam sensor, door, zapper) place each sprite separately.
-    Doors are crazy. They might have extra vecs, like a center vec.
-  - Transformers map jacks to sprite logic buffers, so links can link.
 
+
+prefabs --> transformers
+v Assign sprite ID at construction.
+- Change hacky prefab orientation code to use vector math like rotation,
+  starting with a north-facing sprite model composed of a center vec
+  and a radius vec. Wall-hugger placement is informed by a hugPoint and a
+  facingVec.
+  Double wallhuggers (beam sensor, door, zapper) place each sprite separately.
+  Doors are crazy. They might have extra vecs, like a center vec.
+- Transformers map jacks to sprite logic buffers, so links can link.
 - redo all levels using links and logic
 - Maybe add And and Not sprites
 

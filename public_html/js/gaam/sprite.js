@@ -8,9 +8,13 @@ function Sprite(spriteTemplate) {
   this.pos0 = new Vec2d();
   this.vel = new Vec2d();
   this.rad = new Vec2d();
+
+  // logic link buffers
   this.inputs = [];
   this.outputs = [];
   this.reset(spriteTemplate);
+  this.clearInputs();
+  this.clearOutputs();
 }
 
 Sprite.nextId = 1;
@@ -143,10 +147,28 @@ Sprite.prototype.setPos = function(vec) {
 };
 
 /**
+ * Directly change position.
+ * Call from onSpriteHit(), but not from act() or affect().
+ */
+Sprite.prototype.setPosXY = function(x, y) {
+  this.pos0.setXY(x, y);
+  this.t0 = this.now();
+  this.invalidateSledge();
+};
+
+/**
  * Directly change radius.
  */
 Sprite.prototype.setRad = function(vec) {
   this.rad.set(vec);
+  this.invalidateSledge();
+};
+
+/**
+ * Directly change radius.
+ */
+Sprite.prototype.setRadXY = function(x, y) {
+  this.rad.setXY(x, y);
   this.invalidateSledge();
 };
 
@@ -222,3 +244,26 @@ Sprite.prototype.now = function() {
 Sprite.prototype.area = function() {
   return this.rad.x * this.rad.y;
 };
+
+/**
+ * @enum {number}
+ */
+Sprite.prototype.inputIds = {};
+
+/**
+ * @enum {number}
+ */
+Sprite.prototype.outputIds = {};
+
+Sprite.prototype.clearInputs = function() {
+  for (var i in this.inputIds) {
+    this.inputs[i] = 0;
+  }
+};
+
+Sprite.prototype.clearOutputs = function() {
+  for (var i in this.outputIds) {
+    this.outputs[i] = 0;
+  }
+};
+
