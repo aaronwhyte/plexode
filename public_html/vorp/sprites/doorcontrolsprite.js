@@ -6,13 +6,16 @@
 function DoorControlSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.speed = 0;
-  this.inputs.OPEN = 0;
   this.closedness = 1;
   this.doorSprites = [];
 }
 
 DoorControlSprite.prototype = new Sprite(null);
 DoorControlSprite.prototype.constructor = DoorControlSprite;
+
+DoorControlSprite.prototype.inputIds = {
+  OPEN: 0
+};
 
 DoorControlSprite.TOP_SPEED = 0.3;
 DoorControlSprite.ACCEL = 0.02;
@@ -23,7 +26,7 @@ DoorControlSprite.prototype.addDoorSprite = function(s) {
 };
 
 DoorControlSprite.prototype.act = function() {
-  var destClosedness = this.inputs.OPEN ? 0 : 1;
+  var destClosedness = this.inputs[this.inputs.OPEN] ? 0 : 1;
   if (this.closedness != destClosedness) {
     this.speed = Math.min(this.speed + DoorControlSprite.ACCEL, DoorControlSprite.TOP_SPEED);
     if (this.closedness < destClosedness) {

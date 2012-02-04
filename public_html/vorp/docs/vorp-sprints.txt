@@ -329,19 +329,19 @@ and write to output buffers.
 For now, expect output buffers to all be 0 or 1, and interpret input as true or
 false (non-zero or zero). But I can go all Braitenberg-Vehicles later.
 Tasks:
-- sprites
+v sprites
   v addressable sprite input and output buffers
-  - add addresses to all sprites that have them
+  v add addresses to all sprites that have them
     v everything but zapper and door
     v add DoorControlSprite
-    - add ZapperControlSprite
-  - modified sprite clocking to read and/or write buffers
+    v add ZapperControlSprite
+  v modified sprite clocking to read and/or write buffers
 - links
   v logiclink class
   - give vorp links between input and output buffers
   - addLink() method
   - link clocking in main loop
-
+- hardcode a test level with everything in it, without prefabs.
 
 prefabs --> transformers
 v Assign sprite ID at construction.
