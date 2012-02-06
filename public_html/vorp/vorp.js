@@ -116,7 +116,7 @@ Vorp.prototype.getBaseSpriteTemplate = function() {
         .setWorld(this);
   }
   return this.baseSpriteTemplate;
-}
+};
 
 Vorp.prototype.addPrefab = function(prefab) {
   var sprites = prefab.createSprites(this.getBaseSpriteTemplate());
@@ -162,6 +162,16 @@ Vorp.prototype.setPlayerSprite = function(sprite) {
 };
 
 /**
+ * @param {LogicLink} link
+ */
+Vorp.prototype.addLogicLink = function(link) {
+  var id = link.id;
+  if (!id) throw "Invalid falsy link ID: " + id;
+  if (this.links[id]) throw "Link with ID " + id + " already exists.";
+  this.links[id] = link;
+};
+
+/**
  * @return a new array with all sprites in it. Probably useful for tests.
  */
 Vorp.prototype.getSprites = function() {
@@ -177,10 +187,18 @@ Vorp.prototype.getSprites = function() {
  */
 Vorp.prototype.clock = function() {
   this.phy.clock(1);
+  this.clockSprites();
+  this.clockLinks();
+  this.draw();
+};
+
+Vorp.prototype.clockSprites = function() {
+  // clear teleport counts
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     sprite.portalCount = 0;
   }
+  // sprites act
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     if (sprite.sledgeDuration != Infinity) {
@@ -188,11 +206,22 @@ Vorp.prototype.clock = function() {
     }
     sprite.act(this);
   }
+  // sprites are affected by simultaneous accelerations
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     sprite.affect(this);
   }
-  this.draw();
+};
+
+Vorp.prototype.clockLinks = function() {
+  for (var id in this.links) {
+    var link = this.links[id];
+    var outputSprite = this.getSprite(link.outputSpriteId);
+    if (!outputSprite) throw "no sprite with ID " + link.outputSpriteId;
+    var inputSprite = this.getSprite(link.inputSpriteId);
+    if (!inputSprite) throw "no sprite with ID " + link.inputSpriteId;
+    inputSprite.inputs[link.inputId] = outputSprite.outputs[link.outputId];
+  }
 };
 
 /**

@@ -5,6 +5,7 @@
 function ButtonSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.lastClickTime = -Infinity;
+  var clicked = false;
 }
 ButtonSprite.prototype = new Sprite(null);
 ButtonSprite.prototype.constructor = ButtonSprite;
@@ -19,12 +20,15 @@ ButtonSprite.prototype.isDebouncing = function() {
   return this.lastClickTime + ButtonSprite.DEBOUNCE - this.now() > 0;
 };
 
+ButtonSprite.prototype.act = function() {
+  this.outputs[this.outputIds.CLICKED] = this.clicked ? 1 : 0;
+  this.clicked = false;
+};
+
 ButtonSprite.prototype.onSpriteHit = function(hitSprite) {
-  var clicked = 0;
   if (!this.isDebouncing()) {
-    clicked = 1;
     this.lastClickTime = this.now();
     this.painter.setLastClickTime(this.lastClickTime);
+    this.clicked = true;
   }
-  this.outputs[this.outputIds.CLICKED] = clicked;
 };

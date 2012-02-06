@@ -92,6 +92,7 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, 'vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml(bdir, 'vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, 'vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
+  writePublicHtml(bdir, 'vorp/level7', vorp.formatVorpLevel(vorpJsName, "logic link test", "first-class wiring!"))
   writePublicHtml(bdir, 'ved', ved.formatVed(vorpJsName, vedJsName))
 
   writePublicHtml(bdir, 'ved/transformer-test', test.formatTest(

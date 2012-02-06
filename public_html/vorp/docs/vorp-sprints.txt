@@ -317,7 +317,7 @@ v get Vorp running again
   v fix random teleport-to-nowhere
   v debug doors
 
-2012.01.20 Vorp Logic
+2012.01.20 - 2012.02.05 Vorp Logic
 Design:
 * Each sprite will have input and output buffers, addressed by
 numeric enums.
@@ -336,12 +336,11 @@ v sprites
     v add DoorControlSprite
     v add ZapperControlSprite
   v modified sprite clocking to read and/or write buffers
-- links
+v links
   v logiclink class
-  - give vorp links between input and output buffers
-  - addLink() method
-  - link clocking in main loop
-- hardcode a test level with everything in it, without prefabs.
+  v addLink() method
+  v link clocking in main loop
+v hardcode a test level with logic links in it, without prefabs.
 
 prefabs --> transformers
 v Assign sprite ID at construction.

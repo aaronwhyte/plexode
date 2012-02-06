@@ -25,9 +25,9 @@ Sprite.nextId = 1;
 Sprite.prototype.reset = function(spriteTemplate) {
   if (spriteTemplate) {
     this.gameClock = spriteTemplate.gameClock;
-    this.painter = spriteTemplate.painter;
     this.sledgeInvalidator = spriteTemplate.sledgeInvalidator;
     this.world = spriteTemplate.world;
+    this.painter = spriteTemplate.painter;
     // pos0 is the position at time t0. Use getPos() to get the current position.
     this.pos0.set(spriteTemplate.pos);
     this.vel.set(spriteTemplate.vel);
