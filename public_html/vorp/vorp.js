@@ -145,6 +145,11 @@ Vorp.prototype.addSprite = function(sprite) {
   if (sprite instanceof PortalSprite) {
     this.portals.push(sprite);
   }
+  if (sprite instanceof PlayerAssemblerSprite) {
+    // Assume there's exactly one PlayerAssembler per level, for now.
+    this.playerAssembler = sprite;
+    this.assemblePlayer();
+  }
 };
 
 /**

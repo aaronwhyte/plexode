@@ -31,9 +31,3 @@ Prefab.prototype.createBaseTemplate = function() {
       .setSledgeInvalidator(this.baseSpriteTemplate.sledgeInvalidator)
       .setWorld(this.baseSpriteTemplate.world);
 };
-
-Prefab.prototype.getWorld = function() {
-  // TODO: remove world once sprites are able to execute wiring logic on their own.
-  // This is here so the ZapperSpritePrefab can add and remove a ZapperSprite.
-  return this.baseSpriteTemplate && this.baseSpriteTemplate.world;
-};

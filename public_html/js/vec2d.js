@@ -79,6 +79,12 @@ Vec2d.prototype.scaleXY = function(sx, sy) {
   return this;
 };
 
+Vec2d.prototype.abs = function() {
+  this.x = Math.abs(this.x);
+  this.y = Math.abs(this.y);
+  return this;
+};
+
 Vec2d.prototype.rot90Right = function() {
   var tmp = this.x;
   this.x = -this.y;

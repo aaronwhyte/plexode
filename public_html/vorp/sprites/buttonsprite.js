@@ -5,7 +5,7 @@
 function ButtonSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.lastClickTime = -Infinity;
-  var clicked = false;
+  this.clicked = false;
 }
 ButtonSprite.prototype = new Sprite(null);
 ButtonSprite.prototype.constructor = ButtonSprite;
