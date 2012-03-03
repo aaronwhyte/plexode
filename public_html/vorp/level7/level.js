@@ -73,6 +73,5 @@ window['main'] = function() {
       doorControl.id, doorControl.inputIds.OPEN));
 
   vorp.startLoop();
-  vorp.assemblePlayer();
 };
 

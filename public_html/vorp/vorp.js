@@ -121,10 +121,6 @@ Vorp.prototype.getBaseSpriteTemplate = function() {
 Vorp.prototype.addPrefab = function(prefab) {
   var sprites = prefab.createSprites(this.getBaseSpriteTemplate());
   this.addSprites(sprites);
-  if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
-    this.playerAssembler = sprites[0];
-    this.assemblePlayer();
-  }
 };
 
 Vorp.prototype.addSprites = function(sprites) {
