@@ -14,6 +14,10 @@ function PlayerAssemblerSprite(spriteTemplate) {
 PlayerAssemblerSprite.prototype = new Sprite(null);
 PlayerAssemblerSprite.prototype.constructor = PlayerAssemblerSprite;
 
+PlayerAssemblerSprite.prototype.setTargetPos = function(vec) {
+  this.targetPos.set(vec);
+};
+
 PlayerAssemblerSprite.prototype.onPlayerAssembled = function() {
   var pos = this.getPos(Vec2d.alloc());
   this.painter.createSparks(pos.x, pos.y, this.targetPos.x, this.targetPos.y, this.now());

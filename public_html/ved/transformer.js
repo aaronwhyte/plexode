@@ -111,24 +111,48 @@ Transformer.prototype.transformWall = function(cluster) {
       .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
                 this.rad(y0, y1, Transformer.WALL_RADIUS)));
 };
+
 /**
  * @param {GrafCluster} cluster
  * @return an array of sprites
  */
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
+  var controlVec, template, sprite;
   switch (cluster.data.type) {
     case VedType.PLAYER_ASSEMBLER:
-        var startPos = cluster.parts[0];
-        var template = this.createImmovableSpriteTemplate()
+        controlVec = cluster.parts[0];
+        template = this.createImmovableSpriteTemplate()
             .setPainter(new PlayerAssemblerPainter());
-        this.positionMonoHugger(template, startPos,
+        this.positionMonoHugger(template, controlVec,
             Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
-        var sprite = new PlayerAssemblerSprite(template);
+        sprite = new PlayerAssemblerSprite(template);
+        // there's enough room to assemble a player sprite
+        sprite.setTargetPos(Vec2d.alongRay(template.pos, controlVec,
+            Transformer.WALL_RADIUS + Transformer.BOX_RADIUS * 1.1));
         sprites.push(sprite);
-        sprite.targetPos = new Vec2d(startPos).subtract(template.pos)
-            .scaleToLength(Transformer.WALL_RADIUS + Transformer.BOX_RADIUS * 1.1)
-            .add(template.pos);
+        break;
+    case VedType.BUTTON:
+        controlVec = cluster.parts[0];
+        template = this.createImmovableSpriteTemplate()
+            .setPainter(new ButtonPainter());
+        this.positionMonoHugger(template, controlVec,
+            Transformer.WALL_RADIUS * 0.9, Transformer.WALL_RADIUS * 0.3);
+        sprite = new ButtonSprite(template);
+        sprites.push(sprite);
+        // TODO jacks
+        break;
+    case VedType.GRIP:
+        controlVec = cluster.parts[0];
+        template = this.createImmovableSpriteTemplate()
+            .setPainter(new GripPainter());
+        this.positionMonoHugger(template, controlVec,
+            Transformer.WALL_RADIUS * 0.5, Transformer.WALL_RADIUS * 0.4);
+        sprite = new GripSprite(template);
+        sprite.setTargetPos(Vec2d.alongRay(template.pos, controlVec,
+            Transformer.BOX_RADIUS * 3));
+        sprites.push(sprite);
+        // TODO jacks
         break;
   }
   return sprites;
@@ -143,51 +167,51 @@ Transformer.prototype.transformLink = function(link) {
 /**
  * Sets the template's pos and rad.
  * @param {SpriteTemplate} template
- * @param {Vec2d} startPos  the control point from the graf cluster
+ * @param {Vec2d} controlVec  the control point from the graf cluster
  * @param {number} width  the length of the edge that touches the wall
  * @param {number} height  how far the sprite extends away from the wall
  */
-Transformer.prototype.positionMonoHugger = function(template, startPos, width, height) {
-  var hugPoint = this.calcMonoHugPoint(startPos);
-  var normalUnitVec = new Vec2d(startPos).subtract(hugPoint).scaleToLength(1);
+Transformer.prototype.positionMonoHugger = function(template, controlVec, width, height) {
+  var hugPoint = this.calcMonoHugPoint(controlVec);
+  var normalUnitVec = Vec2d.alongRay(hugPoint, controlVec, 1);
   template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
   template.rad.set(normalUnitVec).scaleToLength(height / 2);
-  template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2))
+  template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2));
   template.rad.abs();
 };
 
-Transformer.prototype.calcMonoHugPoint = function(startPos) {
-  var hugPoints = this.calcHugPoints(p);
-  return hugPoints[this.indexOfClosestPoint(p, hugPoints)];
+Transformer.prototype.calcMonoHugPoint = function(controlVec) {
+  var hugPoints = this.calcHugPoints(controlVec);
+  return hugPoints[this.indexOfClosestPoint(controlVec, hugPoints)];
 };
 
 /**
- * @param {Vec2d} startPos
- * @return an array of four points in cardinal directions from startPos,
+ * @param {Vec2d} controlVec
+ * @return an array of four points in cardinal directions from controlVec,
  * where a rayscan intersected a wall, or at the maximum scan length.
  */
-Transformer.prototype.calcHugPoints = function(startPos) {
+Transformer.prototype.calcHugPoints = function(controlVec) {
   var hugPoints = [];
   for (var i = 0; i < Transformer.CARDINAL_DIRECTIONS.length; i++) {
     var targetPos = new Vec2d(Transformer.CARDINAL_DIRECTIONS[i])
         .scale(Transformer.MAX_HUG_DIST)
-        .add(startPos);
+        .add(controlVec);
     var rayScan = new RayScan(
-        startPos.x, startPos.y,
+        controlVec.x, controlVec.y,
         targetPos.x, targetPos.y,
         1, 1);
     // time is zero to one
     var time = this.vorp.rayScan(rayScan, Vorp.GENERAL_GROUP) ? rayScan.time : 1;
-    hugPoints[i] = targetPos.subtract(startPos).scale(time).add(startPos);
+    hugPoints[i] = Vec2d.alongRay(controlVec, targetPos, time);
   }
   return hugPoints;
 };
 
-Transformer.prototype.indexOfClosestPoint = function(startPos, hugPoints) {
+Transformer.prototype.indexOfClosestPoint = function(controlVec, hugPoints) {
   var lowestDistSquared = Infinity;
   var index;
   for (var i = 0; i < hugPoints.length; i++) {
-    var distSquared = hugPoints[i].distanceSquared(startPos);
+    var distSquared = hugPoints[i].distanceSquared(controlVec);
     if (distSquared < lowestDistSquared) {
       lowestDistSquared = distSquared;
       index = i;

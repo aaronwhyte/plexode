@@ -188,3 +188,9 @@ Vec2d.randDir = function() {
   var dir = Vec2d.dirs[Math.floor(Math.random()*8)];
   return new Vec2d(dir.x, dir.y);
 };
+
+Vec2d.alongRay = function(startPoint, towardsPoint, distance) {
+  return new Vec2d(towardsPoint).subtract(startPoint)
+      .scaleToLength(distance)
+      .add(startPoint);
+};

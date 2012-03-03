@@ -36,10 +36,10 @@ Block on Vorp Logic step...
 Ved-to-Vorp transformer
 Reads GrafModel directly?
 v walls
-- one-point wall-huggers
-  - assembler
-  - button
-  - grip
+v one-point wall-huggers
+  v assembler
+  v button
+  v grip
 - two-point wall-huggers
   - beamsensor
   - door
