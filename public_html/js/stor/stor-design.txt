@@ -1,0 +1,74 @@
+This is service of Ved (Vorp level editor), but should be its own reusable class, so 'ere we are.
+
+Uses:
+- Persist Ved model clipboards, and instantly sync them across all Ved windows.
+- Create levels
+- Store and edits to levels in some append-only log and instantly sync them across windows.
+- Get directory of levels.
+- Support level renaming and deletion.
+- Save misc settings and stuff maybe, w interwindow instasync.
+
+I've got some file types in mind:
+- append-often replayable list of JSON objects, for storing level-edit operations and hence levels
+- simple JSON blobs, for settings and stuff
+- plaintext
+- file directory
+Files will be uniquely addressable by directory path.
+
+
+Implementation ideas:
+Use HTML5 LocalStorage for persistence, and its events for interwindow instasync (IWIS).
+Prefix all data entries with numeric codes (and some namespace prefix) like
+ved-alpha/818726: {...}.
+For the multipart log-like files, use sequential array-like numbering, too:
+ved-alpha/173644/0: [{...}, ...]
+ved-alpha/173644/1: [{...}, ...]
+ved-alpha/173644/2: [{...}, ...]
+Give each node some meta-data object with the a name and type.
+ved-alpha/173644/meta: {name:..., type:...}
+Whenever the name tree is adjusted, enforce path uniqueness, so files are still addressable.
+
+Node numbers and log indexes should never be exposed to the API user.
+
+Example with everything:
+va/0/meta: {name: "", type: "directory"}
+va/0: {101010:true, 987987:true, 123123:true}
+
+va/101010/meta: {name:"readme", type:"plaintext"}
+va/101010: "Welcome to example filesystem X"
+
+va/987987/meta: {name:"settings", type:"json"}
+va/987987: {playerTrails: false, showFps: true}
+
+va/123123/meta: {name:"levels", type:"directory"}
+va/123123: {234234:true} // just one level for this example
+
+va/234234/meta: {name:"level 1", type:"json-log"}
+va/234234/0: "[{...},...]"
+va/234234/1: "[{...},...]"
+
+So the dir tree is easy to generate:
+/
+/readme: ""
+/settings: {}
+/levels/level 1: [{},...]
+
+Operations are pretty REST-y:
+- put(path, type, value)
+- post(path, addValue) // for log-types only
+- get(path) // Returns contents.. and meta? For dirs, returns array of child names?
+- delete(path) // Deletes one file. Can delete dirs if they are empty.
+- getMeta(path)
+- move(oldPath, newPath)
+Secondary stuff:
+- getDirectoryTree(path)
+- deleteTree(path)
+- tail(path)
+
+A filespace object has a prefix (no uniqueness enforced).
+It would be cute to log the operations of a filespace in another filespace, for debugging.
+It would also be cool to store counters and snapshots here. HM!
+And finally, in order to sync the filesystem changes, it might be smart to have a JSON changelog format. SO META.
+
+Too bad there's no multi-window locking anywhere, unless you count the cloud itself. BRUTAL.
+Shared workers aren't ready yet :-(.
