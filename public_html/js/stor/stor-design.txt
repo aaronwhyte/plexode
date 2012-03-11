@@ -72,3 +72,20 @@ And finally, in order to sync the filesystem changes, it might be smart to have 
 
 Too bad there's no multi-window locking anywhere, unless you count the cloud itself. BRUTAL.
 Shared workers aren't ready yet :-(.
+
+======================================================
+Simpler versions:
+
+Keep the append-only file idea, and even the easy renaming. but forget about a directory tree.
+
+stor-instance-prefix/123345/name: "level 1"
+stor-instance-prefix/123345/0: [{...}, {...}]
+stor-instance-prefix/123345/1: [{...}, {...}]
+pros: name and append are one step if you know the number.
+cons: lookup by name is terrible.
+
+prefix/labels/awesometown-level: 123456
+prefix/data/123456/0: [{...},...]
+prefix/data/123456/1: [{...},...]
+pros: No full scan if you already know the label name. You never need the number.
+cons: uuuh nope this one is the bestest.

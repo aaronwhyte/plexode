@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Stor tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/stor/stor.js"></script>
+<script>
+
+addTest(function testGetNonexistentName() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  assertStringifyEquals([], stor.getValues('nonexistent'));
+});
+
+addTest(function testSetAndGet() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  var a = {}; a['a'] = 1;
+  var b = 'wee';
+  var c = 123;
+  var d = [1, 2, 'three', {'4':5, '6':'seven'}];
+  stor.appendValues('foo', [a, b]);
+  assertStringifyEquals([a, b], stor.getValues('foo'));
+  stor.appendValues('foo', [c]);
+  assertStringifyEquals([a, b, c], stor.getValues('foo'));
+  stor.appendValues('foo', [d, d]);
+  assertStringifyEquals([a, b, c, d, d], stor.getValues('foo'));
+});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>
