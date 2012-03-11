@@ -26,6 +26,10 @@ addTest(function testSetAndGet() {
   assertStringifyEquals([a, b, c], stor.getValues('foo'));
   stor.appendValues('foo', [d, d]);
   assertStringifyEquals([a, b, c, d, d], stor.getValues('foo'));
+
+  stor.appendValues('bar', [b, d]);
+  assertStringifyEquals([a, b, c, d, d], stor.getValues('foo'));
+  assertStringifyEquals([b, d], stor.getValues('bar'));
 });
 
 </script>

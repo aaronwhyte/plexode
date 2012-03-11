@@ -28,7 +28,7 @@ Stor.prototype.getKeyForName = function(name) {
  * @private
  */
 Stor.prototype.getKeyForDataIndex = function(dataId, index) {
-  return this.namePrefix + dataId + '/' + index;
+  return this.dataPrefix + dataId + '/' + index;
 };
 
 Stor.prototype.appendValues = function(name, values) {
