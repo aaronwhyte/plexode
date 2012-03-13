@@ -61,8 +61,8 @@ Stor.prototype.appendValues = function(name, values) {
 Stor.prototype.getNames = function() {
   var names = [];
   for (var i = 0, n = this.storage.length; i < n; i++) {
-    var k = this.storage.key[i];
-    if (k.lastIndexOf(this.namePrefix, 0)) {
+    var k = this.storage.key(i);
+    if (0 == k.lastIndexOf(this.namePrefix, 0)) {
       names.push(k.substring(this.namePrefix.length));
     }
   }

@@ -32,6 +32,17 @@ addTest(function testSetAndGet() {
   assertStringifyEquals([b, d], stor.getValues('bar'));
 });
 
+addTest(function testGetNames() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  var expected = ['foo', 'foo2', 'Foo', 'f o o'].sort();
+  for (var i = 0; i < expected.length; i++) {
+    stor.appendValues(expected[i], ['x']);
+  }
+  var actual = stor.getNames().sort();
+  assertStringifyEquals(expected, actual);
+});
+
 </script>
 </head>
 <body onload="runTests()"></body>
