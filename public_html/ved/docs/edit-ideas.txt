@@ -106,3 +106,11 @@ Cluster parts are not sprites. A beam sensor is 2 sprites, but a single cluster 
 Ved shows part jacks, coded into the built-in cluster clipboards.
 The transformer needs code to convert a cluster to a prefab.
 So, does the *prefab* need an API for addressing jacks?
+
+Clips:
+There are system clips and user clips.
+Copying from a level adds a new user clip.
+For user clips, the timestamp is the ID.
+Clicking a clip selects it, but does not move it to the top of the user-clips list.
+Clip selection is persisted and synced cross-tab. Selection is (sys|usr)id.
+User clips are also persisted and synced cross-tab, under /clips/(clipId aka timestamp)

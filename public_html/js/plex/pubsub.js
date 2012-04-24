@@ -39,7 +39,7 @@ plex.PubSub.prototype.unsubscribe = function(func) {
  * Calls all the subscribers in the order in which they were added,
  * passing all arguments along.  Calls the functions in the global context.
  */
-plex.PubSub.prototype.publish = function() {
+plex.PubSub.prototype.publish = function(/* whatever */) {
   for (var i = 0, n = this.subs.length; i < n; ++i) {
     this.subs[i].apply(null, arguments);
   }

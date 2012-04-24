@@ -4,18 +4,21 @@
 <title>Stor tests</title>
 <script src="../../../public_html/js/testing.js"></script>
 <script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/pubsub.js"></script>
 <script src="../../../public_html/js/stor/stor.js"></script>
 <script>
 
 addTest(function testGetNonexistentName() {
   sessionStorage.clear();
   var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
   assertStringifyEquals([], stor.getValues('nonexistent'));
 });
 
-addTest(function testSetAndGet() {
+addTest(function testSetAndGetSANITY() {
   sessionStorage.clear();
   var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
   var a = {}; a['a'] = 1;
   var b = 'wee';
   var c = 123;
@@ -35,12 +38,35 @@ addTest(function testSetAndGet() {
 addTest(function testGetNames() {
   sessionStorage.clear();
   var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
   var expected = ['foo', 'foo2', 'Foo', 'f o o'].sort();
   for (var i = 0; i < expected.length; i++) {
     stor.appendValues(expected[i], ['x']);
   }
   var actual = stor.getNames().sort();
   assertStringifyEquals(expected, actual);
+});
+
+addTest(function testSubscription() {
+  // This doesn't test actual storage events, since those are not
+  // published to the same window that fired them.
+  var events = [];
+  function callback(op, name, value) {
+    events.push([op, name, value]);
+  }
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  stor.subscribe(callback);
+  var names = ['a', 'b', 'a'];
+  for (var i = 0; i < names.length; i++) {
+    stor.appendValues(names[i], [i]);
+  }
+  assertStringifyEquals([
+    [Stor.Ops.APPEND_VALUES, 'a', [0]],
+    [Stor.Ops.APPEND_VALUES, 'b', [1]],
+    [Stor.Ops.APPEND_VALUES, 'a', [2]]
+  ], events);
 });
 
 </script>

@@ -344,7 +344,8 @@ v hardcode a test level with logic links in it, without prefabs.
 
 2012.02.11 Redo Sprite Construction III
 v Assign sprite ID at construction.
-- Fewer sprite construction params. Move static data from prefabs to sprites.
+- Fewer sprite construction params.
+- Move static data from prefabs to sprites.
   - Sprites know their own mass formulas, groups.
   - Sprites construct their own painters. :-/
   - Keep injecting vorp/clock/invalidator bundle.
