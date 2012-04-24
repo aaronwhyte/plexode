@@ -8,7 +8,7 @@ this.plex = this.plex || {};
 
 plex.string = {};
 
-plex.string.REGEXP_ESCAPE_RE_ = /([\{\}\|\^\$\[\]\(\)\.\*\\])/g;
+plex.string.REGEXP_ESCAPE_RE_ = /([\{\}\|\^\$\[\]\(\)\.\*\+\\])/g;
 
 plex.string.AMP_RE_ = /&/g;
 plex.string.LT_RE_ = /</g;
