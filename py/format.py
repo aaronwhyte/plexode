@@ -46,6 +46,7 @@ def plexScripts():
         "time",
         "type",
         "url",
+        "urlsquisher",
         "wij/acinput",
         "wij/jsac",
         "wij/log",

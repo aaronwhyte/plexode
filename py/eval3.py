@@ -14,6 +14,7 @@ def formatEval3():
 <script src="../js/plex/pubsub.js"></script>
 <script src="../js/plex/string.js"></script>
 <script src="../js/plex/url.js"></script>
+<script src="../js/plex/urlsquisher.js"></script>
 <script src="../js/plex/wij/tachanges.js"></script>
 
 <script src="../js/eval3.js"></script>
