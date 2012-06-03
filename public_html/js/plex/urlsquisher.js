@@ -57,9 +57,8 @@ UrlSquisher.prototype.getAvailableChars = function(url) {
 };
 
 UrlSquisher.prototype.dumpLevels = function(levels) {
-  console.log("dumpLevels");
+  console.log("=== dumpLevels === ");
   for (var i = 1; i < levels.length; i++) {
-    console.log("--- level " + i + " ---");
     var level = levels[i];
     for (var key in level.map) {
       console.log(key + " * " + level.map[key].length);
@@ -80,7 +79,7 @@ UrlSquisher.prototype.squish = function(url) {
   }
   levels[1].removeUniques();
 
-  i = 2;
+  var i = 2;
   while (true) {
     levels[i] = new UrlSquisher.RepLevel(tokens, i);
     levels[i].addFromPrevLevel(levels[i - 1]);
@@ -89,26 +88,26 @@ UrlSquisher.prototype.squish = function(url) {
       levels.pop();
       break;
     }
-    levels[i].supercede(levels[i - 1]);
     i++;
+  }
+  for (var i = 2; i < levels.length; i++) {
+    levels[i].removeSelfOverlaps();
+    levels[i].removeUniques();
+  }
+  for (var i = 2; i < levels.length; i++) {
+    levels[i].supercede(levels[i - 1]);
   }
   this.dumpLevels(levels);
 
-
-
-//  var subs = [];
-//  var tokenIndex = 0;
-//  for (var subChar in availableChars) {
-//    if (!sortedTokens[tokenIndex] ||
-//        sortedTokens[tokenIndex].squishBenefit < 1) {
-//      break;
-//    }
-//    subs.push({
-//      'subChar': subChar,
-//      'original': sortedTokens[tokenIndex].token
-//    });
-//    tokenIndex++;
-//  }
+  // next up:
+  // Rename "squish" to something else, like "getNextSub"
+  // and make it pick the best single substitution.
+  // Write a function to take a string and a sub and encode it.
+  // Then call them in a loop, starting with the string "~" + url,
+  // until there are no sub strings left, or there are no good subs left.
+  // Then make the decoder work iteratively, too.
+  // Then test it.
+  // Then productize.
 
 //  // Encode squished URL
 //  var body = url;
@@ -136,9 +135,6 @@ UrlSquisher.prototype.squish = function(url) {
 //  var squishedUrl = commands + '~' + body;
 //  return squishedUrl;
 };
-
-
-
 
 /**
  * Tracks all repeat occurences of chains of tokens.
@@ -194,6 +190,15 @@ UrlSquisher.RepLevel.prototype.addFromPrevLevel = function(prevLevel) {
  * then delete the repeated chain from the prevLevel.
  */
 UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
+  function smallCoveredByBig(smallStarts, bigStarts) {
+    for (var i = 0; i < smallStarts.length; i++) {
+      if (bigStarts.indexOf(smallStarts[i]) == -1 &&
+          bigStarts.indexOf(smallStarts[i] - 1) == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
   if (prevLevel.chainLen != this.chainLen - 1) {
     throw Error("expected prev level chainlen " + this.chainLen - 1 +
         " but got " + prevLevel.chainLen);
@@ -205,20 +210,15 @@ UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
       prevLevel.getKey(starts[0]),
       prevLevel.getKey(starts[0] + 1)
     ];
-    // What if both short chains are equal, and there are n*2 of them?
-    // Example, the new chain is "aaa" and the short ones are both "aa".
-    if (shortKeys[0] &&
-        shortKeys[0] == shortKeys[1] &&
-        prevLevel.map[shortKeys[0]].length == 2 * starts.length) {
-      prevLevel.remove(shortKeys[0]);
-    } else {
-      // Look at the two prevLevel chains.
-      // If they have the same count as the longer chain,
-      // then they're safe to remove.
-      for (var i = 0; i < 2; i++) {
-        var shortKey = shortKeys[i];
-        var shortStarts = prevLevel.map[shortKey];
-        if (shortStarts && shortStarts.length == starts.length) {
+    // Look each of the two prevLevel chains.
+    // If one has the same count as the longer chain,
+    // then it is safe to remove.
+    for (var i = 0; i < 2; i++) {
+      var shortKey = shortKeys[i];
+      var shortStarts = prevLevel.map[shortKey];
+      if (shortStarts) {
+        if (shortStarts.length == starts.length) {
+            //smallCoveredByBig(shortStarts, starts)) {
           prevLevel.remove(shortKey);
         }
       }
@@ -243,7 +243,7 @@ UrlSquisher.RepLevel.prototype.remove = function(key) {
   this.length--;
 };
 
-  UrlSquisher.RepLevel.prototype.removeUniques = function() {
+UrlSquisher.RepLevel.prototype.removeUniques = function() {
   for (var key in this.map) {
     if (this.map[key].length < 2) {
       this.remove(key);
@@ -251,6 +251,30 @@ UrlSquisher.RepLevel.prototype.remove = function(key) {
   }
 };
 
+/**
+ * If a pattern overlaps itself,
+ * like "oxo" does inside "oxoxo",
+ * and like "aa" does inside "aaa",
+ * then delete the later of the two overlapping versions.
+ * Don't delete non-overlapping ones of course.
+ */
+UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
+  for (var key in this.map) {
+    var vals = this.map[key];
+    for (var i = 1; i < vals.length;) {
+      var v0 = vals[i - 1];
+      var v1 = vals[i];
+      if (v1 - v0 >= this.chainLen) {
+        i++;
+      } else {
+        vals.splice(i, 1);
+      }
+    }
+    if (vals.length < 2) {
+      this.remove(key);
+    }
+  }
+};
 
 UrlSquisher.RepLevel.prototype.getSortedStarts = function() {
   var a = [];
@@ -260,7 +284,7 @@ UrlSquisher.RepLevel.prototype.getSortedStarts = function() {
       a.push(Number(list[i]));
     }
   }
-  return a.sort(function(a, b){
+  return a.sort(function(a, b) {
     return a - b
   });
 };
