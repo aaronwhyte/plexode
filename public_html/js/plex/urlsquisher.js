@@ -4,6 +4,32 @@
 function UrlSquisher() {
 }
 
+UrlSquisher.prototype.squish = function(url) {
+  var t0 = (new Date()).getTime();
+  var squished = "~" + url;
+  var availableChars = this.getAvailableChars(url);
+  console.log(availableChars);
+  for (var subChar in availableChars) {
+    var levels = this.calcAllLevels(squished);
+    var original = this.calcBestOriginal(levels, subChar);
+    if (!original) break;
+    var prevLen = squished.length;
+    squished = this.encodeReplacement(subChar, original, squished);
+    console.log([prevLen - squished.length, subChar, original].join(' '));
+  }
+  var t1 = (new Date()).getTime();
+
+  squished = "http://plexode.com/s#" + squished;
+  console.log('ORIGINAL ------------------------');
+  console.log(url);
+  console.log('SQUISHED ------------------------');
+  console.log(squished);
+  console.log("original len: " + url.length);
+  console.log("squished len: " + squished.length);
+  console.log("compression ratio (less is better): " + (squished.length / url.length));
+  console.log("time (ms): " + (t1 - t0));
+};
+
 UrlSquisher.prototype.unsquish = function(squished) {
   var index = 0;
   var body = null;
@@ -37,14 +63,6 @@ UrlSquisher.prototype.unsquish = function(squished) {
   return body;
 };
 
-UrlSquisher.prototype.calcSquishBenefit = function(tokenChain, substitutionLength, frequency) {
-  var originalLength = 0;
-  for (var i = 0; i < tokenChain.length; i++) {
-    originalLength += tokenChain[i].length;
-  }
-  return originalLength * (frequency - 1) - substitutionLength * (frequency + 1) - 1;
-};
-
 /**
  * Figure out what one-character codes are unused.
  */
@@ -66,9 +84,8 @@ UrlSquisher.prototype.dumpLevels = function(levels) {
   }
 };
 
-UrlSquisher.prototype.squish = function(url) {
-  var availableChars = this.getAvailableChars(url);
-  var tokens = plex.url.tokenizeEncodedUrl(url);
+UrlSquisher.prototype.calcAllLevels = function(input) {
+  var tokens = plex.url.tokenizeEncodedUrl(input);
   var levels = [];
 
   levels[1] = new UrlSquisher.RepLevel(tokens, 1);
@@ -97,44 +114,59 @@ UrlSquisher.prototype.squish = function(url) {
   for (var i = 2; i < levels.length; i++) {
     levels[i].supercede(levels[i - 1]);
   }
-  this.dumpLevels(levels);
-
-  // next up:
-  // Rename "squish" to something else, like "getNextSub"
-  // and make it pick the best single substitution.
-  // Write a function to take a string and a sub and encode it.
-  // Then call them in a loop, starting with the string "~" + url,
-  // until there are no sub strings left, or there are no good subs left.
-  // Then make the decoder work iteratively, too.
-  // Then test it.
-  // Then productize.
-
-//  // Encode squished URL
-//  var body = url;
-//  var commands = "";
-//  for (var i = subs.length - 1; i >= 0; i--) {
-//    var sub = subs[i];
-//    var subLen = sub.subChar.length;
-//    var origLen = sub.original.length;
-//    // Skip stuff we can't encode.
-//    if (subLen > 4 || origLen > 16) {
-//      console.log("Oh no! subLen > 4 || origLen > 16: " +
-//          [sub.subChar, sub.original]);
-//      continue;
-//    }
-//    body = body.replace(
-//        new RegExp(plex.string.textToRegExpStr(sub.original), "g"),
-//        sub.subChar);
-//    // 6 bit number, encoded in base-82, a single URL-legal char.
-//    // low 2 bits represent 1-4.
-//    // next 4 bits represent 1-16.
-//    var lenBits = (subLen - 1) + 4 * (origLen - 1);
-//    commands = plex.url.URI_CHARS.charAt(lenBits) +
-//        sub.subChar + sub.original + commands;
-//  }
-//  var squishedUrl = commands + '~' + body;
-//  return squishedUrl;
+  return levels;
 };
+
+
+UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
+  // Now evaluate all the subs and pull out the best one.
+  function calcBenefit(originalLength, substitutionLength, frequency) {
+    return originalLength * (frequency - 1) - substitutionLength * (frequency + 1) - 1;
+  }
+  var bestOriginal = null;
+  var bestBenefit = 0;
+  for (var i = 1; i < levels.length; i++) {
+    var level = levels[i];
+    for (var key in level.map) {
+      var benefit = calcBenefit(key.length, replacement.length, level.map[key].length);
+      if (benefit > bestBenefit) {
+        bestOriginal = key;
+        bestBenefit = benefit;
+      }
+    }
+  }
+  return bestOriginal;
+};
+
+UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
+  var subLen = subChar.length;
+  var origLen = original.length;
+  if (subLen > 4 || origLen > 16) {
+    throw Error("Oh no! subLen > 4 || origLen > 16: " +
+        [subChar, original]);
+  }
+  body = body.replace(
+        new RegExp(plex.string.textToRegExpStr(original), "g"),
+        subChar);
+    // 6 bit number, encoded in base-82, a single URL-legal char.
+    // low 2 bits represent 1-4.
+    // next 4 bits represent 1-16.
+    var lenBits = (subLen - 1) + 4 * (origLen - 1);
+    var command = plex.url.URI_CHARS.charAt(lenBits) +
+        subChar + original;
+  return command + body;
+};
+
+// next up:
+// v Rename "squish" to something else, like "getNextSub"
+//   and make it pick the best single substitution.
+// v Write a function to take a string and a sub and encode it.
+// v Then call them in a loop, starting with the string "~" + url,
+//   until there are no sub strings left, or there are no good subs left.
+// Then make the decoder work iteratively, too.
+// Then test it.
+// Then productize.
+// FYI this looks a lot like Lempel-Ziv. http://www.data-compression.com/lossless.shtml#lz
 
 /**
  * Tracks all repeat occurences of chains of tokens.
@@ -158,6 +190,11 @@ UrlSquisher.RepLevel = function(tokens, chainLen) {
  */
 UrlSquisher.RepLevel.prototype.add = function(startPos) {
   var key = this.getKey(startPos);
+  if (key.length > 16) {
+    // Do not add keys longer than 16 chars,
+    // since we can't encode them.
+    return;
+  }
   var list = this.map[key];
   if (!list) {
     this.map[key] = list = [];
@@ -171,15 +208,11 @@ UrlSquisher.RepLevel.prototype.addFromPrevLevel = function(prevLevel) {
     throw Error("expected prev level chainlen " + this.chainLen - 1 +
         " but got " + prevLevel.chainLen);
   }
-  var starts = prevLevel.getSortedStarts();
-  for (var i = 0; i < starts.length - 1; i++) {
-    var startPos = starts[i];
-    if (starts[i + 1] != startPos + 1) {
-      // There are not two starting chains in a row of length chainLen - 1,
-      // so there must not be a longer repeated chain of length chainLen here.
-      continue;
+  var starts = prevLevel.getAllStarts();
+  for (var start in starts) {
+    if (starts[start - 1]) {
+      this.add(start - 1);
     }
-    this.add(startPos);
   }
 };
 
@@ -276,15 +309,13 @@ UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
   }
 };
 
-UrlSquisher.RepLevel.prototype.getSortedStarts = function() {
-  var a = [];
+UrlSquisher.RepLevel.prototype.getAllStarts = function() {
+  var a = {};
   for (var key in this.map) {
     var list = this.map[key];
     for (var i = 0; i < list.length; i++) {
-      a.push(Number(list[i]));
+      a[list[i]] = true;
     }
   }
-  return a.sort(function(a, b) {
-    return a - b
-  });
+  return a;
 };
