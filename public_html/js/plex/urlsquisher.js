@@ -1,94 +1,76 @@
 /**
  * @constructor
  */
-function UrlSquisher() {
-}
+plex.UrlSquisher = function() {
+};
 
-UrlSquisher.prototype.squish = function(url) {
-  var t0 = (new Date()).getTime();
+plex.UrlSquisher.prototype.squish = function(url) {
   var squished = "~" + url;
-  var availableChars = this.getAvailableChars(url);
-  console.log(availableChars);
-  for (var subChar in availableChars) {
+  var subChar;
+  while (subChar = this.getAvailableChar(squished)) {
     var levels = this.calcAllLevels(squished);
     var original = this.calcBestOriginal(levels, subChar);
     if (!original) break;
-    var prevLen = squished.length;
     squished = this.encodeReplacement(subChar, original, squished);
-    console.log([prevLen - squished.length, subChar, original].join(' '));
   }
   var t1 = (new Date()).getTime();
-
-  squished = "http://plexode.com/s#" + squished;
-  console.log('ORIGINAL ------------------------');
-  console.log(url);
-  console.log('SQUISHED ------------------------');
-  console.log(squished);
-  console.log("original len: " + url.length);
-  console.log("squished len: " + squished.length);
-  console.log("compression ratio (less is better): " + (squished.length / url.length));
-  console.log("time (ms): " + (t1 - t0));
+  return squished;
 };
 
-UrlSquisher.prototype.unsquish = function(squished) {
-  var index = 0;
-  var body = null;
-  var subs = [];
-  // The 'while' condition is just to prevent an infinite loop for bad input.
-  while (index < squished.length) {
-    var c = squished.charAt(index);
+plex.UrlSquisher.prototype.unsquish = function(squishedText) {
+  var text = squishedText;
+  // The loop condition prevents an infinite loop for bad input.
+  var count = 0
+  while (count < 1000) {
+    count++;
+    var c = text.charAt(0);
     if (c == "~") {
       // The rest is the body.
-      body = squished.substr(index + 1);
+      text = text.substr(1);
       break;
     }
-    var bits = plex.url.URI_CHARS.indexOf(c);
-    var origLen = Math.floor(bits / 4) + 1;
-    var subLen = (bits & 3) + 1;
-    index++;
-    var sub = squished.substr(index, subLen);
-    index += subLen;
-    var original = squished.substr(index, origLen);
-    index += origLen;
-    subs.push({
-      'sub': sub,
-      'original': original
-    });
+    var lens = this.decodeLenChar(c);
+    var subLen = lens.subLen;
+    var origLen = lens.origLen;
+    var sub = text.substr(1, subLen);
+    var original = text.substr(1 + subLen, origLen);
+    text = text.substr(1 + subLen + origLen);
+    text = text.replace(
+        new RegExp(plex.string.textToRegExpStr(sub), "g"),
+        original);
   }
-  for (var i = 0; i < subs.length; i++) {
-    var sub = subs[i];
-    body = body.replace(new RegExp(plex.string.textToRegExpStr(sub.sub), "g"),
-        sub.original);
-  }
-  return body;
+  return text;
 };
 
 /**
- * Figure out what one-character codes are unused.
+ * Figure out what one-character code is unused.
  */
-UrlSquisher.prototype.getAvailableChars = function(url) {
+plex.UrlSquisher.prototype.getAvailableChar = function(url) {
   var chars = plex.url.createUriCharSet();
   for (var i = 0; i < url.length; i++) {
     delete chars[url.charAt(i)];
   }
-  return chars;
-};
-
-UrlSquisher.prototype.dumpLevels = function(levels) {
-  console.log("=== dumpLevels === ");
-  for (var i = 1; i < levels.length; i++) {
-    var level = levels[i];
-    for (var key in level.map) {
-      console.log(key + " * " + level.map[key].length);
-    }
+  for (var c in chars) {
+    return c;
   }
+  return null;
 };
 
-UrlSquisher.prototype.calcAllLevels = function(input) {
+//plex.UrlSquisher.prototype.dumpLevels = function(levels) {
+//  console.log("=== dumpLevels === ");
+//  for (var i = 1; i < levels.length; i++) {
+//    var level = levels[i];
+//    for (var key in level.map) {
+//      console.log(key + " * " + level.map[key].length);
+//    }
+//  }
+//};
+
+plex.UrlSquisher.prototype.calcAllLevels = function(input) {
   var tokens = plex.url.tokenizeEncodedUrl(input);
   var levels = [];
 
-  levels[1] = new UrlSquisher.RepLevel(tokens, 1);
+  levels[1] = new plex.UrlSquisher.RepLevel(tokens, 1);
 
   // For each token, remember where it appears.
   for (var i = 0; i < tokens.length; i++) {
@@ -98,7 +80,7 @@ UrlSquisher.prototype.calcAllLevels = function(input) {
 
   var i = 2;
   while (true) {
-    levels[i] = new UrlSquisher.RepLevel(tokens, i);
+    levels[i] = new plex.UrlSquisher.RepLevel(tokens, i);
     levels[i].addFromPrevLevel(levels[i - 1]);
     levels[i].removeUniques();
     if (levels[i].length == 0) {
@@ -118,7 +100,7 @@ UrlSquisher.prototype.calcAllLevels = function(input) {
 };
 
 
-UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
+plex.UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
   // Now evaluate all the subs and pull out the best one.
   function calcBenefit(originalLength, substitutionLength, frequency) {
     return originalLength * (frequency - 1) - substitutionLength * (frequency + 1) - 1;
@@ -138,23 +120,54 @@ UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
   return bestOriginal;
 };
 
-UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
-  var subLen = subChar.length;
-  var origLen = original.length;
-  if (subLen > 4 || origLen > 16) {
-    throw Error("Oh no! subLen > 4 || origLen > 16: " +
-        [subChar, original]);
-  }
-  body = body.replace(
-        new RegExp(plex.string.textToRegExpStr(original), "g"),
-        subChar);
-    // 6 bit number, encoded in base-82, a single URL-legal char.
-    // low 2 bits represent 1-4.
-    // next 4 bits represent 1-16.
-    var lenBits = (subLen - 1) + 4 * (origLen - 1);
-    var command = plex.url.URI_CHARS.charAt(lenBits) +
-        subChar + original;
+plex.UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
+  var re = new RegExp(plex.string.textToRegExpStr(original), "g");
+  body = body.replace(re, subChar);
+  var command = this.encodeLenChar(subChar.length, original.length) + subChar + original;
   return command + body;
+};
+
+plex.UrlSquisher.prototype.checkSubLens = function(subLen, origLen) {
+  if (Math.floor(subLen) != subLen || subLen < 1 || subLen > 1) {
+    throw Error("Illegal subLen " + subLen);
+  }
+  if (Math.floor(origLen) != origLen || origLen < 1 || origLen > 16) {
+    throw Error("Illegal origLen " + origLen);
+  }
+};
+
+/**
+ * Encodes into a 6 bit number, encoded in base-82, a single URL-legal char.
+ * low 2 bits represent subLen 1-4.
+ * next 4 bits represent origLen 1-16.
+ */
+plex.UrlSquisher.prototype.encodeLenChar = function(subLen, origLen) {
+  this.checkSubLens(subLen, origLen);
+  var lenBits = (subLen - 1) + 4 * (origLen - 1);
+  if (lenBits < 0 || lenBits >= plex.url.URI_CHARS.length) {
+    throw Error("cannot encode lenBits " + lenBits);
+  }
+  var retval = plex.url.URI_CHARS.charAt(lenBits);
+  if (retval < 0) {
+    throw Error("No legal character can encode bit value" + lenBits);
+  }
+  var check = this.decodeLenChar(retval);
+  if (check.subLen != subLen) {
+    throw Error(["check.subLen != subLen", check.subLen, subLen].join(' '));
+  }
+  if (check.origLen != origLen) {
+    throw Error(["check.origLen != origLen", check.origLen, origLen].join(' '));
+  }
+  return retval;
+};
+
+plex.UrlSquisher.prototype.decodeLenChar = function(c) {
+  var bits = plex.url.URI_CHARS.indexOf(c);
+  if (bits < 0) throw Error("Invalid bits char '" + c + "'");
+  var subLen = (bits & 3) + 1;
+  var origLen = Math.floor(bits / 4) + 1;
+  this.checkSubLens(subLen, origLen);
+  return {subLen: subLen, origLen: origLen};
 };
 
 // next up:
@@ -163,8 +176,9 @@ UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
 // v Write a function to take a string and a sub and encode it.
 // v Then call them in a loop, starting with the string "~" + url,
 //   until there are no sub strings left, or there are no good subs left.
-// Then make the decoder work iteratively, too.
-// Then test it.
+// v Then make the decoder work iteratively, too.
+// v Then test it.
+// - fix map to use a plex.map, not an object literal. Until then, cannot compress the word "constructor", you dork!
 // Then productize.
 // FYI this looks a lot like Lempel-Ziv. http://www.data-compression.com/lossless.shtml#lz
 
@@ -175,7 +189,7 @@ UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
  * @param chainLen  the length of the token chains at this level
  * @constructor
  */
-UrlSquisher.RepLevel = function(tokens, chainLen) {
+plex.UrlSquisher.RepLevel = function(tokens, chainLen) {
   this.tokens = tokens;
   this.chainLen = chainLen;
 
@@ -188,7 +202,7 @@ UrlSquisher.RepLevel = function(tokens, chainLen) {
 /**
  * @param startPos
  */
-UrlSquisher.RepLevel.prototype.add = function(startPos) {
+plex.UrlSquisher.RepLevel.prototype.add = function(startPos) {
   var key = this.getKey(startPos);
   if (key.length > 16) {
     // Do not add keys longer than 16 chars,
@@ -203,7 +217,7 @@ UrlSquisher.RepLevel.prototype.add = function(startPos) {
   this.length++;
 };
 
-UrlSquisher.RepLevel.prototype.addFromPrevLevel = function(prevLevel) {
+plex.UrlSquisher.RepLevel.prototype.addFromPrevLevel = function(prevLevel) {
   if (prevLevel.chainLen != this.chainLen - 1) {
     throw Error("expected prev level chainlen " + this.chainLen - 1 +
         " but got " + prevLevel.chainLen);
@@ -222,7 +236,7 @@ UrlSquisher.RepLevel.prototype.addFromPrevLevel = function(prevLevel) {
  * if if covers all the instances of a repeated chain in the prevLevel,
  * then delete the repeated chain from the prevLevel.
  */
-UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
+plex.UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
   function smallCoveredByBig(smallStarts, bigStarts) {
     for (var i = 0; i < smallStarts.length; i++) {
       if (bigStarts.indexOf(smallStarts[i]) == -1 &&
@@ -259,7 +273,7 @@ UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
   }
 };
 
-UrlSquisher.RepLevel.prototype.getTokens = function(startPos) {
+plex.UrlSquisher.RepLevel.prototype.getTokens = function(startPos) {
   var a = [];
   for (var i = 0; i < this.chainLen; i++) {
     a.push(this.tokens[startPos + i]);
@@ -267,16 +281,16 @@ UrlSquisher.RepLevel.prototype.getTokens = function(startPos) {
   return a;
 };
 
-UrlSquisher.RepLevel.prototype.getKey = function(startPos) {
+plex.UrlSquisher.RepLevel.prototype.getKey = function(startPos) {
   return this.getTokens(startPos).join('');
 };
 
-UrlSquisher.RepLevel.prototype.remove = function(key) {
+plex.UrlSquisher.RepLevel.prototype.remove = function(key) {
   delete this.map[key];
   this.length--;
 };
 
-UrlSquisher.RepLevel.prototype.removeUniques = function() {
+plex.UrlSquisher.RepLevel.prototype.removeUniques = function() {
   for (var key in this.map) {
     if (this.map[key].length < 2) {
       this.remove(key);
@@ -291,7 +305,7 @@ UrlSquisher.RepLevel.prototype.removeUniques = function() {
  * then delete the later of the two overlapping versions.
  * Don't delete non-overlapping ones of course.
  */
-UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
+plex.UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
   for (var key in this.map) {
     var vals = this.map[key];
     for (var i = 1; i < vals.length;) {
@@ -309,7 +323,7 @@ UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
   }
 };
 
-UrlSquisher.RepLevel.prototype.getAllStarts = function() {
+plex.UrlSquisher.RepLevel.prototype.getAllStarts = function() {
   var a = {};
   for (var key in this.map) {
     var list = this.map[key];
