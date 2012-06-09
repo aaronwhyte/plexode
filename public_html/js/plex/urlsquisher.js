@@ -5,22 +5,23 @@ plex.UrlSquisher = function() {
 };
 
 plex.UrlSquisher.prototype.squish = function(url) {
-  var squished = "~" + url;
+  var text = "~" + url;
   var subChar;
-  while (subChar = this.getAvailableChar(squished)) {
-    var levels = this.calcAllLevels(squished);
+  while (subChar = this.getAvailableShortStr(text)) {
+    var levels = this.calcAllLevels(text);
     var original = this.calcBestOriginal(levels, subChar);
     if (!original) break;
-    squished = this.encodeReplacement(subChar, original, squished);
+    text = this.squishStep(subChar, original, text);
   }
-  var t1 = (new Date()).getTime();
-  return squished;
+  console.log("squished: " + text);
+  console.log("compression ration: " + text.length / url.length);
+  return text;
 };
 
 plex.UrlSquisher.prototype.unsquish = function(squishedText) {
   var text = squishedText;
   // The loop condition prevents an infinite loop for bad input.
-  var count = 0
+  var count = 0;
   while (count < 1000) {
     count++;
     var c = text.charAt(0);
@@ -29,29 +30,41 @@ plex.UrlSquisher.prototype.unsquish = function(squishedText) {
       text = text.substr(1);
       break;
     }
-    var lens = this.decodeLenChar(c);
-    var subLen = lens.subLen;
-    var origLen = lens.origLen;
-    var sub = text.substr(1, subLen);
-    var original = text.substr(1 + subLen, origLen);
-    text = text.substr(1 + subLen + origLen);
-    text = text.replace(
-        new RegExp(plex.string.textToRegExpStr(sub), "g"),
-        original);
+    text = this.unsquishStep(text);
   }
   return text;
 };
 
+plex.UrlSquisher.prototype.unsquishStep = function(text) {
+  var c = text.charAt(0);
+  var lens = this.decodeLenChar(c);
+  var subLen = lens.subLen;
+  var origLen = lens.origLen;
+  var sub = text.substr(1, subLen);
+  var original = text.substr(1 + subLen, origLen);
+  //console.log(['unsquish with', text.substr(0, 1 + subLen + origLen), sub, original].join(' '));
+
+  text = text.substr(1 + subLen + origLen);
+  //console.log("before unsquish: " + text);
+  text = plex.string.replace(text, sub, original);
+  //console.log("after unsquish:  " + text);
+  return text;
+};
+
 /**
- * Figure out what one-character code is unused.
+ * Figure out what short string is unused.
  */
-plex.UrlSquisher.prototype.getAvailableChar = function(url) {
-  var chars = plex.url.createUriCharSet();
-  for (var i = 0; i < url.length; i++) {
-    delete chars[url.charAt(i)];
+plex.UrlSquisher.prototype.getAvailableShortStr = function(url) {
+  for (var i = 0; i < plex.url.URI_CHARS.length; i++) {
+    var c = plex.url.URI_CHARS.charAt(i);
+    if (url.indexOf(c) < 0) return c;
   }
-  for (var c in chars) {
-    return c;
+  for (var x = 0; x < plex.url.URI_CHARS.length; x++) {
+    for (var y = 0; y < plex.url.URI_CHARS.length; y++) {
+      if (x == y) continue;
+      var str = plex.url.URI_CHARS.charAt(x) + plex.url.URI_CHARS.charAt(y);
+      if (url.indexOf(str) < 0) return str;
+    }
   }
   return null;
 };
@@ -120,15 +133,17 @@ plex.UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
   return bestOriginal;
 };
 
-plex.UrlSquisher.prototype.encodeReplacement = function(subChar, original, body) {
-  var re = new RegExp(plex.string.textToRegExpStr(original), "g");
-  body = body.replace(re, subChar);
+plex.UrlSquisher.prototype.squishStep = function(subChar, original, text) {
   var command = this.encodeLenChar(subChar.length, original.length) + subChar + original;
-  return command + body;
+  var squished = command + plex.string.replace(text, original, subChar);
+//  var unsq = this.unsquishStep(squished);
+//  if (unsq != text) throw Error("what was squished cannot be unsquished!");
+  console.log(["squishStep", subChar, original, text.length - squished.length].join(' '));
+  return squished;
 };
 
 plex.UrlSquisher.prototype.checkSubLens = function(subLen, origLen) {
-  if (Math.floor(subLen) != subLen || subLen < 1 || subLen > 1) {
+  if (Math.floor(subLen) != subLen || subLen < 1 || subLen > 4) {
     throw Error("Illegal subLen " + subLen);
   }
   if (Math.floor(origLen) != origLen || origLen < 1 || origLen > 16) {

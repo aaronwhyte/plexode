@@ -8,7 +8,7 @@ this.plex = this.plex || {};
 
 plex.string = {};
 
-plex.string.REGEXP_ESCAPE_RE_ = /([\{\}\|\^\$\[\]\(\)\.\?\*\+\\])/g;
+plex.string.REGEXP_ESCAPE_RE_ = /([\{\}\|\^\$\[\]\(\)\.\?\*\+\\\,\:\!])/g;
 
 plex.string.AMP_RE_ = /&/g;
 plex.string.LT_RE_ = /</g;
@@ -59,4 +59,12 @@ plex.string.textToSingleQuoteJsLiteral = function(text) {
   return String(text).
     replace(plex.string.SQUOT_RE_, '\\\'').
     replace(plex.string.EOLN_RE_, '\\n');
+};
+
+plex.string.replace = function(text, oldStr, newStr) {
+  var re = new RegExp(plex.string.textToRegExpStr(oldStr), 'g');
+  // Ha-ha! Read about "$" here:
+  // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/replace
+  var sub = newStr.replace(/\$/g, "$$$$"); // Replaces one dollar-sign with two.
+  return text.replace(re, sub);
 };
