@@ -10,6 +10,7 @@ def formatEval3():
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
+<script src="../js/plex/map.js"></script>
 <script src="../js/plex/object.js"></script>
 <script src="../js/plex/pubsub.js"></script>
 <script src="../js/plex/string.js"></script>

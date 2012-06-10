@@ -69,16 +69,6 @@ plex.UrlSquisher.prototype.getAvailableShortStr = function(url) {
   return null;
 };
 
-//plex.UrlSquisher.prototype.dumpLevels = function(levels) {
-//  console.log("=== dumpLevels === ");
-//  for (var i = 1; i < levels.length; i++) {
-//    var level = levels[i];
-//    for (var key in level.map) {
-//      console.log(key + " * " + level.map[key].length);
-//    }
-//  }
-//};
-
 plex.UrlSquisher.prototype.calcAllLevels = function(input) {
   var tokens = plex.url.tokenizeEncodedUrl(input);
   var levels = [];
@@ -122,8 +112,10 @@ plex.UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
   var bestBenefit = 0;
   for (var i = 1; i < levels.length; i++) {
     var level = levels[i];
-    for (var key in level.map) {
-      var benefit = calcBenefit(key.length, replacement.length, level.map[key].length);
+    var keys = level.map.getKeys();
+    for (var j = 0; j < keys.length; j++) {
+      var key = keys[j];
+      var benefit = calcBenefit(key.length, replacement.length, level.map.get(key).length);
       if (benefit > bestBenefit) {
         bestOriginal = key;
         bestBenefit = benefit;
@@ -210,7 +202,7 @@ plex.UrlSquisher.RepLevel = function(tokens, chainLen) {
 
   // Each key is a token chain joined with empty string, like "abc%20123".
   // Each value is an array of starting points where the chain appears.
-  this.map = {};
+  this.map = new plex.Map();
   this.length = 0;
 };
 
@@ -224,9 +216,9 @@ plex.UrlSquisher.RepLevel.prototype.add = function(startPos) {
     // since we can't encode them.
     return;
   }
-  var list = this.map[key];
+  var list = this.map.get(key);
   if (!list) {
-    this.map[key] = list = [];
+    this.map.set(key, list = []);
   }
   list.push(startPos);
   this.length++;
@@ -266,8 +258,10 @@ plex.UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
         " but got " + prevLevel.chainLen);
   }
   // Look at all the entries in the nextLevel map
-  for (var key in this.map) {
-    var starts = this.map[key];
+  var keys = this.map.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var starts = this.map.get(key);
     var shortKeys = [
       prevLevel.getKey(starts[0]),
       prevLevel.getKey(starts[0] + 1)
@@ -275,9 +269,9 @@ plex.UrlSquisher.RepLevel.prototype.supercede = function(prevLevel) {
     // Look each of the two prevLevel chains.
     // If one has the same count as the longer chain,
     // then it is safe to remove.
-    for (var i = 0; i < 2; i++) {
+    for (var j = 0; j < 2; j++) {
       var shortKey = shortKeys[i];
-      var shortStarts = prevLevel.map[shortKey];
+      var shortStarts = prevLevel.map.get(shortKey);
       if (shortStarts) {
         if (shortStarts.length == starts.length) {
             //smallCoveredByBig(shortStarts, starts)) {
@@ -301,13 +295,15 @@ plex.UrlSquisher.RepLevel.prototype.getKey = function(startPos) {
 };
 
 plex.UrlSquisher.RepLevel.prototype.remove = function(key) {
-  delete this.map[key];
+  this.map.delete(key);
   this.length--;
 };
 
 plex.UrlSquisher.RepLevel.prototype.removeUniques = function() {
-  for (var key in this.map) {
-    if (this.map[key].length < 2) {
+  var keys = this.map.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    if (this.map.get(key).length < 2) {
       this.remove(key);
     }
   }
@@ -321,15 +317,17 @@ plex.UrlSquisher.RepLevel.prototype.removeUniques = function() {
  * Don't delete non-overlapping ones of course.
  */
 plex.UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
-  for (var key in this.map) {
-    var vals = this.map[key];
-    for (var i = 1; i < vals.length;) {
-      var v0 = vals[i - 1];
-      var v1 = vals[i];
+  var keys = this.map.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var vals = this.map.get(key);
+    for (var j = 1; j < vals.length;) {
+      var v0 = vals[j - 1];
+      var v1 = vals[j];
       if (v1 - v0 >= this.chainLen) {
-        i++;
+        j++;
       } else {
-        vals.splice(i, 1);
+        vals.splice(j, 1);
       }
     }
     if (vals.length < 2) {
@@ -340,10 +338,12 @@ plex.UrlSquisher.RepLevel.prototype.removeSelfOverlaps = function() {
 
 plex.UrlSquisher.RepLevel.prototype.getAllStarts = function() {
   var a = {};
-  for (var key in this.map) {
-    var list = this.map[key];
-    for (var i = 0; i < list.length; i++) {
-      a[list[i]] = true;
+  var keys = this.map.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var list = this.map.get(key);
+    for (var j = 0; j < list.length; j++) {
+      a[list[j]] = true;
     }
   }
   return a;

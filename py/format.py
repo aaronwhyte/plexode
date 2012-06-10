@@ -36,6 +36,7 @@ def plexScripts():
         "js/parser",
         "js/props",
         "js/token",
+        "map",
         "object",
         "pane",
         "point",
