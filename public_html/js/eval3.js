@@ -13,6 +13,19 @@ plex.eval3.INPUT_IDS = [
   'ms', 'oth', 'otj',
   'cex'
 ];
+
+plex.eval3.DEFAULTS = {
+  ht: '',
+  ohh: '1',
+  ohj: '1',
+  jt: '',
+  ojh: '1',
+  ojj: '1',
+  ms: '100',
+  oth: '0',
+  otj: '0',
+  cex: '1'
+};
                        
 plex.eval3.start = function() {
   // Decode URL and fill whitelisted input fields with initial values.
@@ -26,6 +39,8 @@ plex.eval3.start = function() {
       } else {
         plex.dom.gebi(id).value = map[id];
       }
+    } else if (id in plex.eval3.DEFAULTS) {
+      plex.dom.gebi(id).value = plex.eval3.DEFAULTS[id];
     }
   }
   
@@ -54,7 +69,8 @@ plex.eval3.start = function() {
   cbListen('ohj', plex.eval3.save);
   cbListen('ojh', plex.eval3.save);
   cbListen('ojj', plex.eval3.save);
-  
+  cbListen('cex', plex.eval3.save);
+
   // Immediately eval if any onchange boxes are checked.
   plex.eval3.eval(
       plex.dom.gebi('ohh').checked || plex.dom.gebi('ojh').checked,
@@ -133,13 +149,17 @@ plex_eval3_evalJs = function() {
 
 plex.eval3.save = function() {
   var map = {};
+  var val;
   for (var i = 0; i < plex.eval3.INPUT_IDS.length; i++) {
     var id = plex.eval3.INPUT_IDS[i];
     var input = plex.dom.gebi(id);
     if (input.type == 'checkbox') {
-      map[id] = input.checked ? 1 : 0;
+      val = input.checked ? '1' : '0';
     } else {
-      map[id] = plex.dom.gebi(id).value;
+      val = plex.dom.gebi(id).value;
+    }
+    if (val != plex.eval3.DEFAULTS[id]) {
+      map[id] = val;
     }
   }
   var q = plex.url.encodeQuery(map);
