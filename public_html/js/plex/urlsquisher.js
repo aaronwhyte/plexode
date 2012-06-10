@@ -177,18 +177,6 @@ plex.UrlSquisher.prototype.decodeLenChar = function(c) {
   return {subLen: subLen, origLen: origLen};
 };
 
-// next up:
-// v Rename "squish" to something else, like "getNextSub"
-//   and make it pick the best single substitution.
-// v Write a function to take a string and a sub and encode it.
-// v Then call them in a loop, starting with the string "~" + url,
-//   until there are no sub strings left, or there are no good subs left.
-// v Then make the decoder work iteratively, too.
-// v Then test it.
-// - fix map to use a plex.map, not an object literal. Until then, cannot compress the word "constructor", you dork!
-// Then productize.
-// FYI this looks a lot like Lempel-Ziv. http://www.data-compression.com/lossless.shtml#lz
-
 /**
  * Tracks all repeat occurences of chains of tokens.
  * All chains in one RepLevel are of the same length.
