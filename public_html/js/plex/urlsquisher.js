@@ -2,6 +2,8 @@
  * @constructor
  */
 plex.UrlSquisher = function() {
+  // It's kind of dumb to have on object for this,
+  // but whatevs. I may want it later.
 };
 
 plex.UrlSquisher.prototype.squish = function(url) {

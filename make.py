@@ -76,12 +76,6 @@ def buildPlexode(bdir):
     '../../tools/closure-compiler',
     getJsCompFlags(bdir, getVedJsFileNames(), "ved/" + vedJsName))
 
-#  print "compiling minigames/1 JS"
-#  minigame1JsName = 'mg1_%s.js' % str(int(time.time() * 1000))
-#  compileJs(
-#    '../../tools/closure-compiler',
-#    getJsCompFlags(bdir, getMinigame1JsFileNames(), "minigames/1/" + minigame1JsName))
-
   print "generating index.html files"
   writePublicHtml(bdir,'', mainpage.formatMain())
   writePublicHtml(bdir, '/insta-html', instahtml.formatInstaHtml())
@@ -99,8 +93,7 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
   writePublicHtml(bdir, '/ved', ved.formatVed(vorpJsName, vedJsName))
   writePublicHtml(bdir, '/chordo', chordo.formatChordo())
-#  writePublicHtml(bdir, '/minigames', minigames.formatMinigames())
-#  writePublicHtml(bdir, '/minigames/1', minigames.formatMinigame1(minigame1JsName))
+  writePublicHtml(bdir, '/u', unsquish.formatUnsquish())
 
   print "DONE building plexode"
 
