@@ -11,10 +11,12 @@ def formatChordo():
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
+<script src="../js/plex/map.js"></script>
 <script src="../js/plex/object.js"></script>
 <script src="../js/plex/pubsub.js"></script>
 <script src="../js/plex/string.js"></script>
 <script src="../js/plex/url.js"></script>
+<script src="../js/plex/urlsquisher.js"></script>
 <script src="../js/plex/wij/tachanges.js"></script>
 
 <script src="../chordo/chordo.js"></script>
@@ -37,7 +39,7 @@ function onLoadHandler() {
 </script>
 </head><body onload="onLoadHandler()">
 """)
-  h.append(format.navDiv(name, 1))
+  h.append(format.navDiv(name, 1, squishui=True))
   h.append(format.mainDiv("""
 <div>
 <input type="checkbox" id="jazzChords">

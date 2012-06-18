@@ -82,7 +82,7 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, '/eval', eval1.formatEval())
   writePublicHtml(bdir, '/eval2', eval2.formatEval2())
   writePublicHtml(bdir, '/eval3', eval3.formatEval3())
-  writePublicHtml(bdir, '/eval3quirks', eval3quirks.formatEval3Quirks())
+  writePublicHtml(bdir, '/eval3quirks', eval3.formatEval3(quirks=True))
   writePublicHtml(bdir, '/fracas', fracas.formatFracas())
   writePublicHtml(bdir, '/vorp', vorp.formatVorp())
   writePublicHtml(bdir, '/vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))

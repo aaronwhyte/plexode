@@ -10,18 +10,13 @@ links = [
 #  ("chordo", "chordo/"),
 ]
 
-def headStart(name, depth):
+def headStart(name, depth, quirks=False):
     toTop = '../' * depth
-    return ''.join(['''<!DOCTYPE HTML>
-<html><head><title>plexode:''', name, '''</title>
-<link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode2.css">
-<script src="''', toTop, '''js/util.js"></script>
-'''])
-
-def headStartQuirks(name, depth):
-    toTop = '../' * depth
-    return ''.join(['''<html><head><title>plexode:''', name, '''</title>
-<link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode2.css">
+    doctype = '<!DOCTYPE HTML>\n'
+    if quirks:
+      doctype = ''
+    return ''.join([doctype, '''<html><head><title>plexode:''', name, '''</title>
+<link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode3.css">
 <script src="''', toTop, '''js/util.js"></script>
 '''])
 
@@ -89,9 +84,11 @@ def plexodeLogo():
     return ''.join(html)
 
 
-def navDiv(name, level):
+def navDiv(name, level, squishui=False):
     html = ['<div class="top">']
     html.append('<div class="copyright">Copyright 2006 Aaron Whyte</div>')
+    if squishui:
+      html.append(squishUi())
     html.append(plexodeLogo())
     for link in links:
         if link[0] == name:
@@ -100,6 +97,14 @@ def navDiv(name, level):
             html.append(navLink(link, level))
     html.append('</div>')
     return ''.join(html)
+
+
+def squishUi():
+  return """<div id=squishdiv>
+<button id=squishbutton onclick="squishUrl()">Shorten URL</button>
+<input id=squishinput type=text>
+<div id=squishstats></div>
+</div>"""
 
 
 def mainDiv(innerHtml):
