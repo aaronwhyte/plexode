@@ -2,11 +2,12 @@
  * @constructor
  */
 plex.UrlSquisher = function() {
-  // It's kind of dumb to have on object for this,
-  // but whatevs. I may want it later.
+  this.legalChars = plex.url.TOTES_SAFE_HASH_CHARS;
 };
 
 plex.UrlSquisher.prototype.squish = function(url) {
+  this.monoCharIndex = -1;
+  this.biCharIndex = 0;
   var text = "~" + url;
   var subChar;
   while (subChar = this.getAvailableShortStr(text)) {
@@ -15,8 +16,8 @@ plex.UrlSquisher.prototype.squish = function(url) {
     if (!original) break;
     text = this.squishStep(subChar, original, text);
   }
-  console.log("squished: " + text);
-  console.log("compression ration: " + text.length / url.length);
+//  console.log("squished: " + text);
+//  console.log("compression ratio: " + text.length / url.length);
   return text;
 };
 
@@ -44,7 +45,7 @@ plex.UrlSquisher.prototype.unsquishStep = function(text) {
   var origLen = lens.origLen;
   var sub = text.substr(1, subLen);
   var original = text.substr(1 + subLen, origLen);
-  //console.log(['unsquish with', text.substr(0, 1 + subLen + origLen), sub, original].join(' '));
+//  console.log(['unsquish with', text.substr(0, 1 + subLen + origLen), sub, original].join(' '));
 
   text = text.substr(1 + subLen + origLen);
   //console.log("before unsquish: " + text);
@@ -57,16 +58,17 @@ plex.UrlSquisher.prototype.unsquishStep = function(text) {
  * Figure out what short string is unused.
  */
 plex.UrlSquisher.prototype.getAvailableShortStr = function(url) {
-  for (var i = 0; i < plex.url.URI_CHARS.length; i++) {
-    var c = plex.url.URI_CHARS.charAt(i);
+  while (++this.monoCharIndex < this.legalChars.length) {
+    var c = this.legalChars.charAt(this.monoCharIndex);
     if (url.indexOf(c) < 0) return c;
   }
-  for (var x = 0; x < plex.url.URI_CHARS.length; x++) {
-    for (var y = 0; y < plex.url.URI_CHARS.length; y++) {
-      if (x == y) continue;
-      var str = plex.url.URI_CHARS.charAt(x) + plex.url.URI_CHARS.charAt(y);
-      if (url.indexOf(str) < 0) return str;
-    }
+  var squareLen = this.legalChars.length * this.legalChars.length;
+  while (++this.biCharIndex < squareLen) {
+    var x = Math.floor(this.biCharIndex / this.legalChars.length);
+    var y = this.biCharIndex % this.legalChars.length;
+    if (x == y) continue;
+    var str = this.legalChars.charAt(x) + this.legalChars.charAt(y);
+    if (url.indexOf(str) < 0) return str;
   }
   return null;
 };
@@ -132,7 +134,7 @@ plex.UrlSquisher.prototype.squishStep = function(subChar, original, text) {
   var squished = command + plex.string.replace(text, original, subChar);
 //  var unsq = this.unsquishStep(squished);
 //  if (unsq != text) throw Error("what was squished cannot be unsquished!");
-  console.log(["squishStep", subChar, original, text.length - squished.length].join(' '));
+//  console.log(["squishStep", subChar, original, text.length - squished.length].join(' '));
   return squished;
 };
 
@@ -153,10 +155,10 @@ plex.UrlSquisher.prototype.checkSubLens = function(subLen, origLen) {
 plex.UrlSquisher.prototype.encodeLenChar = function(subLen, origLen) {
   this.checkSubLens(subLen, origLen);
   var lenBits = (subLen - 1) + 4 * (origLen - 1);
-  if (lenBits < 0 || lenBits >= plex.url.URI_CHARS.length) {
+  if (lenBits < 0 || lenBits >= this.legalChars.length) {
     throw Error("cannot encode lenBits " + lenBits);
   }
-  var retval = plex.url.URI_CHARS.charAt(lenBits);
+  var retval = this.legalChars.charAt(lenBits);
   if (retval < 0) {
     throw Error("No legal character can encode bit value" + lenBits);
   }
@@ -171,7 +173,7 @@ plex.UrlSquisher.prototype.encodeLenChar = function(subLen, origLen) {
 };
 
 plex.UrlSquisher.prototype.decodeLenChar = function(c) {
-  var bits = plex.url.URI_CHARS.indexOf(c);
+  var bits = this.legalChars.indexOf(c);
   if (bits < 0) throw Error("Invalid bits char '" + c + "'");
   var subLen = (bits & 3) + 1;
   var origLen = Math.floor(bits / 4) + 1;
@@ -338,3 +340,4 @@ plex.UrlSquisher.RepLevel.prototype.getAllStarts = function() {
   }
   return a;
 };
+

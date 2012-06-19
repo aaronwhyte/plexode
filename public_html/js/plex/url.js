@@ -66,13 +66,10 @@ plex.url.getQuery = function() {
 plex.url.URI_CHARS = "!#$&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 plex.url.URI_COMPONENT_CHARS = "!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 
-plex.url.createUriCharSet = function() {
-  var uriCharSet = {};
-  for (var i = 0; i < plex.url.URI_CHARS.length; i++) {
-    uriCharSet[plex.url.URI_CHARS.charAt(i)] = true;
-  }
-  return uriCharSet;
-};
+// Firefox percent-escapes the single-quote ' char when you do window.location.href.
+// Firefox unescapes stuff when you do window.location.hash, mangling data stored there.
+// Firefox seems to mangle parentheses, too.
+plex.url.TOTES_SAFE_HASH_CHARS = "!*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 
 /**
  * Splits a percent-encoded UTF-8-encoded URL into strings representing
