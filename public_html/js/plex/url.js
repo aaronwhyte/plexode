@@ -60,7 +60,6 @@ plex.url.getQuery = function() {
 plex.url.URI_CHARS = "!#$&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 plex.url.URI_COMPONENT_CHARS = "!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 
-// Firefox unescapes stuff when you do window.location.hash, mangling data stored there.
 // Firefox incorrectly percent-escapes single-quotes when you do window.location.href.
 plex.url.TOTES_SAFE_HASH_CHARS = "!()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 

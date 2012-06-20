@@ -19,8 +19,6 @@ plex.UrlSquisher.prototype.squish = function(url) {
     if (!original) break;
     text = this.squishStep(subChar, original, text);
   }
-//  console.log("squished: " + text);
-//  console.log("compression ratio: " + text.length / url.length);
   return text;
 };
 
@@ -48,12 +46,9 @@ plex.UrlSquisher.prototype.unsquishStep = function(text) {
   var origLen = lens.origLen;
   var sub = text.substr(1, subLen);
   var original = text.substr(1 + subLen, origLen);
-//  console.log(['unsquish with', text.substr(0, 1 + subLen + origLen), sub, original].join(' '));
 
   text = text.substr(1 + subLen + origLen);
-  //console.log("before unsquish: " + text);
   text = plex.string.replace(text, sub, original);
-  //console.log("after unsquish:  " + text);
   return text;
 };
 
@@ -135,9 +130,6 @@ plex.UrlSquisher.prototype.calcBestOriginal = function(levels, replacement) {
 plex.UrlSquisher.prototype.squishStep = function(subChar, original, text) {
   var command = this.encodeLenChar(subChar.length, original.length) + subChar + original;
   var squished = command + plex.string.replace(text, original, subChar);
-//  var unsq = this.unsquishStep(squished);
-//  if (unsq != text) throw Error("what was squished cannot be unsquished!");
-//  console.log(["squishStep", subChar, original, text.length - squished.length].join(' '));
   return squished;
 };
 

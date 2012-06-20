@@ -11,13 +11,13 @@ def formatUnsquish():
 <script src="../js/plex/string.js"></script>
 <script src="../js/plex/url.js"></script>
 <script src="../js/plex/urlsquisher.js"></script>
-
 <script src="../js/unsquish.js"></script>
-</head><body onload="unsquish()">
+</head>
+<body onload="unsquish()">
+<i>unsquish...</i>
+</body>
+</html>
 """)
-  h.append(format.navDiv(name, 1))
-  h.append(format.mainDiv("""<div id="url"></div>"""))
-  h.append(format.footer())
   return ''.join(h)
 
 def main():

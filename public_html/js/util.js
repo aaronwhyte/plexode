@@ -71,25 +71,33 @@ function invalidateSquishedUrl() {
 function squishUrl() {
   var squisher = new plex.UrlSquisher();
   var url = String(window.location);
-  //var prefix = "http://plexode.com/u/#";
-  var prefix = "file:///Users/awhyte/dev/build/plexode/public_html/u/index.html#";
+  var prefix = "http://plexode.com/u/#";
+  //var prefix = "file:///Users/awhyte/dev/build/plexode/public_html/u/index.html#";
   var squishedUrl = prefix + squisher.squish(url);
+  var squished = true;
   if (squishedUrl.length >= url.length) {
     squishedUrl = url;
+    squished = false;
   }
 
   gebi("squishbutton").style.display = "none";
 
   var si = gebi("squishinput");
   si.value = squishedUrl;
-  si.style.display = "block";
-  si.focus();
-  si.select();
+  if (squished) {
+    si.style.display = "block";
+    si.focus();
+    si.select();
+  }
 
   var ss = gebi("squishstats");
-  ss.innerHTML = [
-    "size:", url.length, "&rarr;", squishedUrl.length,
-    " savings:", Math.floor(100 * (1 - squishedUrl.length / url.length)) + "%"
-  ].join('');
+  if (squished) {
+    ss.innerHTML = [
+      "size:", url.length, "&rarr;", squishedUrl.length,
+      " savings:", Math.floor(100 * (1 - squishedUrl.length / url.length)) + "%"
+    ].join('');
+  } else {
+    ss.innerHTML ="Sorry, the URL couldn't be shortened.";
+  }
   ss.style.display = "block";
-};
+}

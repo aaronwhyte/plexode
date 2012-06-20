@@ -101,7 +101,7 @@ def navDiv(name, level, squishui=False):
 
 def squishUi():
   return """<div id=squishdiv>
-<button id=squishbutton onclick="squishUrl()">Shorten URL</button>
+<button id=squishbutton onclick="squishUrl()">shorter URL</button>
 <input id=squishinput type=text>
 <div id=squishstats></div>
 </div>"""
