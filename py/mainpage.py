@@ -28,9 +28,9 @@ a {
 
 <div class="news">
 <span class="date">2012-06-19</span>
-Url compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
+URL compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
 now have a URL shortener button in the top right corner, that calculates a compressed URL.
-The shorter URLs still contain all the original information; URLs aren't stored in a database.
+A compressed URL contains all the information that was in the original. URLs aren't stored in a database.
 <br>
 The algorithm:
 <ol>
@@ -38,12 +38,11 @@ The algorithm:
 <li>Select the one with the biggest length*frequency, to 'squish' by substituting a smaller,
 unused string for the larger one.
 <li>Create an 'unsquish' command string to reverse the squish step.
-<li>If the length of unsquish command is more than paid for by the squish,
+<li>If the substitution would shorten the string more than the command would lengthen it,
 <br>then the new string = the unsquish command + the old string with the substitution made.
 <br>Otherwise quit.
 <li>Goto step 1.
 </ol>
-It's lossless, and it's designed to compress URLs with hundreds or thousands of characters.
 </div>
 
 <div class="news">
