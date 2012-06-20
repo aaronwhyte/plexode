@@ -11,19 +11,13 @@ plex.url = {};
  */
 plex.url.setFragment = function(val) {
   // Just setting the location.hash to the val fails to encode newlines in
-  // Safari, so we replace the whole URL with a manually generated string.
+  // Safari, so we replace the whole URL.
   // Also, setting the hash to empty-string removes the '#', causing a reload,
   // so always add the #.
-  var href = [
-    location.protocol,
-    '//',
-    location.hostname,
-    location.port ? ':' + location.port : '',
-    location.pathname,
-    location.search,
-    '#',
-    val ? val : ''];
-  location.replace(href.join(''));
+  var href = location.href;
+  var hashIndex = href.indexOf("#");
+  var nonHash = hashIndex < 0 ? href : href.substr(0, hashIndex);
+  location.replace(nonHash + "#" + val);
 };
 
 /**
@@ -66,10 +60,9 @@ plex.url.getQuery = function() {
 plex.url.URI_CHARS = "!#$&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 plex.url.URI_COMPONENT_CHARS = "!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 
-// Firefox percent-escapes the single-quote ' char when you do window.location.href.
 // Firefox unescapes stuff when you do window.location.hash, mangling data stored there.
-// Firefox seems to mangle parentheses, too.
-plex.url.TOTES_SAFE_HASH_CHARS = "!*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
+// Firefox incorrectly percent-escapes single-quotes when you do window.location.href.
+plex.url.TOTES_SAFE_HASH_CHARS = "!()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~";
 
 /**
  * Splits a percent-encoded UTF-8-encoded URL into strings representing

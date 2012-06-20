@@ -7,5 +7,5 @@ function unsquish() {
   var s = new plex.UrlSquisher();
   var f = plex.url.getFragment();
   var u = s.unsquish(f);
-  window.location = u;
+  window.location.replace(u);
 }

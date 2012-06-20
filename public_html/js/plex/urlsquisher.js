@@ -8,6 +8,9 @@ plex.UrlSquisher = function() {
 plex.UrlSquisher.prototype.squish = function(url) {
   this.monoCharIndex = -1;
   this.biCharIndex = 0;
+  // Firefox's location.href will turn a single-quote in a hash into "%27".
+  // So don't ever allow single-quotes in squished URLs.
+  url = url.replace(/'/g, '%27');
   var text = "~" + url;
   var subChar;
   while (subChar = this.getAvailableShortStr(text)) {
