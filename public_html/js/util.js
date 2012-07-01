@@ -24,7 +24,7 @@ function textToHtml(text) {
     ['<', '&lt;'],
     ['&', '&amp;'],
     ['"', '&quot;'],
-    ['\n', '<br />']
+    ['\n', '<br>']
   ];
   for (var i=0; i<text.length; i++) {
     var c = text.charAt(i);
@@ -58,4 +58,46 @@ function ct(text, parent) {
     parent.appendChild(e);
   }
   return e;
+}
+
+function invalidateSquishedUrl() {
+  var si = gebi("squishinput");
+  si.style.display = "";
+  si.value = "";
+  gebi("squishstats").style.display = "";
+  gebi("squishbutton").style.display = "";
+}
+
+function squishUrl() {
+  var squisher = new plex.UrlSquisher();
+  var url = String(window.location);
+  var prefix = "http://plexode.com/u/#";
+  //var prefix = "file:///Users/awhyte/dev/build/plexode/public_html/u/index.html#";
+  var squishedUrl = prefix + squisher.squish(url);
+  var squished = true;
+  if (squishedUrl.length >= url.length) {
+    squishedUrl = url;
+    squished = false;
+  }
+
+  gebi("squishbutton").style.display = "none";
+
+  var si = gebi("squishinput");
+  si.value = squishedUrl;
+  if (squished) {
+    si.style.display = "block";
+    si.focus();
+    si.select();
+  }
+
+  var ss = gebi("squishstats");
+  if (squished) {
+    ss.innerHTML = [
+      "size:", url.length, "&rarr;", squishedUrl.length,
+      " savings:", Math.floor(100 * (1 - squishedUrl.length / url.length)) + "%"
+    ].join('');
+  } else {
+    ss.innerHTML ="Sorry, the URL couldn't be shortened.";
+  }
+  ss.style.display = "block";
 }

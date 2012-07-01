@@ -71,6 +71,7 @@ Chordo.prototype.save = function() {
   }
   var q = plex.url.encodeQuery(map);
   plex.url.setFragment(q);
+  if (invalidateSquishedUrl) invalidateSquishedUrl();
 };
 
 Chordo.JAZZ_CHORDS = [

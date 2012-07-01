@@ -9,6 +9,7 @@ __all__ = [
   'mainpage',
   'minigames',
   'test',
+  'unsquish',
   'ved',
   'vorp',
   ]

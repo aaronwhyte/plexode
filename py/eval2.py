@@ -65,7 +65,7 @@ def formatEval2():
 </style>
 """)
   h.append('</head><body onload="plex.eval2.start()">')
-  h.append(format.navDiv(name, 1))
+  h.append(format.navDiv(name, 1, squishui=True))
   h.append(format.mainDiv("""
 <div id="log"></div>
 A JavaScript evaluator - Now with autocomplete!<sub>BETA</sub><br>

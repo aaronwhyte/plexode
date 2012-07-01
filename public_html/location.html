@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+<title>location location location</title>
+<script>
+function textToHtml(t) {
+  return t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+}
+function whatisyourlocation() {
+  function t(txt) {
+    h.push(textToHtml(txt));
+  }
+  var h = [];
+  t('window.location     : ' + window.location);
+  t('window.location.href: ' + window.location.href);
+  t('window.location.hash: ' + window.location.hash);
+  document.getElementById('out').innerHTML = h.join('\n');
+}
+function locationReplace() {
+  window.location.replace(document.getElementById('newloc1').value);
+}
+function locationEquals() {
+  window.location = document.getElementById('newloc2').value;
+}
+</script>
+</head>
+<body onload="whatisyourlocation()">
+<div id="out" style="font-family:monospace; white-space:pre"></div>
+
+<input type="text" style="width:30em" id="newloc1"> <button onclick="locationReplace()">window.location.replace()</button>
+<br>
+<input type="text" style="width:30em" id="newloc2"> <button onclick="locationEquals()">window.location = </button>
+
+</body>
