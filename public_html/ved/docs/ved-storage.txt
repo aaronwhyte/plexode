@@ -16,8 +16,8 @@ and concurrent editing by the same human is virtually impossible.
 Level files have names.
 Level maps are represented as a list of operations, encoded as JSON.
 Whenever the user makes a change, it is appended to the list as a smaller list.
-LocalStorage doesn't support appending, so each edit will show up as a new
-key/value pair.
+LocalStorage doesn't support appending to a single value,
+so each edit will show up as a new key/value pair.
 This makes appending fast, since it's just a serialize-and-write, with no
 read/deserialize/edit/reserialize-everything.
 
@@ -27,3 +27,73 @@ one big one, and it can cull obsolete ones. This is a "replay".
 How do I split the basics apart from the Ved stuff?
 Use a directory tree and RESTful ops... OK, I'm moving the filesystem details to
 stor-design.txt, and this doc will focus on the ved-specific use cases.
+
+Stor will provide only this API, which is necessary but insufficient:
+- Stor(storage, prefix) // instantiate handle to underlying storage mechanism, with given namespace
+- listenToStorage() // static initialization
+- getNames() // gets all entity names in stor instance
+- appendValues(name, values)
+- getValues(name) // replace with getValues(name, aboveIndex) ?
+- subs
+- this.pubsub.publish(Stor.Ops.APPEND_VALUES, name, values);
+
+Ved needs...
+- A directory of all level names.
+- An OpStor for each level, maybe with a LevelStor on top.
+- A ClipStor for clips, which might be build on OpStor too.
+
+==============
+=== OpStor ===
+==============
+This is storage that expresses a global series of operations on objects, their attributes, and links between them.
+Because I'd like the stor to be a remote server at some point, I need to handle offline, async, races, etc.
+Here is plan:
+IDs:
+- Each client must have a globally unique client ID - random UID, or server-computed.
+- Object IDs are assigned on the client, like (clientId + DELIMITER + clientObjId).
+  These are permanent and unique, client and server.
+  There is no id-remapping anywhere ever. That simplifies a lot.
+- Operations have two IDs: a client-created one, and a server-assigned globally ordered one.
+  Both of these IDs are stored on the server and rebroadcast to all subscribers.
+
+A client's view of an opstream is like this:
+  [server ops] +
+  [client committed ops that are not yet acked by the server] +
+  ["what-if" ops not committed by the client]
+All ops are fully reversible.
+For the UI's sake, a client keeps the "reified" state in memory.
+The "what if" ops get done and undone constantly.
+The client-committed ops get subitted to storage until they are acked.
+When the server gets ops, it doesn't ack them directly.
+It simply sends the ops back to the client, including the clientOpId and the (new) serverOpId.
+For each op from the server,
+  The client should look at the oldest unacked clientOpId.
+  If it matches the first server op's clientOpId, then the client can simply mark that op as acked,
+      without undoing/redoing any ops first.
+  Else the client must
+      un-reify all unacked client ops,
+      insert the server op (or ops, if it has a batch),
+      and re-reify all unacked client ops on top of it.
+
+Tricky case:
+Say there's an object X.
+Offline, client A links X to Y.
+Offline, client B deletes X.
+Client B goes online and posts the deletion. It gets acked by the server.
+Client A goes online and posts the link op without checking for server ops first.
+- The server must assign server IDs even to invalid ops, and store the clientOpId/serverOpId pairs.
+- The server may be clever and only broadcast valid ops to clients that didn't originate the ops.
+- The server must ack all of a client's ops back to the client somehow.
+- The server may send a shorter "acked through serverOpId n, clientOpId m"
+Back to our story...
+Client A hears from the server about the deletion of X by B, and then the linking of X to Y (by itself, A).
+Clients must be able to ignore invalid operations when reifying or re-reifying.
+
+Server interface:
+- void postOps (bucket, (clientOpId, payload)+) // server assigns serverOpIds
+- (serverOpId, clientOpId, payload)* getOpsAfter(bucket, serverOpId)
+Handle subscription and invalidation separately (or not at all)
+
+Server should be able to do a compression replay which preserves the highest-ever acked clientOpId for each client,
+and the serverIds (and all other parts) of all remaining operations.
+

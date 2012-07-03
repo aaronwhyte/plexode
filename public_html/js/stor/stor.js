@@ -1,5 +1,5 @@
 /**
- *
+ * A key/value store with named lists of values.
  * @constructor
  */
 function Stor(storage, prefix) {
@@ -16,7 +16,7 @@ Stor.NAME = 'name';
 Stor.DATA = 'data';
 
 Stor.Ops = {
-  APPEND_VALUES: 'append_values'
+  APPEND_VALUE: 'append_value'
 };
 
 //prefix/name/awesometown-level: 123456
@@ -37,26 +37,46 @@ Stor.prototype.getStorageListener = function() {
     var id = path[2];
     var name = self.getNameForId(id);
     if (name) {
-      self.pubsub.publish(Stor.Ops.APPEND_VALUES, name, JSON.parse(e.newValue));
+      self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, JSON.parse(e.newValue));
     }
   };
 };
 
 /**
- * @private
+ * @return {Array} the names of all the objects in this Stor
  */
-Stor.prototype.getKeyForName = function(name) {
-  return this.namePrefix + name;
+Stor.prototype.getNames = function() {
+  var names = [];
+  for (var i = 0, n = this.storage.length; i < n; i++) {
+    var k = this.storage.key(i);
+    if (0 == k.lastIndexOf(this.namePrefix, 0)) {
+      var name = k.substring(this.namePrefix.length);
+      names.push(name);
+      // populate idToName map while we're at it.
+      var scanId = this.storage.getItem(this.getKeyForName(name));
+      this.idToName[scanId] = name;
+    }
+  }
+  return names;
 };
 
 /**
- * @private
+ * Appends new values to the stor. Creates a new names object if the name isn't in use.
+ * @param name
+ * @param values
  */
-Stor.prototype.getKeyForDataIndex = function(dataId, index) {
-  return [this.dataPrefix, dataId, index].join('/');
+Stor.prototype.appendValues = function(name, values) {
+  for (var i = 0; i < values.length; i++) {
+    this.appendValue(name, values[i]);
+  }
 };
 
-Stor.prototype.appendValues = function(name, values) {
+/**
+ * Appends a new value to the stor. Creates a new names object if the name isn't in use.
+ * @param name
+ * @param value
+ */
+Stor.prototype.appendValue = function(name, value) {
   var nameKey = this.getKeyForName(name);
   // see if the name is there
   var dataId = this.storage.getItem(nameKey);
@@ -81,11 +101,65 @@ Stor.prototype.appendValues = function(name, values) {
     nextIndex++;
   }
   // Write to that index.
-  this.storage.setItem(dataKey, JSON.stringify(values));
+  this.storage.setItem(dataKey, JSON.stringify(value));
   // Cache the last index value, to avoid a chain of lookups next time.
   this.lastIndex[dataId] = nextIndex;
   // Windows won't publish storage events they initiate!
-  this.pubsub.publish(Stor.Ops.APPEND_VALUES, name, values);
+  this.pubsub.publish(Stor.Ops.APPEND_VALUE, name, value);
+};
+
+/**
+ * All the values for one name in this Stor
+ * @param name
+ * @return {Array} of values, in the order in which they were inserted.
+ */
+Stor.prototype.getValues = function(name) {
+  return this.getValuesAfterIndex(name, 0);
+};
+
+/**
+ * All the values for one name in this Stor after some index
+ * @param {string} name
+ * @param {number} afterIndex
+ * @return {Array} of values, in the order in which they were inserted.
+ */
+Stor.prototype.getValuesAfterIndex = function(name, afterIndex) {
+  var dataId = this.storage.getItem(this.getKeyForName(name));
+  if (!dataId) return [];
+  var retval = [];
+  if (isNaN(afterIndex)) throw Error("afterIndex is not a number: " + afterIndex);
+  var index = Math.max(1, afterIndex + 1);
+  while (true) {
+    var valueString = this.storage.getItem(this.getKeyForDataIndex(dataId, index++));
+    if (!valueString) break;
+    var value = JSON.parse(valueString);
+    retval.push(value);
+  }
+  return retval;
+};
+
+/**
+ * Subscribe to the change-publisher. The listener will be called
+ * with three params, like so:
+ * fn(Stor.Ops.APPEND_VALUE, name, values);
+ * @param fn
+ */
+Stor.prototype.subscribe = function(fn) {
+  this.pubsub.subscribe(fn);
+};
+
+/**
+ * @private
+ */
+Stor.prototype.getKeyForName = function(name) {
+  return this.namePrefix + name;
+};
+
+/**
+ * @private
+ */
+Stor.prototype.getKeyForDataIndex = function(dataId, index) {
+  return [this.dataPrefix, dataId, index].join('/');
 };
 
 /**
@@ -93,10 +167,12 @@ Stor.prototype.appendValues = function(name, values) {
  * @private
  */
 Stor.prototype.getNameForId = function(id) {
+  // check the cache first
   var name = this.idToName[id];
   if (name) return name;
-  var retval = null;
+
   // Scan all keys and populate the entire idToName cache.
+  var retval = null;
   for (var i = 0, n = this.storage.length; i < n; i++) {
     var k = this.storage.key(i);
     if (0 == k.lastIndexOf(this.namePrefix, 0)) {
@@ -110,39 +186,4 @@ Stor.prototype.getNameForId = function(id) {
     }
   }
   return retval;
-};
-
-Stor.prototype.getNames = function() {
-  var names = [];
-  for (var i = 0, n = this.storage.length; i < n; i++) {
-    var k = this.storage.key(i);
-    if (0 == k.lastIndexOf(this.namePrefix, 0)) {
-      var name = k.substring(this.namePrefix.length);
-      names.push(name);
-      // populate idToName map while we're at it.
-      var scanId = this.storage.getItem(this.getKeyForName(name));
-      this.idToName[scanId] = name;
-    }
-  }
-  return names;
-};
-
-Stor.prototype.getValues = function(name) {
-  var dataId = this.storage.getItem(this.getKeyForName(name));
-  if (!dataId) return [];
-  var retval = [];
-  var index = 1;
-  while (true) {
-    var valueString = this.storage.getItem(this.getKeyForDataIndex(dataId, index++));
-    if (!valueString) break;
-    var values = JSON.parse(valueString);
-    for (var i = 0; i < values.length; i++) {
-      retval.push(values[i]);
-    }
-  }
-  return retval;
-};
-
-Stor.prototype.subscribe = function(fn) {
-  this.pubsub.subscribe(fn);
 };

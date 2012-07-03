@@ -43,7 +43,7 @@ v one-point wall-huggers
   v button
   v grip
 
-ClipList 2011.03.25 -
+ClipList 2012.03.25 - ...
 Whole cliplist will be one Stor object.
 Need a replay strategy that does two things:
 1: Preserve op numbers
@@ -51,6 +51,12 @@ Need a replay strategy that does two things:
 After a replay, the remaining ops should have no redundant information.
 
 v add pubsub to Stor events
+... 2012.07.03 ...
+- write real cross-tab Stor test page
+  - bake API
+    - subscribe to invalidations
+    - get changes after opdid X
+
 - addClip(id, model): inserts in order
 - getIds(): returns unsorted ID list
 - getClip(id)

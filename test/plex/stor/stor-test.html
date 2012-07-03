@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
 <title>Stor tests</title>
@@ -35,6 +35,19 @@ addTest(function testSetAndGetSANITY() {
   assertStringifyEquals([b, d], stor.getValues('bar'));
 });
 
+addTest(function testGetValuesAfterIndex() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  stor.appendValues('foo', ['a', 'b', 'c', 'd']);
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValues('foo'));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', -10));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', 0));
+  assertStringifyEquals(['c', 'd'], stor.getValuesAfterIndex('foo', 2));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 4));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 20));
+});
+
 addTest(function testGetNames() {
   sessionStorage.clear();
   var stor = new Stor(sessionStorage, 'stor-test');
@@ -60,12 +73,12 @@ addTest(function testSubscription() {
   stor.subscribe(callback);
   var names = ['a', 'b', 'a'];
   for (var i = 0; i < names.length; i++) {
-    stor.appendValues(names[i], [i]);
+    stor.appendValue(names[i], i);
   }
   assertStringifyEquals([
-    [Stor.Ops.APPEND_VALUES, 'a', [0]],
-    [Stor.Ops.APPEND_VALUES, 'b', [1]],
-    [Stor.Ops.APPEND_VALUES, 'a', [2]]
+    [Stor.Ops.APPEND_VALUE, 'a', 0],
+    [Stor.Ops.APPEND_VALUE, 'b', 1],
+    [Stor.Ops.APPEND_VALUE, 'a', 2]
   ], events);
 });
 

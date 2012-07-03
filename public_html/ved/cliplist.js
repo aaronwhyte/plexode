@@ -16,7 +16,3 @@ ClipList.prototype.getClip = function(id) {
 ClipList.prototype.removeClip = function(id) {
   delete this.clips[id];
 };
-
-ClipList.prototype.removeClip = function(id) {
-  delete this.clips[id];
-};
