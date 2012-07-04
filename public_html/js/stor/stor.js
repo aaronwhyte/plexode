@@ -159,7 +159,7 @@ Stor.prototype.getKeyForName = function(name) {
  * @private
  */
 Stor.prototype.getKeyForDataIndex = function(dataId, index) {
-  return [this.dataPrefix, dataId, index].join('/');
+  return this.dataPrefix + dataId + '/' + index;
 };
 
 /**
