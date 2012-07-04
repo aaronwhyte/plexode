@@ -52,10 +52,11 @@ After a replay, the remaining ops should have no redundant information.
 
 v add pubsub to Stor events
 ... 2012.07.03 ...
-- write real cross-tab Stor test page
-  - bake API
-    - subscribe to invalidations
-    - get changes after opdid X
+v write real cross-tab Stor test page
+- write OpStor
+  - subscribe to invalidations
+  - get changes after opdid X
+  - demo
 
 - addClip(id, model): inserts in order
 - getIds(): returns unsorted ID list

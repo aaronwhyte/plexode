@@ -1,51 +1,5 @@
-Ved multiwindow multisession UX vs localStorage
-
-The clipboards will be shared between all Ved windows.
-Ved won't support pinning clipboards or snippets, but it will support
-editing multiple levels at the same time. I expect to keep at least 2 levels
-open when editing. One will be a "back lot" full of patterns I like to use,
-that I can copy to a clipboard, and paste into the playable level I'm working
-on.
-I might also keep multiple views of the same level open - a zoomed-out one
-and a zoomed-in one, or separate areas - whatever.
-
-Changes to the clipboard should be reflected instantly in all windows.
-Don't worry about concurrency with the clipboard. It's not critical data,
-and concurrent editing by the same human is virtually impossible.
-
-Level files have names.
-Level maps are represented as a list of operations, encoded as JSON.
-Whenever the user makes a change, it is appended to the list as a smaller list.
-LocalStorage doesn't support appending to a single value,
-so each edit will show up as a new key/value pair.
-This makes appending fast, since it's just a serialize-and-write, with no
-read/deserialize/edit/reserialize-everything.
-
-Periodically, a process can consolidate a lot of these entries into
-one big one, and it can cull obsolete ones. This is a "replay".
-
-How do I split the basics apart from the Ved stuff?
-Use a directory tree and RESTful ops... OK, I'm moving the filesystem details to
-stor-design.txt, and this doc will focus on the ved-specific use cases.
-
-Stor will provide only this API, which is necessary but insufficient:
-- Stor(storage, prefix) // instantiate handle to underlying storage mechanism, with given namespace
-- listenToStorage() // static initialization
-- getNames() // gets all entity names in stor instance
-- appendValues(name, values)
-- getValues(name) // replace with getValues(name, aboveIndex) ?
-- subs
-- this.pubsub.publish(Stor.Ops.APPEND_VALUES, name, values);
-
-Ved needs...
-- A directory of all level names.
-- An OpStor for each level, maybe with a LevelStor on top.
-- A ClipStor for clips, which might be build on OpStor too.
-
-==============
-=== OpStor ===
-==============
-This is storage that expresses a global series of operations on objects, their attributes, and links between them.
+This is storage that expresses a global series of operations, on objects, their attributes, and links between them,
+like the operations in grafop.js.
 Because I'd like the stor to be a remote server at some point, I need to handle offline, async, races, etc.
 Here is plan:
 IDs:
