@@ -204,21 +204,17 @@ GrafModel.prototype.getLink = function(id) {
  * @return a mapping from old obj IDs to new obj IDs
  */
 GrafModel.prototype.addModel = function(model) {
-  var self = this;
-  var idMap = {};
+  var ops = model.serializeToOpsJson();
+  this.rewriteOpIds(ops);
+  this.applyOps(ops);
+};
 
-  function addId(oldId) {
-    var newId = self.newId();
-    idMap[oldId] = newId;
-    return newId;
-  }
-  function getId(oldId) {
-    var newId = idMap[oldId];
-    if (!newId) {
-      throw Error('model refers to nonexistent id: ' + oldId);
-    }
-    return newId;
-  }
+/**
+ * @return a JSON array of ops that can be used to create an identical model.
+ * Since that re-uses this model's IDs, it can't be added to this model.
+ * See "rewriteOpIds(ops)"
+ */
+GrafModel.prototype.serializeToOpsJson = function() {
   function pushDataOps(objId, data) {
     for (var key in data) {
       ops.push({
@@ -235,55 +231,89 @@ GrafModel.prototype.addModel = function(model) {
   var ops = [];
 
   // Add clusters.
-  for (var clusterId in model.clusters) {
-    var cluster = model.clusters[clusterId];
-    var newClusterId = addId(clusterId);
+  for (var clusterId in this.clusters) {
+    var cluster = this.clusters[clusterId];
     ops.push({
       type: GrafOp.Type.ADD_CLUSTER,
-      id: newClusterId
+      id: clusterId
     });
-    pushDataOps(newClusterId, cluster.data);
-    
+    pushDataOps(clusterId, cluster.data);
+
     // Add cluster's parts.
     for (var partId in cluster.parts) {
       var part = cluster.parts[partId];
-      var newPartId = addId(partId);
       ops.push({
         type: GrafOp.Type.ADD_PART,
-        id: newPartId,
-        clusterId: newClusterId,
+        id: partId,
+        clusterId: clusterId,
         x: part.x,
         y: part.y
       });
-      pushDataOps(newPartId, part.data);
+      pushDataOps(partId, part.data);
 
       // Add part's jacks.
       for (var jackId in part.jacks) {
         var jack = part.jacks[jackId];
-        var newJackId = addId(jackId);
         ops.push({
           type: GrafOp.Type.ADD_JACK,
-          id: newJackId,
-          partId: newPartId
+          id: jackId,
+          partId: partId
         });
-        pushDataOps(newJackId, jack.data);
+        pushDataOps(jackId, jack.data);
       }
     }
   }
 
   // Add links.
-  for (var linkId in model.links) {
-    var link = model.links[linkId];
-    var newLinkId = addId(linkId);
+  for (var linkId in this.links) {
+    var link = this.links[linkId];
     ops.push({
       type: GrafOp.Type.ADD_LINK,
-      id: newLinkId,
-      jackId1: getId(link.jackId1),
-      jackId2: getId(link.jackId2)
+      id: linkId,
+      jackId1: link.jackId1,
+      jackId2: link.jackId2
     });
-    pushDataOps(newLinkId, link.data);
+    pushDataOps(linkId, link.data);
+  }
+  return ops;
+};
+
+/**
+ * OVerwrites the op IDs to new IDs from this model's ID generator,
+ * so the ops can be applied to this model. Retains
+ */
+GrafModel.prototype.rewriteOpIds = function(ops) {
+  var self = this;
+  var idMap = {};
+
+  function addId(oldId) {
+    if (idMap[oldId]) {
+      throw Error('the list of ops seems to have included the same ID twice: ' + oldId);
+    }
+    var newId = self.newId();
+    idMap[oldId] = newId;
+    return newId;
+  }
+  function getId(oldId) {
+    var newId = idMap[oldId];
+    if (!newId) {
+      throw Error('model refers to nonexistent id: ' + oldId);
+    }
+    return newId;
   }
 
-  this.applyOps(ops);
-  return idMap;
+  function rewriteId(op, fieldName) {
+    if (op[fieldName]) {
+      op[fieldName] = getId(op[fieldName]);
+    }
+  }
+
+  var fieldNames = ['clusterId', 'partId', 'jackId1', 'jackId2'];
+  for (var i = 0; i < ops.length; i++) {
+    var op = ops[i];
+    op.id = addId(op.id);
+    for (var j = 0; j < fieldNames.length; j++) {
+      rewriteId(op, fieldNames[j]);
+    }
+  }
 };

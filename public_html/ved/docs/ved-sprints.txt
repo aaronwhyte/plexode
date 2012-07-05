@@ -49,48 +49,23 @@ Need a replay strategy that does two things:
 1: Preserve op numbers
 2: Eliminate obsolete ops
 After a replay, the remaining ops should have no redundant information.
-
 v add pubsub to Stor events
 ... 2012.07.03
 v write real cross-tab Stor demo
-- write OpStor
-  - subscribe to invalidations
-  - get changes after opdid X
-  - demo
-
-- addClip(id, model): inserts in order
-- getIds(): returns unsorted ID list
-- getClip(id)
-- removeClip(id)
-- subscribe
-
-key/meta : {metadata}
-key/ops : [ops]
-metadata includes pointer to first op (0 by default).
-
-How about a more generic collection type that has key-value pairs,
-and pubsubs for add and remove,
-including a listener thing that maintains a random-access sorted list of keys (in a skiplist or whatev),
-and a thing that persists stuff in a Stor.
-Also needs a listener for Stor mutations,
-and a short-circuit if attempting to add something with an existing key.
-
-Clip interface:
-writes:
-- add clip(id, model) - error if ID already exists?
-- delete clip(id)
-reads:
-- getClipsIds() - gets ordered array of clip IDs
-- getClip(id)
-notifications:
-- subscribe(fn) - callback can be "invalidate" tickle w no args,
-  or full Stor operation (which I just made up) like
-  {
-    op_type: APPEND,
-    obj_name: <clipId>,
-    value_index: <0 or 1>, // clips only support set and maybe delete
-    values: [graf model ops, including "delete"]
-  }
+v write OpStor
+  v server-assigned IDs
+  v get changes after server ID X
+  v test
+  v invalidation pubsub
+v ClipListOp
+  v addClip(timestamp(order), clientOpId, grafModelOps)
+    v serialize a Graf to a list of ops, which are by nature JSON
+  v removeClip(clientOpId)
+- Clip
+  - (timestamp(order), (clientOp)id, grafModel)
+- ClipList
+  - list of clips, sorted by timestamp
+  - applyOp(clipListOp)
 
 SysClipList instance
 - walls
@@ -113,17 +88,6 @@ Ved-to-Vorp transformer II
   - timer
 
 ============== VED UI ============
-Clip Sync
-How to sync it cross-tab?
-Store it as a list of add and remove operations?
-[
-  {opId: 10, type:put, clipId: 13123113, model: {...}},
-  {opId: 11, type:put, clipId: 13432194, model: {...}},
-  {opId: 12, type:delete, clipId: 13432194},
-]
-Each tab listens for appends, reads the op, and executes if it needs that opId.
-IDs need to increase, either by time or by read/write. Neither is perfect :-(.
-
 Ved UI API:
 - iteration for rendering
 - spacial queries

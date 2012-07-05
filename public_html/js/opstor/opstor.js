@@ -29,3 +29,13 @@ OpStor.prototype.appendOp = function(clientOpId, op) {
 OpStor.prototype.getOpsAfterIndex = function(afterIndex) {
   return this.stor.getValuesAfterIndex(this.name, afterIndex);
 };
+
+/**
+ * Register a callback that gets called with no parameters, just to trigger invalidation.
+ * @param {function} callback
+ */
+OpStor.prototype.subscribe = function(callback) {
+  this.stor.subscribe(function() {
+    callback();
+  });
+};
