@@ -12,7 +12,7 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   this.playerSprite = null;
   this.cameraPos = new Vec2d();
   this.painters = [];
-  
+
   // Portals have super-special view-through rendering, so we gonna track em.
   this.portals = [];
   this.portalPos1 = new Vec2d();
@@ -61,7 +61,7 @@ Vorp.COLLIDER_GROUP_PAIRS = [
   [Vorp.PORTAL_PROBE_GROUP, Vorp.PORTAL_GROUP],
 
   [Vorp.GRIP_BLOCKER_GROUP, Vorp.WALL_GROUP],
-  
+
   [Vorp.EMPTY_GROUP, Vorp.EMPTY_GROUP],
   [Vorp.NO_HIT_GROUP, Vorp.EMPTY_GROUP]
 ];
@@ -111,8 +111,8 @@ Vorp.prototype.startLoop = function() {
 Vorp.prototype.getBaseSpriteTemplate = function() {
   if (!this.baseSpriteTemplate) {
     this.baseSpriteTemplate = new SpriteTemplate()
-	.setGameClock(this.gameClock)
-	.setSledgeInvalidator(this.sledgeInvalidator)
+        .setGameClock(this.gameClock)
+        .setSledgeInvalidator(this.sledgeInvalidator)
         .setWorld(this);
   }
   return this.baseSpriteTemplate;
@@ -134,7 +134,7 @@ Vorp.prototype.addSprites = function(sprites) {
  */
 Vorp.prototype.addSprite = function(sprite) {
   this.phy.addSprite(sprite);
-  var painter = sprite.getPainter(); 
+  var painter = sprite.getPainter();
   if (painter) {
     this.addPainter(painter);
   }
@@ -235,7 +235,7 @@ Vorp.prototype.draw = function() {
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);
   }
-  
+
   // Tell painters to advance. Might as well remove any that are kaput.
   // (The timing of isKaput() returning true isn't critical;
   // it doesn't have to be decided during advance().)
@@ -266,10 +266,10 @@ Vorp.prototype.draw = function() {
       this.drawWorld(false, this.portalPos1);
     }
   }
-  
+
   // Center the drawing transform on the normal camera pos - the player.
   this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
-  
+
   if (portalScry) {
     // Cover the portal previews a little, to dim them compared to the "real" world
     this.renderer.setFillStyle('rgba(25, 50, 50, 0.75)');
@@ -288,7 +288,7 @@ Vorp.prototype.draw = function() {
     }
     this.renderer.transformEnd();
   }
-  
+
   // Set up the viewport for player-centered rendering.
   this.drawWorld(true);
 
@@ -312,16 +312,16 @@ Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos
         true);
     this.renderer.context.clip();
   }
-  
+
   // painters paint in layers
   for (var i = 0; i < Vorp.LAYERS.length; i++) {
     var layer = Vorp.LAYERS[i];
     for (var j = 0; j < this.painters.length; j++) {
-      var painter = this.painters[j]; 
+      var painter = this.painters[j];
       painter.paint(this.renderer, layer);
     }
   }
-  
+
   if (opt_drawColliderDebugging) {
     // Draw whatever the collider feels like drawing, for debugging purposes.
     this.phy.collider.draw(this.renderer);
@@ -352,7 +352,7 @@ Vorp.prototype.killPlayer = function() {
   var deadPlayerPrefab = new DeadPlayerPrefab(playerPos.x, playerPos.y);
   var deadPlayerSprites = deadPlayerPrefab.createSprites(this.getBaseSpriteTemplate());
   this.addSprites(deadPlayerSprites);
-  
+
   // remove normal player sprite
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);

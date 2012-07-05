@@ -28,6 +28,39 @@ Transformer.CARDINAL_DIRECTIONS = [
 ];
 Transformer.MAX_HUG_DIST = 500;
 
+/**
+ * @param {GrafModel} model  stuff to add to Vorp
+ */
+Transformer.prototype.transformModel = function(model) {
+  var id, cluster;
+
+  for (id in model.clusters) {
+    cluster = model.clusters[id];
+    if (cluster.data.type == VedType.WALL) {
+      // Add wall sprites immediately.
+      this.vorp.addSprite(this.transformWall(model.clusters[id]));
+    }
+  }
+
+  // Compile all non-wall sprites before adding them,
+  // so the wallhugger rayscans only see the walls.
+  var sprites = [];
+  for (id in model.clusters) {
+    cluster = model.clusters[id];
+    if (cluster.data.type != VedType.WALL) {
+      var clusterSprites = this.transformCluster(model.clusters[id]);
+      for (var i = 0; i < clusterSprites.length; i++) {
+        sprites.push(clusterSprites[i]);
+      }
+    }
+  }
+  this.vorp.addSprites(sprites);
+
+  for (id in model.links) {
+    this.transformLink(model.links[id]);
+  }
+};
+
 Transformer.prototype.createImmovableSpriteTemplate = function() {
   return this.createBaseTemplate()
       .setGroup(Vorp.WALL_GROUP)
@@ -54,43 +87,9 @@ Transformer.prototype.mid = function(a, b) {
 Transformer.prototype.rad = function(a, b, r) {
   return Math.abs(a - b) / 2 + r;
 };
-
-/**
- * @param {GrafModel} model  stuff to add to Vorp
- */
-Transformer.prototype.transformModel = function(model) {
-  var id, cluster;
-
-  for (id in model.clusters) {
-    cluster = model.clusters[id];
-    if (cluster.data.type == VedType.WALL) {
-      // Add wall sprites immediately.
-      this.vorp.add(this.transformWall(model.clusters[id]));
-    }
-  }
-
-  // Compile all non-wall sprites before adding them,
-  // so the wallhugger rayscans only see the walls.
-  var sprites = [];
-  for (id in model.clusters) {
-    cluster = model.clusters[id];
-    if (cluster.data.type != VedType.WALL) {
-      var clusterSprites = this.transformCluster(model.clusters[id]);
-      for (var i = 0; i < clusterSprites.length; i++) {
-        sprites.push(clusterSprites[i]);
-      }
-    }
-  }
-  this.vorp.addSprites(sprites);
-
-  for (id in model.links) {
-    this.transformLink(model.links[id]);
-  }
-};
-
 /**
  * @param {GrafCluster} cluster
- * @return one wall sprite
+ * @return {Sprite} one wall sprite
  */
 Transformer.prototype.transformWall = function(cluster) {
   var parts = [];

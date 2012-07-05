@@ -98,19 +98,41 @@ one or more control points with various constraints and natures
 - Some robots have multiple point groups like waypoints and dropoff points.
 - Timers can even use control points to dictate timer length.  Wee, abuse the system! 
 
-Parts have painters.  They do NOT show the resulting sprites.  Just an AR overlay of data.
-The under-layer *is* the resulting sprites and their painters... but not a full Vorp.
+Parts and links have painters.  They do NOT show the resulting sprites. Just an AR overlay of graf data.
+The under-layer *is* the resulting sprites and their painters - a full Vorp.
 
-Link editing:
-Cluster parts are not sprites. A beam sensor is 2 sprites, but a single cluster part.
-Ved shows part jacks, coded into the built-in cluster clipboards.
-The transformer needs code to convert a cluster to a prefab.
-So, does the *prefab* need an API for addressing jacks?
+Cluster parts are not sprites!
+A beam sensor is two sprites, but a one-part cluster.
+A door is three sprites (two visible parts and an invisible controller) but it's also a one-part cluster.
+The transformer needs code to convert a cluster to a set of sprites.
+
+It's the transformer's job to interpret the graf as vorp data, so it has deep knowledge of both worlds.
+The Transformer will track the jack mapping from graf jacks to sprite inputs/outputs, as it creates sprites.
+It'll use that to create vorp links from graf data.
 
 Clips:
 There are system clips and user clips.
 Copying from a level adds a new user clip.
-For user clips, the timestamp is the ID.
 Clicking a clip selects it, but does not move it to the top of the user-clips list.
 Clip selection is persisted and synced cross-tab. Selection is (sys|usr)id.
 User clips are also persisted and synced cross-tab, under /clips/(clipId aka timestamp)
+
+2012.07.05
+How does a playable level get built?
+First, populate a GrafModel
+* Create an empty GrafModel.
+* Create a SysClipList, which has Graf elements for all the level pieces - walls, exits doors, etc.
+* Copy clips from the SysClipList to the graf.
+* Manipulate the parts in the model, to position the graf control points
+* Add the exit URL to each exit.
+* Create links from jack to jack to wire buttons to doors and stuff.
+Now transform the GrafModel into a Vorp!
+* Create an empty Vorp.
+* Create a Transformer with the vorp, plus its gameClock and sledgeInvalidator.
+* transformer.transformModel(grafModel)
+* Now your vorp is ready to play!
+...
+In the distant future, the UI for building levels will use the processes above,
+but instead of playing the vorp, the UI will display it frozen in time, overlaid with the grafmodel.
+The user will manipulate the grafmodel using a generic graf editor UI that doesn't
+have to know about the Transformer or Vorp.

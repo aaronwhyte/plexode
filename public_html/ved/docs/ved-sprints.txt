@@ -78,7 +78,7 @@ SysClipList instance
 Level 9: clip-based level building
 - exercise system clips
 
-Ved-to-Vorp transformer II
+Ved-to-Vorp transformer part II
 - two-point wall-huggers
   - beamsensor
   - door
