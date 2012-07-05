@@ -43,14 +43,14 @@ v one-point wall-huggers
   v button
   v grip
 
-ClipList 2012.03.25 - ...
+ClipList 2012.03.25 - 2012.07.05
 Whole cliplist will be one Stor object.
 Need a replay strategy that does two things:
 1: Preserve op numbers
 2: Eliminate obsolete ops
 After a replay, the remaining ops should have no redundant information.
 v add pubsub to Stor events
-... 2012.07.03
+... 2012.07.03 resuming ...
 v write real cross-tab Stor demo
 v write OpStor
   v server-assigned IDs
@@ -58,14 +58,16 @@ v write OpStor
   v test
   v invalidation pubsub
 v ClipListOp
-  v addClip(timestamp(order), clientOpId, grafModelOps)
+  v addClip(timestamp(order), id, grafModelOps)
     v serialize a Graf to a list of ops, which are by nature JSON
   v removeClip(clientOpId)
-- Clip
-  - (timestamp(order), (clientOp)id, grafModel)
-- ClipList
-  - list of clips, sorted by timestamp
-  - applyOp(clipListOp)
+v Clip
+  v (timestamp(order), id, grafModel)
+v ClipList
+  v list of clips, sorted by timestamp
+  v applyOp(clipListOp)
+  v basic test
+
 
 SysClipList instance
 - walls

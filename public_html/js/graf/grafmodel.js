@@ -204,7 +204,7 @@ GrafModel.prototype.getLink = function(id) {
  * @return a mapping from old obj IDs to new obj IDs
  */
 GrafModel.prototype.addModel = function(model) {
-  var ops = model.serializeToOpsJson();
+  var ops = model.createOps();
   this.rewriteOpIds(ops);
   this.applyOps(ops);
 };
@@ -214,7 +214,7 @@ GrafModel.prototype.addModel = function(model) {
  * Since that re-uses this model's IDs, it can't be added to this model.
  * See "rewriteOpIds(ops)"
  */
-GrafModel.prototype.serializeToOpsJson = function() {
+GrafModel.prototype.createOps = function() {
   function pushDataOps(objId, data) {
     for (var key in data) {
       ops.push({
