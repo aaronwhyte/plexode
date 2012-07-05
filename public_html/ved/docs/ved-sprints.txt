@@ -51,8 +51,8 @@ Need a replay strategy that does two things:
 After a replay, the remaining ops should have no redundant information.
 
 v add pubsub to Stor events
-... 2012.07.03 ...
-v write real cross-tab Stor test page
+... 2012.07.03
+v write real cross-tab Stor demo
 - write OpStor
   - subscribe to invalidations
   - get changes after opdid X

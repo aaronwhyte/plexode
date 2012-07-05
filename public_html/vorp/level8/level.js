@@ -5,8 +5,7 @@ window['main'] = function() {
         .setMass(Infinity)
         .setSledgeDuration(Infinity)
         .setPosXY(x, y)
-        .setRadXY(20, 20)
-        .setMass(Infinity);
+        .setRadXY(20, 20);
   }
 
   function intangible() {
@@ -15,17 +14,16 @@ window['main'] = function() {
         .setMass(Infinity)
         .setSledgeDuration(Infinity)
         .setPosXY(0, 0)
-        .setRadXY(1, 1)
-        .setMass(Infinity);
+        .setRadXY(1, 1);
   }
 
   function movable(x, y) {
     return createBaseTemplate()
         .setGroup(Vorp.GENERAL_GROUP)
+        .setMass(1)
         .setSledgeDuration(1.01)
         .setPosXY(x, y)
-        .setRadXY(20, 20)
-        .setMass(1);
+        .setRadXY(20, 20);
   }
 
   function createBaseTemplate() {
@@ -75,4 +73,3 @@ window['main'] = function() {
   vorp.startLoop();
   vorp.assemblePlayer();
 };
-

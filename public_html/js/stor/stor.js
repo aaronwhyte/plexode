@@ -75,6 +75,7 @@ Stor.prototype.appendValues = function(name, values) {
  * Appends a new value to the stor. Creates a new names object if the name isn't in use.
  * @param name
  * @param value
+ * @return the index of the newly appended value
  */
 Stor.prototype.appendValue = function(name, value) {
   var nameKey = this.getKeyForName(name);
@@ -104,8 +105,12 @@ Stor.prototype.appendValue = function(name, value) {
   this.storage.setItem(dataKey, JSON.stringify(value));
   // Cache the last index value, to avoid a chain of lookups next time.
   this.lastIndex[dataId] = nextIndex;
-  // Windows won't publish storage events they initiate!
-  this.pubsub.publish(Stor.Ops.APPEND_VALUE, name, value);
+
+  // Windows won't publish storage events they initiate, so publish one ourselves.
+  var self = this;
+  window.setTimeout(function(){self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, value)}, 0);
+
+  return this.lastIndex[dataId];
 };
 
 /**
@@ -136,6 +141,19 @@ Stor.prototype.getValuesAfterIndex = function(name, afterIndex) {
     retval.push(value);
   }
   return retval;
+};
+
+/**
+ * @return the next available index for the named item
+ */
+Stor.prototype.getNextIndex = function(name) {
+  var dataId = this.storage.getItem(this.getKeyForName(name));
+  var nextIndex = (this.lastIndex[dataId] || 0) + 1;
+  var dataKey;
+  while (this.storage.getItem(dataKey = this.getKeyForDataIndex(dataId, nextIndex))) {
+    nextIndex++;
+  }
+  return nextIndex;
 };
 
 /**
