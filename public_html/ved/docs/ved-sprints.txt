@@ -36,14 +36,15 @@ v Logic support in Vorp
 v Test level (not using transformer or prefabs)
 
 
-Ved-to-Vorp transformer I
+Transformer 1
 v walls
 v one-point wall-huggers
   v assembler
   v button
   v grip
 
-ClipList 2012.03.25 - 2012.07.05
+2012.03.25 - 2012.07.05
+ClipList
 Whole cliplist will be one Stor object.
 Need a replay strategy that does two things:
 1: Preserve op numbers
@@ -68,17 +69,19 @@ v ClipList
   v applyOp(clipListOp)
   v basic test
 
+2012.07.20 -
+SysClipList 1
+It's a ClipList instance, initialized with static data.
+v static SysClipListBuilder.build(json)
+v static system data JSON
+  v wall
+  v assembler
+- use it to build a level
+  - walls
+  - assembler
+  - play it
 
-SysClipList instance
-- walls
-- assembler
-- button
-- grip
-
-Level 9: clip-based level building
-- exercise system clips
-
-Ved-to-Vorp transformer part II
+Transformer 2
 - two-point wall-huggers
   - beamsensor
   - door

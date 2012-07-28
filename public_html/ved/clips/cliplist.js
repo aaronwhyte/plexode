@@ -51,7 +51,8 @@ ClipList.prototype.removeClip = function(id) {
  * Sorts the ordered ID list in reverse timestamp order (newest first).
  */
 ClipList.prototype.sortOrderedIds = function() {
+  var self = this;
   this.orderedIds.sort(function(id1, id2) {
-    return this.clips[id2].timestamp - this.clips[id1].timestamp;
+    return self.clips[id2].timestamp - self.clips[id1].timestamp;
   });
 };

@@ -34,20 +34,21 @@ Transformer.MAX_HUG_DIST = 500;
 Transformer.prototype.transformModel = function(model) {
   var id, cluster;
 
+  // Add all wall sprites first,
+  // so wallhugger rayscans will see them.
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.data.type == VedType.WALL) {
-      // Add wall sprites immediately.
-      this.vorp.addSprite(this.transformWall(model.clusters[id]));
+    if (cluster.data['type'] == VedType.WALL) {
+      this.vorp.addSprites(this.transformCluster(cluster));
     }
   }
 
   // Compile all non-wall sprites before adding them,
-  // so the wallhugger rayscans only see the walls.
+  // so the wallhugger rayscans will only see the walls.
   var sprites = [];
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.data.type != VedType.WALL) {
+    if (cluster.data['type'] != VedType.WALL) {
       var clusterSprites = this.transformCluster(model.clusters[id]);
       for (var i = 0; i < clusterSprites.length; i++) {
         sprites.push(clusterSprites[i]);
@@ -87,40 +88,38 @@ Transformer.prototype.mid = function(a, b) {
 Transformer.prototype.rad = function(a, b, r) {
   return Math.abs(a - b) / 2 + r;
 };
-/**
- * @param {GrafCluster} cluster
- * @return {Sprite} one wall sprite
- */
-Transformer.prototype.transformWall = function(cluster) {
-  var parts = [];
-  for (var id in cluster.parts) {
-    parts.push(cluster.parts[id]);
-  }
-  if (parts.length != 2) {
-    throw Error("Expected 2 parts in a wall cluster, found " + parts.length +
-        ", in cluster with id " + cluster.id);
-  }
-  var x0 = parts[0].x;
-  var y0 = parts[0].y;
-  var x1 = parts[1].x;
-  var y1 = parts[1].y;
-  return new WallSprite(this.createImmovableSpriteTemplate()
-      .setPainter(new RectPainter("rgb(80,48,176)"))
-      .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
-      .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
-                this.rad(y0, y1, Transformer.WALL_RADIUS)));
-};
 
 /**
+ * Transforms graf clusters into sprites.
  * @param {GrafCluster} cluster
  * @return an array of sprites
  */
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
   var controlVec, template, sprite;
+  var parts = [];
+  for (var id in cluster.parts) {
+    parts.push(cluster.parts[id]);
+  }
   switch (cluster.data.type) {
+    case VedType.WALL:
+        if (parts.length != 2) {
+          throw Error("Expected 2 parts in a wall cluster, found " + parts.length +
+              ", in cluster with id " + cluster.id);
+        }
+        var x0 = parts[0].x;
+        var y0 = parts[0].y;
+        var x1 = parts[1].x;
+        var y1 = parts[1].y;
+        sprite = new WallSprite(this.createImmovableSpriteTemplate()
+            .setPainter(new RectPainter("rgb(80,48,176)"))
+            .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
+            .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
+            this.rad(y0, y1, Transformer.WALL_RADIUS)));
+        sprites.push(sprite);
+        break;
     case VedType.PLAYER_ASSEMBLER:
-        controlVec = cluster.parts[0];
+        controlVec = new Vec2d(parts[0].x, parts[0].y);
         template = this.createImmovableSpriteTemplate()
             .setPainter(new PlayerAssemblerPainter());
         this.positionMonoHugger(template, controlVec,
@@ -132,8 +131,8 @@ Transformer.prototype.transformCluster = function(cluster) {
         sprites.push(sprite);
         break;
     case VedType.BUTTON:
-        controlVec = cluster.parts[0];
-        template = this.createImmovableSpriteTemplate()
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createImmovableSpriteTemplate()
             .setPainter(new ButtonPainter());
         this.positionMonoHugger(template, controlVec,
             Transformer.WALL_RADIUS * 0.9, Transformer.WALL_RADIUS * 0.3);
@@ -142,8 +141,8 @@ Transformer.prototype.transformCluster = function(cluster) {
         // TODO jacks
         break;
     case VedType.GRIP:
-        controlVec = cluster.parts[0];
-        template = this.createImmovableSpriteTemplate()
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createImmovableSpriteTemplate()
             .setPainter(new GripPainter());
         this.positionMonoHugger(template, controlVec,
             Transformer.WALL_RADIUS * 0.5, Transformer.WALL_RADIUS * 0.4);
@@ -181,7 +180,8 @@ Transformer.prototype.positionMonoHugger = function(template, controlVec, width,
 
 Transformer.prototype.calcMonoHugPoint = function(controlVec) {
   var hugPoints = this.calcHugPoints(controlVec);
-  return hugPoints[this.indexOfClosestPoint(controlVec, hugPoints)];
+  var index = this.indexOfClosestPoint(controlVec, hugPoints);
+  return hugPoints[index];
 };
 
 /**
@@ -192,7 +192,8 @@ Transformer.prototype.calcMonoHugPoint = function(controlVec) {
 Transformer.prototype.calcHugPoints = function(controlVec) {
   var hugPoints = [];
   for (var i = 0; i < Transformer.CARDINAL_DIRECTIONS.length; i++) {
-    var targetPos = new Vec2d(Transformer.CARDINAL_DIRECTIONS[i])
+    var targetPos = new Vec2d()
+        .set(Transformer.CARDINAL_DIRECTIONS[i])
         .scale(Transformer.MAX_HUG_DIST)
         .add(controlVec);
     var rayScan = new RayScan(

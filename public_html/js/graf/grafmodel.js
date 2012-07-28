@@ -279,8 +279,9 @@ GrafModel.prototype.createOps = function() {
 };
 
 /**
- * OVerwrites the op IDs to new IDs from this model's ID generator,
- * so the ops can be applied to this model. Retains
+ * Overwrites the op IDs to new IDs from this model's ID generator,
+ * so the ops can be applied to this model.
+ * @return {Object} idMap
  */
 GrafModel.prototype.rewriteOpIds = function(ops) {
   var self = this;
@@ -311,9 +312,16 @@ GrafModel.prototype.rewriteOpIds = function(ops) {
   var fieldNames = ['clusterId', 'partId', 'jackId1', 'jackId2'];
   for (var i = 0; i < ops.length; i++) {
     var op = ops[i];
-    op.id = addId(op.id);
+    if (GrafOp.isAddOpType(op.type)) {
+      // For add ops, the id is the new object's ID.
+      op.id = addId(op.id);
+    } else {
+      // For non-add ops, the id points to the object to be changed.
+      rewriteId(op, "id");
+    }
     for (var j = 0; j < fieldNames.length; j++) {
       rewriteId(op, fieldNames[j]);
     }
   }
+  return idMap;
 };

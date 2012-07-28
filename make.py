@@ -91,6 +91,7 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, 'vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, 'vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
   writePublicHtml(bdir, 'vorp/level7', vorp.formatVorpLevel(vorpJsName, "logic link test", "first-class wiring!"))
+  writePublicHtml(bdir, 'vorp/level9', vorp.formatVorpLevel(vorpJsName, "sysclip test", "transformer test, too"))
   writePublicHtml(bdir, 'ved', ved.formatVed(vorpJsName, vedJsName))
   writePublicHtml(bdir, 'chordo', chordo.formatChordo())
   writePublicHtml(bdir, 'u', unsquish.formatUnsquish())
@@ -112,6 +113,10 @@ def getVorpJsFileNames():
   js = []
   prefix = 'public_html/js/'
   js.extend(getJsFileNamesInPath('%sgaam' % prefix))
+  js.extend(getJsFileNamesInPath('%sgraf' % prefix))
+
+  js.extend(getJsFileNamesInPath('public_html/ved'))
+
   miscDeps = [
     'circularqueue.js',
     'depinj.js',
@@ -120,16 +125,19 @@ def getVorpJsFileNames():
     'util.js',
     'vec2d.js',
     'plex/array.js',
+    'plex/map.js',
     'plex/point.js',
     'plex/rect.js',
     'plex/type.js',
   ]
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
+
   vorpJs = getJsFileNamesInPath('public_html/vorp')
   for dep in vorpJs:
     if dep[-8:] != 'level.js':
       js.append(dep)
+
   return js
 
 

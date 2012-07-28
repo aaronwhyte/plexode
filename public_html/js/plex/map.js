@@ -28,6 +28,9 @@ plex.Map.prototype.delete = function(k) {
   delete this.m[plex.Map.PREFIX + k];
 };
 
+/**
+ * @return {Array}
+ */
 plex.Map.prototype.getKeys = function() {
   var keys = [];
   for (var pk in this.m) {
