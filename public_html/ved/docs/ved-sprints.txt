@@ -69,18 +69,19 @@ v ClipList
   v applyOp(clipListOp)
   v basic test
 
-2012.07.20 -
+2012.07.20 - 2012.07.28
 SysClipList 1
 It's a ClipList instance, initialized with static data.
 v static SysClipListBuilder.build(json)
 v static system data JSON
   v wall
   v assembler
-- use it to build a level
-  - walls
-  - assembler
-  - play it
+v use it to build a level
+  v walls
+  v assembler
+  v play it
 
+2012.07.28 -
 Transformer 2
 - two-point wall-huggers
   - beamsensor

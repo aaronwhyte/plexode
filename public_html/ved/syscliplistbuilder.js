@@ -78,5 +78,15 @@ SysClipListBuilder.createDefaultDataMap = function() {
           .concat(opsToAddPart(2, 1))
   );
 
+  addOpsToMap(VedType.BUTTON,
+      opsToAddCluster(1, VedType.BUTTON)
+          .concat(opsToAddPart(2, 1))
+  );
+
+  addOpsToMap(VedType.GRIP,
+      opsToAddCluster(1, VedType.GRIP)
+          .concat(opsToAddPart(2, 1))
+  );
+
   return map;
 };

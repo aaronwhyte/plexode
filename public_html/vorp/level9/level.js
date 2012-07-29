@@ -32,6 +32,8 @@ window['main'] = function() {
   addWall(0, 0, 400, 0);
   addWall(0, 0, 0, 400);
   addSingleWallHugger(VedType.PLAYER_ASSEMBLER, 201, 200);
+  addSingleWallHugger(VedType.BUTTON, -100, 100);
+  addSingleWallHugger(VedType.GRIP, 300, -100);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

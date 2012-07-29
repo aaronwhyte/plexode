@@ -77,6 +77,7 @@ Transformer.prototype.createMovableSpriteTemplate = function() {
 
 Transformer.prototype.createBaseTemplate = function() {
   return new SpriteTemplate()
+      .setWorld(this.vorp)
       .setGameClock(this.gameClock)
       .setSledgeInvalidator(this.sledgeInvalidator);
 };
@@ -115,7 +116,7 @@ Transformer.prototype.transformCluster = function(cluster) {
             .setPainter(new RectPainter("rgb(80,48,176)"))
             .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
             .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
-            this.rad(y0, y1, Transformer.WALL_RADIUS)));
+                      this.rad(y0, y1, Transformer.WALL_RADIUS)));
         sprites.push(sprite);
         break;
     case VedType.PLAYER_ASSEMBLER:
@@ -135,7 +136,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createImmovableSpriteTemplate()
             .setPainter(new ButtonPainter());
         this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS * 0.9, Transformer.WALL_RADIUS * 0.3);
+            Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
         sprite = new ButtonSprite(template);
         sprites.push(sprite);
         // TODO jacks
@@ -145,7 +146,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createImmovableSpriteTemplate()
             .setPainter(new GripPainter());
         this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS * 0.5, Transformer.WALL_RADIUS * 0.4);
+            Transformer.WALL_RADIUS * 1.0, Transformer.WALL_RADIUS * 0.8);
         sprite = new GripSprite(template);
         sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
             Transformer.BOX_RADIUS * 3));
