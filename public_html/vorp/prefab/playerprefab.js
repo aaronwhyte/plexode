@@ -13,7 +13,7 @@ PlayerPrefab.prototype.constructor = Prefab;
 
 PlayerPrefab.prototype.createSprites = function(baseSpriteTemplate) {
   this.baseSpriteTemplate = baseSpriteTemplate;
-  var r = Prefab.BOX_RADIUS;
+  var r = Transformer.BOX_RADIUS;
   var a = new PlayerSprite(this.createMovableSpriteTemplate()
       .setPainter(new PlayerPainter())
       .setPosXY(this.x, this.y)

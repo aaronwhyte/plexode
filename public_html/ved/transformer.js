@@ -126,8 +126,8 @@ Transformer.prototype.transformCluster = function(cluster) {
             Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
         sprite = new PlayerAssemblerSprite(template);
         // there's enough room to assemble a player sprite
-        sprite.setTargetPos(Vec2d.alongRay(template.pos, controlVec,
-            Transformer.WALL_RADIUS + Transformer.BOX_RADIUS * 1.1));
+        sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+            Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
         sprites.push(sprite);
         break;
     case VedType.BUTTON:
@@ -147,7 +147,7 @@ Transformer.prototype.transformCluster = function(cluster) {
         this.positionMonoHugger(template, controlVec,
             Transformer.WALL_RADIUS * 0.5, Transformer.WALL_RADIUS * 0.4);
         sprite = new GripSprite(template);
-        sprite.setTargetPos(Vec2d.alongRay(template.pos, controlVec,
+        sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
             Transformer.BOX_RADIUS * 3));
         sprites.push(sprite);
         // TODO jacks
@@ -171,8 +171,9 @@ Transformer.prototype.transformLink = function(link) {
  */
 Transformer.prototype.positionMonoHugger = function(template, controlVec, width, height) {
   var hugPoint = this.calcMonoHugPoint(controlVec);
-  var normalUnitVec = Vec2d.alongRay(hugPoint, controlVec, 1);
+  var normalUnitVec = new Vec2d().set(controlVec).subtract(hugPoint).scaleToLength(1);
   template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
+
   template.rad.set(normalUnitVec).scaleToLength(height / 2);
   template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2));
   template.rad.abs();
@@ -202,7 +203,7 @@ Transformer.prototype.calcHugPoints = function(controlVec) {
         1, 1);
     // time is zero to one
     var time = this.vorp.rayScan(rayScan, Vorp.GENERAL_GROUP) ? rayScan.time : 1;
-    hugPoints[i] = Vec2d.alongRay(controlVec, targetPos, time);
+    hugPoints[i] = Vec2d.alongRayFraction(controlVec, targetPos, time);
   }
   return hugPoints;
 };

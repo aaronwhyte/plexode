@@ -29,9 +29,9 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
-  addWall(0, 0, 1000, 0);
-  addWall(0, 1000, 1000, 1000);
-  addSingleWallHugger(VedType.PLAYER_ASSEMBLER, 100, 500);
+  addWall(0, 0, 400, 0);
+  addWall(0, 0, 0, 400);
+  addSingleWallHugger(VedType.PLAYER_ASSEMBLER, 201, 200);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();
@@ -40,5 +40,4 @@ window['main'] = function() {
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
   transformer.transformModel(model);
   vorp.startLoop();
-  vorp.assemblePlayer();
 };

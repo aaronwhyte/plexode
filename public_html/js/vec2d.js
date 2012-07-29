@@ -189,10 +189,18 @@ Vec2d.randDir = function() {
   return new Vec2d(dir.x, dir.y);
 };
 
-Vec2d.alongRay = function(startPoint, towardsPoint, distance) {
+Vec2d.alongRayDistance = function(startPoint, towardsPoint, distance) {
   return new Vec2d()
       .set(towardsPoint)
       .subtract(startPoint)
       .scaleToLength(distance)
+      .add(startPoint);
+};
+
+Vec2d.alongRayFraction = function(startPoint, towardsPoint, fraction) {
+  return new Vec2d()
+      .set(towardsPoint)
+      .subtract(startPoint)
+      .scale(fraction)
       .add(startPoint);
 };
