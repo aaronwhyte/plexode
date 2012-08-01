@@ -146,7 +146,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createImmovableSpriteTemplate()
             .setPainter(new GripPainter());
         this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS * 1.0, Transformer.WALL_RADIUS * 0.8);
+            Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.8);
         sprite = new GripSprite(template);
         sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
             Transformer.BOX_RADIUS * 3));

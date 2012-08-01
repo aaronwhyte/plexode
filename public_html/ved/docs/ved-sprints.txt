@@ -80,18 +80,30 @@ v use it to build a level
   v walls
   v assembler
   v play it
+  v grip
+  v button
+  v play it again
 
 2012.07.28 -
-Transformer 2
-- two-point wall-huggers
-  - beamsensor
+SysClipList & Transformer: Part II
+v SysClips for everything
+- Transformer for everything
   - door
+  - beamsensor
   - zapper
-- free-floaters:
   - block
   - exit
-  - portal
   - timer
+  - portal pair
+
+Transform Links
+- Playable level
+
+Replace Levels
+
+Delete LevelBuilder
+
+Delete Prefabs
 
 ============== VED UI ============
 Ved UI API:

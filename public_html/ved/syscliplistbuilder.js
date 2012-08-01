@@ -68,25 +68,28 @@ SysClipListBuilder.createDefaultDataMap = function() {
     map.set(id, graf);
   }
 
-  addOpsToMap(VedType.WALL,
-      opsToAddCluster(1, VedType.WALL)
-          .concat(opsToAddPart(2, 1, 0, -Transformer.WALL_RADIUS * 2))
-          .concat(opsToAddPart(3, 1, 0, Transformer.WALL_RADIUS * 2)));
+  function addMonoPartCluster(type) {
+    addOpsToMap(type, opsToAddCluster(1, type).concat(opsToAddPart(2, 1)));
+  }
 
-  addOpsToMap(VedType.PLAYER_ASSEMBLER,
-      opsToAddCluster(1, VedType.PLAYER_ASSEMBLER)
-          .concat(opsToAddPart(2, 1))
-  );
+  function addBiPartCluster(type) {
+    addOpsToMap(type,
+        opsToAddCluster(1, type)
+            .concat(opsToAddPart(2, 1, 0, -Transformer.WALL_RADIUS * 2))
+            .concat(opsToAddPart(3, 1, 0, Transformer.WALL_RADIUS * 2)));
+  }
 
-  addOpsToMap(VedType.BUTTON,
-      opsToAddCluster(1, VedType.BUTTON)
-          .concat(opsToAddPart(2, 1))
-  );
-
-  addOpsToMap(VedType.GRIP,
-      opsToAddCluster(1, VedType.GRIP)
-          .concat(opsToAddPart(2, 1))
-  );
+  addMonoPartCluster(VedType.BEAM_SENSOR);
+  addMonoPartCluster(VedType.BLOCK);
+  addMonoPartCluster(VedType.BUTTON);
+  addMonoPartCluster(VedType.DOOR);
+  addMonoPartCluster(VedType.EXIT);
+  addMonoPartCluster(VedType.GRIP);
+  addMonoPartCluster(VedType.PLAYER_ASSEMBLER);
+  addBiPartCluster(VedType.PORTAL);
+  addMonoPartCluster(VedType.TIMER);
+  addBiPartCluster(VedType.WALL);
+  addMonoPartCluster(VedType.ZAPPER);
 
   return map;
 };
