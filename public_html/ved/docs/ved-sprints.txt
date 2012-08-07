@@ -88,13 +88,15 @@ v use it to build a level
 SysClipList & Transformer: Part II
 v SysClips for everything
 - Transformer for everything
+  v block
   - door
   - beamsensor
   - zapper
-  - block
-  - exit
   - timer
   - portal pair
+  - exit
+    v body
+    - URL
 
 Transform Links
 - Playable level

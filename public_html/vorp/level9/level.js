@@ -21,7 +21,7 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
-  function addSingleWallHugger(type, x, y) {
+  function addMonoPart(type, x, y) {
     var ops = sysClipList.getClipById(type).grafModel.createOps();
     var idMap = model.rewriteOpIds(ops);
     model.applyOps(ops);
@@ -31,9 +31,13 @@ window['main'] = function() {
 
   addWall(0, 0, 400, 0);
   addWall(0, 0, 0, 400);
-  addSingleWallHugger(VedType.PLAYER_ASSEMBLER, 201, 200);
-  addSingleWallHugger(VedType.BUTTON, -100, 100);
-  addSingleWallHugger(VedType.GRIP, 300, -100);
+  addMonoPart(VedType.PLAYER_ASSEMBLER, 201, 200);
+  addMonoPart(VedType.BUTTON, -100, 100);
+  addMonoPart(VedType.GRIP, 300, -100);
+  addMonoPart(VedType.BLOCK, 200, 200);
+  addMonoPart(VedType.BLOCK, 200, 300);
+  addMonoPart(VedType.BLOCK, 200, 400);
+  addMonoPart(VedType.EXIT, 500, 500);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

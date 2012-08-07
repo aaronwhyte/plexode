@@ -144,15 +144,36 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.GRIP:
       controlVec = new Vec2d(parts[0].x, parts[0].y);
       template = this.createImmovableSpriteTemplate()
-            .setPainter(new GripPainter());
-        this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.8);
-        sprite = new GripSprite(template);
-        sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-            Transformer.BOX_RADIUS * 3));
-        sprites.push(sprite);
-        // TODO jacks
-        break;
+          .setPainter(new GripPainter());
+      this.positionMonoHugger(template, controlVec,
+          Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.8);
+      sprite = new GripSprite(template);
+      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+          Transformer.BOX_RADIUS * 3));
+      sprites.push(sprite);
+      // TODO jacks
+      break;
+    case VedType.BLOCK:
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createMovableSpriteTemplate()
+          .setPainter(new RectPainter("#dd4"))
+          .setPos(controlVec)
+          .setRadXY(Transformer.BOX_RADIUS, Transformer.BOX_RADIUS)
+          .setMass(1);
+      sprite = new BlockSprite(template);
+      sprites.push(sprite);
+      break;
+    case VedType.EXIT:
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createImmovableSpriteTemplate()
+          .setPainter(new RectPainter("#0f0"))
+          .setPos(controlVec)
+          .setRadXY(Transformer.BOX_RADIUS * 1.5, Transformer.BOX_RADIUS * 1.5);
+      sprite = new ExitSprite(template);
+      // TODO: proper exit URL
+      sprite.setUrl("index.html");
+      sprites.push(sprite);
+      break;
   }
   return sprites;
 };
@@ -184,6 +205,23 @@ Transformer.prototype.calcMonoHugPoint = function(controlVec) {
   var hugPoints = this.calcHugPoints(controlVec);
   var index = this.indexOfClosestPoint(controlVec, hugPoints);
   return hugPoints[index];
+};
+
+/**
+ * Sets the templates' pos and rad.
+ * @param {SpriteTemplate} template
+ * @param {Vec2d} controlVec  the control point from the graf cluster
+ * @param {number} width  the length of the edge that touches the wall
+ * @param {number} height  how far the sprite extends away from the wall
+ */
+Transformer.prototype.positionDoubleHugger = function(template, controlVec, width, height) {
+  var hugPoint = this.calcMonoHugPoint(controlVec);
+  var normalUnitVec = new Vec2d().set(controlVec).subtract(hugPoint).scaleToLength(1);
+  template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
+
+  template.rad.set(normalUnitVec).scaleToLength(height / 2);
+  template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2));
+  template.rad.abs();
 };
 
 /**
