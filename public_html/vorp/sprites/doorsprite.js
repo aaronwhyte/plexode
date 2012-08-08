@@ -14,7 +14,7 @@ function DoorSprite(spriteTemplate, x0, y0, x1, y1) {
   this.x1 = x1;
   this.y1 = y1;
   this.prevClosedness = this.closedness = 1;
-  this.setDimensions();
+  this.dimensionsInitialized = false;
 }
 DoorSprite.prototype = new Sprite(null);
 DoorSprite.prototype.constructor = DoorSprite;
@@ -22,7 +22,7 @@ DoorSprite.prototype.constructor = DoorSprite;
 DoorSprite.THICKNESS = 10;
 
 DoorSprite.prototype.act = function() {
-  if (this.closedness != this.prevClosedness) {
+  if (!this.dimensionsInitialized || this.closedness != this.prevClosedness) {
     this.setDimensions();
   }
 };

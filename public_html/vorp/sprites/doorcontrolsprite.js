@@ -1,5 +1,5 @@
 /**
- * The params for a door are unlike most other sprites, so heads up.
+ * An invisible logic sprite that can open and close a pair of door sprites.
  * @constructor
  * @extends {Sprite}
  */

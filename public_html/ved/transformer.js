@@ -26,7 +26,7 @@ Transformer.CARDINAL_DIRECTIONS = [
   new Vec2d(0, 1),
   new Vec2d(-1, 0)
 ];
-Transformer.MAX_HUG_DIST = 500;
+Transformer.MAX_HUG_DIST = 1000;
 
 /**
  * @param {GrafModel} model  stuff to add to Vorp
@@ -104,43 +104,43 @@ Transformer.prototype.transformCluster = function(cluster) {
   }
   switch (cluster.data.type) {
     case VedType.WALL:
-        if (parts.length != 2) {
-          throw Error("Expected 2 parts in a wall cluster, found " + parts.length +
-              ", in cluster with id " + cluster.id);
-        }
-        var x0 = parts[0].x;
-        var y0 = parts[0].y;
-        var x1 = parts[1].x;
-        var y1 = parts[1].y;
-        sprite = new WallSprite(this.createImmovableSpriteTemplate()
-            .setPainter(new RectPainter("rgb(80,48,176)"))
-            .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
-            .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
-                      this.rad(y0, y1, Transformer.WALL_RADIUS)));
-        sprites.push(sprite);
-        break;
+      if (parts.length != 2) {
+        throw Error("Expected 2 parts in a wall cluster, found " + parts.length +
+            ", in cluster with id " + cluster.id);
+      }
+      var x0 = parts[0].x;
+      var y0 = parts[0].y;
+      var x1 = parts[1].x;
+      var y1 = parts[1].y;
+      sprite = new WallSprite(this.createImmovableSpriteTemplate()
+          .setPainter(new RectPainter("rgb(80,48,176)"))
+          .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
+          .setRadXY(this.rad(x0, x1, Transformer.WALL_RADIUS),
+                    this.rad(y0, y1, Transformer.WALL_RADIUS)));
+      sprites.push(sprite);
+      break;
     case VedType.PLAYER_ASSEMBLER:
-        controlVec = new Vec2d(parts[0].x, parts[0].y);
-        template = this.createImmovableSpriteTemplate()
-            .setPainter(new PlayerAssemblerPainter());
-        this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
-        sprite = new PlayerAssemblerSprite(template);
-        // there's enough room to assemble a player sprite
-        sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-            Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
-        sprites.push(sprite);
-        break;
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createImmovableSpriteTemplate()
+          .setPainter(new PlayerAssemblerPainter());
+      this.positionMonoHugger(template, controlVec,
+          Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
+      sprite = new PlayerAssemblerSprite(template);
+      // there's enough room to assemble a player sprite
+      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+          Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
+      sprites.push(sprite);
+      break;
     case VedType.BUTTON:
       controlVec = new Vec2d(parts[0].x, parts[0].y);
       template = this.createImmovableSpriteTemplate()
-            .setPainter(new ButtonPainter());
-        this.positionMonoHugger(template, controlVec,
-            Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
-        sprite = new ButtonSprite(template);
-        sprites.push(sprite);
-        // TODO jacks
-        break;
+          .setPainter(new ButtonPainter());
+      this.positionMonoHugger(template, controlVec,
+          Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
+      sprite = new ButtonSprite(template);
+      sprites.push(sprite);
+      // TODO jacks
+      break;
     case VedType.GRIP:
       controlVec = new Vec2d(parts[0].x, parts[0].y);
       template = this.createImmovableSpriteTemplate()
@@ -173,6 +173,28 @@ Transformer.prototype.transformCluster = function(cluster) {
       // TODO: proper exit URL
       sprite.setUrl("index.html");
       sprites.push(sprite);
+      break;
+    case VedType.DOOR:
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+
+      // DoorControlSprite
+      template = this.createImmovableSpriteTemplate()
+          .setPos(controlVec);
+      var controlSprite = new DoorControlSprite(template);
+      // TODO jacks
+      sprites.push(controlSprite);
+
+      // DoorSprite x2
+      var hugPoints = this.calcDoubleHugPoints(controlVec);
+      var midpoint = Vec2d.midpoint(hugPoints[0], hugPoints[1]);
+      for (var i = 0; i < 2; i++) {
+        template = this.createImmovableSpriteTemplate()
+            .setPainter(new RectPainter("#aaa"));
+        var hug = hugPoints[i];
+        sprite = new DoorSprite(template, hug.x, hug.y, midpoint.x, midpoint.y);
+        controlSprite.addDoorSprite(sprite);
+        sprites.push(sprite);
+      }
       break;
   }
   return sprites;
@@ -207,21 +229,11 @@ Transformer.prototype.calcMonoHugPoint = function(controlVec) {
   return hugPoints[index];
 };
 
-/**
- * Sets the templates' pos and rad.
- * @param {SpriteTemplate} template
- * @param {Vec2d} controlVec  the control point from the graf cluster
- * @param {number} width  the length of the edge that touches the wall
- * @param {number} height  how far the sprite extends away from the wall
- */
-Transformer.prototype.positionDoubleHugger = function(template, controlVec, width, height) {
-  var hugPoint = this.calcMonoHugPoint(controlVec);
-  var normalUnitVec = new Vec2d().set(controlVec).subtract(hugPoint).scaleToLength(1);
-  template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
-
-  template.rad.set(normalUnitVec).scaleToLength(height / 2);
-  template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2));
-  template.rad.abs();
+Transformer.prototype.calcDoubleHugPoints = function(controlVec) {
+  var hugPoints = this.calcHugPoints(controlVec);
+  var index = this.indexOfClosestPoint(controlVec, hugPoints);
+  var oppositeIndex = (index + 2) % 4;
+  return [hugPoints[index], hugPoints[oppositeIndex]];
 };
 
 /**

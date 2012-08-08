@@ -89,16 +89,16 @@ SysClipList & Transformer: Part II
 v SysClips for everything
 - Transformer for everything
   v block
-  - door
-  - beamsensor
+  v door
   - zapper
+  - beamsensor
   - timer
   - portal pair
   - exit
     v body
     - URL
 
-Transform Links
+Transformer III: Transform Links
 - Playable level
 
 Replace Levels

@@ -204,3 +204,10 @@ Vec2d.alongRayFraction = function(startPoint, towardsPoint, fraction) {
       .scale(fraction)
       .add(startPoint);
 };
+
+Vec2d.midpoint = function(a, b) {
+  return new Vec2d()
+      .set(a)
+      .add(b)
+      .scale(0.5);
+};

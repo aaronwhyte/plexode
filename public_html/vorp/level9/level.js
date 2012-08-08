@@ -31,13 +31,23 @@ window['main'] = function() {
 
   addWall(0, 0, 400, 0);
   addWall(0, 0, 0, 400);
-  addMonoPart(VedType.PLAYER_ASSEMBLER, 201, 200);
-  addMonoPart(VedType.BUTTON, -100, 100);
-  addMonoPart(VedType.GRIP, 300, -100);
-  addMonoPart(VedType.BLOCK, 200, 200);
-  addMonoPart(VedType.BLOCK, 200, 300);
-  addMonoPart(VedType.BLOCK, 200, 400);
-  addMonoPart(VedType.EXIT, 500, 500);
+  addWall(400, 400, 800, 400);
+  addMonoPart(VedType.PLAYER_ASSEMBLER, 50, 200);
+  addMonoPart(VedType.BUTTON, 500, 450);
+  addMonoPart(VedType.BUTTON, 550, 450);
+  addMonoPart(VedType.BUTTON, 600, 450);
+  addMonoPart(VedType.BUTTON, 650, 450);
+  addMonoPart(VedType.BUTTON, 700, 450);
+  addMonoPart(VedType.GRIP, 350, -100);
+  addMonoPart(VedType.GRIP, 200, -100);
+  addMonoPart(VedType.GRIP, 50, -100);
+  addMonoPart(VedType.BLOCK, -100, 200);
+  addMonoPart(VedType.BLOCK, -100, 300);
+  addMonoPart(VedType.BLOCK, -100, 400);
+  addMonoPart(VedType.EXIT, 600, 200);
+  addMonoPart(VedType.DOOR, 400, 100);
+//  addMonoPart(VedType.DOOR, 800, 100);
+//  addMonoPart(VedType.DOOR, 50, 100);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();
