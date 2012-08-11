@@ -90,7 +90,7 @@ v SysClips for everything
 - Transformer for everything
   v block
   v door
-  - zapper
+  v zapper
   - beamsensor
   - timer
   - portal pair

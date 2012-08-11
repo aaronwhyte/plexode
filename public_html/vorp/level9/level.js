@@ -29,6 +29,7 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
+  addWall(-400, 0, -400, 600);
   addWall(0, 0, 400, 0);
   addWall(0, 0, 0, 400);
   addWall(400, 400, 800, 400);
@@ -46,6 +47,7 @@ window['main'] = function() {
   addMonoPart(VedType.BLOCK, -100, 400);
   addMonoPart(VedType.EXIT, 600, 200);
   addMonoPart(VedType.DOOR, 400, 100);
+  addMonoPart(VedType.ZAPPER, -100, 0);
 //  addMonoPart(VedType.DOOR, 800, 100);
 //  addMonoPart(VedType.DOOR, 50, 100);
 
