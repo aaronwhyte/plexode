@@ -92,8 +92,8 @@ v SysClips for everything
   v door
   v zapper
   v beamsensor
-  - timer
-  - portal pair
+  v timer
+  v portal pair
   - exit
     v body
     - URL

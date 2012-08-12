@@ -29,6 +29,15 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
+  function addPortals(x1, y1, x2, y2) {
+    var ops = sysClipList.getClipById(VedType.PORTAL).grafModel.createOps();
+    var idMap = model.rewriteOpIds(ops);
+    model.applyOps(ops);
+    movePartId(idMap[2], x1, y1);
+    movePartId(idMap[3], x2, y2);
+    return model.getCluster(idMap[0]);
+  }
+
   addWall(-400, 0, -400, 600);
   addWall(0, 0, 400, 0);
   addWall(0, 0, 0, 400);
@@ -49,6 +58,7 @@ window['main'] = function() {
   addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
   addMonoPart(VedType.BEAM_SENSOR, -100, 100);
+  addPortals(200, 600, 0, -400);
 //  addMonoPart(VedType.DOOR, 800, 100);
 //  addMonoPart(VedType.DOOR, 50, 100);
 

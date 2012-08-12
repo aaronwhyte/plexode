@@ -219,6 +219,31 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprites.push(sprite);
       break;
 
+    case VedType.PORTAL:
+      var portals = [];
+      for (var i = 0; i < 2; i++) {
+        controlVec = new Vec2d(parts[i].x, parts[i].y);
+        template = this.createMovableSpriteTemplate()
+            .setPainter(new RectPainter('#0df'))
+            .setPos(controlVec)
+            .setRadXY(Transformer.BOX_RADIUS * 1.1, Transformer.BOX_RADIUS * 1.1)
+            .setMass(1.1);
+        portals[i] = new PortalSprite(template);
+        sprites.push(portals[i]);
+      }
+      portals[0].setTargetSprite(portals[1]);
+      portals[1].setTargetSprite(portals[0]);
+      break;
+
+    case VedType.TIMER:
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      template = this.createIntangibleSpriteTemplate()
+          .setPos(controlVec);
+      sprite = new TimerSprite(template);
+      // TODO: jacks
+      sprites.push(sprite);
+      break;
+
     case VedType.WALL:
       if (parts.length != 2) {
         throw Error("Expected 2 parts in a wall cluster, found " + parts.length +
