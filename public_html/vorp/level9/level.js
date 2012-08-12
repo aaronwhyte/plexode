@@ -48,6 +48,7 @@ window['main'] = function() {
   addMonoPart(VedType.EXIT, 600, 200);
   addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
+  addMonoPart(VedType.BEAM_SENSOR, -100, 100);
 //  addMonoPart(VedType.DOOR, 800, 100);
 //  addMonoPart(VedType.DOOR, 50, 100);
 

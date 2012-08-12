@@ -342,27 +342,19 @@ v links
   v link clocking in main loop
 v hardcode a test level with logic links in it, without prefabs.
 
-2012.02.11 Redo Sprite Construction III
+2012.02.11 - ? Redo Sprite Construction III
 v Assign sprite ID at construction.
-- Fewer sprite construction params.
-- Move static data from prefabs to sprites.
-  - Sprites know their own mass formulas, groups.
-  - Sprites construct their own painters. :-/
-  - Keep injecting vorp/clock/invalidator bundle.
-- Rejigger sprite positioning code to use a couple points and shared libs.
-- Position sprites with two or three points. Use vector math, not repetitive ifs.
 
-Transformers
-- Wallhugger positioning code
-  v mono
-  - bi
-- transformers for clusters
-  v PlayerAssembler
-  - model-based test level with walls and assembler
-- Map jacks to sprite logic buffers, so links can link.
-- Redo all levels using links and logic
-  - Maybe add And and Not sprites?
-- Delete prefabs
+Portal push
+- Portals rayscan for walls and doors constantly
+- They push away from those things
+
+Fullscreen
+- render walls in offscreen canvas once
+- copy from offscreen canvas to onscreen one, instead of clearing
+
+Sound
+- Web Audio or just Audio?
 
 Plasma sprites:
 - plasma cannon

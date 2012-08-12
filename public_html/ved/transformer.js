@@ -104,12 +104,37 @@ Transformer.prototype.rad = function(a, b, r) {
  */
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
-  var controlVec, template, sprite;
+  var controlVec, controlSprite, template, sprite, hugPoints;
   var parts = [];
   for (var id in cluster.parts) {
     parts.push(cluster.parts[id]);
   }
   switch (cluster.data.type) {
+
+    case VedType.BEAM_SENSOR:
+      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      hugPoints = this.calcDoubleHugPoints(controlVec);
+
+      // BeamerSprite
+      template = this.createImmovableSpriteTemplate()
+          .setPainter(new BeamerPainter());
+      this.positionHugger(template, hugPoints[0], controlVec,
+          0.5 * Transformer.WALL_RADIUS,
+          0.6 * Transformer.WALL_RADIUS);
+      var beamer = new BeamerSprite(template);
+      // TODO jacks
+      sprites.push(beamer);
+
+      // SensorSprite
+      template = this.createImmovableSpriteTemplate()
+          .setPainter(new RectPainter('#888'));
+      this.positionHugger(template, hugPoints[1], controlVec,
+          0.6 * Transformer.WALL_RADIUS,
+          0.2 * Transformer.WALL_RADIUS);
+      var sensor = new SensorSprite(template);
+      sprites.push(sensor);
+      beamer.setTargetSprite(sensor);
+      break;
 
     case VedType.BLOCK:
       controlVec = new Vec2d(parts[0].x, parts[0].y);
@@ -139,12 +164,12 @@ Transformer.prototype.transformCluster = function(cluster) {
       // DoorControlSprite
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
-      var controlSprite = new DoorControlSprite(template);
+      controlSprite = new DoorControlSprite(template);
       // TODO jacks
       sprites.push(controlSprite);
 
       // DoorSprite x2
-      var hugPoints = this.calcDoubleHugPoints(controlVec);
+      hugPoints = this.calcDoubleHugPoints(controlVec);
       var midpoint = Vec2d.midpoint(hugPoints[0], hugPoints[1]);
       for (var i = 0; i < 2; i++) {
         template = this.createImmovableSpriteTemplate()
@@ -215,12 +240,12 @@ Transformer.prototype.transformCluster = function(cluster) {
 
     case VedType.ZAPPER:
       controlVec = new Vec2d(parts[0].x, parts[0].y);
-      var hugPoints = this.calcDoubleHugPoints(controlVec);
+      hugPoints = this.calcDoubleHugPoints(controlVec);
 
       // ZapperControlSprite
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
-      var controlSprite = new ZapperControlSprite(template);
+      controlSprite = new ZapperControlSprite(template);
       // TODO jacks
       sprites.push(controlSprite);
 
@@ -230,8 +255,8 @@ Transformer.prototype.transformCluster = function(cluster) {
           .setPainter(new ZapperPainter(true))
           .setPos(Vec2d.midpoint(hugPoints[0], hugPoints[1]))
           .setRadXY(
-              this.rad(hugPoints[0].x, hugPoints[1].x, Transformer.WALL_RADIUS * 0.5),
-              this.rad(hugPoints[0].y, hugPoints[1].y, Transformer.WALL_RADIUS * 0.5));
+              this.rad(hugPoints[0].x, hugPoints[1].x, Transformer.WALL_RADIUS * 0.4),
+              this.rad(hugPoints[0].y, hugPoints[1].y, Transformer.WALL_RADIUS * 0.4));
       sprite = new ZapperSprite(template);
       controlSprite.setZapperSprite(sprite);
       sprites.push(sprite);
@@ -240,12 +265,11 @@ Transformer.prototype.transformCluster = function(cluster) {
       for (var i = 0; i < 2; i++) {
         template = this.createImmovableSpriteTemplate()
             .setPainter(new RectPainter("#88f"));
-        this.positionMonoHugger(template, hugPoints[i],
+        this.positionHugger(template, hugPoints[i], controlVec,
             Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.5);
         sprite = new WallSprite(template);
         sprites.push(sprite);
       }
-
       break;
 
   }
@@ -267,7 +291,18 @@ Transformer.prototype.transformLink = function(link) {
  */
 Transformer.prototype.positionMonoHugger = function(template, controlVec, width, height) {
   var hugPoint = this.calcMonoHugPoint(controlVec);
-  var normalUnitVec = new Vec2d().set(controlVec).subtract(hugPoint).scaleToLength(1);
+  this.positionHugger(template, hugPoint, controlVec, width, height);
+};
+
+/**
+ * @param template
+ * @param hugPoint
+ * @param facingPoint
+ * @param width
+ * @param height
+ */
+Transformer.prototype.positionHugger = function(template, hugPoint, facingPoint, width, height) {
+  var normalUnitVec = new Vec2d().set(facingPoint).subtract(hugPoint).scaleToLength(1);
   template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
 
   template.rad.set(normalUnitVec).scaleToLength(height / 2);
