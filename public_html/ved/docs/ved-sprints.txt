@@ -84,19 +84,19 @@ v use it to build a level
   v button
   v play it again
 
-2012.07.28 -
+2012.07.28 - 2012.08.12
 SysClipList & Transformer: Part II
 v SysClips for everything
-- Transformer for everything
+v Transformer for everything
   v block
   v door
   v zapper
   v beamsensor
   v timer
   v portal pair
-  - exit
+  v exit
     v body
-    - URL
+    v URL
 
 Transformer III: Transform Links
 - Remember how links work by looking at level 8
