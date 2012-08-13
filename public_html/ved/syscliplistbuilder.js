@@ -62,6 +62,16 @@ SysClipListBuilder.createDefaultDataMap = function() {
     }];
   }
 
+  function opsToSetData(id, key, value) {
+    return [{
+      type: GrafOp.Type.SET_DATA,
+      id: id,
+      key: key,
+      value: value,
+      oldValue: undefined
+    }];
+  }
+
   function addOpsToMap(id, ops) {
     var graf = new GrafModel();
     graf.applyOps(ops);
@@ -83,13 +93,16 @@ SysClipListBuilder.createDefaultDataMap = function() {
   addMonoPartCluster(VedType.BLOCK);
   addMonoPartCluster(VedType.BUTTON);
   addMonoPartCluster(VedType.DOOR);
-  addMonoPartCluster(VedType.EXIT);
+  addOpsToMap(VedType.EXIT, opsToAddCluster(1, VedType.EXIT)
+      .concat(opsToAddPart(2, 1))
+      .concat(opsToSetData(2, 'url', '.')));
   addMonoPartCluster(VedType.GRIP);
   addMonoPartCluster(VedType.PLAYER_ASSEMBLER);
   addBiPartCluster(VedType.PORTAL);
   addMonoPartCluster(VedType.TIMER);
   addBiPartCluster(VedType.WALL);
   addMonoPartCluster(VedType.ZAPPER);
+
 
   return map;
 };

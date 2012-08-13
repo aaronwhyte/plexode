@@ -29,6 +29,21 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
+  function addExit(x, y, url) {
+    var ops = sysClipList.getClipById(VedType.EXIT).grafModel.createOps();
+    ops.push({
+      type: GrafOp.Type.SET_DATA,
+      id: 2,
+      key: 'url',
+      value: url,
+      oldValue: '.'
+    });
+    var idMap = model.rewriteOpIds(ops);
+    model.applyOps(ops);
+    movePartId(idMap[2], x, y);
+    return model.getCluster(idMap[0]);
+  }
+
   function addPortals(x1, y1, x2, y2) {
     var ops = sysClipList.getClipById(VedType.PORTAL).grafModel.createOps();
     var idMap = model.rewriteOpIds(ops);
@@ -54,7 +69,8 @@ window['main'] = function() {
   addMonoPart(VedType.BLOCK, -100, 200);
   addMonoPart(VedType.BLOCK, -100, 300);
   addMonoPart(VedType.BLOCK, -100, 400);
-  addMonoPart(VedType.EXIT, 600, 200);
+  addMonoPart(VedType.EXIT, 800, 200);
+  addExit(600, 200, 'http://plexode.com');
   addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
   addMonoPart(VedType.BEAM_SENSOR, -100, 100);

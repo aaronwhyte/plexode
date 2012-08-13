@@ -188,8 +188,7 @@ Transformer.prototype.transformCluster = function(cluster) {
           .setPos(controlVec)
           .setRadXY(Transformer.BOX_RADIUS * 1.5, Transformer.BOX_RADIUS * 1.5);
       sprite = new ExitSprite(template);
-      // TODO: proper exit URL
-      sprite.setUrl("index.html");
+      sprite.setUrl(parts[0].data['url']);
       sprites.push(sprite);
       break;
 
