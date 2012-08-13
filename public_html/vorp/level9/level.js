@@ -58,9 +58,8 @@ window['main'] = function() {
   addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
   addMonoPart(VedType.BEAM_SENSOR, -100, 100);
-  addPortals(200, 600, 0, -400);
-//  addMonoPart(VedType.DOOR, 800, 100);
-//  addMonoPart(VedType.DOOR, 50, 100);
+  addPortals(100, 600, 400, -400);
+  addPortals(300, 600, -400, -400);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

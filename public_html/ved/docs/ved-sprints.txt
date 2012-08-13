@@ -99,13 +99,15 @@ v SysClips for everything
     - URL
 
 Transformer III: Transform Links
-- Playable level
+- Remember how links work by looking at level 8
+- Make transformer links work with testing in level 9
 
-Replace Levels
+Replace the old levels with hot new style
 
-Delete LevelBuilder
-
-Delete Prefabs
+Delete dead code
+- delete obsolete sprite logic event handler methods
+- delete LevelBuilder
+- delete Prefabs
 
 ============== VED UI ============
 Ved UI API:

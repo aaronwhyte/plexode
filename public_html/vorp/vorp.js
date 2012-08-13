@@ -29,7 +29,7 @@ Vorp.FRICTION = 0.1;
 
 
 // Target frames per second.
-Vorp.FPS = 45;
+Vorp.FPS = 50;
 
 Vorp.PLAYER_GROUP = 1;
 Vorp.WALL_GROUP = 2;
