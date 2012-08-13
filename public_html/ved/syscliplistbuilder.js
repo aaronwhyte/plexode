@@ -99,7 +99,9 @@ SysClipListBuilder.createDefaultDataMap = function() {
   addMonoPartCluster(VedType.GRIP);
   addMonoPartCluster(VedType.PLAYER_ASSEMBLER);
   addBiPartCluster(VedType.PORTAL);
-  addMonoPartCluster(VedType.TIMER);
+  addOpsToMap(VedType.TIMER, opsToAddCluster(1, VedType.TIMER)
+      .concat(opsToAddPart(2, 1))
+      .concat(opsToSetData(2, 'timeout', 100)));
   addBiPartCluster(VedType.WALL);
   addMonoPartCluster(VedType.ZAPPER);
 

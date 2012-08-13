@@ -21,23 +21,20 @@ window['main'] = function() {
     return model.getCluster(idMap[0]);
   }
 
-  function addMonoPart(type, x, y) {
-    var ops = sysClipList.getClipById(type).grafModel.createOps();
-    var idMap = model.rewriteOpIds(ops);
-    model.applyOps(ops);
-    movePartId(idMap[2], x, y);
-    return model.getCluster(idMap[0]);
-  }
-
-  function addExit(x, y, url) {
-    var ops = sysClipList.getClipById(VedType.EXIT).grafModel.createOps();
-    ops.push({
-      type: GrafOp.Type.SET_DATA,
-      id: 2,
-      key: 'url',
-      value: url,
-      oldValue: '.'
-    });
+  function addMonoPart(type, x, y, opt_data) {
+    var clipModel = sysClipList.getClipById(type).grafModel;
+    var ops = clipModel.createOps();
+    if (opt_data) {
+      for (var key in opt_data) {
+        ops.push({
+          type: GrafOp.Type.SET_DATA,
+          id: 2,
+          key: key,
+          value: opt_data[key],
+          oldValue: clipModel.getPart(2).data[key]
+        });
+      }
+    }
     var idMap = model.rewriteOpIds(ops);
     model.applyOps(ops);
     movePartId(idMap[2], x, y);
@@ -70,12 +67,13 @@ window['main'] = function() {
   addMonoPart(VedType.BLOCK, -100, 300);
   addMonoPart(VedType.BLOCK, -100, 400);
   addMonoPart(VedType.EXIT, 800, 200);
-  addExit(600, 200, 'http://plexode.com');
+  addMonoPart(VedType.EXIT, 600, 200, {'url': 'http://plexode.com'});
   addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
   addMonoPart(VedType.BEAM_SENSOR, -100, 100);
   addPortals(100, 600, 400, -400);
   addPortals(300, 600, -400, -400);
+  addMonoPart(VedType.TIMER, 0, -200, {'timeout': 200});
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

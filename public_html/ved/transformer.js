@@ -239,6 +239,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       sprite = new TimerSprite(template);
+      sprite.setTimeoutLength(parts[0].data['timeout']);
       // TODO: jacks
       sprites.push(sprite);
       break;
