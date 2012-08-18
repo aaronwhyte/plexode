@@ -93,14 +93,25 @@ v Transformer for everything
   v zapper
   v beamsensor
   v timer
+    v timeout value
   v portal pair
   v exit
     v body
     v URL
 
+2012.08.12 -
 Transformer III: Transform Links
-- Remember how links work by looking at level 8
-- Make transformer links work with testing in level 9
+v Remember how links work by looking at level 8
+- Add jacks to sys clip models
+  v beamsensor
+  v door
+  - ...
+- Populate transformer jackMap when transforming clusters
+  v beamsensor
+  v door
+  - ...
+v Make transformer links work
+v test in level 9 or so
 
 Replace the old levels with hot new style
 

@@ -126,6 +126,7 @@ def getVorpJsFileNames():
     'vec2d.js',
     'plex/array.js',
     'plex/map.js',
+    'plex/object.js',
     'plex/point.js',
     'plex/rect.js',
     'plex/type.js',

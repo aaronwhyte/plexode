@@ -8,12 +8,7 @@ function Transformer(vorp, gameClock, sledgeInvalidator) {
   this.gameClock = gameClock;
   this.sledgeInvalidator = sledgeInvalidator;
 
-  // maps jackIds to objects like
-  // {
-  //   spriteId: id,
-  //   type: buffer type enum,
-  //   index: num
-  // }
+  // Maps model jackIds to JackAddress objects, to locate jacks in the Vorp instance.
   // Gets populated as sprites are created, and used when links are added.
   this.jackMap = {};
 }
@@ -105,10 +100,7 @@ Transformer.prototype.rad = function(a, b, r) {
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
   var controlVec, controlSprite, template, sprite, hugPoints;
-  var parts = [];
-  for (var id in cluster.parts) {
-    parts.push(cluster.parts[id]);
-  }
+  var parts = cluster.getPartList();
   switch (cluster.data.type) {
 
     case VedType.BEAM_SENSOR:
@@ -122,7 +114,8 @@ Transformer.prototype.transformCluster = function(cluster) {
           0.5 * Transformer.WALL_RADIUS,
           0.6 * Transformer.WALL_RADIUS);
       var beamer = new BeamerSprite(template);
-      // TODO jacks
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(beamer, JackAddress.Type.OUTPUT, beamer.outputIds.BEAM_BROKEN);
       sprites.push(beamer);
 
       // SensorSprite
@@ -165,7 +158,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       controlSprite = new DoorControlSprite(template);
-      // TODO jacks
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(controlSprite, JackAddress.Type.INPUT, controlSprite.inputIds.OPEN);
       sprites.push(controlSprite);
 
       // DoorSprite x2
@@ -305,6 +299,9 @@ Transformer.prototype.transformCluster = function(cluster) {
  * @param {GrafLink} link
  */
 Transformer.prototype.transformLink = function(link) {
+  var ja1 = this.jackMap[link.jackId1];
+  var ja2 = this.jackMap[link.jackId2];
+  this.vorp.addLogicLink(new LogicLink(ja1.sprite.id, ja1.index, ja2.sprite.id, ja2.index));
 };
 
 /**

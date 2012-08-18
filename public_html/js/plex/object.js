@@ -36,3 +36,15 @@ plex.object.keys = function(obj) {
   }
   return keys;
 };
+
+plex.object.values = function(obj) {
+  var values = [];
+  try {
+    for (var key in obj) {
+      values.push(obj[key]);
+    }
+  } catch (e) {
+    // some kinda access violation
+  }
+  return values;
+};

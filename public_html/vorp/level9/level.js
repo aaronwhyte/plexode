@@ -18,7 +18,7 @@ window['main'] = function() {
     model.applyOps(ops);
     movePartId(idMap[2], x0, y0);
     movePartId(idMap[3], x1, y1);
-    return model.getCluster(idMap[0]);
+    return model.getCluster(idMap[1]);
   }
 
   function addMonoPart(type, x, y, opt_data) {
@@ -38,7 +38,7 @@ window['main'] = function() {
     var idMap = model.rewriteOpIds(ops);
     model.applyOps(ops);
     movePartId(idMap[2], x, y);
-    return model.getCluster(idMap[0]);
+    return model.getCluster(idMap[1]);
   }
 
   function addPortals(x1, y1, x2, y2) {
@@ -47,7 +47,24 @@ window['main'] = function() {
     model.applyOps(ops);
     movePartId(idMap[2], x1, y1);
     movePartId(idMap[3], x2, y2);
-    return model.getCluster(idMap[0]);
+    return model.getCluster(idMap[1]);
+  }
+
+  function addSimpleLink(outputCluster, inputCluster) {
+    function firstJackId(cluster) {
+      var part = plex.object.values(cluster.parts)[0];
+      var jack = plex.object.values(part.jacks)[0];
+      return jack.id;
+    }
+    var id = model.newId();
+    var op = {
+      type: GrafOp.Type.ADD_LINK,
+      id: id,
+      jackId1: firstJackId(outputCluster),
+      jackId2: firstJackId(inputCluster)
+    };
+    model.applyOp(op);
+    return model.getLink(id);
   }
 
   addWall(-400, 0, -400, 600);
@@ -68,12 +85,14 @@ window['main'] = function() {
   addMonoPart(VedType.BLOCK, -100, 400);
   addMonoPart(VedType.EXIT, 800, 200);
   addMonoPart(VedType.EXIT, 600, 200, {'url': 'http://plexode.com'});
-  addMonoPart(VedType.DOOR, 400, 100);
+  var doorCluster = addMonoPart(VedType.DOOR, 400, 100);
   addMonoPart(VedType.ZAPPER, -100, 0);
-  addMonoPart(VedType.BEAM_SENSOR, -100, 100);
+  var beamSensorCluster = addMonoPart(VedType.BEAM_SENSOR, -100, 100);
   addPortals(100, 600, 400, -400);
   addPortals(300, 600, -400, -400);
   addMonoPart(VedType.TIMER, 0, -200, {'timeout': 200});
+
+  addSimpleLink(beamSensorCluster, doorCluster);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

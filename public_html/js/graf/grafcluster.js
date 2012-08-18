@@ -20,3 +20,7 @@ GrafCluster.prototype.addPart = function(part) {
 GrafCluster.prototype.removePart = function(part) {
   delete this.parts[part.id];
 };
+
+GrafCluster.prototype.getPartList = function() {
+  return plex.object.values(this.parts);
+};
