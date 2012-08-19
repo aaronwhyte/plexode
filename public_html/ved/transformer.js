@@ -147,8 +147,9 @@ Transformer.prototype.transformCluster = function(cluster) {
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
       sprite = new ButtonSprite(template);
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.CLICKED);
       sprites.push(sprite);
-      // TODO jacks
       break;
 
     case VedType.DOOR:
@@ -195,8 +196,9 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprite = new GripSprite(template);
       sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
           Transformer.BOX_RADIUS * 3));
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.GRIPPING);
       sprites.push(sprite);
-      // TODO jacks
       break;
 
     case VedType.PLAYER_ASSEMBLER:
@@ -234,7 +236,11 @@ Transformer.prototype.transformCluster = function(cluster) {
           .setPos(controlVec);
       sprite = new TimerSprite(template);
       sprite.setTimeoutLength(parts[0].data['timeout']);
-      // TODO: jacks
+      // TODO: More robust selection of jack from model based on type and name.
+      this.jackMap[parts[0].getJackList()[1].id] =
+          new JackAddress(sprite, JackAddress.Type.INPUT, sprite.inputIds.RESTART);
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.RUNNING);
       sprites.push(sprite);
       break;
 
@@ -265,7 +271,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       controlSprite = new ZapperControlSprite(template);
-      // TODO jacks
+      this.jackMap[parts[0].getJackList()[0].id] =
+          new JackAddress(controlSprite, JackAddress.Type.INPUT, controlSprite.inputIds.OPEN);
       sprites.push(controlSprite);
 
       // ZapperSprite

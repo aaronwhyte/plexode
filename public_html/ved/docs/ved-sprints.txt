@@ -99,26 +99,59 @@ v Transformer for everything
     v body
     v URL
 
-2012.08.12 -
+2012.08.12 - 2012.08.19
 Transformer III: Transform Links
 v Remember how links work by looking at level 8
-- Add jacks to sys clip models
+v Add jacks to sys clip models
   v beamsensor
+  v button
   v door
-  - ...
-- Populate transformer jackMap when transforming clusters
+  v grip
+  v timer
+  v zapper
+v Populate transformer jackMap when transforming clusters
   v beamsensor
+  v button
   v door
-  - ...
+  v grip
+  v timer
+  v zapper
 v Make transformer links work
 v test in level 9 or so
+  v beamsensor
+  v button
+  v door
+  v grip
+  v timer
+  v zapper
 
-Replace the old levels with hot new style
+Transformer IV: Automatic Jacks
+- Add jack type and name as data in sys clips, automatically, based on sprite constants.
+- Populate transformer jackmap automatically as well.
+
+LevEd API I
+- levEd.pasteClip(clip, loc)
+- partOrJackId levEd.getNearest(loc, opt_maxDist)
+- levEd.setSelected(partOrJackId, selected)
+- levEd.clearSelection()
+- levEd.translateSelectedParts(deltaPos)
+- levEd.linkSelectedJacks() //
+- Create test level
+
+Replace the (good) old levels with hot new style, but programatic.
 
 Delete dead code
 - delete obsolete sprite logic event handler methods
 - delete LevelBuilder
 - delete Prefabs
+
+Pull it into the main branch
+
+Ship It
+
+LevEd API II
+- levEd.deletedSelectedParts()
+- levEd.twistSelectedParts(LEFT90 | RIGHT90 | FLIP_X | FLIP_Y)
 
 ============== VED UI ============
 Ved UI API:

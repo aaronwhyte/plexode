@@ -21,9 +21,6 @@ SysClipListBuilder.createFromMap = function(idToGraf) {
   var ids = idToGraf.getKeys();
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
-//    if (!(id in VedType)) {
-//      throw Error('id ' + id + ' is not in VedType enum');
-//    }
     var graf = idToGraf.get(id);
     var clip = new Clip(0, id, graf);
     clipList.addClip(id, clip);
@@ -91,42 +88,56 @@ SysClipListBuilder.createDefaultDataMap = function() {
   }
 
   function addBiPartCluster(type) {
-    addOpsToMap(type,
-        opsToAddCluster(1, type)
-            .concat(opsToAddPart(2, 1, 0, -Transformer.WALL_RADIUS * 2))
-            .concat(opsToAddPart(3, 1, 0, Transformer.WALL_RADIUS * 2)));
+    addOpsToMap(type, [].concat(
+        opsToAddCluster(1, type),
+        opsToAddPart(2, 1, 0, -Transformer.WALL_RADIUS * 2),
+        opsToAddPart(3, 1, 0, Transformer.WALL_RADIUS * 2)));
   }
 
-  addOpsToMap(VedType.BEAM_SENSOR, opsToAddCluster(1, VedType.BEAM_SENSOR)
-      .concat(opsToAddPart(2, 1))
-      .concat(opsToAddJack(3, 2, JackAddress.Type.OUTPUT)));
+  addOpsToMap(VedType.BEAM_SENSOR, [].concat(
+      opsToAddCluster(1, VedType.BEAM_SENSOR),
+      opsToAddPart(2, 1),
+      opsToAddJack(3, 2, JackAddress.Type.OUTPUT)));
 
   addMonoPartCluster(VedType.BLOCK);
 
-  addMonoPartCluster(VedType.BUTTON); // TODO jacks
+  addOpsToMap(VedType.BUTTON, [].concat(
+      opsToAddCluster(1, VedType.BUTTON),
+      opsToAddPart(2, 1),
+      opsToAddJack(3, 2, JackAddress.Type.OUTPUT)));
 
-  addOpsToMap(VedType.DOOR, opsToAddCluster(1, VedType.DOOR)
-      .concat(opsToAddPart(2, 1))
-      .concat(opsToAddJack(3, 2, JackAddress.Type.INPUT)));
+  addOpsToMap(VedType.DOOR, [].concat(
+      opsToAddCluster(1, VedType.DOOR),
+      opsToAddPart(2, 1),
+      opsToAddJack(3, 2, JackAddress.Type.INPUT)));
 
-  addOpsToMap(VedType.EXIT, opsToAddCluster(1, VedType.EXIT)
-      .concat(opsToAddPart(2, 1))
-      .concat(opsToSetData(2, 'url', '.')));
+  addOpsToMap(VedType.EXIT, [].concat(
+      opsToAddCluster(1, VedType.EXIT),
+      opsToAddPart(2, 1),
+      opsToSetData(2, 'url', '.')));
 
-  addMonoPartCluster(VedType.GRIP);  // TODO jacks
+  addOpsToMap(VedType.GRIP, [].concat(
+      opsToAddCluster(1, VedType.GRIP),
+      opsToAddPart(2, 1),
+      opsToAddJack(3, 2, JackAddress.Type.OUTPUT)));
 
   addMonoPartCluster(VedType.PLAYER_ASSEMBLER);
 
   addBiPartCluster(VedType.PORTAL);
 
-  addOpsToMap(VedType.TIMER, opsToAddCluster(1, VedType.TIMER)
-      .concat(opsToAddPart(2, 1))
-      .concat(opsToSetData(2, 'timeout', 100)));
+  addOpsToMap(VedType.TIMER, [].concat(
+      opsToAddCluster(1, VedType.TIMER),
+      opsToAddPart(2, 1),
+      opsToSetData(2, 'timeout', 100),
+      opsToAddJack(3, 2, JackAddress.Type.INPUT),
+      opsToAddJack(4, 2, JackAddress.Type.OUTPUT)));
 
   addBiPartCluster(VedType.WALL);
 
-  addMonoPartCluster(VedType.ZAPPER);  // TODO jacks
-
+  addOpsToMap(VedType.ZAPPER, [].concat(
+      opsToAddCluster(1, VedType.ZAPPER),
+      opsToAddPart(2, 1),
+      opsToAddJack(3, 2, JackAddress.Type.INPUT)));
 
   return map;
 };
