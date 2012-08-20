@@ -125,9 +125,10 @@ v test in level 9 or so
   v timer
   v zapper
 
+2012.08.19 - 2012.08.19
 Transformer IV: Automatic Jacks
-- Add jack type and name as data in sys clips, automatically, based on sprite constants.
-- Populate transformer jackmap automatically as well.
+v Add jack type and name as data in sys clips, automatically, based on sprite constants.
+v Populate transformer jackmap automatically as well.
 
 LevEd API I
 - levEd.pasteClip(clip, loc)

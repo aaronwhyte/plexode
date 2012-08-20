@@ -99,12 +99,13 @@ Transformer.prototype.rad = function(a, b, r) {
  */
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
-  var controlVec, controlSprite, template, sprite, hugPoints;
+  var controlVec, controlSprite, template, sprite, part, hugPoints;
   var parts = cluster.getPartList();
   switch (cluster.data.type) {
 
     case VedType.BEAM_SENSOR:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       hugPoints = this.calcDoubleHugPoints(controlVec);
 
       // BeamerSprite
@@ -114,8 +115,7 @@ Transformer.prototype.transformCluster = function(cluster) {
           0.5 * Transformer.WALL_RADIUS,
           0.6 * Transformer.WALL_RADIUS);
       var beamer = new BeamerSprite(template);
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(beamer, JackAddress.Type.OUTPUT, beamer.outputIds.BEAM_BROKEN);
+      this.transformJacks(beamer, part.getJackList());
       sprites.push(beamer);
 
       // SensorSprite
@@ -130,7 +130,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.BLOCK:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createMovableSpriteTemplate()
           .setPainter(new RectPainter("#dd4"))
           .setPos(controlVec)
@@ -141,26 +142,26 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.BUTTON:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createImmovableSpriteTemplate()
           .setPainter(new ButtonPainter());
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
       sprite = new ButtonSprite(template);
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.CLICKED);
+      this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;
 
     case VedType.DOOR:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
 
       // DoorControlSprite
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       controlSprite = new DoorControlSprite(template);
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(controlSprite, JackAddress.Type.INPUT, controlSprite.inputIds.OPEN);
+      this.transformJacks(controlSprite, part.getJackList());
       sprites.push(controlSprite);
 
       // DoorSprite x2
@@ -177,7 +178,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.EXIT:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createImmovableSpriteTemplate()
           .setPainter(new RectPainter("#0f0"))
           .setPos(controlVec)
@@ -188,7 +190,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.GRIP:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createImmovableSpriteTemplate()
           .setPainter(new GripPainter());
       this.positionMonoHugger(template, controlVec,
@@ -196,13 +199,13 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprite = new GripSprite(template);
       sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
           Transformer.BOX_RADIUS * 3));
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.GRIPPING);
+      this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;
 
     case VedType.PLAYER_ASSEMBLER:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createImmovableSpriteTemplate()
           .setPainter(new PlayerAssemblerPainter());
       this.positionMonoHugger(template, controlVec,
@@ -231,16 +234,13 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.TIMER:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       sprite = new TimerSprite(template);
       sprite.setTimeoutLength(parts[0].data['timeout']);
-      // TODO: More robust selection of jack from model based on type and name.
-      this.jackMap[parts[0].getJackList()[1].id] =
-          new JackAddress(sprite, JackAddress.Type.INPUT, sprite.inputIds.RESTART);
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(sprite, JackAddress.Type.OUTPUT, sprite.outputIds.RUNNING);
+      this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;
 
@@ -264,15 +264,15 @@ Transformer.prototype.transformCluster = function(cluster) {
       break;
 
     case VedType.ZAPPER:
-      controlVec = new Vec2d(parts[0].x, parts[0].y);
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
       hugPoints = this.calcDoubleHugPoints(controlVec);
 
       // ZapperControlSprite
       template = this.createIntangibleSpriteTemplate()
           .setPos(controlVec);
       controlSprite = new ZapperControlSprite(template);
-      this.jackMap[parts[0].getJackList()[0].id] =
-          new JackAddress(controlSprite, JackAddress.Type.INPUT, controlSprite.inputIds.OPEN);
+      this.transformJacks(controlSprite, part.getJackList());
       sprites.push(controlSprite);
 
       // ZapperSprite
@@ -300,6 +300,21 @@ Transformer.prototype.transformCluster = function(cluster) {
 
   }
   return sprites;
+};
+
+Transformer.prototype.transformJacks = function(sprite, jackList) {
+  for (var i = 0; i < jackList.length; i++) {
+    var jack = jackList[i];
+    var type = jack.data.type;
+    var name = jack.data.name;
+    var jackIndexMap = null;
+    if (type === JackAddress.Type.INPUT) {
+      jackIndexMap = sprite.inputIds;
+    } else if (type === JackAddress.Type.OUTPUT) {
+      jackIndexMap = sprite.outputIds;
+    }
+    this.jackMap[jack.id] = new JackAddress(sprite, type, jackIndexMap[name]);
+  }
 };
 
 /**
