@@ -26,7 +26,7 @@ DoorControlSprite.prototype.addDoorSprite = function(s) {
 };
 
 DoorControlSprite.prototype.act = function() {
-  var destClosedness = this.inputs[this.inputs.OPEN] ? DoorControlSprite.MIN_CLOSEDNESS : 1;
+  var destClosedness = this.getInputOr(this.inputIds.OPEN) ? DoorControlSprite.MIN_CLOSEDNESS : 1;
   if (this.closedness != destClosedness) {
     this.speed = Math.min(this.speed + DoorControlSprite.ACCEL, DoorControlSprite.TOP_SPEED);
     if (this.closedness < destClosedness) {

@@ -21,7 +21,7 @@ ZapperControlSprite.prototype.setZapperSprite = function(s) {
 };
 
 ZapperControlSprite.prototype.act = function() {
-  var newOpen = this.inputs[this.inputIds.OPEN];
+  var newOpen = this.getInputOr(this.inputIds.OPEN);
   if (!this.oldOpen && newOpen) {
     this.world.removeSprite(this.zapperSprite.id);
   } else if (this.oldOpen && !newOpen) {

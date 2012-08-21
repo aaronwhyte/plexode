@@ -130,6 +130,11 @@ Transformer IV: Automatic Jacks
 v Add jack type and name as data in sys clips, automatically, based on sprite constants.
 v Populate transformer jackmap automatically as well.
 
+2012.08.20 - 2012.08.21
+v fix link aggregation
+  v or
+  v and
+
 LevEd API I
 - levEd.pasteClip(clip, loc)
 - partOrJackId levEd.getNearest(loc, opt_maxDist)
@@ -146,9 +151,9 @@ Delete dead code
 - delete LevelBuilder
 - delete Prefabs
 
-Pull it into the main branch
+Merge year-old vorplogic branch into the main branch!
 
-Ship It
+Deploy to plexode.
 
 LevEd API II
 - levEd.deletedSelectedParts()

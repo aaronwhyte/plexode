@@ -1,9 +1,16 @@
-function LogicLink(outputSpriteId, outputId, inputSpriteId, inputId) {
+/**
+ * @param outputSpriteId
+ * @param outputIndex
+ * @param inputSpriteId
+ * @param inputIndex
+ * @constructor
+ */
+function LogicLink(outputSpriteId, outputIndex, inputSpriteId, inputIndex) {
   this.id = LogicLink.nextId++;
   this.outputSpriteId = outputSpriteId;
-  this.outputId = outputId;
+  this.outputIndex = outputIndex;
   this.inputSpriteId = inputSpriteId;
-  this.inputId = inputId;
+  this.inputIndex = inputIndex;
 }
 
 LogicLink.nextId = 1;

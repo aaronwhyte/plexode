@@ -73,7 +73,11 @@ window['main'] = function() {
   addWall(400, 400, 800, 400);
   addMonoPart(VedType.PLAYER_ASSEMBLER, 50, 200);
   var buttonCluster = addMonoPart(VedType.BUTTON, 600, 450);
-  var gripCluster = addMonoPart(VedType.GRIP, 50, -100);
+  var gripClusters = [
+    addMonoPart(VedType.GRIP, 50, -100),
+    addMonoPart(VedType.GRIP, 250, -100),
+    addMonoPart(VedType.GRIP, 450, -100)
+  ];
   addMonoPart(VedType.BLOCK, -100, 200);
   addMonoPart(VedType.BLOCK, -100, 300);
   addMonoPart(VedType.BLOCK, -100, 400);
@@ -88,7 +92,9 @@ window['main'] = function() {
   var timerCluster = addMonoPart(VedType.TIMER, 0, -200, {'timeout': 200});
 
   addSimpleLink(beamSensorCluster, zapperCluster);
-  addSimpleLink(gripCluster, doorCluster1);
+  gripClusters.forEach(function (gripCluster) {
+    addSimpleLink(gripCluster, doorCluster1);
+  });
   addSimpleLink(buttonCluster, timerCluster);
   addSimpleLink(timerCluster, doorCluster2);
 

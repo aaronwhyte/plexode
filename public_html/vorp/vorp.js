@@ -215,13 +215,20 @@ Vorp.prototype.clockSprites = function() {
 };
 
 Vorp.prototype.clockLinks = function() {
+  // Clear old input buffers.
+  for (var id in this.links) {
+    var link = this.links[id];
+    var inputSprite = this.getSprite(link.inputSpriteId);
+    if (!inputSprite) throw "no sprite with ID " + link.inputSpriteId;
+    inputSprite.clearInputs();
+  }
+  // Set new input buffer values.
   for (var id in this.links) {
     var link = this.links[id];
     var outputSprite = this.getSprite(link.outputSpriteId);
     if (!outputSprite) throw "no sprite with ID " + link.outputSpriteId;
     var inputSprite = this.getSprite(link.inputSpriteId);
-    if (!inputSprite) throw "no sprite with ID " + link.inputSpriteId;
-    inputSprite.inputs[link.inputId] = outputSprite.outputs[link.outputId];
+    inputSprite.addToInput(link.inputIndex, outputSprite.outputs[link.outputIndex]);
   }
 };
 

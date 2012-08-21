@@ -35,7 +35,7 @@ TimerSprite.prototype.restart = function() {
 };
 
 TimerSprite.prototype.act = function() {
-  if (this.inputs[this.inputIds.RESTART]) {
+  if (this.getInputOr(this.inputIds.RESTART)) {
     this.restart();
   }
   this.outputs[this.outputIds.RUNNING] = this.isRunning() ? 1 : 0;

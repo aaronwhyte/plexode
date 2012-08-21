@@ -11,6 +11,7 @@ function Sprite(spriteTemplate) {
 
   // logic link buffers
   this.inputs = [];
+  this.inputCounts = [];
   this.outputs = [];
   this.reset(spriteTemplate);
   this.clearInputs();
@@ -42,6 +43,7 @@ Sprite.prototype.reset = function(spriteTemplate) {
   this.id = Sprite.nextId++;
   this.acceleration.setXY(0, 0);
   this.inputs.length = 0;
+  this.inputCounts.length = 0;
   this.outputs.length = 0;
 };
 
@@ -256,14 +258,29 @@ Sprite.prototype.inputIds = {};
 Sprite.prototype.outputIds = {};
 
 Sprite.prototype.clearInputs = function() {
-  for (var i in this.inputIds) {
-    this.inputs[i] = 0;
+  for (var id in this.inputIds) {
+    var index = this.inputIds[id];
+    this.inputs[index] = 0;
+    this.inputCounts[index] = 0;
   }
 };
 
 Sprite.prototype.clearOutputs = function() {
-  for (var i in this.outputIds) {
-    this.outputs[i] = 0;
+  for (var id in this.outputIds) {
+    var index = this.outputIds[id];
+    this.outputs[index] = 0;
   }
 };
 
+Sprite.prototype.addToInput = function(inputIndex, outputValue) {
+  this.inputs[inputIndex] += outputValue;
+  this.inputCounts[inputIndex]++;
+};
+
+Sprite.prototype.getInputOr = function(inputIndex) {
+  return this.inputs[inputIndex];
+};
+
+Sprite.prototype.getInputAnd = function(inputIndex) {
+  return this.inputCounts[inputIndex] && this.inputs[inputIndex] >= this.inputCounts[inputIndex];
+};
