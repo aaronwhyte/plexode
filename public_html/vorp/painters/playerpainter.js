@@ -48,7 +48,7 @@ PlayerPainter.prototype.advance = function(now) {
   // Remove obsolete events
   while(this.events.size()) {
     if (this.events.getFromTail(0).time + PlayerPainter.TRAIL_TIMESPAN < now) {
-      this.events.dequeue();
+      PaintEvent.free(this.events.dequeue());
     } else {
       break;
     }

@@ -93,6 +93,6 @@ PaintEvent.alloc = function(type, time, px, py, vx, vy, rx, ry) {
 /**
  * @param {PaintEvent} PaintEvent
  */
-PaintEvent.free = function(PaintEvent) {
-  PaintEvent.pool[PaintEvent.poolSize++] = PaintEvent;
+PaintEvent.free = function(paintEvent) {
+  PaintEvent.pool[PaintEvent.poolSize++] = paintEvent;
 };

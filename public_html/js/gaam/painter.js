@@ -11,7 +11,10 @@ function Painter(opt_maxTrailLength) {
  * @param {PaintEvent} event
  */
 Painter.prototype.addEvent = function(event) {
-  this.events.enqueue(event);
+  var fellOffTail = this.events.enqueue(event);
+  if (fellOffTail) {
+    PaintEvent.free(fellOffTail);
+  }
 };
 
 /**
