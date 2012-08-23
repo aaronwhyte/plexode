@@ -81,13 +81,16 @@ window['main'] = function() {
   addMonoPart(VedType.BLOCK, -100, 200);
   addMonoPart(VedType.BLOCK, -100, 300);
   addMonoPart(VedType.BLOCK, -100, 400);
-  addMonoPart(VedType.EXIT, 800, 200);
-  addMonoPart(VedType.EXIT, 600, 200, {'url': 'http://plexode.com'});
+  for (var a = 0; a < 4; a++) {
+    for (var b = 0; b < 4; b++) {
+      addMonoPart(VedType.BLOCK, 100 + a * 50, 800 + b * 50);
+    }
+  }
+  addMonoPart(VedType.EXIT, 600, 200, {'url': '../level10/'});
   var doorCluster1 = addMonoPart(VedType.DOOR, 400, 100);
   var doorCluster2 = addMonoPart(VedType.DOOR, 500, 100);
   var zapperCluster = addMonoPart(VedType.ZAPPER, -100, 0);
   var beamSensorCluster = addMonoPart(VedType.BEAM_SENSOR, -100, 100);
-  addPortals(100, 600, 400, -400);
   addPortals(300, 600, -400, -400);
   var timerCluster = addMonoPart(VedType.TIMER, 0, -200, {'timeout': 200});
 

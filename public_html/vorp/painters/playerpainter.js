@@ -59,7 +59,7 @@ PlayerPainter.prototype.advance = function(now) {
 PlayerPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
     this.tractorBeamPainter.paint(renderer, layer);
-    if (FLAGS && FLAGS.get('playerTrail')) {
+    if ((FLAGS && FLAGS.get('playerTrail'))) {
       var prevEvent = null;
       renderer.context.beginPath();
       renderer.setStrokeStyle('rgba(255, 68, 221, 0.5)');

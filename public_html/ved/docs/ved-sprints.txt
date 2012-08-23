@@ -135,14 +135,20 @@ v fix link aggregation
   v or
   v and
 
-LevEd API I
-- levEd.pasteClip(clip, loc)
+2012.08.21 - 2012.08.21
+v fix some alloc/free GC issues
+
+2012.08.22 -
+LevelEd API I
+v levelEd.pasteClip(clip, loc)
 - partOrJackId levEd.getNearest(loc, opt_maxDist)
-- levEd.setSelected(partOrJackId, selected)
-- levEd.clearSelection()
-- levEd.translateSelectedParts(deltaPos)
-- levEd.linkSelectedJacks() //
-- Create test level
+  v parts
+  - accessible vector offsets for input + output jacks
+v levelEd.setSelected(partOrJackId, selected)
+v levelEd.clearSelection()
+v levelEd.translateSelectedParts(deltaPos)
+- levelEd.linkSelectedJacks() //
+v Create test level
 
 Replace the (good) old levels with hot new style, but programatic.
 
