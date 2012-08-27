@@ -3,100 +3,78 @@ window['main'] = function() {
   var sysClipList = SysClipListBuilder.createDefaultInstance();
   var ed = new LevelEd(model);
 
-  function movePart(oldPos, newPos) {
-    ed.clearSelection();
-    var id = ed.getNearestId(oldPos);
-    if (!id) throw "nothing at oldPos " + oldPos;
-    ed.select(id, true);
-    ed.moveSelectedParts(new Vec2d().set(newPos).subtract(oldPos));
-  }
-
-//  function addWall(x0, y0, x1, y1) {
-//    var ops = sysClipList.getClipById(VedType.WALL).grafModel.createOps();
-//    var idMap = model.rewriteOpIds(ops);
-//    model.applyOps(ops);
-//    movePartId(idMap[2], x0, y0);
-//    movePartId(idMap[3], x1, y1);
-//    return model.getCluster(idMap[1]);
-//  }
-
-  function paste(type, x, y, opt_data) {
-    var clipModel = sysClipList.getClipById(type).grafModel;
-    ed.pasteModel(sysClipList.getClipById(type).grafModel, new Vec2d(x, y));
-
-//    if (opt_data) {
-//      for (var key in opt_data) {
-//        ops.push({
-//          type: GrafOp.Type.SET_DATA,
-//          id: 2,
-//          key: key,
-//          value: opt_data[key],
-//          oldValue: clipModel.getPart(2).data[key]
-//        });
-//      }
-//    }
-  }
-
-//  function addPortals(x1, y1, x2, y2) {
-//    var ops = sysClipList.getClipById(VedType.PORTAL).grafModel.createOps();
-//    var idMap = model.rewriteOpIds(ops);
-//    model.applyOps(ops);
-//    movePartId(idMap[2], x1, y1);
-//    movePartId(idMap[3], x2, y2);
-//    return model.getCluster(idMap[1]);
-//  }
-
-//  function addSimpleLink(outputCluster, inputCluster) {
-//    function firstJackId(cluster) {
-//      var part = plex.object.values(cluster.parts)[0];
-//      var jack = plex.object.values(part.jacks)[0];
-//      return jack.id;
-//    }
-//    var id = model.newId();
-//    var op = {
-//      type: GrafOp.Type.ADD_LINK,
-//      id: id,
-//      jackId1: firstJackId(outputCluster),
-//      jackId2: firstJackId(inputCluster)
-//    };
-//    model.applyOp(op);
-//    return model.getLink(id);
-//  }
-
-//  addWall(-400, 0, -400, 400);
-//  addWall(0, 0, 500, 0);
-//  addWall(0, 0, 0, 400);
-//  addWall(400, 400, 800, 400);
-  paste(VedType.WALL, 50, 100);
-  paste(VedType.PLAYER_ASSEMBLER, 50, 200);
-//  var buttonCluster = addMonoPart(VedType.BUTTON, 600, 450);
-//  var gripClusters = [
-//    addMonoPart(VedType.GRIP, 50, -100),
-//    addMonoPart(VedType.GRIP, 250, -100),
-//    addMonoPart(VedType.GRIP, 450, -100)
-//  ];
-  paste(VedType.BLOCK, -100, 200);
-  paste(VedType.BLOCK, -100, 300);
-  paste(VedType.BLOCK, -100, 400);
-  for (var a = 0; a < 4; a++) {
-    for (var b = 0; b < 4; b++) {
-      paste(VedType.BLOCK, 100 + a * 50, 800 + b * 50);
+  /**
+   * @param tuples An array of [objId, key, value] arrays.
+   */
+  function pasteWithPositions(type, pos1, pos2, opt_dataTuples) {
+    var idMap = ed.pasteWithPositions(
+        sysClipList.getClipById(type).grafModel,
+        [pos1, pos2]);
+    if (opt_dataTuples) {
+      setData(opt_dataTuples, idMap);
     }
   }
-  paste(VedType.EXIT, 600, 200, {'url': '../level9'});
-//  var doorCluster1 = addMonoPart(VedType.DOOR, 400, 100);
-//  var doorCluster2 = addMonoPart(VedType.DOOR, 500, 100);
-//  var zapperCluster = addMonoPart(VedType.ZAPPER, -100, 0);
-//  var beamSensorCluster = addMonoPart(VedType.BEAM_SENSOR, -100, 100);
-  paste(VedType.PORTAL, 300, 600);
-//  var timerCluster = addMonoPart(VedType.TIMER, 0, -200, {'timeout': 200});
-//
-//  addSimpleLink(beamSensorCluster, zapperCluster);
-//  gripClusters.forEach(function (gripCluster) {
-//    addSimpleLink(gripCluster, doorCluster1);
-//  });
-//  addSimpleLink(buttonCluster, timerCluster);
-//  addSimpleLink(timerCluster, doorCluster2);
+
+  /**
+   * @param tuples An array of [objId, key, value] arrays.
+   */
+  function pasteWithOffset(type, offset, opt_dataTuples) {
+    var idMap = ed.pasteWithOffset(sysClipList.getClipById(type).grafModel, offset);
+    if (opt_dataTuples) {
+      setData(opt_dataTuples, idMap);
+    }
+  }
+
+  /**
+   * @param tuples An array of [objId, key, value] arrays.
+   */
+  function setData(tuples, opt_idMap) {
+    for (var i in tuples) {
+      var tuple = tuples[i];
+      var objId = opt_idMap ? opt_idMap[tuple[0]] : tuple[0];
+      var key = tuple[1];
+      var val = tuple[2];
+      ed.setData(objId, key, val);
+    }
+  }
+
+  function link(outputPartPos, inputPartPos) {
+    ed.clearSelection();
+    var outputJackId = ed.getNearestId(ed.getJackOffset(false).add(outputPartPos));
+    ed.select(outputJackId, true);
+    var inputJackId = ed.getNearestId(ed.getJackOffset(true).add(inputPartPos));
+    ed.select(inputJackId, true);
+    ed.linkSelectedJacks();
+  }
+
+  function v(x, y) {
+    return new Vec2d(x, y);
+  }
+
+  function wall(x1, y1, x2, y2) {
+    pasteWithPositions(VedType.WALL, v(x1, y1), v(x2, y2));
+  }
+
+  function mono(type, x1, y1, opt_tuples) {
+    pasteWithOffset(type, v(x1, y1), opt_tuples);
+  }
+
+  wall(-400, 0, -400, 400);
+  wall(0, 0, 500, 0);
+  wall(0, 0, 0, 400);
+  wall(400, 400, 800, 400);
+  wall(400, 800, 800, 800);
+  mono(VedType.PLAYER_ASSEMBLER, 50, 200);
+
+  mono(VedType.GRIP, 600, 600);
+  mono(VedType.DOOR, 700, 700);
+  link(new Vec2d(600, 600), new Vec2d(700, 700));
+
+  mono(VedType.BLOCK, -100, 200);
+  mono(VedType.BLOCK, -100, 300);
+  mono(VedType.BLOCK, -100, 400);
+  mono(VedType.EXIT, 600, 200, [[2, 'url', '../level10']]);
+  mono(VedType.PORTAL, 300, 600);
 
   var renderer = new Renderer(document.getElementById('canvas'), new Camera());
   var gameClock = new GameClock();

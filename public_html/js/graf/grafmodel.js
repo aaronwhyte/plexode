@@ -325,3 +325,17 @@ GrafModel.prototype.rewriteOpIds = function(ops) {
   }
   return idMap;
 };
+
+GrafModel.prototype.getLinksBetweenJacks = function(jackId1, jackId2) {
+  var links = [];
+  var jack1 = this.getJack(jackId1);
+  var jack2 = this.getJack(jackId2);
+  for (var linkId1 in jack1.links) {
+    for (var linkId2 in jack2.links) {
+      if (linkId1 == linkId2) {
+        links.push[jack1.links[linkId1]];
+      }
+    }
+  }
+  return links;
+};

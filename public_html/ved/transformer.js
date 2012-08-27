@@ -33,7 +33,7 @@ Transformer.prototype.transformModel = function(model) {
   // so wallhugger rayscans will see them.
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.data['type'] == VedType.WALL) {
+    if (cluster.getType() == VedType.WALL) {
       this.vorp.addSprites(this.transformCluster(cluster));
     }
   }
@@ -43,7 +43,7 @@ Transformer.prototype.transformModel = function(model) {
   var sprites = [];
   for (id in model.clusters) {
     cluster = model.clusters[id];
-    if (cluster.data['type'] != VedType.WALL) {
+    if (cluster.getType() != VedType.WALL) {
       var clusterSprites = this.transformCluster(model.clusters[id]);
       for (var i = 0; i < clusterSprites.length; i++) {
         sprites.push(clusterSprites[i]);
@@ -101,7 +101,7 @@ Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
   var controlVec, controlSprite, template, sprite, part, hugPoints;
   var parts = cluster.getPartList();
-  switch (cluster.data.type) {
+  switch (cluster.getType()) {
 
     case VedType.BEAM_SENSOR:
       part = parts[0];
@@ -305,15 +305,14 @@ Transformer.prototype.transformCluster = function(cluster) {
 Transformer.prototype.transformJacks = function(sprite, jackList) {
   for (var i = 0; i < jackList.length; i++) {
     var jack = jackList[i];
-    var type = jack.data.type;
-    var name = jack.data.name;
+    var type = jack.getType();
     var jackIndexMap = null;
     if (type === JackAddress.Type.INPUT) {
       jackIndexMap = sprite.inputIds;
     } else if (type === JackAddress.Type.OUTPUT) {
       jackIndexMap = sprite.outputIds;
     }
-    this.jackMap[jack.id] = new JackAddress(sprite, type, jackIndexMap[name]);
+    this.jackMap[jack.id] = new JackAddress(sprite, type, jackIndexMap[jack.getName()]);
   }
 };
 

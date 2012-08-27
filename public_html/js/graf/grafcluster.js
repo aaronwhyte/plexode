@@ -24,3 +24,7 @@ GrafCluster.prototype.removePart = function(part) {
 GrafCluster.prototype.getPartList = function() {
   return plex.object.values(this.parts);
 };
+
+GrafCluster.prototype.getType = function() {
+  return this.data.type;
+};

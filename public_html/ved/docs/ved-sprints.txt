@@ -138,17 +138,19 @@ v fix link aggregation
 2012.08.21 - 2012.08.21
 v fix some alloc/free GC issues
 
-2012.08.22 -
+2012.08.22 - 2012.08.26
 LevelEd API I
 v levelEd.pasteClip(clip, loc)
-- partOrJackId levEd.getNearest(loc, opt_maxDist)
+v partOrJackId levEd.getNearest(loc, opt_maxDist)
   v parts
-  - accessible vector offsets for input + output jacks
+  v accessible vector offsets for input + output jacks
 v levelEd.setSelected(partOrJackId, selected)
 v levelEd.clearSelection()
 v levelEd.translateSelectedParts(deltaPos)
-- levelEd.linkSelectedJacks() //
+v levelEd.linkSelectedJacks()
 v Create test level
+v data support
+v easy wall positioning
 
 Replace the (good) old levels with hot new style, but programatic.
 
