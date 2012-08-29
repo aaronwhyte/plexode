@@ -152,7 +152,14 @@ v Create test level
 v data support
 v easy wall positioning
 
-Replace the (good) old levels with hot new style, but programatic.
+2012.08.28 -
+LevelProg: The new programatic level building interface
+v refactor from LevelEd and level 10 code.
+v startVorp
+v test to make sure it works
+- improve how key/value pairs are set - no more objIds in tuples.
+
+Replace the old levels with LevelProg code.
 
 Delete dead code
 - delete obsolete sprite logic event handler methods
