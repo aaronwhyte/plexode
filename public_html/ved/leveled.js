@@ -32,9 +32,21 @@ LevelEd.prototype.pasteWithOffset = function(clipModel, offset) {
     part.x += offset.x;
     part.y += offset.y;
   }
-  var ops = tempModel.createOps();
+  return this.paste(tempModel);
+};
+
+/**
+ * @param {GrafModel} clipModel
+ * @return a map from the clipModel IDs to the level's model IDs
+ */
+LevelEd.prototype.paste = function(clipModel) {
+  var ops = clipModel.createOps();
   var idMap = this.model.rewriteOpIds(ops);
   this.model.applyOps(ops);
+
+  this.clearSelection();
+  this.selectByIds(plex.object.values(idMap), true);
+
   return idMap;
 };
 
@@ -146,6 +158,18 @@ LevelEd.prototype.linkSelectedJacks = function() {
   this.model.applyOps(ops);
 };
 
+LevelEd.prototype.setDataOnSelection = function(keyVals) {
+  for (var k in keyVals) {
+    var v = keyVals[k];
+    for (var objId in this.selection) {
+      var obj = this.model.objs[objId];
+      if (k in obj.data) {
+        this.setDataById(objId, k, v);
+      }
+    }
+  }
+};
+
 
 ////////////////////////////////////////////////////////////////////////
 // Below are the internal methods that UIs shouldn't have to use.
@@ -200,7 +224,7 @@ LevelEd.prototype.getNearestId = function(pos, opt_maxDist) {
 };
 
 /**
- * Selects or unselects a part or jack.
+ * Selects or unselects a part or jack by ID.
  * @param partOrJackId
  * @param {boolean} selected true if selecting or false if unselecting
  */
@@ -209,5 +233,16 @@ LevelEd.prototype.selectById = function(partOrJackId, selected) {
     this.selection[partOrJackId] = true;
   } else {
     delete this.selection[partOrJackId];
+  }
+};
+
+/**
+ * Selects or unselects an array of parts or jacks by ID.
+ * @param partOrJackIds
+ * @param {boolean} selected true if selecting or false if unselecting
+ */
+LevelEd.prototype.selectByIds = function(partOrJackIds, selected) {
+  for (var i = 0; i < partOrJackIds.length; i++) {
+    this.selectById(partOrJackIds[i], selected);
   }
 };

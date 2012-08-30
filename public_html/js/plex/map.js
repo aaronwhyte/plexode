@@ -18,6 +18,7 @@ plex.Map.PREFIX = '=';
 
 plex.Map.prototype.set = function(k, v) {
   this.m[plex.Map.PREFIX + k] = v;
+  return this;
 };
 
 plex.Map.prototype.get = function(k) {

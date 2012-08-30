@@ -15,7 +15,7 @@ window['main'] = function() {
   ed.mono(VedType.BLOCK, -100, 200);
   ed.mono(VedType.BLOCK, -100, 300);
   ed.mono(VedType.BLOCK, -100, 400);
-  ed.mono(VedType.EXIT, 600, 200, [[2, 'url', '../level10']]);
+  ed.mono(VedType.EXIT, 600, 200, {'url': '../level10#You found the exit after ' + new Date()});
   ed.mono(VedType.PORTAL, 300, 600);
 
   ed.startVorp(document.getElementById('canvas'));
