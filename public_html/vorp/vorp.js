@@ -76,19 +76,6 @@ Vorp.LAYERS = [
   Vorp.LAYER_DEBUG = 'debug'
 ];
 
-Vorp.startWithLevelBuilder = function(levelBuilder, canvas) {
-  var camera = new Camera();
-  var renderer = new Renderer(canvas, camera);
-  var gameClock = new GameClock(1);
-  var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
-  var prefabs = levelBuilder.getPrefabs();
-  for (var i = 0; i < prefabs.length; i++) {
-    vorp.addPrefab(prefabs[i]);
-  }
-  vorp.startLoop();
-};
-
 Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
@@ -110,17 +97,9 @@ Vorp.prototype.startLoop = function() {
 
 Vorp.prototype.getBaseSpriteTemplate = function() {
   if (!this.baseSpriteTemplate) {
-    this.baseSpriteTemplate = new SpriteTemplate()
-        .setGameClock(this.gameClock)
-        .setSledgeInvalidator(this.sledgeInvalidator)
-        .setWorld(this);
+    this.baseSpriteTemplate = VorpSpriteTemplate.createBase(this, this.gameClock, this.sledgeInvalidator);
   }
   return this.baseSpriteTemplate;
-};
-
-Vorp.prototype.addPrefab = function(prefab) {
-  var sprites = prefab.createSprites(this.getBaseSpriteTemplate());
-  this.addSprites(sprites);
 };
 
 Vorp.prototype.addSprites = function(sprites) {

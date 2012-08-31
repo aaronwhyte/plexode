@@ -152,14 +152,22 @@ v Create test level
 v data support
 v easy wall positioning
 
-2012.08.28 -
+2012.08.28 - 2012.08.29
 LevelProg: The new programatic level building interface
 v refactor from LevelEd and level 10 code.
 v startVorp
 v test to make sure it works
-- improve how key/value pairs are set - no more objIds in tuples.
+v improve how key/value pairs are set - no more objIds in tuples.
 
+2012.08.30 -
 Replace the old levels with LevelProg code.
+v level 1
+  v add wall-chaining API
+- level 2
+  - fix player-killing code to not use prefabs
+    - consolidate sprite template code from transformer and vorp
+    - add some kinda sprite-spawning code. register sprite factories with Vorp? hm.
+  - create and use ToggleSprite
 
 Delete dead code
 - delete obsolete sprite logic event handler methods

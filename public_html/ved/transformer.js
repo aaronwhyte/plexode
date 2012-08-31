@@ -57,31 +57,8 @@ Transformer.prototype.transformModel = function(model) {
   }
 };
 
-Transformer.prototype.createIntangibleSpriteTemplate = function() {
-  return this.createBaseTemplate()
-      .setGroup(Vorp.NO_HIT_GROUP)
-      .setMass(Infinity)
-      .setSledgeDuration(Infinity);
-};
-
-Transformer.prototype.createImmovableSpriteTemplate = function() {
-  return this.createBaseTemplate()
-      .setGroup(Vorp.WALL_GROUP)
-      .setMass(Infinity)
-      .setSledgeDuration(Infinity);
-};
-
-Transformer.prototype.createMovableSpriteTemplate = function() {
-  return this.createBaseTemplate()
-      .setGroup(Vorp.GENERAL_GROUP)
-      .setSledgeDuration(1.01);
-};
-
 Transformer.prototype.createBaseTemplate = function() {
-  return new SpriteTemplate()
-      .setWorld(this.vorp)
-      .setGameClock(this.gameClock)
-      .setSledgeInvalidator(this.sledgeInvalidator);
+  return VorpSpriteTemplate.createBase(this.vorp, this.gameClock, this.sledgeInvalidator);
 };
 
 Transformer.prototype.mid = function(a, b) {
@@ -109,7 +86,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       hugPoints = this.calcDoubleHugPoints(controlVec);
 
       // BeamerSprite
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new BeamerPainter());
       this.positionHugger(template, hugPoints[0], controlVec,
           0.5 * Transformer.WALL_RADIUS,
@@ -119,7 +97,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprites.push(beamer);
 
       // SensorSprite
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new RectPainter('#888'));
       this.positionHugger(template, hugPoints[1], controlVec,
           0.6 * Transformer.WALL_RADIUS,
@@ -132,7 +111,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.BLOCK:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createMovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeMovable()
           .setPainter(new RectPainter("#dd4"))
           .setPos(controlVec)
           .setRadXY(Transformer.BOX_RADIUS, Transformer.BOX_RADIUS)
@@ -144,7 +124,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.BUTTON:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new ButtonPainter());
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 1.9, Transformer.WALL_RADIUS * 0.6);
@@ -158,7 +139,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       controlVec = new Vec2d(part.x, part.y);
 
       // DoorControlSprite
-      template = this.createIntangibleSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeIntangible()
           .setPos(controlVec);
       controlSprite = new DoorControlSprite(template);
       this.transformJacks(controlSprite, part.getJackList());
@@ -168,7 +150,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       hugPoints = this.calcDoubleHugPoints(controlVec);
       var midpoint = Vec2d.midpoint(hugPoints[0], hugPoints[1]);
       for (var i = 0; i < 2; i++) {
-        template = this.createImmovableSpriteTemplate()
+        template = this.createBaseTemplate()
+            .makeImmovable()
             .setPainter(new RectPainter("#aaa"));
         var hug = hugPoints[i];
         sprite = new DoorSprite(template, hug.x, hug.y, midpoint.x, midpoint.y);
@@ -180,7 +163,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.EXIT:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new RectPainter("#0f0"))
           .setPos(controlVec)
           .setRadXY(Transformer.BOX_RADIUS * 1.5, Transformer.BOX_RADIUS * 1.5);
@@ -192,7 +176,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.GRIP:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new GripPainter());
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.8);
@@ -206,7 +191,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.PLAYER_ASSEMBLER:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new PlayerAssemblerPainter());
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
@@ -221,7 +207,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       var portals = [];
       for (var i = 0; i < 2; i++) {
         controlVec = new Vec2d(parts[i].x, parts[i].y);
-        template = this.createMovableSpriteTemplate()
+        template = this.createBaseTemplate()
+            .makeMovable()
             .setPainter(new RectPainter('#0df'))
             .setPos(controlVec)
             .setRadXY(Transformer.BOX_RADIUS * 1.1, Transformer.BOX_RADIUS * 1.1)
@@ -236,7 +223,8 @@ Transformer.prototype.transformCluster = function(cluster) {
     case VedType.TIMER:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
-      template = this.createIntangibleSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeIntangible()
           .setPos(controlVec);
       sprite = new TimerSprite(template);
       sprite.setTimeoutLength(parts[0].data['timeout']);
@@ -253,7 +241,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       var y0 = parts[0].y;
       var x1 = parts[1].x;
       var y1 = parts[1].y;
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setPainter(new RectPainter("rgb(80,48,176)"))
           .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
           .setRadXY(
@@ -269,14 +258,16 @@ Transformer.prototype.transformCluster = function(cluster) {
       hugPoints = this.calcDoubleHugPoints(controlVec);
 
       // ZapperControlSprite
-      template = this.createIntangibleSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeIntangible()
           .setPos(controlVec);
       controlSprite = new ZapperControlSprite(template);
       this.transformJacks(controlSprite, part.getJackList());
       sprites.push(controlSprite);
 
       // ZapperSprite
-      template = this.createImmovableSpriteTemplate()
+      template = this.createBaseTemplate()
+          .makeImmovable()
           .setGroup(Vorp.ZAPPER_GROUP)
           .setPainter(new ZapperPainter(true))
           .setPos(Vec2d.midpoint(hugPoints[0], hugPoints[1]))
@@ -289,7 +280,8 @@ Transformer.prototype.transformCluster = function(cluster) {
 
       // WallSprite x2
       for (var i = 0; i < 2; i++) {
-        template = this.createImmovableSpriteTemplate()
+        template = this.createBaseTemplate()
+            .makeImmovable()
             .setPainter(new RectPainter("#88f"));
         this.positionHugger(template, hugPoints[i], controlVec,
             Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.5);
