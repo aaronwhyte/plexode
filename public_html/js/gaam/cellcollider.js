@@ -213,7 +213,10 @@ CellCollider.prototype.calcHit = function(id1, id2) {
 };
 
 CellCollider.prototype.removeSledge = function(sledgeId) {
-  delete this.sledges[sledgeId];
+  if (this.sledges[sledgeId]) {
+    Sledge.free(this.sledges[sledgeId]);
+    delete this.sledges[sledgeId];
+  }
 };
 
 /**

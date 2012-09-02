@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stor demo</title>
+<script src="../js/util.js"></script>
+<script src="../js/plex/pubsub.js"></script>
+<script src="../js/stor/stor.js"></script>
+<script>
+var stor;
+var STOR_NAME = 'stor-demo';
+function start() {
+  stor = new Stor(localStorage, STOR_NAME);
+  stor.listenToStorage();
+  stor.subscribe(onStorEvent);
+  var values = stor.getValues(STOR_NAME);
+  for (var i = 0; i < values.length; i++) {
+    print(values[i]);
+  }
+}
+
+function onButtonClicked() {
+  var een = gebi('een');
+  var text = een.value;
+  if (!text) return;
+  een.value = '';
+  stor.appendValue(STOR_NAME, text);
+}
+
+function onStorEvent(op, name, value) {
+  if (name != STOR_NAME) return;
+  print(value);
+}
+
+function print(text) {
+  var oot = gebi('oot');
+  oot.innerHTML = textToHtml(text) + "<br>" + oot.innerHTML;
+}
+</script>
+</head>
+<body onload="start()">
+Open this on multiple tabs in the same browser instance.<br>
+<input id="een" size="30"><button onclick="onButtonClicked()">save</button>
+<div id="oot"></div>
+</body>
+</html>

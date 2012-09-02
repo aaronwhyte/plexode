@@ -41,6 +41,10 @@ function assertEquals(expected, actual) {
   }
 }
 
+function assertTrue(val) {
+  assertEquals(true, val);
+}
+
 function assertStringifyEquals(expected, actual) {
   var expectedStr = JSON.stringify(expected);
   var actualStr = JSON.stringify(actual);

@@ -61,7 +61,7 @@ def formatVorpLevel(jsName, title, description):
   return ''.join([
 """<!DOCTYPE HTML>
 <html><head><title>""", title, """</title>
-<link rel="stylesheet" type="text/css" href="../../css/plexode2.css">
+<link rel="stylesheet" type="text/css" href="../../css/plexode3.css">
 <link rel="stylesheet" type="text/css" href="../vorp.css">
 <script src="../""" + jsName + """"></script>
 <script src="./level.js"></script>

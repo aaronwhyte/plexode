@@ -36,8 +36,10 @@ CircularQueue.prototype.isFull = function() {
  * Adds an item to the head of the queue.
  * If the queue is full, an item is dropped from the tail.
  * @param val  Any value, to be enqueued.
+ * @return the object that fell off the tail, or null if nothing fell off
  */
 CircularQueue.prototype.enqueue = function(val) {
+  var whatFellOff = null;
   if (this.head == -1) {
     // was empty
     this.head = this.tail = 0;
@@ -47,6 +49,8 @@ CircularQueue.prototype.enqueue = function(val) {
       this.head = 0;
     }
     if (this.head == this.tail) {
+      whatFellOff = this.a[this.tail];
+      // something falls off the tail
       this.tail++;
       if (this.tail >= this.maxLen) {
         this.tail = 0;
@@ -54,6 +58,7 @@ CircularQueue.prototype.enqueue = function(val) {
     }
   }
   this.a[this.head] = val;
+  return whatFellOff;
 };
 
 

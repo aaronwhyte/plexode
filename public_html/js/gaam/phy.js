@@ -18,7 +18,6 @@ function Phy(collider, gameClock, sledgeInvalidator) {
   this.spriteIdToSledgeId = {};
   this.sprites = {}; // ID to object
   this.sledges = {}; // ID to object, doy
-  this.nextSpriteId = 1;
   this.spriteTimeouts = new SkipQueue(100);
   
   this.onSpriteHitObj = null;
@@ -42,15 +41,11 @@ Phy.prototype.isSpriteTimeoutValid = function(spriteTimeout) {
 /**
  * Adds the sprite here, and inserts a sledge into the multicollider.
  * @param {Sprite} sprite
- * @return the new sprite ID
  */
 Phy.prototype.addSprite = function(sprite) {
   if (!sprite) throw "no sprite";
-  var spriteId = this.nextSpriteId++;
-  sprite.id = spriteId;
-  this.sprites[spriteId] = sprite;
-  this.sledgeInvalidator.add(spriteId);
-  return spriteId;
+  this.sprites[sprite.id] = sprite;
+  this.sledgeInvalidator.add(sprite.id);
 };
 
 /**

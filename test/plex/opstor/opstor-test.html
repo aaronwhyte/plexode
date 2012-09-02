@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>OpStor tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/pubsub.js"></script>
+<script src="../../../public_html/js/stor/stor.js"></script>
+<script src="../../../public_html/js/opstor/opstor.js"></script>
+<script>
+
+addTest(function testServerAssignedOpIds() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'opstor-test');
+  var opStor = new OpStor(stor, 'foo');
+  opStor.appendOp('client1-100', {x:1});
+  opStor.appendOp('client2-100', {x:2});
+  opStor.appendOp('client1-101', {x:3});
+  assertStringifyEquals(
+      [
+        [1, 'client1-100', {x:1}],
+        [2, 'client2-100', {x:2}],
+        [3, 'client1-101', {x:3}]
+      ],
+      opStor.getOpsAfterIndex(-Infinity));
+  assertStringifyEquals(
+      [
+        [3, 'client1-101', {x:3}]
+      ],
+      opStor.getOpsAfterIndex(2));
+});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

@@ -8,8 +8,17 @@ function Sprite(spriteTemplate) {
   this.pos0 = new Vec2d();
   this.vel = new Vec2d();
   this.rad = new Vec2d();
+
+  // logic link buffers
+  this.inputs = [];
+  this.inputCounts = [];
+  this.outputs = [];
   this.reset(spriteTemplate);
+  this.clearInputs();
+  this.clearOutputs();
 }
+
+Sprite.nextId = 1;
 
 /**
  * @param {SpriteTemplate=} spriteTemplate
@@ -17,9 +26,9 @@ function Sprite(spriteTemplate) {
 Sprite.prototype.reset = function(spriteTemplate) {
   if (spriteTemplate) {
     this.gameClock = spriteTemplate.gameClock;
-    this.painter = spriteTemplate.painter;
     this.sledgeInvalidator = spriteTemplate.sledgeInvalidator;
     this.world = spriteTemplate.world;
+    this.painter = spriteTemplate.painter;
     // pos0 is the position at time t0. Use getPos() to get the current position.
     this.pos0.set(spriteTemplate.pos);
     this.vel.set(spriteTemplate.vel);
@@ -31,8 +40,11 @@ Sprite.prototype.reset = function(spriteTemplate) {
     /** @type {number} */
     this.t0 = this.now();
   }
-  this.id = null;
+  this.id = Sprite.nextId++;
   this.acceleration.setXY(0, 0);
+  this.inputs.length = 0;
+  this.inputCounts.length = 0;
+  this.outputs.length = 0;
 };
 
 /**
@@ -137,10 +149,28 @@ Sprite.prototype.setPos = function(vec) {
 };
 
 /**
+ * Directly change position.
+ * Call from onSpriteHit(), but not from act() or affect().
+ */
+Sprite.prototype.setPosXY = function(x, y) {
+  this.pos0.setXY(x, y);
+  this.t0 = this.now();
+  this.invalidateSledge();
+};
+
+/**
  * Directly change radius.
  */
 Sprite.prototype.setRad = function(vec) {
   this.rad.set(vec);
+  this.invalidateSledge();
+};
+
+/**
+ * Directly change radius.
+ */
+Sprite.prototype.setRadXY = function(x, y) {
+  this.rad.setXY(x, y);
   this.invalidateSledge();
 };
 
@@ -215,4 +245,42 @@ Sprite.prototype.now = function() {
  */
 Sprite.prototype.area = function() {
   return this.rad.x * this.rad.y;
+};
+
+/**
+ * @enum {number}
+ */
+Sprite.prototype.inputIds = {};
+
+/**
+ * @enum {number}
+ */
+Sprite.prototype.outputIds = {};
+
+Sprite.prototype.clearInputs = function() {
+  for (var id in this.inputIds) {
+    var index = this.inputIds[id];
+    this.inputs[index] = 0;
+    this.inputCounts[index] = 0;
+  }
+};
+
+Sprite.prototype.clearOutputs = function() {
+  for (var id in this.outputIds) {
+    var index = this.outputIds[id];
+    this.outputs[index] = 0;
+  }
+};
+
+Sprite.prototype.addToInput = function(inputIndex, outputValue) {
+  this.inputs[inputIndex] += outputValue;
+  this.inputCounts[inputIndex]++;
+};
+
+Sprite.prototype.getInputOr = function(inputIndex) {
+  return this.inputs[inputIndex];
+};
+
+Sprite.prototype.getInputAnd = function(inputIndex) {
+  return this.inputCounts[inputIndex] && this.inputs[inputIndex] >= this.inputCounts[inputIndex];
 };

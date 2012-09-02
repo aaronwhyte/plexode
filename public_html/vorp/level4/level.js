@@ -1,28 +1,48 @@
 window['main'] = function() {
-  var b = new LevelBuilder();
-  b.scale(230);
+  var SCALE = 230;
 
-  b.mark(0, 0).markX(7).markY(4).markX(5).markY(2).markX(0).markY(0).wall();
+  function wallStart(x, y) {
+    return ed.wallStart(x * SCALE, y * SCALE);
+  }
 
-  b.mark(2, 0.5).mark(4, 1.5).portals();
-  b.mark(0, 1).dir(Prefab.RIGHT).playerAssembler(true);
-  b.mark(6, 3).exit('../level5/index.html');
-  
-  var door = b.mark(3.5, 0).markY(2).door(true);
-  b.mark(2.5, 0).markY(2).beamSensor(function(beamBroken) {
-    if (beamBroken) {
-      door.setClosed(false);
-      timer.stop();
-    } else {
-      timer.start();
-    }
-  });
-  var timer = b.mark(3, 2).timer(40, function() {
-    door.setClosed(true);
-  });
- 
-  b.mark(0.5, 0.5).block();
-  b.mark(5.5, 0.5).block();
-  Vorp.startWithLevelBuilder(
-      b, document.getElementById('canvas'), document.getElementById('flags'));
+  function wx(x) {
+    return ed.wallToX(x * SCALE);
+  }
+
+  function wy(y) {
+    return ed.wallToY(y * SCALE);
+  }
+
+  function mono(type, x, y, opt_data) {
+    return ed.mono(type, x * SCALE, y * SCALE, opt_data)
+  }
+
+  function double(type, x1, y1, x2, y2, opt_data) {
+    return ed.double(type, x1 * SCALE, y1 * SCALE, x2 * SCALE, y2 * SCALE, opt_data)
+  }
+
+  var ed = LevelProg.create();
+
+  wallStart(0, 0);
+  wx(7);
+  wy(4);
+  wx(5);
+  wy(2);
+  wx(0);
+  wy(0);
+
+  double(VedType.PORTAL, 2, 0.5, 4, 1.5);
+  mono(VedType.PLAYER_ASSEMBLER, 0.2, 1);
+  mono(VedType.EXIT, 6, 3, {'url': '../level5/index.html'});
+
+  var beamPos = mono(VedType.BEAM_SENSOR, 2.5, 1);
+  var timerPos = mono(VedType.TIMER, 3, 2, {'timeout': 40});
+  var doorPos = mono(VedType.DOOR, 3.5, 1);
+  ed.link(beamPos, timerPos);
+  ed.link(timerPos, doorPos);
+
+  mono(VedType.BLOCK, 0.5, 0.5);
+  mono(VedType.BLOCK, 5.5, 0.5);
+
+  ed.startVorp(document.getElementById('canvas'));
 };

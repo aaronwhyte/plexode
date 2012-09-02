@@ -42,10 +42,11 @@ def ensureDir(f):
 
 
 def writePublicHtml(bdir, path, content):
-  print "  %s/index.html" % path
-  d = '%s/public_html%s' % (bdir, path)
+  print "  writing %s/index.html..." % path
+  d = os.path.join(bdir, 'public_html', path)
   ensureDir(d)
-  f = open('%s/index.html' % d, 'w')
+  fname = os.path.join(d, 'index.html')
+  f = open(fname, 'w')
   f.write(content)
   f.close()
 
@@ -61,39 +62,37 @@ def buildPlexode(bdir):
   os.makedirs(bdir)
   
   print "copying stuff to %s" % bdir
-  shutil.copytree("cgi-bin", "%s/cgi-bin" % bdir)
-  shutil.copytree("public_html",  "%s/public_html" % bdir)
-  
+  shutil.copytree("cgi-bin", os.path.join(bdir, 'cgi-bin'))
+  shutil.copytree("public_html",  os.path.join(bdir, 'public_html'))
+
   print "compiling vorp JS"
   vorpJsName = 'vorp_%s.js' % str(int(time.time() * 1000))
-  compileJs(
-    '../../tools/closure-compiler',
-    getJsCompFlags(bdir, getVorpJsFileNames(), "vorp/" + vorpJsName))
+  vorpJsPublicHtmlPath = os.path.join('vorp', vorpJsName)
+  concatenateJs(bdir, getVorpJsFileNames(), vorpJsPublicHtmlPath)
 
   print "compiling ved JS"
   vedJsName = 'ved_%s.js' % str(int(time.time() * 1000))
-  compileJs(
-    '../../tools/closure-compiler',
-    getJsCompFlags(bdir, getVedJsFileNames(), "ved/" + vedJsName))
+  vedJsPublicHtmlPath = os.path.join('ved', vedJsName)
+  concatenateJs(bdir, getVedJsFileNames(), vedJsPublicHtmlPath)
 
   print "generating index.html files"
   writePublicHtml(bdir,'', mainpage.formatMain())
-  writePublicHtml(bdir, '/insta-html', instahtml.formatInstaHtml())
-  writePublicHtml(bdir, '/eval', eval1.formatEval())
-  writePublicHtml(bdir, '/eval2', eval2.formatEval2())
-  writePublicHtml(bdir, '/eval3', eval3.formatEval3())
-  writePublicHtml(bdir, '/eval3quirks', eval3.formatEval3(quirks=True))
-  writePublicHtml(bdir, '/fracas', fracas.formatFracas())
-  writePublicHtml(bdir, '/vorp', vorp.formatVorp())
-  writePublicHtml(bdir, '/vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
-  writePublicHtml(bdir, '/vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
-  writePublicHtml(bdir, '/vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
-  writePublicHtml(bdir, '/vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
-  writePublicHtml(bdir, '/vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
-  writePublicHtml(bdir, '/vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  writePublicHtml(bdir, '/ved', ved.formatVed(vorpJsName, vedJsName))
-  writePublicHtml(bdir, '/chordo', chordo.formatChordo())
-  writePublicHtml(bdir, '/u', unsquish.formatUnsquish())
+  writePublicHtml(bdir, 'insta-html', instahtml.formatInstaHtml())
+  writePublicHtml(bdir, 'eval', eval1.formatEval())
+  writePublicHtml(bdir, 'eval2', eval2.formatEval2())
+  writePublicHtml(bdir, 'eval3', eval3.formatEval3())
+  writePublicHtml(bdir, 'eval3quirks', eval3.formatEval3(quirks=True))
+  writePublicHtml(bdir, 'fracas', fracas.formatFracas())
+  writePublicHtml(bdir, 'vorp', vorp.formatVorp())
+  writePublicHtml(bdir, 'vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
+  writePublicHtml(bdir, 'vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
+  writePublicHtml(bdir, 'vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
+  writePublicHtml(bdir, 'vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
+  writePublicHtml(bdir, 'vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
+  writePublicHtml(bdir, 'vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
+  writePublicHtml(bdir, 'ved', ved.formatVed(vorpJsName, vedJsName))
+  writePublicHtml(bdir, 'chordo', chordo.formatChordo())
+  writePublicHtml(bdir, 'u', unsquish.formatUnsquish())
 
   print "DONE building plexode"
 
@@ -112,6 +111,10 @@ def getVorpJsFileNames():
   js = []
   prefix = 'public_html/js/'
   js.extend(getJsFileNamesInPath('%sgaam' % prefix))
+  js.extend(getJsFileNamesInPath('%sgraf' % prefix))
+
+  js.extend(getJsFileNamesInPath('public_html/ved'))
+
   miscDeps = [
     'circularqueue.js',
     'depinj.js',
@@ -120,16 +123,20 @@ def getVorpJsFileNames():
     'util.js',
     'vec2d.js',
     'plex/array.js',
+    'plex/map.js',
+    'plex/object.js',
     'plex/point.js',
     'plex/rect.js',
     'plex/type.js',
   ]
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
+
   vorpJs = getJsFileNamesInPath('public_html/vorp')
   for dep in vorpJs:
     if dep[-8:] != 'level.js':
       js.append(dep)
+
   return js
 
 
@@ -169,6 +176,14 @@ def getMinigame1JsFileNames():
     js.append(dep)
   return js
 
+def concatenateJs(bdir, sourcePaths, outputPublicHtmlPath):
+  outFile = open(os.path.join(bdir, 'public_html', outputPublicHtmlPath), 'w');
+  for sourcePath in sourcePaths:
+    sourceFile = open(sourcePath, 'r')
+    outFile.write(sourceFile.read())
+    sourceFile.close();
+    outFile.write("\n");
+  outFile.close()
 
 def getJsCompFlags(bdir, jsFileNames, outputFileName):
   flags = []
@@ -188,7 +203,6 @@ def getJsCompFlags(bdir, jsFileNames, outputFileName):
     flags.append(jsFileName)
 
   return flags
-
 
 def compileJs(pathOfCompilerJar, jsCompFlags):
   compilerJarPath = os.path.join(pathOfCompilerJar, 'compiler.jar')

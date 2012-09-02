@@ -6,7 +6,6 @@
 function BeamerSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.targetSprite = null;
-  this.beamBroken = false;
 }
 
 BeamerSprite.prototype = new Sprite(null);
@@ -16,8 +15,8 @@ BeamerSprite.prototype.setTargetSprite = function(t) {
   this.targetSprite = t;
 };
 
-BeamerSprite.prototype.setOnChange = function(f) {
-  this.onChange = f;
+BeamerSprite.prototype.outputIds = {
+  BEAM_BROKEN: 0
 };
 
 BeamerSprite.prototype.act = function() {
@@ -35,13 +34,8 @@ BeamerSprite.prototype.act = function() {
         pos.y + rayScan.time * (targetPos.y - pos.y));
   }
   RayScan.free(rayScan);
-  var beamBroken = hitSpriteId != this.targetSprite.id;
-  if (this.beamBroken != beamBroken) {
-    this.beamBroken = beamBroken;
-    if (this.onChange) {
-      this.onChange(beamBroken);
-    }
-  }
+  this.outputs[this.outputIds.BEAM_BROKEN] =
+      hitSpriteId == this.targetSprite.id ? 0 : 1;
   Vec2d.free(pos);
   Vec2d.free(targetPos);
 };

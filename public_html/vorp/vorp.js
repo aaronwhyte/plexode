@@ -1,24 +1,26 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate) {
+function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   FLAGS && FLAGS.init('portalScry', true);
   this.renderer = renderer;
   this.phy = phy;
   this.wham = wham;
   this.gameClock = gameClock;
-  this.baseSpriteTemplate = baseSpriteTemplate;
+  this.sledgeInvalidator = sledgeInvalidator;
 
   this.playerSprite = null;
   this.cameraPos = new Vec2d();
   this.painters = [];
-  
+
   // Portals have super-special view-through rendering, so we gonna track em.
   this.portals = [];
   this.portalPos1 = new Vec2d();
   this.portalPos2 = new Vec2d();
 
   this.accelerationsOut = [new Vec2d(), new Vec2d()];
+
+  this.links = {};
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
@@ -27,7 +29,7 @@ Vorp.FRICTION = 0.1;
 
 
 // Target frames per second.
-Vorp.FPS = 45;
+Vorp.FPS = 50;
 
 Vorp.PLAYER_GROUP = 1;
 Vorp.WALL_GROUP = 2;
@@ -59,7 +61,7 @@ Vorp.COLLIDER_GROUP_PAIRS = [
   [Vorp.PORTAL_PROBE_GROUP, Vorp.PORTAL_GROUP],
 
   [Vorp.GRIP_BLOCKER_GROUP, Vorp.WALL_GROUP],
-  
+
   [Vorp.EMPTY_GROUP, Vorp.EMPTY_GROUP],
   [Vorp.NO_HIT_GROUP, Vorp.EMPTY_GROUP]
 ];
@@ -74,30 +76,12 @@ Vorp.LAYERS = [
   Vorp.LAYER_DEBUG = 'debug'
 ];
 
-Vorp.startWithLevelBuilder = function(levelBuilder, canvas, flagsDiv, opt_camera) {
-  var camera = opt_camera || new Camera();
-  var vorp = Vorp.create(canvas, camera);
-  var prefabs = levelBuilder.getPrefabs();
-  for (var i = 0; i < prefabs.length; i++) {
-    vorp.addPrefab(prefabs[i]);
-  }
-  vorp.startLoop();
-};
-
-Vorp.create = function(canvas, camera) {
-  var renderer = new Renderer(canvas, camera);
-  var gameClock = new GameClock(1);
-  var sledgeInvalidator = new SledgeInvalidator();
+Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
-  var baseSpriteTemplate = new SpriteTemplate()
-	.setGameClock(gameClock)
-	.setSledgeInvalidator(sledgeInvalidator);
-  var vorp = new Vorp(renderer, phy, wham, gameClock, baseSpriteTemplate);
-  // TODO: Arg, circular dep. Remove when level prefabs aren't used for wiring buttons to zappers.
-  vorp.baseSpriteTemplate.setWorld(vorp);
+  var vorp = new Vorp(renderer, phy, wham, gameClock, sledgeInvalidator);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
   return vorp;
 };
@@ -111,13 +95,11 @@ Vorp.prototype.startLoop = function() {
       Vorp.FPS);
 };
 
-Vorp.prototype.addPrefab = function(prefab) {
-  var sprites = prefab.createSprites(this.baseSpriteTemplate);
-  this.addSprites(sprites);
-  if (prefab instanceof PlayerAssemblerPrefab && prefab.isEntrance) {
-    this.playerAssembler = sprites[0];
-    this.assemblePlayer();
+Vorp.prototype.getBaseSpriteTemplate = function() {
+  if (!this.baseSpriteTemplate) {
+    this.baseSpriteTemplate = VorpSpriteTemplate.createBase(this, this.gameClock, this.sledgeInvalidator);
   }
+  return this.baseSpriteTemplate;
 };
 
 Vorp.prototype.addSprites = function(sprites) {
@@ -131,12 +113,17 @@ Vorp.prototype.addSprites = function(sprites) {
  */
 Vorp.prototype.addSprite = function(sprite) {
   this.phy.addSprite(sprite);
-  var painter = sprite.getPainter(); 
+  var painter = sprite.getPainter();
   if (painter) {
     this.addPainter(painter);
   }
   if (sprite instanceof PortalSprite) {
     this.portals.push(sprite);
+  }
+  if (sprite instanceof PlayerAssemblerSprite) {
+    // Assume there's exactly one PlayerAssembler per level, for now.
+    this.playerAssembler = sprite;
+    this.assemblePlayer();
   }
 };
 
@@ -155,14 +142,43 @@ Vorp.prototype.setPlayerSprite = function(sprite) {
 };
 
 /**
+ * @param {LogicLink} link
+ */
+Vorp.prototype.addLogicLink = function(link) {
+  var id = link.id;
+  if (!id) throw "Invalid falsy link ID: " + id;
+  if (this.links[id]) throw "Link with ID " + id + " already exists.";
+  this.links[id] = link;
+};
+
+/**
+ * @return a new array with all sprites in it. Probably useful for tests.
+ */
+Vorp.prototype.getSprites = function() {
+  var sprites = [];
+  for (var id in this.phy.sprites) {
+    sprites.push(this.phy.sprites[id]);
+  }
+  return sprites;
+};
+
+/**
  * Moves time forward by one and then draws.
  */
 Vorp.prototype.clock = function() {
   this.phy.clock(1);
+  this.clockSprites();
+  this.clockLinks();
+  this.draw();
+};
+
+Vorp.prototype.clockSprites = function() {
+  // clear teleport counts
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     sprite.portalCount = 0;
   }
+  // sprites act
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     if (sprite.sledgeDuration != Infinity) {
@@ -170,11 +186,29 @@ Vorp.prototype.clock = function() {
     }
     sprite.act(this);
   }
+  // sprites are affected by simultaneous accelerations
   for (var id in this.phy.sprites) {
     var sprite = this.phy.sprites[id];
     sprite.affect(this);
   }
-  this.draw();
+};
+
+Vorp.prototype.clockLinks = function() {
+  // Clear old input buffers.
+  for (var id in this.links) {
+    var link = this.links[id];
+    var inputSprite = this.getSprite(link.inputSpriteId);
+    if (!inputSprite) throw "no sprite with ID " + link.inputSpriteId;
+    inputSprite.clearInputs();
+  }
+  // Set new input buffer values.
+  for (var id in this.links) {
+    var link = this.links[id];
+    var outputSprite = this.getSprite(link.outputSpriteId);
+    if (!outputSprite) throw "no sprite with ID " + link.outputSpriteId;
+    var inputSprite = this.getSprite(link.inputSpriteId);
+    inputSprite.addToInput(link.inputIndex, outputSprite.outputs[link.outputIndex]);
+  }
 };
 
 /**
@@ -187,7 +221,7 @@ Vorp.prototype.draw = function() {
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);
   }
-  
+
   // Tell painters to advance. Might as well remove any that are kaput.
   // (The timing of isKaput() returning true isn't critical;
   // it doesn't have to be decided during advance().)
@@ -218,10 +252,10 @@ Vorp.prototype.draw = function() {
       this.drawWorld(false, this.portalPos1);
     }
   }
-  
+
   // Center the drawing transform on the normal camera pos - the player.
   this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
-  
+
   if (portalScry) {
     // Cover the portal previews a little, to dim them compared to the "real" world
     this.renderer.setFillStyle('rgba(25, 50, 50, 0.75)');
@@ -240,7 +274,7 @@ Vorp.prototype.draw = function() {
     }
     this.renderer.transformEnd();
   }
-  
+
   // Set up the viewport for player-centered rendering.
   this.drawWorld(true);
 
@@ -264,16 +298,16 @@ Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos
         true);
     this.renderer.context.clip();
   }
-  
+
   // painters paint in layers
   for (var i = 0; i < Vorp.LAYERS.length; i++) {
     var layer = Vorp.LAYERS[i];
     for (var j = 0; j < this.painters.length; j++) {
-      var painter = this.painters[j]; 
+      var painter = this.painters[j];
       painter.paint(this.renderer, layer);
     }
   }
-  
+
   if (opt_drawColliderDebugging) {
     // Draw whatever the collider feels like drawing, for debugging purposes.
     this.phy.collider.draw(this.renderer);
@@ -298,30 +332,32 @@ Vorp.prototype.removeSprite = function(id) {
   this.phy.removeSprite(id);
 };
 
+Vorp.prototype.getDeadPlayerSpritefactory = function() {
+  if (!this.deadPlayerSpriteFactory) {
+    this.deadPlayerSpriteFactory = new DeadPlayerSpriteFactory(this.getBaseSpriteTemplate());
+  }
+  return this.deadPlayerSpriteFactory;
+};
+
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var playerPos = this.playerSprite.getPos(new Vec2d());
-  var deadPlayerPrefab = new DeadPlayerPrefab(playerPos.x, playerPos.y);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.baseSpriteTemplate);
-  this.addSprites(deadPlayerSprites);
-  
+  var deadPlayerSprite = this.getDeadPlayerSpritefactory().createXY(playerPos.x, playerPos.y)
+  this.addSprite(deadPlayerSprite);
+
   // remove normal player sprite
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);
 
-  this.playerSprite = deadPlayerSprites[0];
+  this.playerSprite = deadPlayerSprite;
 };
 
 Vorp.prototype.assemblePlayer = function() {
   if (this.playerSprite) {
     this.removeSprite(this.playerSprite.id);
   }
-  var target = this.playerAssembler.targetPos;
-  var playerPrefab = new PlayerPrefab(target.x, target.y);
-  var playerSprites = playerPrefab.createSprites(this.baseSpriteTemplate);
-  this.playerSprite = playerSprites[0];
-  this.addSprites(playerSprites);
-  this.playerAssembler.onPlayerAssembled();
+  this.playerSprite = this.playerAssembler.createPlayer();
+  this.addSprite(this.playerSprite);
 };
 
 /**

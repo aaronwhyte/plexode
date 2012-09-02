@@ -1,14 +1,14 @@
 window['main'] = function() {
-  var b = new LevelBuilder();
-  b.mark(0, 0).markX(1600).markY(500).markX(0).markY(0).wall();
-  b.mark(0, 250).dir(Prefab.RIGHT).playerAssembler(true);
-  b.mark(400, 150, 700, 350).portals();
-  b.mark(1600-250, 250).exit('../level3/index.html');
-  var z = b.mark(1000, 0).markY(500).zapper(true);
-  b.mark(900, 0).dir(Prefab.DOWN).button(
-      function() {
-        z.setActive(!z.active);
-      });
-  Vorp.startWithLevelBuilder(
-      b, document.getElementById('canvas'), document.getElementById('flags'));
-}
+  var ed = LevelProg.create();
+  ed.wallStart(0, 0).wallToX(1600).wallToY(500).wallToX(0).wallToY(0);
+  ed.mono(VedType.PLAYER_ASSEMBLER, 50, 250);
+  ed.double(VedType.PORTAL, 400, 150, 700, 350);
+  ed.mono(VedType.EXIT, 1600-250, 250, {'url': '../level3/index.html'});
+  var zapperPos = ed.mono(VedType.ZAPPER, 1000, 50);
+  var buttonPos = ed.mono(VedType.BUTTON, 900, 50);
+  var togglePos = ed.mono(VedType.TOGGLE, 1100, 200);
+  ed.link(buttonPos, togglePos);
+  ed.link(togglePos, zapperPos);
+
+  ed.startVorp(document.getElementById('canvas'));
+};

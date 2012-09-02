@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stor tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/pubsub.js"></script>
+<script src="../../../public_html/js/stor/stor.js"></script>
+<script>
+
+addTest(function testGetNonexistentName() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  assertStringifyEquals([], stor.getValues('nonexistent'));
+});
+
+addTest(function testSetAndGet() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  var a = {}; a['a'] = 1;
+  var b = 'wee';
+  var c = 123;
+  var d = [1, 2, 'three', {'4':5, '6':'seven'}];
+  stor.appendValues('foo', [a, b]);
+  assertStringifyEquals([a, b], stor.getValues('foo'));
+  stor.appendValues('foo', [c]);
+  assertStringifyEquals([a, b, c], stor.getValues('foo'));
+  stor.appendValues('foo', [d, d]);
+  assertStringifyEquals([a, b, c, d, d], stor.getValues('foo'));
+
+  stor.appendValues('bar', [b, d]);
+  assertStringifyEquals([a, b, c, d, d], stor.getValues('foo'));
+  assertStringifyEquals([b, d], stor.getValues('bar'));
+});
+
+addTest(function testDifferentPrefixes() {
+  sessionStorage.clear();
+  var stor0 = new Stor(sessionStorage, 'stor-0');
+  var stor1 = new Stor(sessionStorage, 'stor-1');
+  stor0.appendValue('foo', 'a');
+  stor1.appendValue('foo', 'b');
+  assertStringifyEquals(['a'], stor0.getValues('foo'));
+  assertStringifyEquals(['b'], stor1.getValues('foo'));
+});
+
+addTest(function testDifferentNames() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.appendValue('foo', 'a');
+  stor.appendValue('bar', 'b');
+  assertStringifyEquals(['a'], stor.getValues('foo'));
+  assertStringifyEquals(['b'], stor.getValues('bar'));
+});
+
+addTest(function testGetValuesAfterIndex() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  stor.appendValues('foo', ['a', 'b', 'c', 'd']);
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValues('foo'));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', -10));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', 0));
+  assertStringifyEquals(['c', 'd'], stor.getValuesAfterIndex('foo', 2));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 4));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 20));
+});
+
+addTest(function testGetValuesAfterIndex() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  stor.appendValues('foo', ['a', 'b', 'c', 'd']);
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValues('foo'));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', -10));
+  assertStringifyEquals(['a', 'b', 'c', 'd'], stor.getValuesAfterIndex('foo', 0));
+  assertStringifyEquals(['c', 'd'], stor.getValuesAfterIndex('foo', 2));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 4));
+  assertStringifyEquals([], stor.getValuesAfterIndex('foo', 20));
+});
+
+addTest(function testGetNextIndex() {
+  sessionStorage.clear();
+  var stor = new Stor(sessionStorage, 'stor-test');
+  stor.listenToStorage();
+  assertEquals(1, stor.getNextIndex('foo'));
+  stor.appendValues('foo', [1, 2, 3]);
+  assertEquals(4, stor.getNextIndex('foo'));
+});
+
+//addTest(function testSubscription() {
+//  // This doesn't test actual storage events, since those are not
+//  // published to the same window that fired them.
+//  var events = [];
+//  function callback(op, name, value) {
+//    events.push([op, name, value]);
+//  }
+//  sessionStorage.clear();
+//  var stor = new Stor(sessionStorage, 'stor-test');
+//  stor.listenToStorage();
+//  stor.subscribe(callback);
+//  var names = ['a', 'b', 'a'];
+//  for (var i = 0; i < names.length; i++) {
+//    stor.appendValue(names[i], i);
+//  }
+//  assertStringifyEquals([
+//    [Stor.Ops.APPEND_VALUE, 'a', 0],
+//    [Stor.Ops.APPEND_VALUE, 'b', 1],
+//    [Stor.Ops.APPEND_VALUE, 'a', 2]
+//  ], events);
+//});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

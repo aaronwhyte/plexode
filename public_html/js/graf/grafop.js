@@ -3,25 +3,25 @@
  * This class is just a namespace for static values and methods.
  * A real Graf operation is JSON, like so:
  *
- * { type:”addCluster”,  id: 1 }
- * { type:”removeCluster”, id:1 }
+ * { type:"addCluster",  id: 1 }
+ * { type:"removeCluster", id:1 }
  *
- * { type:“addPart”, id:2, clusterId:1, x:10, y:10 }
- * { type:“movePart”, id:2, oldX:10, oldY:10, x:20, y:20}
- * { type:“removePart”, id:2, clusterId:1, x:20, y:20 }
+ * { type:"addPart", id:2, clusterId:1, x:10, y:10 }
+ * { type:“movePart", id:2, oldX:10, oldY:10, x:20, y:20}
+ * { type:“removePart", id:2, clusterId:1, x:20, y:20 }
  *
- * { type:”addJack”, id:3, partId:2 }
- * { type:”removeJack”, id:3, partId:2 }
+ * { type:"addJack", id:3, partId:2 }
+ * { type:"removeJack", id:3, partId:2 }
  *
- * { type:”addLink”, id:5, jackId1:3, jackId2:4}
- * { type:”removeLink”, id:5, jackId1:3, jackId2:4}
+ * { type:"addLink", id:5, jackId1:3, jackId2:4}
+ * { type:"removeLink", id:5, jackId1:3, jackId2:4}
  *
  * Every instance of the object types above has its own key/value store.
  * Use "setData" ops to update those stores.  Set a value as undefined to erase
  * it.
- * { type:”setData”, id:2, key:”color”, oldValue:undefined, value:”red” }
- * { type:”setData”, id:2, key:”color”, oldValue:”red”, value:”blue” }
- * { type:”setData”, id:2, key:”color”, oldValue:”blue”, value:undefined }
+ * { type:"setData", id:2, key:"color", oldValue:undefined, value:"red" }
+ * { type:"setData", id:2, key:"color", oldValue:"red", value:"blue" }
+ * { type:"setData", id:2, key:"color", oldValue:"blue", value:undefined }
  */
 function GrafOp() {}
 
@@ -39,6 +39,12 @@ GrafOp.Type = {
   ADD_LINK: 'addLink',
   REMOVE_LINK: 'removeLink',
   SET_DATA: 'setData'
+};
+
+GrafOp.isAddOpType = function(type) {
+  return type == GrafOp.Type.ADD_CLUSTER ||
+      type == GrafOp.Type.ADD_PART ||
+      type == GrafOp.Type.ADD_JACK;
 };
 
 /**

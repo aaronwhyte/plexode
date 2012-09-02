@@ -1,75 +1,85 @@
 window['main'] = function() {
-  var b = new LevelBuilder();
-  b.scale(230);
-  b.mark(
-    11, 12,
-    11, 8,
-    10, 8,
-    10, 7,
-    8, 7,
-    8, 8,
-    5, 8,
-    5, 7,
-    3, 7,
-    3, 8,
-    0, 8,
-    0, 5,
-    1, 5,
-    1, 3,
-    0, 3,
-    0, 0,
-    3, 0,
-    3, 3,
-    2, 3,
-    2, 5,
-    3, 5,
-    3, 6,
-    5, 6,
-    5, 5,
-    8, 5,
-    8, 6,
-    10, 6,
-    10, 5,
-    13, 5,
-    13, 8,
-    12, 8,
-    12, 10,
-    13, 10,
-    13, 11,
-    15, 11,
-    15, 14,
-    11, 14,
-    11, 12,
-    13, 12,
-    13, 13).wall();
-  var z1 = b.mark(9, 6, 9, 7).zapper(true);
-  b.mark(8.5, 6).dir(Prefab.DOWN).button(
-      function() {
-        z1.setActive(!z1.active);
-      });
-  var z2 = b.mark(11, 8.5, 12, 8.5).zapper(true);
-  b.mark(11, 9).dir(Prefab.RIGHT).button(
-      function() {
-        z2.setActive(!z2.active);
-      });
-  var z3 = b.mark(11, 10, 12, 10).zapper(true);
-  b.mark(11.5, 12).dir(Prefab.UP).button(
-      function() {
-        z3.setActive(!z3.active);
-      });
-  var z4 = b.mark(13, 11, 13, 12).zapper(true);
-  b.mark(13, 12.5).dir(Prefab.LEFT).button(
-      function() {
-        z4.setActive(!z4.active);
-      });
-  b.mark(6.5, 8).dir(Prefab.UP).playerAssembler(true);
-  b.mark(1, 4, 2, 4).zapper(true);
-  b.mark(4, 6, 4, 7).zapper(true);
-  b.mark(12.5, 5.5).block();
-//  b.mark(12.5, 6).block();
-//  b.mark(12.5, 6.5).block();
-  b.mark(14.5, 11.5, 12, 12.5).portals();
-  b.mark(1.5, 1.5).exit('../level4/index.html');
-  Vorp.startWithLevelBuilder(
-      b, document.getElementById('canvas'), document.getElementById('flags'));
-}
+  var SCALE = 230;
+
+  function wallStart(x, y) {
+    return ed.wallStart(x * SCALE, y * SCALE);
+  }
+
+  function wx(x) {
+    return ed.wallToX(x * SCALE);
+  }
+
+  function wy(y) {
+    return ed.wallToY(y * SCALE);
+  }
+
+  function mono(type, x, y, opt_data) {
+    return ed.mono(type, x * SCALE, y * SCALE, opt_data)
+  }
+
+  function double(type, x1, y1, x2, y2, opt_data) {
+    return ed.double(type, x1 * SCALE, y1 * SCALE, x2 * SCALE, y2 * SCALE, opt_data)
+  }
+
+  var ed = LevelProg.create();
+  wallStart(11, 12);
+  wy(8);
+  wx(10);
+  wy(7);
+  wx(8);
+  wy(8);
+  wx(5);
+  wy(7);
+  wx(3);
+  wy(8);
+  wx(0);
+  wy(5);
+  wx(1);
+  wy(3);
+  wx(0);
+  wy(0);
+  wx(3);
+  wy(3);
+  wx(2);
+  wy(5);
+  wx(3);
+  wy(6);
+  wx(5);
+  wy(5);
+  wx(8);
+  wy(6);
+  wx(10);
+  wy(5);
+  wx(13);
+  wy(8);
+  wx(12);
+  wy(10);
+  wx(13);
+  wy(11);
+  wx(15);
+  wy(14);
+  wx(11);
+  wy(12);
+  wx(13);
+  wy(13);
+
+  function buttonToggleZapper(bx, by, tx, ty, zx, zy) {
+    var buttonPos = mono(VedType.BUTTON, bx, by);
+    var togglePos = mono(VedType.TOGGLE, tx, ty);
+    var zapperPos = mono(VedType.ZAPPER, zx, zy);
+    ed.link(buttonPos, togglePos);
+    ed.link(togglePos, zapperPos);
+  }
+  buttonToggleZapper(8.5, 6.2, -10, -10, 9, 6.5);
+  buttonToggleZapper(11.2, 9, -11, -11, 11.5, 8.5);
+  buttonToggleZapper(11.5, 11.8, -12, -12, 11.5, 10);
+  buttonToggleZapper(12.8, 12.5, -13, -13, 13, 11.5);
+  mono(VedType.PLAYER_ASSEMBLER, 6.5, 7.8);
+  mono(VedType.ZAPPER, 1.5, 4);
+  mono(VedType.ZAPPER, 4, 6.5);
+  mono(VedType.BLOCK, 12.5, 5.5);
+  double(VedType.PORTAL, 14.5, 11.5, 12, 12.5);
+  mono(VedType.EXIT, 1.5, 1.5, {'url': '../level4/index.html'});
+
+  ed.startVorp(document.getElementById('canvas'));
+};

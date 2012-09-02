@@ -8,6 +8,7 @@ __all__ = [
   'instahtml',
   'mainpage',
   'minigames',
+  'test',
   'unsquish',
   'ved',
   'vorp',

@@ -298,7 +298,7 @@ HUGE BREAK FOR LEVEL EDITOR, "VED".
 (Hey, I edited this file right in GitHub.  Pretty great!)
 Did not finish yet but we're back for some saw sharpening...
 
-2011.12.?? - 2012.01.03 refactor like a horse running backwards
+2011.12 - 2012.01.03 refactor like a horse running backwards
 v remove phy from sprite constructors
 v convert sprites to use SpriteTemplate and more Vec2d.
 v convert prefabs too
@@ -317,21 +317,54 @@ v get Vorp running again
   v fix random teleport-to-nowhere
   v debug doors
 
-Vorp Logic
-- Addressable sprite input and output buffers
-- links between input and output buffers
-- link clocking to  and modified sprite clocking
-- link creation API in LevelBuilder
-- redo all levels using links and logic
+2012.01.20 - 2012.02.05 Vorp Logic
+Design:
+* Each sprite will have input and output buffers, addressed by
+numeric enums.
+* During sprite clocking, each sprite will be able to read from input buffers
+and write to output buffers.
+* In the main loop, a new link-clocking phase will
+  * clear all sprite input buffers
+  * for each link, add the input value to the output.
+For now, expect output buffers to all be 0 or 1, and interpret input as true or
+false (non-zero or zero). But I can go all Braitenberg-Vehicles later.
+Tasks:
+v sprites
+  v addressable sprite input and output buffers
+  v add addresses to all sprites that have them
+    v everything but zapper and door
+    v add DoorControlSprite
+    v add ZapperControlSprite
+  v modified sprite clocking to read and/or write buffers
+v links
+  v logiclink class
+  v addLink() method
+  v link clocking in main loop
+v hardcode a test level with logic links in it, without prefabs.
+
+2012.02.11 - ? Redo Sprite Construction III
+v Assign sprite ID at construction.
+
+Portal push
+- Portals rayscan for walls and doors constantly
+- They push away from those things
+
+Fullscreen
+- render walls in offscreen canvas once
+- copy from offscreen canvas to onscreen one, instead of clearing
+
+Sound
+- Web Audio or just Audio?
 
 Plasma sprites:
 - plasma cannon
 - plasma itself
 - plasma switch
+- test level
 
 Zombie sprites:
 - zombie
-- zombie assembler
+- zombie assemblers
 
 teleport sparks
 - implode

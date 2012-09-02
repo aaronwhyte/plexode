@@ -79,6 +79,12 @@ Vec2d.prototype.scaleXY = function(sx, sy) {
   return this;
 };
 
+Vec2d.prototype.abs = function() {
+  this.x = Math.abs(this.x);
+  this.y = Math.abs(this.y);
+  return this;
+};
+
 Vec2d.prototype.rot90Right = function() {
   var tmp = this.x;
   this.x = -this.y;
@@ -181,4 +187,27 @@ Vec2d.dirs = [
 Vec2d.randDir = function() {
   var dir = Vec2d.dirs[Math.floor(Math.random()*8)];
   return new Vec2d(dir.x, dir.y);
+};
+
+Vec2d.alongRayDistance = function(startPoint, towardsPoint, distance) {
+  return new Vec2d()
+      .set(towardsPoint)
+      .subtract(startPoint)
+      .scaleToLength(distance)
+      .add(startPoint);
+};
+
+Vec2d.alongRayFraction = function(startPoint, towardsPoint, fraction) {
+  return new Vec2d()
+      .set(towardsPoint)
+      .subtract(startPoint)
+      .scale(fraction)
+      .add(startPoint);
+};
+
+Vec2d.midpoint = function(a, b) {
+  return new Vec2d()
+      .set(a)
+      .add(b)
+      .scale(0.5);
 };

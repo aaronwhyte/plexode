@@ -18,6 +18,7 @@ plex.Map.PREFIX = '=';
 
 plex.Map.prototype.set = function(k, v) {
   this.m[plex.Map.PREFIX + k] = v;
+  return this;
 };
 
 plex.Map.prototype.get = function(k) {
@@ -28,6 +29,9 @@ plex.Map.prototype.delete = function(k) {
   delete this.m[plex.Map.PREFIX + k];
 };
 
+/**
+ * @return {Array}
+ */
 plex.Map.prototype.getKeys = function() {
   var keys = [];
   for (var pk in this.m) {

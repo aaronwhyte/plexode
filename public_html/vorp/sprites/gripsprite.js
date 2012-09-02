@@ -5,7 +5,6 @@
 function GripSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.targetPos = null;  // vec
-  this.onChange = null;  // fn
 
   this.pos = new Vec2d();
   this.heldPos = new Vec2d();
@@ -20,13 +19,13 @@ function GripSprite(spriteTemplate) {
 GripSprite.prototype = new Sprite(null);
 GripSprite.prototype.constructor = GripSprite;
 
+GripSprite.prototype.outputIds = {
+  GRIPPING: 0
+};
+
 GripSprite.prototype.setTargetPos = function(vec) {
   this.targetPos = (new Vec2d()).set(vec);
   this.distToTarget = vec.distance(this.getPos(this.pos));
-};
-
-GripSprite.prototype.setOnChange = function(fn) {
-  this.onChange = fn;
 };
 
 GripSprite.prototype.act = function() {
@@ -44,15 +43,13 @@ GripSprite.prototype.act = function() {
     // keep on grippin'
     this.gripForce();
   }
+  this.outputs[this.outputIds.GRIPPING] = this.heldSprite ? 1 : 0;
 };
 
 GripSprite.prototype.gripScan = function() {
   if (!this.targetPos) return;
   this.scanInitVec.set(this.targetPos).subtract(this.getPos(this.pos)).scale(1.5);
   this.gripScanSweep(this.scanInitVec, 1/8, 1);
-  if (this.heldSprite && this.onChange) {
-    this.onChange(true);
-  }
 };
 
 /**
@@ -106,7 +103,6 @@ GripSprite.prototype.maybeBreakGrip = function() {
   var h = this.heldSprite.getPos(this.heldPos);
   if (p.distanceSquared(h) > this.distToTarget * this.distToTarget * 2) {
     this.heldSprite = null;
-    if (this.onChange) this.onChange(false);
     return true;
   }
   return false;

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>GrafOp tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/graf/grafop.js"></script>
+<script src="../../../public_html/js/graf/grafmodel.js"></script>
+<script src="../../../public_html/js/graf/grafcluster.js"></script>
+<script src="../../../public_html/js/graf/grafpart.js"></script>
+<script src="../../../public_html/js/graf/grafjack.js"></script>
+<script src="../../../public_html/js/graf/graflink.js"></script>
+<script src="../../../public_html/ved/clips/clip.js"></script>
+<script src="../../../public_html/ved/clips/cliplist.js"></script>
+<script src="../../../public_html/ved/clips/cliplistop.js"></script>
+<script>
+
+function createGrafOps() {
+  return [
+    {
+      type:GrafOp.Type.ADD_CLUSTER,
+      id: "100"
+    },
+    {
+      type:GrafOp.Type.ADD_PART,
+        id: "200",
+        clusterId: "100",
+        x: 10,
+        y: 20
+    }
+  ];
+}
+
+addTest(function testAddAndGetClipOp() {
+  var timestamp = 1000;
+  var id = 'client1-123';
+  var addOp = ClipListOp.createAdd(timestamp, id, createGrafOps());
+  var clipList = new ClipList();
+  clipList.applyOp(addOp);
+  var clip = clipList.getClipByOrder(0);
+  assertStringifyEquals(createGrafOps(), clip.grafModel.createOps());
+});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

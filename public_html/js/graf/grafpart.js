@@ -24,3 +24,11 @@ GrafPart.prototype.addJack = function(jack) {
 GrafPart.prototype.removeJack = function(jack) {
   delete this.jacks[jack.id];
 };
+
+GrafPart.prototype.getJack = function(id) {
+  return this.jacks[id];
+};
+
+GrafPart.prototype.getJackList = function() {
+  return plex.object.values(this.jacks);
+};

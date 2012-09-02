@@ -21,3 +21,19 @@ GrafJack.prototype.addLink = function(link) {
 GrafJack.prototype.removeLink = function(link) {
   delete this.links[link.id];
 };
+
+GrafJack.prototype.getType = function() {
+  return this.data.type;
+};
+
+GrafJack.prototype.getName = function() {
+  return this.data.name;
+};
+
+GrafJack.prototype.isInput = function() {
+  return this.getType() == JackAddress.Type.INPUT;
+};
+
+GrafJack.prototype.isOutput = function() {
+  return this.getType() == JackAddress.Type.OUTPUT;
+};
