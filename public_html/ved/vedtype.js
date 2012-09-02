@@ -11,6 +11,7 @@ VedType = {
   PLAYER_ASSEMBLER: 'player_assembler',
   PORTAL: 'portal',
   TIMER: 'timer',
+  TOGGLE: 'toggle',
   WALL: 'wall',
   ZAPPER: 'zapper'
 };

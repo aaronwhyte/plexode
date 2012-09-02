@@ -332,30 +332,32 @@ Vorp.prototype.removeSprite = function(id) {
   this.phy.removeSprite(id);
 };
 
+Vorp.prototype.getDeadPlayerSpritefactory = function() {
+  if (!this.deadPlayerSpriteFactory) {
+    this.deadPlayerSpriteFactory = new DeadPlayerSpriteFactory(this.getBaseSpriteTemplate());
+  }
+  return this.deadPlayerSpriteFactory;
+};
+
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var playerPos = this.playerSprite.getPos(new Vec2d());
-  var deadPlayerPrefab = new DeadPlayerPrefab(playerPos.x, playerPos.y);
-  var deadPlayerSprites = deadPlayerPrefab.createSprites(this.getBaseSpriteTemplate());
-  this.addSprites(deadPlayerSprites);
+  var deadPlayerSprite = this.getDeadPlayerSpritefactory().createXY(playerPos.x, playerPos.y)
+  this.addSprite(deadPlayerSprite);
 
   // remove normal player sprite
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);
 
-  this.playerSprite = deadPlayerSprites[0];
+  this.playerSprite = deadPlayerSprite;
 };
 
 Vorp.prototype.assemblePlayer = function() {
   if (this.playerSprite) {
     this.removeSprite(this.playerSprite.id);
   }
-  var target = this.playerAssembler.targetPos;
-  var playerPrefab = new PlayerPrefab(target.x, target.y);
-  var playerSprites = playerPrefab.createSprites(this.getBaseSpriteTemplate());
-  this.playerSprite = playerSprites[0];
-  this.addSprites(playerSprites);
-  this.playerAssembler.onPlayerAssembled();
+  this.playerSprite = this.playerAssembler.createPlayer();
+  this.addSprite(this.playerSprite);
 };
 
 /**

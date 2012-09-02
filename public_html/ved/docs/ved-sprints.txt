@@ -163,14 +163,15 @@ v improve how key/value pairs are set - no more objIds in tuples.
 Replace the old levels with LevelProg code.
 v level 1
   v add wall-chaining API
-- level 2
-  - fix player-killing code to not use prefabs
-    - consolidate sprite template code from transformer and vorp
-    - add some kinda sprite-spawning code. register sprite factories with Vorp? hm.
-  - create and use ToggleSprite
-v delete obsolete sprite logic event handler methods
-v delete LevelBuilder
-- delete Prefabs
+v level 2
+  v fix player-killing code to not use prefabs
+    v consolidate sprite template code from transformer and vorp
+    v add some kinda sprite-spawning code.
+  v delete obsolete sprite logic event handler methods
+  v delete LevelBuilder
+  v delete Prefabs
+  v create and use ToggleSprite
+  v streamline part and link creation
 
 Merge year-old vorplogic branch into the main branch!
 

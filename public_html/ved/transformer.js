@@ -196,7 +196,8 @@ Transformer.prototype.transformCluster = function(cluster) {
           .setPainter(new PlayerAssemblerPainter());
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
-      sprite = new PlayerAssemblerSprite(template);
+      sprite = new PlayerAssemblerSprite(template,
+          new PlayerSpriteFactory(this.createBaseTemplate()));
       // there's enough room to assemble a player sprite
       sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
           Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
@@ -228,6 +229,17 @@ Transformer.prototype.transformCluster = function(cluster) {
           .setPos(controlVec);
       sprite = new TimerSprite(template);
       sprite.setTimeoutLength(parts[0].data['timeout']);
+      this.transformJacks(sprite, part.getJackList());
+      sprites.push(sprite);
+      break;
+
+    case VedType.TOGGLE:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeIntangible()
+          .setPos(controlVec);
+      sprite = new ToggleSprite(template);
       this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;

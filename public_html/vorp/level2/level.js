@@ -4,17 +4,11 @@ window['main'] = function() {
   ed.mono(VedType.PLAYER_ASSEMBLER, 50, 250);
   ed.double(VedType.PORTAL, 400, 150, 700, 350);
   ed.mono(VedType.EXIT, 1600-250, 250, {'url': '../level3/index.html'});
-
-  var zapperPos = new Vec2d(1000, 50);
-  ed.mono(VedType.ZAPPER, zapperPos.x, zapperPos.y);
-
-  var buttonPos = new Vec2d(900, 50);
-  ed.mono(VedType.BUTTON, buttonPos.x, buttonPos.y);
-  // TODO: toggle sprite
-
-  ed.selectNearest(zapperPos, true);
-  ed.selectNearest(buttonPos, true);
-  ed.linkSelectedJacks();
+  var zapperPos = ed.mono(VedType.ZAPPER, 1000, 50);
+  var buttonPos = ed.mono(VedType.BUTTON, 900, 50);
+  var togglePos = ed.mono(VedType.TOGGLE, 1100, 200);
+  ed.link(buttonPos, togglePos);
+  ed.link(togglePos, zapperPos);
 
   ed.startVorp(document.getElementById('canvas'));
 };

@@ -51,7 +51,7 @@ DeadPlayerPainter.SPARK_ADVANCESPARK = function(spark, now) {
 DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
-  var size = Math.max(0.2, timeFrac) * Prefab.BOX_RADIUS;
+  var size = Math.max(0.2, timeFrac) * Transformer.BOX_RADIUS;
   renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };

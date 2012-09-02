@@ -49,10 +49,12 @@ LevelProg.prototype.wallToY = function(y) {
  * @param {number} x
  * @param {number} y
  * @param {Object=} opt_data optional object with key/value pairs to set on the pasted model objects.
+ * @return {Vec2d} vector at x, y
  */
 LevelProg.prototype.mono = function(type, x, y, opt_data) {
   this.pasteWithOffset(this.sysClips.getClipById(type).grafModel, new Vec2d(x, y));
   opt_data && this.setDataOnSelection(opt_data);
+  return new Vec2d(x, y);
 };
 
 /**

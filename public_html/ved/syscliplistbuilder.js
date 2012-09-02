@@ -150,6 +150,11 @@ SysClipListBuilder.createDefaultDataMap = function() {
       opToSetData(2, 'timeout', 100),
       opsToAddJacks(2, TimerSprite)));
 
+  addOpsToMap(VedType.TOGGLE, [].concat(
+      opsToAddCluster(1, VedType.TOGGLE),
+      opsToAddPart(2, 1),
+      opsToAddJacks(2, ToggleSprite)));
+
   addBiPartCluster(VedType.WALL);
 
   addOpsToMap(VedType.ZAPPER, [].concat(
