@@ -172,6 +172,10 @@ v level 2
   v delete Prefabs
   v create and use ToggleSprite
   v streamline part and link creation
+v level 3
+- level 4
+- level 5
+- level 6
 
 Merge year-old vorplogic branch into the main branch!
 
