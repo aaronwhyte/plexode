@@ -1,151 +1,135 @@
 window['main'] = function() {
-  var b = new LevelBuilder();
-  b.scale(230);
+  var SCALE = 230;
+  var translation = new Vec2d();
 
-  function placeRoom(x, y, fn) {
-    b.save();
-    b.translate(x, y);
-    fn(b);
-    b.restore();
+  function wallStart(x, y) {
+    x += translation.x;
+    y += translation.y;
+    return ed.wallStart(x * SCALE, y * SCALE);
   }
-  
-  placeRoom(0, 0, room0);
-  placeRoom(1, 6, room1);
-  placeRoom(2, 10, room2);
-  placeRoom(7, 14, room3);
-  placeRoom(10.5, 10, room4);
 
-  Vorp.startWithLevelBuilder(
-      b, document.getElementById('canvas'), document.getElementById('flags'));
+  function wx(x) {
+    x += translation.x;
+    return ed.wallToX(x * SCALE);
+  }
+
+  function wy(y) {
+    y += translation.y;
+    return ed.wallToY(y * SCALE);
+  }
+
+  function mono(type, x, y, opt_data) {
+    x += translation.x;
+    y += translation.y;
+    return ed.mono(type, x * SCALE, y * SCALE, opt_data)
+  }
+
+  function double(type, x1, y1, x2, y2, opt_data) {
+    x1 += translation.x;
+    y1 += translation.y;
+    x2 += translation.x;
+    y2 += translation.y;
+    return ed.double(type, x1 * SCALE, y1 * SCALE, x2 * SCALE, y2 * SCALE, opt_data)
+  }
+
+  var ed = LevelProg.create();
+
+  // room 0
+  translation.setXY(0, 0);
+  wallStart(3, 6);
+  wy(4);
+  wx(4);
+  wy(1);
+  wx(1);
+  wy(4);
+  wx(2);
+  wy(6);
+  mono(VedType.PLAYER_ASSEMBLER, 2.5, 1.2);
+  mono(VedType.BLOCK, 3.6, 3.4);
+
+  // room 1
+  translation.setXY(1, 6);
+  wallStart(1, 0);
+  wx(0);
+  wy(3);
+  wx(2);
+  wy(4);
+  wallStart(2, 0);
+  wx(3);
+  wy(4);
+  ed.link(
+      mono(VedType.GRIP, 1, 2.8),
+      mono(VedType.DOOR, 2.5, 3)
+  );
+
+  // room 2
+  translation.setXY(2, 10);
+  wallStart(1, 0);
+  wy(1);
+  wx(0);
+  wy(4);
+  wx(1);
+  wy(7);
+  wx(5);
+  wallStart(2, 0);
+  wy(1);
+  wx(3);
+  wy(4);
+  wx(2);
+  wy(6);
+  wx(5);
+  wallStart(0, 2.15);
+  wx(0.65);
+  wallStart(0, 2.85);
+  wx(0.65);
+  var outDoor = mono(VedType.DOOR, 1.5, 4);
+  var gripDoor = mono(VedType.DOOR, 0.6, 2.5);
+  var leftGrip = mono(VedType.GRIP, 0.2, 2.5);
+  var rightGrip = mono(VedType.GRIP, 2.8, 2.5);
+  ed.link(leftGrip, gripDoor);
+  ed.link(rightGrip, gripDoor);
+  ed.link(leftGrip, outDoor);
+  mono(VedType.BLOCK, 3 - 0.4, 2.5);
+
+  // room 3
+  translation.setXY(7, 14);
+  wallStart(0, 2);
+  wx(1);
+  wy(1);
+  wx(4);
+  wy(4);
+  wx(1);
+  wy(3);
+  wx(0);
+  wallStart(4.5, 0);
+  wy(4);
+  wx(7.5);
+  wy(1);
+  wx(5.5);
+  wy(0);
+  double(VedType.PORTAL, 2.5, 2.5, 6, 2.5);
+  mono(VedType.BLOCK, 3.5, 1.5);
+  function gripAndDoor(gx, gy, dx, dy) {
+    ed.link(
+        mono(VedType.GRIP, gx, gy),
+        mono(VedType.DOOR, dx, dy));
+  }
+  gripAndDoor(5.5, 3.8, 5, 0.6);
+  gripAndDoor(6.5, 3.8, 5, 0.2);
+  gripAndDoor(7.3, 3.0, 5, -0.2);
+  gripAndDoor(7.3, 2.0, 5, -0.6);
+
+  // room 4
+  translation.setXY(10.5, 10);
+  wallStart(1, 4);
+  wy(3);
+  wx(0);
+  wy(0);
+  wx(3);
+  wy(3);
+  wx(2);
+  wy(4);
+  mono(VedType.EXIT, 1.5, 1.5, {'url': '../level1/index.html'});
+
+  ed.startVorp(document.getElementById('canvas'));
 };
-
-function room0(b) {
-  b.mark(2.5, 1).dir(Prefab.DOWN).playerAssembler(true);
-  b.mark(
-      3, 6,
-      3, 4,
-      4, 4,
-      4, 1,
-      1, 1,
-      1, 4,
-      2, 4,
-      2, 6).wall();
-  b.mark(3.6, 3.4).block();
-}
-
-function room1(b) {
-  b.mark(
-      1, 0,
-      0, 0,
-      0, 3,
-      2, 3,
-      2, 4).wall();
-  b.mark(
-      2, 0,
-      3, 0,
-      3, 4).wall();
-  var d = b.mark(2, 3, 3, 3).door(true);
-  b.mark(1, 3).dir(Prefab.UP).grip(
-      function(held) {
-        d.setClosed(!held);
-      });
-}
-
-function room2(b) {
-  b.mark(
-      1, 0,
-      1, 1,
-      0, 1,
-      0, 4,
-      1, 4,
-      1, 7,
-      5, 7).wall();
-  b.mark(
-      2, 0,
-      2, 1,
-      3, 1,
-      3, 4,
-      2, 4,
-      2, 6,
-      5, 6).wall();
-
-  var outDoor = b.mark(1, 4, 2, 4).door(true);
-  b.mark(0, 2.2, 0.6, 2.2).wall();
-  b.mark(0, 2.8, 0.6, 2.8).wall();
-  var gripDoor = b.mark(0.6, 2.2, 0.6, 2.8).door(false);
-  
-  var leftGrip = false;
-  var rightGrip = false;
-
-  function setGripDoor() {
-    gripDoor.setClosed(!leftGrip && !rightGrip);
-  }
-  b.mark(0, 2.5).dir(Prefab.RIGHT).grip(
-      function(held) {
-        outDoor.setClosed(!held);
-        leftGrip = held;
-        setGripDoor();
-      });
-  b.mark(3, 2.5).dir(Prefab.LEFT).grip(
-      function(held) {
-        rightGrip = held;
-        setGripDoor();
-      });
-  b.mark(3 - 0.4, 2.5).block();
-}
-
-function room3(b) {
-  // left walls
-  b.mark(
-      0, 2,
-      1, 2,
-      1, 1,
-      4, 1,
-      4, 4,
-      1, 4,
-      1, 3,
-      0, 3).wall();
-
-  // right walls
-  b.mark(
-      4.5, 0,
-      4.5, 4,
-      7.5, 4,
-      7.5, 1,
-      5.5, 1,
-      5.5, 0).wall();
-
-  b.mark(2.5, 2.5, 6, 2.5).portals();
-  b.mark(3.5, 1.5).block();
-  
-  var d1 = b.mark(4.5, 0.6).markX(5.5).door(true);
-  var d2 = b.mark(4.5, 0.2).markX(5.5).door(true);
-  var d3 = b.mark(4.5, -0.2).markX(5.5).door(true);
-  var d4 = b.mark(4.5, -0.6).markX(5.5).door(true);
-  
-  b.mark(5.5, 4).dir(Prefab.UP).grip(function(held) {
-    d1.setClosed(!held);
-  });
-  b.mark(6.5, 4).dir(Prefab.UP).grip(function(held) {
-    d2.setClosed(!held);
-  });
-  b.mark(7.5, 3).dir(Prefab.LEFT).grip(function(held) {
-    d3.setClosed(!held);
-  });
-  b.mark(7.5, 2).dir(Prefab.LEFT).grip(function(held) {
-    d4.setClosed(!held);
-  });
-}
-
-function room4(b) {
-  b.mark(
-      1, 4,
-      1, 3,
-      0, 3,
-      0, 0,
-      3, 0,
-      3, 3,
-      2, 3,
-      2, 4).wall();
-  b.mark(1.5, 1.5).exit('../level1/index.html');
-}
