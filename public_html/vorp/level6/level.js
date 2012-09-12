@@ -1,4 +1,5 @@
-window['main'] = function() {
+var vorpLevels = vorpLevels || {};
+(function() {
   var SCALE = 230;
   var translation = new Vec2d();
 
@@ -131,5 +132,5 @@ window['main'] = function() {
   wy(4);
   mono(VedType.EXIT, 1.5, 1.5, {'url': '../level1/index.html'});
 
-  ed.startVorp(document.getElementById('canvas'));
-};
+  vorpLevels['level6'] = ed.createOps();
+})();

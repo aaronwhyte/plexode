@@ -1,6 +1,8 @@
 /**
  * A store for a single stream of operations, indexed by the server-assigned operation ID.
- * Backed by one namd Stor object.
+ * Backed by one named object within a Stor.
+ * @param {Stor} stor
+ * @param {String} name
  * @constructor
  */
 function OpStor(stor, name) {

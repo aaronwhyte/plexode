@@ -102,3 +102,6 @@ LevelProg.prototype.startVorp = function(canvas) {
   vorp.startLoop();
 };
 
+LevelProg.prototype.createOps = function() {
+  return this.model.createOps();
+}

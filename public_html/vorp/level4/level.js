@@ -1,4 +1,5 @@
-window['main'] = function() {
+var vorpLevels = vorpLevels || {};
+(function() {
   var SCALE = 230;
 
   function wallStart(x, y) {
@@ -44,5 +45,5 @@ window['main'] = function() {
   mono(VedType.BLOCK, 0.5, 0.5);
   mono(VedType.BLOCK, 5.5, 0.5);
 
-  ed.startVorp(document.getElementById('canvas'));
-};
+  vorpLevels['level4'] = ed.createOps();
+})();

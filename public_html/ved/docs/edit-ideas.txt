@@ -136,3 +136,16 @@ In the distant future, the UI for building levels will use the processes above,
 but instead of playing the vorp, the UI will display it frozen in time, overlaid with the grafmodel.
 The user will manipulate the grafmodel using a generic graf editor UI that doesn't
 have to know about the Transformer or Vorp.
+
+2012.09.09
+Done: graf, ops, transformer. All Plexode levels using new system. Yaaaay!
+Later: A level editor anyone can use, and easy level sharing (with my hugeurl technology).
+Now: A level editor I can use at home.
+
+Stor on LocalStorage, to put multiple levels of ops into.
+LevelList
+LevelListModel is backed by the Stor.
+URL scheme:
+vorp/edit/index.html:
+vorp/edit/index.html#level=<uri-component-escaped level name>
+App starts, checks hash vs. local store. If the local store doesn't have the thing, then bounce to the

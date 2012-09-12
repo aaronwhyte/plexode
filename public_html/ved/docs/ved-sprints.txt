@@ -177,15 +177,21 @@ v level 4
 v level 5
 v level 6
 
-Merge year-old vorplogic branch into the main branch!
+v Merge year-old vorplogic branch into the main branch!
 
-Deploy to plexode.
-
-LevEd API II
-- levEd.deletedSelectedParts()
-- levEd.twistSelectedParts(LEFT90 | RIGHT90 | FLIP_X | FLIP_Y)
+v Deploy to plexode.
 
 ============== VED UI ============
+
+2012.09.08 - 2012.09.08
+Access Existing Level Models
+v alter py level HTML template to expect a vorpLevels object with one key/value and start Vorp with it.
+v alter level.js's to supply vorpLevels = vorpLevels || {}, and vorpLevels['levelX'] = {...}
+
+LevelList
+- createLevel
+- populate it from siz levels of JSON
+
 Ved UI API:
 - iteration for rendering
 - spacial queries
@@ -209,3 +215,8 @@ Ved model for interactive editing
   - other wall endpoint moves minimum distance to remain coaxial
   - deleting any part deletes all jacks and links and data first
   - deleting last part in a cluster deletes cluster
+
+LevEd API II
+- levEd.deletedSelectedParts()
+- levEd.twistSelectedParts(LEFT90 | RIGHT90 | FLIP_X | FLIP_Y)
+

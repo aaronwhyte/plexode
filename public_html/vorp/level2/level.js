@@ -1,4 +1,5 @@
-window['main'] = function() {
+var vorpLevels = vorpLevels || {};
+(function() {
   var ed = LevelProg.create();
   ed.wallStart(0, 0).wallToX(1600).wallToY(500).wallToX(0).wallToY(0);
   ed.mono(VedType.PLAYER_ASSEMBLER, 50, 250);
@@ -9,6 +10,5 @@ window['main'] = function() {
   var togglePos = ed.mono(VedType.TOGGLE, 1100, 200);
   ed.link(buttonPos, togglePos);
   ed.link(togglePos, zapperPos);
-
-  ed.startVorp(document.getElementById('canvas'));
-};
+  vorpLevels['level2'] = ed.createOps();
+})();

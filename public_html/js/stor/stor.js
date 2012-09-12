@@ -1,5 +1,7 @@
 /**
- * A key/value store with named lists of values.
+ * A key/valuelist store where .
+ * @param {Object} storage  usually localStorage or sessionStorage
+ * @param {String} prefix A prefix to identify all the keys in storage that belong to this Stor.
  * @constructor
  */
 function Stor(storage, prefix) {

@@ -1,4 +1,5 @@
-window['main'] = function() {
+var vorpLevels = vorpLevels || {};
+(function() {
   var ed = LevelProg.create();
   ed.wallStart(0, 0).wallToX(2000).wallToY(2000).wallToX(0).wallToY(0);
   ed.wallStart(1000, 500).wallToY(1500);
@@ -12,5 +13,5 @@ window['main'] = function() {
       ed.mono(VedType.BLOCK, x, y);
     }
   }
-  ed.startVorp(document.getElementById('canvas'));
-};
+  vorpLevels['level1'] = ed.createOps();
+})();

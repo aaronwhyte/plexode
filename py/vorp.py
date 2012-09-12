@@ -65,6 +65,28 @@ def formatVorpLevel(jsName, title, description):
 <link rel="stylesheet" type="text/css" href="../vorp.css">
 <script src="../""" + jsName + """"></script>
 <script src="./level.js"></script>
+<script>
+function main() {
+  // Convert ops JSON to GrafModel.
+  var levelOps = plex.object.values(vorpLevels)[0];
+  var grafModel = new GrafModel();
+  grafModel.applyOps(levelOps);
+
+  // create vorp instance
+  var canvas = document.getElementById('canvas');
+  var renderer = new Renderer(canvas, new Camera());
+  var gameClock = new GameClock();
+  var sledgeInvalidator = new SledgeInvalidator();
+  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
+
+  // Use Transformer to populate Vorp with Model.
+  var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
+  transformer.transformModel(grafModel);
+
+  // Start the game up!
+  vorp.startLoop();
+}
+</script>
 </head>
 <body onload="main()">
 <div id="levelCenter">
