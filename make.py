@@ -72,7 +72,7 @@ def buildPlexode(bdir):
 
   print "compiling ved JS"
   vedJsName = 'ved_%s.js' % str(int(time.time() * 1000))
-  vedJsPublicHtmlPath = os.path.join('ved', vedJsName)
+  vedJsPublicHtmlPath = os.path.join('vorp/edit', vedJsName)
   concatenateJs(bdir, getVedJsFileNames(), vedJsPublicHtmlPath)
 
   print "generating index.html files"
@@ -90,7 +90,7 @@ def buildPlexode(bdir):
   writePublicHtml(bdir, 'vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
   writePublicHtml(bdir, 'vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
   writePublicHtml(bdir, 'vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  writePublicHtml(bdir, 'ved', ved.formatVed(vorpJsName, vedJsName))
+  writePublicHtml(bdir, 'vorp/edit', ved.formatVed(vorpJsName, vedJsName))
   writePublicHtml(bdir, 'chordo', chordo.formatChordo())
   writePublicHtml(bdir, 'u', unsquish.formatUnsquish())
 

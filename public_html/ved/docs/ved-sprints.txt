@@ -188,9 +188,21 @@ Access Existing Level Models
 v alter py level HTML template to expect a vorpLevels object with one key/value and start Vorp with it.
 v alter level.js's to supply vorpLevels = vorpLevels || {}, and vorpLevels['levelX'] = {...}
 
-LevelList
-- createLevel
-- populate it from siz levels of JSON
+2012.09.12 -
+VedApp 1: directory
+v Make a space for the code, manual testing
+- Add button to nuke localstorage and repopulate it with real level1-6 data :-o
+- Read all level names from stor on startup
+- show levels and link to them
+
+VedApp 2: test level
+
+VedApp 3: pretend edit level
+
+VedApp 4: missing level page
+
+VedApp 5: add and delete levels?
+
 
 Ved UI API:
 - iteration for rendering

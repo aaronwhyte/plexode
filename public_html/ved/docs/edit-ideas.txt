@@ -146,6 +146,15 @@ Stor on LocalStorage, to put multiple levels of ops into.
 LevelList
 LevelListModel is backed by the Stor.
 URL scheme:
-vorp/edit/index.html:
-vorp/edit/index.html#level=<uri-component-escaped level name>
-App starts, checks hash vs. local store. If the local store doesn't have the thing, then bounce to the
+vorp/edit/index.html#mode=edit&level=<uri-component-escaped level name>
+App starts, checks hash vs. local store. If the local store doesn't have the thing, say so and link to the main page.
+Pages:
+- Level Directory
+  - vorp/edit/
+  - show levels and link to them
+  - add level
+- Edit Level
+  - vorp/edit/#mode=edit&level=<name>
+- Test Level (maybe with debug options?)
+  - vorp/edit/#mode=test&level=<name>
+- Missing Level (fallback behavior for Edit or Test)

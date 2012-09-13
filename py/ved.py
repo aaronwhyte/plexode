@@ -2,36 +2,27 @@
 
 import format
 
+# TODO: Move this whole thing to glorious photonpotato.com/vorp/edit/
+
 def formatVed(vorpJsName, vedJsName):
-  name = 'ved'
+  name = 'vorp/edit'
   h = []
-  h.append(format.headStart(name, 1))
+  h.append(format.headStart(name, 2))
   h.append("""
+<link rel="stylesheet" type="text/css" href="../../css/plexode3.css">
+<link rel="stylesheet" type="text/css" href="../vorp.css">
 <link rel="stylesheet" type="text/css" href="./ved.css">
-</head><body>""")
-  h.append(format.navDiv(name, 1))
-  h.append(format.mainDiv("""
-<div
-id="jsonTab" class="tab selected" onclick="selectTab('jsonTab')">json</div><div
-id="editorTab" class="tab unselected" onclick="selectTab('editorTab')">editor</div><div
-id="vorpTab" class="tab unselected" onclick="selectTab('vorpTab')">vorp</div>
-<div style="background:#aaf;padding:1em;"> stuff goes here</div>
-<script src=\"../vorp/""" + vorpJsName + """\"></script>
-<script src=\"""" + vedJsName + """\"></script>
+<script src="../""" + vorpJsName + """"></script>
+<script src="./""" + vedJsName + """"></script>
 <script>
-function selectTab(name) {
-  var tabNames = ['jsonTab', 'editorTab', 'vorpTab'];
-  for (var i = 0; i < tabNames.length; i++) {
-    var tab = document.getElementById(tabNames[i]);
-    if (tab.id == name) {
-      tab.className = "tab selected";
-    } else {
-      tab.className = "tab unselected";
-    }
-  }
+var vedApp;
+function main() {
+  vedApp = new VedApp(document.getElementById('vedroot'));
 }
 </script>
-"""))
+</head><body onload="main()">""")
+  h.append(format.navDiv(name, 2))
+  h.append(format.mainDiv("""<div id="vedroot">ved stuff goes here</div>"""))
   h.append(format.footer())
   return ''.join(h)
 
