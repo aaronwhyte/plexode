@@ -145,7 +145,10 @@ def getVedJsFileNames():
   # The compiled Vorp fils will be pulled in by Ved pages, too.
   js = []
   prefix = 'public_html/js/'
+  js.extend(getJsFileNamesInPath('%splex' % prefix))
   js.extend(getJsFileNamesInPath('%sgraf' % prefix))
+  js.extend(getJsFileNamesInPath('%sstor' % prefix))
+  js.extend(getJsFileNamesInPath('%sopstor' % prefix))
   miscDeps = []
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))

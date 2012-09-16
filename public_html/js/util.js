@@ -44,10 +44,10 @@ function gebi(id) {
   return document.getElementById(id);
 }
 
-function ce(name, parent) {
+function ce(name, opt_parent) {
   var e = document.createElement(name);
-  if (parent) {
-    parent.appendChild(e);
+  if (opt_parent) {
+    opt_parent.appendChild(e);
   }
   return e;
 }

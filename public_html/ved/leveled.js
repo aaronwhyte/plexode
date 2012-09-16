@@ -138,15 +138,15 @@ LevelEd.prototype.linkSelectedJacks = function() {
       var output = outputs[outputIndex];
       if (output.partId == input.partId) {
         // Don't link a part to itself.
-        console.log('not linking a part to itself');
+//        console.log('not linking a part to itself');
         continue;
       }
       // Make sure they're not already linked.
       if (this.model.getLinksBetweenJacks(output.id, input.id).length) {
-        console.log('not linking jacks that are already linked');
+//        console.log('not linking jacks that are already linked');
         continue;
       }
-      console.log(['linking jacks:', input.id, output.id].join(' '));
+//      console.log(['linking jacks:', input.id, output.id].join(' '));
       ops.push({
         type: GrafOp.Type.ADD_LINK,
         id: this.model.newId(),
