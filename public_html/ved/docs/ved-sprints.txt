@@ -204,8 +204,10 @@ v fake testing renderer
 v fake editing renderer
 v hyperlink from directory to test
 
+2012.09.16 -
 VedApp testing page
-- playable
+v playable
+- clean up on exit. Could be...tricky
 - title nav
 
 VedApp level-not-found page
