@@ -39,9 +39,9 @@ plex.url.encodeQuery = function(map) {
   return q.join('&');
 };
 
-plex.url.decodeQuery = function(q) {
+plex.url.decodeQuery = function(queryString) {
   var map = {};
-  var pairs = q.split('&');
+  var pairs = queryString.split('&');
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i].split('=');
     var key = decodeURIComponent(pair[0]);

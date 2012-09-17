@@ -189,20 +189,30 @@ v alter py level HTML template to expect a vorpLevels object with one key/value 
 v alter level.js's to supply vorpLevels = vorpLevels || {}, and vorpLevels['levelX'] = {...}
 
 2012.09.12 - 2012.09.15
-VedApp 1: directory
+VedApp directory
 v Make a space for the code, manual testing
 v Add button to nuke localstorage and repopulate it with real level1-6 data :-o
 v render level names
 
-VedApp 2: test-a-level page
-- add a test-a-level page
-- hyperlink from directory
+2012.09.16 - 2012.09.16
+VedApp navigation
+v parse URL hash params and draw with directory or testing renderer
+  v levelname param
+  v mode param: testing (editing later)
+v rerender on hashchange event
+v fake testing renderer
+v fake editing renderer
+v hyperlink from directory to test
 
-VedApp 3: pretend edit-level page
+VedApp testing page
+- playable
+- title nav
 
-VedApp 4: level-not-found page
+VedApp level-not-found page
 
-VedApp 5: add and delete levels from diretory?
+VedApp nav header?
+
+VedApp add and delete levels from directory?
 
 
 Ved UI API:
