@@ -61,7 +61,7 @@ Renderer.prototype.stats = function() {
   c.textSize = "14pt";
   c.fontFamily = "monospace";
   this.setFillStyle("#444");
-  c.fillText(this.fps + ' ' + GU_nextDelay, 2, 2);
+  c.fillText(this.fps, 2, 2);
 };
 
 Renderer.prototype.setFillStyle = function(style) {

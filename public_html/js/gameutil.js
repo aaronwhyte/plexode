@@ -25,11 +25,15 @@ function GU_start(func, opt_fps) {
   GU_targetPeriod = 1000 / fps;
   GU_nextDelay = Math.floor(GU_targetPeriod);
   GU_clientFunc = func;
+  GU_startKeyListener();
+
+  GU_clock();
+}
+
+function GU_startKeyListener() {
   document.onkeydown = GU_keyDown;
   document.onkeypress = null; // GU_keyDown;
   document.onkeyup = GU_keyUp;
-
-  GU_clock();
 }
 
 function GU_clock() {

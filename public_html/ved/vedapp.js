@@ -32,6 +32,12 @@ VedApp.prototype.render = function() {
     this.listeningToHashChanges = true;
   }
 
+  // Stop any running timer loops instance.
+  if (this.vorp) {
+    this.vorp.stopLoop();
+    this.vorp = null;
+  }
+
   // out-of-dom fragment to prevent rerendering as we go
   // (no idea if that really works)
   var appDiv = plex.dom.ce('div');
@@ -128,8 +134,8 @@ VedApp.prototype.renderTesting = function(appDiv, levelName) {
   transformer.transformModel(grafModel);
 
   // Start the game up.
-  // TODO: kill it when we navigate away. Leaking timer loops is baaaaad.
   vorp.startLoop();
+  this.vorp = vorp;
 };
 
 VedApp.prototype.nuke = function() {

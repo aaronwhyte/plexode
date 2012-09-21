@@ -87,12 +87,23 @@ Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
 };
 
 Vorp.prototype.startLoop = function() {
-  var vorp = this;
-  GU_start(
-      function() {
-        vorp.clock();
-      },
-      Vorp.FPS);
+  // TODO: replace GU_startKeyListener with nicer thing
+  GU_startKeyListener();
+  if (!this.loop) {
+    var self = this;
+    this.loop = new plex.Loop(
+        function() {
+          self.clock();
+        },
+        Vorp.FPS);
+  }
+  this.loop.start();
+};
+
+Vorp.prototype.stopLoop = function() {
+  if (this.loop) {
+    this.loop.stop();
+  }
 };
 
 Vorp.prototype.getBaseSpriteTemplate = function() {
