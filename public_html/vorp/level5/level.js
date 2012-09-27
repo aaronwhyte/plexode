@@ -13,5 +13,5 @@ var vorpLevels = vorpLevels || {};
   ed.mono(VedType.BLOCK, 50, 100);
   ed.double(VedType.PORTAL, 1600-100, 100, 1600-100, 500-100);
 
-  vorpLevels['level5'] = ed.createOps();
+  vorpLevels['level 5: gripper!'] = ed.createOps();
 })();

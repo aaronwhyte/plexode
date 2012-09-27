@@ -10,5 +10,5 @@ var vorpLevels = vorpLevels || {};
   var togglePos = ed.mono(VedType.TOGGLE, 1100, 200);
   ed.link(buttonPos, togglePos);
   ed.link(togglePos, zapperPos);
-  vorpLevels['level2'] = ed.createOps();
+  vorpLevels['level 2: zapper/button test'] = ed.createOps();
 })();

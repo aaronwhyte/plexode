@@ -45,5 +45,5 @@ var vorpLevels = vorpLevels || {};
   mono(VedType.BLOCK, 0.5, 0.5);
   mono(VedType.BLOCK, 5.5, 0.5);
 
-  vorpLevels['level4'] = ed.createOps();
+  vorpLevels['level 4: beam sensor, timer, and door test'] = ed.createOps();
 })();

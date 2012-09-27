@@ -12,17 +12,17 @@ function VedApp(rootNode, stor, opt_testLevelMap) {
 /**
  * @type {enum}
  */
-VedApp.Mode = {
-  EDITING: 'editing',
-  TESTING: 'testing'
+VedApp.Params = {
+  MODE: 'mode',
+  LEVEL: 'level'
 };
 
 /**
  * @type {enum}
  */
-VedApp.Params = {
-  MODE: 'mode',
-  LEVEL: 'level'
+VedApp.Mode = {
+  EDIT: 'edit',
+  TEST: 'test'
 };
 
 VedApp.prototype.render = function() {
@@ -46,9 +46,10 @@ VedApp.prototype.render = function() {
   var query = plex.url.decodeQuery(hash);
   var level = query[VedApp.Params.LEVEL];
   var mode = query[VedApp.Params.MODE];
-  if (mode == VedApp.Mode.TESTING) {
+
+  if (mode == VedApp.Mode.TEST) {
     this.renderTesting(appDiv, level);
-  } else if (mode == VedApp.Mode.EDITING) {
+  } else if (mode == VedApp.Mode.EDIT) {
     this.renderEditing(appDiv, level);
   } else {
     this.renderDirectory(appDiv);
@@ -66,52 +67,94 @@ VedApp.prototype.getHashChangeListener = function() {
   };
 };
 
-VedApp.prototype.renderDirectory = function(appDiv) {
-  // nuke button
-  var nukeButton = plex.dom.ce('button', appDiv);
-  plex.dom.ct('Nuke and repopulate', nukeButton);
-  var self = this;
-  nukeButton.onclick = function() {
-    self.nuke();
-    self.repopulate(); // vorpLevels is populated by levels
-    self.render();
-  };
+VedApp.prototype.renderTopNav = function(appDiv, text, parentText, parentQuery) {
+  function slash() {
+    var slashSpan = plex.dom.ce('span', appDiv);
+    plex.dom.ct(" / ", slashSpan);
+  }
+  if (parentQuery) {
+    slash();
+    var parentLink = plex.dom.ce('a', appDiv);
+    parentLink.href = '#' + plex.url.encodeQuery(parentQuery);
+    plex.dom.ct(parentText, parentLink);
+    //plex.dom.appendClass(parentLink, 'vedNavLink');
+  }
+  slash();
+  var locSpan = plex.dom.ce('span', appDiv);
+  plex.dom.ct(text, locSpan);
+};
 
-  plex.dom.ce('hr', appDiv);
+VedApp.prototype.renderDirectory = function(appDiv) {
 
   // list of levels
   var levelNames = this.stor.getNames();
   for (var i = 0; i < levelNames.length; i++) {
     var levelName = levelNames[i];
     var levelDiv = plex.dom.ce('div', appDiv);
-    plex.dom.appendClass(levelDiv, 'directoryRow');
+    plex.dom.appendClass(levelDiv, 'vedDirectoryRow');
 
     var editLink = plex.dom.ce('a', levelDiv);
     editLink.href = '#' + plex.url.encodeQuery({
-      mode: VedApp.Mode.EDITING,
+      mode: VedApp.Mode.EDIT,
       level: levelName
     });
     plex.dom.ct('edit', editLink);
-    plex.dom.appendClass(editLink, 'directoryLink');
+    plex.dom.appendClass(editLink, 'vedNavLink');
 
     var testLink = plex.dom.ce('a', levelDiv);
     testLink.href = '#' + plex.url.encodeQuery({
-      mode: VedApp.Mode.TESTING,
+      mode: VedApp.Mode.TEST,
       level: levelName
     });
     plex.dom.ct('test', testLink);
-    plex.dom.appendClass(testLink, 'directoryLink');
+    plex.dom.appendClass(testLink, 'vedNavLink');
 
     plex.dom.ct(levelName, levelDiv);
   }
+
+  plex.dom.ce('br', appDiv);
+
+  // nuke button
+  var nukeButton = plex.dom.ce('button', appDiv);
+  plex.dom.appendClass(nukeButton, 'vedButton');
+  plex.dom.ct('Nuke localstore', nukeButton);
+  var self = this;
+  nukeButton.onclick = function() {
+    self.nuke();
+    self.render();
+  };
+  // repopulate button
+  var repopulateButton = plex.dom.ce('button', appDiv);
+  plex.dom.appendClass(repopulateButton, 'vedButton');
+  plex.dom.ct('Repopulate', repopulateButton);
+  var self = this;
+  repopulateButton.onclick = function() {
+    self.repopulate(); // vorpLevels is populated by levels
+    self.render();
+  };
+};
+
+
+VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
+  if (plex.array.contains(this.stor.getNames(), levelName)) {
+    return false;
+  }
+  var errorDiv = plex.dom.ce('div', appDiv);
+  plex.dom.appendClass(errorDiv, 'vedError');
+  plex.dom.ct('The level "' + levelName + '" was not found in the localstore.', errorDiv);
+  return true;
 };
 
 VedApp.prototype.renderEditing = function(appDiv, levelName) {
-  plex.dom.ct('editing ' + levelName, appDiv);
+  this.renderTopNav(appDiv, 'editing - ' + levelName, 'directory', {});
+  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {
-  plex.dom.ct('testing ' + levelName, appDiv);
+  this.renderTopNav(appDiv, 'testing - ' + levelName, 'directory', {});
+  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+
   plex.dom.ce('br', appDiv);
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.height = 600;

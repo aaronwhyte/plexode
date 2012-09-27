@@ -13,5 +13,5 @@ var vorpLevels = vorpLevels || {};
       ed.mono(VedType.BLOCK, x, y);
     }
   }
-  vorpLevels['level1'] = ed.createOps();
+  vorpLevels['level 1: first one ever!'] = ed.createOps();
 })();

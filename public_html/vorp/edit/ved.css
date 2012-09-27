@@ -1,9 +1,18 @@
-a.directoryLink {
-  font-weight: normal;
-  margin-right:0.5em;
+a.vedNavLink {
+  margin-right:0.8em;
 }
 
-.directoryRow {
-  font-size:200%;
+.vedDirectoryRow {
+  font-size:large;
   margin:0.25em;
+}
+
+.vedButton {
+  font-size:large;
+}
+
+.vedError {
+    font-size:x-large;
+    color:#f44;
+
 }

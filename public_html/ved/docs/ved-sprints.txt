@@ -204,15 +204,14 @@ v fake testing renderer
 v fake editing renderer
 v hyperlink from directory to test
 
-2012.09.16 -
+2012.09.16 - 2012.09.26
 VedApp testing page
 v playable
 v clean up on exit. Could be...tricky
-- title nav
+v title nav (turns out that was dumb but I did it)
 
-VedApp level-not-found page
-
-VedApp nav header?
+2012.09.26
+v VedApp level-not-found error
 
 VedApp add and delete levels from directory?
 

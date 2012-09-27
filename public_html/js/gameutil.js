@@ -31,6 +31,7 @@ function GU_start(func, opt_fps) {
 }
 
 function GU_startKeyListener() {
+  GU_keys.length = 0;
   document.onkeydown = GU_keyDown;
   document.onkeypress = null; // GU_keyDown;
   document.onkeyup = GU_keyUp;

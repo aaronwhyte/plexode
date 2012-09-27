@@ -132,5 +132,5 @@ var vorpLevels = vorpLevels || {};
   wy(4);
   mono(VedType.EXIT, 1.5, 1.5, {'url': '../level1/index.html'});
 
-  vorpLevels['level6'] = ed.createOps();
+  vorpLevels['level 6: pretty good teleporter puzzle level'] = ed.createOps();
 })();

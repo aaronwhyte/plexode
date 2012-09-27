@@ -82,5 +82,5 @@ var vorpLevels = vorpLevels || {};
   dual(VedType.PORTAL, 14.5, 11.5, 12, 12.5);
   mono(VedType.EXIT, 1.5, 1.5, {'url': '../level4/index.html'});
 
-  vorpLevels['level3'] = ed.createOps();
+  vorpLevels['level 3: real level with zappers'] = ed.createOps();
 })();
