@@ -132,7 +132,8 @@ Vorp.prototype.addSprite = function(sprite) {
     this.portals.push(sprite);
   }
   if (sprite instanceof PlayerAssemblerSprite) {
-    // Assume there's exactly one PlayerAssembler per level, for now.
+    // Assume there's exactly one PlayerAssembler per level for now.
+    /** @type {PlayerAssemblerSprite} */
     this.playerAssembler = sprite;
     this.assemblePlayer();
   }
@@ -353,7 +354,7 @@ Vorp.prototype.getDeadPlayerSpritefactory = function() {
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var playerPos = this.playerSprite.getPos(new Vec2d());
-  var deadPlayerSprite = this.getDeadPlayerSpritefactory().createXY(playerPos.x, playerPos.y)
+  var deadPlayerSprite = this.getDeadPlayerSpritefactory().createXY(playerPos.x, playerPos.y);
   this.addSprite(deadPlayerSprite);
 
   // remove normal player sprite

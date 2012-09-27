@@ -333,7 +333,7 @@ GrafModel.prototype.getLinksBetweenJacks = function(jackId1, jackId2) {
   for (var linkId1 in jack1.links) {
     for (var linkId2 in jack2.links) {
       if (linkId1 == linkId2) {
-        links.push[jack1.links[linkId1]];
+        links.push(jack1.links[linkId1]);
       }
     }
   }

@@ -32,6 +32,8 @@ RayScan.prototype.reset = function(x0, y0, x1, y1, rx, ry) {
   this.yTime = null;
   this.time = null;
   this.hitSledgeId = null;
+
+  this.hitSpriteId = null;
   return this;
 };
 

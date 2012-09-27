@@ -25,6 +25,7 @@ function getTestFunctionNameFromStack() {
     if (m) return m[2];
     caller = caller.caller;
   }
+  return 'did not find test function name';
 }
 
 var failed = false;

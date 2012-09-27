@@ -18,7 +18,7 @@ var vorpLevels = vorpLevels || {};
     return ed.mono(type, x * SCALE, y * SCALE, opt_data)
   }
 
-  function double(type, x1, y1, x2, y2, opt_data) {
+  function dual(type, x1, y1, x2, y2, opt_data) {
     return ed.double(type, x1 * SCALE, y1 * SCALE, x2 * SCALE, y2 * SCALE, opt_data)
   }
 
@@ -32,7 +32,7 @@ var vorpLevels = vorpLevels || {};
   wx(0);
   wy(0);
 
-  double(VedType.PORTAL, 2, 0.5, 4, 1.5);
+  dual(VedType.PORTAL, 2, 0.5, 4, 1.5);
   mono(VedType.PLAYER_ASSEMBLER, 0.2, 1);
   mono(VedType.EXIT, 6, 3, {'url': '../level5/index.html'});
 

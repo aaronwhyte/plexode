@@ -207,7 +207,7 @@ v hyperlink from directory to test
 2012.09.16 -
 VedApp testing page
 v playable
-- clean up on exit. Could be...tricky
+v clean up on exit. Could be...tricky
 - title nav
 
 VedApp level-not-found page
@@ -241,7 +241,7 @@ Ved model for interactive editing
   - deleting any part deletes all jacks and links and data first
   - deleting last part in a cluster deletes cluster
 
-LevEd API II
+LevelEd API II
 - levEd.deletedSelectedParts()
 - levEd.twistSelectedParts(LEFT90 | RIGHT90 | FLIP_X | FLIP_Y)
 

@@ -5,7 +5,7 @@
 function PlayerAssemblerSprite(spriteTemplate, playerSpriteFactory) {
   Sprite.call(this, spriteTemplate);
   this.playerSpriteFactory = playerSpriteFactory;
-  
+
   /**
    * Spot where the player will be assembled
    */

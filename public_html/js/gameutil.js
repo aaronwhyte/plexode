@@ -45,17 +45,6 @@ function GU_clock() {
   if (GU_nextDelay < 1) GU_nextDelay = 0;
   setTimeout(GU_clock, GU_nextDelay, null);
 }
-
-function GU_togglePlay() {
-  if (GU_timeoutId === null) {
-    GU_timeoutId = setTimeout(GU_clock, 10, null);
-  } else {
-    //window.clearInterval(GU_intervalId);
-    GU_timeoutId = null;
-  }
-  GU_updateInfoDiv();
-}
-
 function GU_keyDown(e) {
   if (!e) e = window.event;
   var key = e.keyCode;
@@ -75,20 +64,20 @@ function GU_keyUp(e) {
     key = window['event'].keyCode;
     shift = window['event'].shiftKey;
   }
-  
+
   GU_keys[key] = false;
 }
 
 function GU_copyKeysVec(vec) {
   vec.setXY(
-      (GU_keys[VK_LEFT] ? -1 : 0) + (GU_keys[VK_RIGHT] ? 1 : 0),  
+      (GU_keys[VK_LEFT] ? -1 : 0) + (GU_keys[VK_RIGHT] ? 1 : 0),
       (GU_keys[VK_UP] ? -1 : 0) + (GU_keys[VK_DOWN] ? 1 : 0));
   return vec;
 }
 
 function GU_copyCustomKeysVec(vec, up, right, down, left) {
   vec.setXY(
-      (GU_keys[left] ? -1 : 0) + (GU_keys[right] ? 1 : 0),  
+      (GU_keys[left] ? -1 : 0) + (GU_keys[right] ? 1 : 0),
       (GU_keys[up] ? -1 : 0) + (GU_keys[down] ? 1 : 0));
   return vec;
 }

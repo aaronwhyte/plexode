@@ -25,7 +25,7 @@ var vorpLevels = vorpLevels || {};
     return ed.mono(type, x * SCALE, y * SCALE, opt_data)
   }
 
-  function double(type, x1, y1, x2, y2, opt_data) {
+  function dual(type, x1, y1, x2, y2, opt_data) {
     x1 += translation.x;
     y1 += translation.y;
     x2 += translation.x;
@@ -108,7 +108,7 @@ var vorpLevels = vorpLevels || {};
   wy(1);
   wx(5.5);
   wy(0);
-  double(VedType.PORTAL, 2.5, 2.5, 6, 2.5);
+  dual(VedType.PORTAL, 2.5, 2.5, 6, 2.5);
   mono(VedType.BLOCK, 3.5, 1.5);
   function gripAndDoor(gx, gy, dx, dy) {
     ed.link(

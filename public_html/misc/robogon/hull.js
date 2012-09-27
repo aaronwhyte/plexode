@@ -43,7 +43,7 @@ Hull.prototype.addPoint = function(p) {
     // Set both workvecs to the center of the tri.
     this.setToTriCenter(tri, this.work1);
     this.work2.set(this.work1);
-    var avgToTri = this.work1.subtract(this.avg)
+    var avgToTri = this.work1.subtract(this.avg);
     avgToTri.scaleToLength(1);
     var pointToTri = this.work2.subtract(p).scaleToLength(1);
     pointToTri.scaleToLength(1);
