@@ -10,8 +10,8 @@ function TractorBeamSparkList() {
 TractorBeamSparkList.prototype = new SparkList();
 TractorBeamSparkList.prototype.constructor = TractorBeamSparkList;
 
-TractorBeamSparkList.FRICTION = 0.2;
-TractorBeamSparkList.RAND_ACCEL = 2;
+TractorBeamSparkList.FRICTION = 0.05;
+TractorBeamSparkList.RAND_ACCEL = 1;
   
 TractorBeamSparkList.prototype.alloc = function() {
   return {

@@ -21,15 +21,17 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   this.accelerationsOut = [new Vec2d(), new Vec2d()];
 
   this.links = {};
+  this.editable = false;
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
 
 Vorp.FRICTION = 0.1;
 
+Vorp.ZOOM = 0.37;
 
 // Target frames per second.
-Vorp.FPS = 50;
+Vorp.FPS = 60;
 
 Vorp.PLAYER_GROUP = 1;
 Vorp.WALL_GROUP = 2;
@@ -229,7 +231,9 @@ Vorp.prototype.clockLinks = function() {
 Vorp.prototype.draw = function() {
   var now = this.now();
   this.renderer.clear();
-  this.renderer.setZoom(0.37);
+  if (!this.editable) {
+    this.renderer.setZoom(0.37);
+  }
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);
   }
@@ -250,7 +254,7 @@ Vorp.prototype.draw = function() {
     }
   }
 
-  var portalScry = !FLAGS || FLAGS.get('portalScry');
+  var portalScry = false;//!FLAGS || FLAGS.get('portalScry');
   if (portalScry) {
     // Each portal draws its target's environment around it.  OMG so freaky.
     for (var i = 0; i < this.portals.length; i++) {
@@ -258,15 +262,19 @@ Vorp.prototype.draw = function() {
       if (!portal.targetSprite) continue;
       portal.getPos(this.portalPos1);
       portal.targetSprite.getPos(this.portalPos2);
-      this.renderer.setCenter(
-          this.cameraPos.x + (this.portalPos1.x - this.portalPos2.x),
-          this.cameraPos.y + (this.portalPos1.y - this.portalPos2.y));
+      if (!this.editable) {
+        this.renderer.setCenter(
+            this.cameraPos.x + (this.portalPos1.x - this.portalPos2.x),
+            this.cameraPos.y + (this.portalPos1.y - this.portalPos2.y));
+      }
       this.drawWorld(false, this.portalPos1);
     }
   }
 
   // Center the drawing transform on the normal camera pos - the player.
-  this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
+  if (!this.editable) {
+    this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
+  }
 
   if (portalScry) {
     // Cover the portal previews a little, to dim them compared to the "real" world

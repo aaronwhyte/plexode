@@ -49,7 +49,7 @@ GripSprite.prototype.act = function() {
 GripSprite.prototype.gripScan = function() {
   if (!this.targetPos) return;
   this.scanInitVec.set(this.targetPos).subtract(this.getPos(this.pos)).scale(1.5);
-  this.gripScanSweep(this.scanInitVec, 1/8, 1);
+  this.gripScanSweep(this.scanInitVec, 1/10, 1);
 };
 
 /**
@@ -74,6 +74,7 @@ GripSprite.prototype.gripScanSweep = function(vec, arc, scans) {
       var sprite = this.world.getSprite(hitSpriteId);
       if (sprite.mass < Infinity) {
         this.heldSprite = sprite;
+        this.heldSprite.getPos(this.heldPos);
         this.painter.clearRayScans();
         // Pick the closest target.
         minTime = rayScan.time;
@@ -88,7 +89,7 @@ GripSprite.prototype.gripScanSweep = function(vec, arc, scans) {
 
 GripSprite.prototype.gripForce = function() {
   var heldPos = this.heldSprite.getPos(this.heldPos);
-  this.accel.set(this.targetPos).subtract(heldPos).scale(0.031 / this.heldSprite.mass);
+  this.accel.set(this.targetPos).subtract(heldPos).scale(0.025 / this.heldSprite.mass);
   this.heldSprite.accelerate(this.accel);
 
   this.painter.setHolding(3); // TODO what's the real strength?
@@ -101,7 +102,7 @@ GripSprite.prototype.gripForce = function() {
 GripSprite.prototype.maybeBreakGrip = function() {
   var p = this.targetPos;
   var h = this.heldSprite.getPos(this.heldPos);
-  if (p.distanceSquared(h) > this.distToTarget * this.distToTarget * 2) {
+  if (p.distanceSquared(h) > this.distToTarget * this.distToTarget * 1.2) {
     this.heldSprite = null;
     return true;
   }

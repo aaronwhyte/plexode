@@ -149,6 +149,35 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   this.renderTopNav(appDiv, 'editing - ' + levelName, 'directory', {});
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
+  plex.dom.ce('br', appDiv);
+  var canvas = plex.dom.ce('canvas', appDiv);
+  canvas.height = 600;
+  canvas.width = 600;
+
+  // get level graf
+  var opStor = new OpStor(this.stor, levelName);
+  var levelOps = opStor.getOpsAfterIndex(-1);
+  var grafModel = new GrafModel();
+  grafModel.applyOps(levelOps);
+
+  // camera is shared by vorp and ved
+  var camera = new Camera();
+  camera.setZoom(0.1);
+
+  // create vorp instance
+  var renderer = new Renderer(canvas, camera);
+  var gameClock = new GameClock();
+  var sledgeInvalidator = new SledgeInvalidator();
+  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
+  vorp.editable = true;
+
+  // Use Transformer to populate Vorp with Model.
+  var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
+  transformer.transformModel(grafModel);
+
+  // Just draw one frame
+  vorp.clock();
+  vorp.draw();
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {

@@ -35,8 +35,8 @@ PlayerSprite.GRIP_RANGE = 120;
 PlayerSprite.MAX_KICK_POW = 23;
 PlayerSprite.KICK_DECAY = 0.4;
 
-PlayerSprite.ACCEL = 2.5;
-PlayerSprite.BRAKE = 0.10;
+PlayerSprite.ACCEL = 2.2;//.5;
+PlayerSprite.BRAKE = 0.08;
 
 PlayerSprite.prototype.act = function() {
   this.painter.clearRayScans();

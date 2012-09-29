@@ -180,10 +180,10 @@ Transformer.prototype.transformCluster = function(cluster) {
           .makeImmovable()
           .setPainter(new GripPainter());
       this.positionMonoHugger(template, controlVec,
-          Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.8);
+          Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.5);
       sprite = new GripSprite(template);
       sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-          Transformer.BOX_RADIUS * 3));
+          Transformer.BOX_RADIUS * 4));
       this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;

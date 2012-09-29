@@ -5,7 +5,7 @@
 function TractorBeamPainter() {
   Painter.call(this, 1); // doesn't really track events, though.
   //FLAGS && FLAGS.init('tractorSparksFromSource', false);
-  FLAGS && FLAGS.init('tractorSparksWhileHolding', true);
+  //FLAGS && FLAGS.init('tractorSparksWhileHolding', false);
   FLAGS && FLAGS.init('tractorSparksWhileSeeking', true);
   this.kaput = false;
 
@@ -32,6 +32,8 @@ TractorBeamPainter.State = {
   RELEASING: 2
 };
 
+TractorBeamPainter.SPARK_RAD = 3;
+
 TractorBeamPainter.prototype.addRayScan = function(rayScan) {
   if (FLAGS && !FLAGS.get('tractorSparksWhileSeeking')) return;
   if (Math.random() < 0.4) return;
@@ -42,8 +44,8 @@ TractorBeamPainter.prototype.addRayScan = function(rayScan) {
       rayScan.x0 + (rayScan.x1 - rayScan.x0) * (rayScan.time || 1) * coef,
       rayScan.y0 + (rayScan.y1 - rayScan.y0) * (rayScan.time || 1) * coef);
   temp.vel.setXY(0, 0);
-  temp.rad = 5;// + Math.random() * 2;
-  temp.endTime = this.now + 8 + 2 * Math.random();
+  temp.rad = TractorBeamPainter.SPARK_RAD;// + Math.random() * 2;
+  temp.endTime = this.now + 8 + 10 * Math.random();
   this.sparks.add(temp);
 };
 
@@ -76,32 +78,36 @@ TractorBeamPainter.prototype.advance = function(now) {
   if (this.state == TractorBeamPainter.State.RELEASING) {
     this.state = TractorBeamPainter.State.EMPTY;
     var temp = this.sparkTemplate;
-    for (var i = 0; i <= 1; i += Math.random() * 0.1) {
+    //if (!this.kickStrength) return;
+    var baseVel = Vec2d.alloc();
+    baseVel.set(this.heldPos).subtract(this.holderPos).scaleToLength(1).rot90Right();
+    for (var i = 0; i <= 1; i += 0.05 + Math.random() * 0.05) {
       temp.pos.set(this.heldPos).subtract(this.holderPos).scale(i).add(this.holderPos);
-      temp.vel.setXY(Math.random() - 0.5, Math.random() - 0.5);
-      temp.vel.scaleToLength(2 + this.kickStrength / 5);
-      temp.rad = 5;
-      temp.endTime = this.now + (5 + this.kickStrength/3 + this.holdStrength/3) * (1 - Math.abs(0.5 - i));
+      //temp.vel.setXY(Math.random() - 0.5, Math.random() - 0.5);
+      temp.vel.set(baseVel);
+      temp.vel.scaleToLength((this.kickStrength/10) * (Math.random() > 0.5 ? 1 : -1));
+      temp.rad = TractorBeamPainter.SPARK_RAD;
+      temp.endTime = this.now + (Math.random() * (5 + this.kickStrength/3 + this.holdStrength/10));// * (1 - Math.abs(0.5 - i));
       this.sparks.add(temp);
     }
   }
 
-  if (this.state == TractorBeamPainter.State.HOLDING &&
-      (!FLAGS || FLAGS.get('tractorSparksWhileHolding'))) {
-    for (var i = 0; i < 4 + this.holdStrength; i++) {
-      if (Math.random() > 0.01) continue;
-      var temp = this.sparkTemplate;
-      var along = Math.random();
-      temp.pos.set(this.heldPos).subtract(this.holderPos)
-          .scale(along)
-          .add(this.holderPos);
-      temp.vel.set(this.heldPos).subtract(this.holderPos).rot90Right();
-      temp.vel.scaleToLength((Math.random() - 0.5) * (2 + this.holdStrength));
-      temp.rad = 5;
-      temp.endTime = this.now + Math.random() * 30;
-      this.sparks.add(temp);
-    }
-  }
+//  if (this.state == TractorBeamPainter.State.HOLDING &&
+//      (!FLAGS || FLAGS.get('tractorSparksWhileHolding'))) {
+//    for (var i = 0; i < 4 + this.holdStrength; i++) {
+//      if (Math.random() > 0.01) continue;
+//      var temp = this.sparkTemplate;
+//      var along = Math.random();
+//      temp.pos.set(this.heldPos).subtract(this.holderPos)
+//          .scale(along)
+//          .add(this.holderPos);
+//      temp.vel.set(this.heldPos).subtract(this.holderPos).rot90Right();
+//      temp.vel.scaleToLength((Math.random() - 0.5) * (2 + this.holdStrength/5));
+//      temp.rad = TractorBeamPainter.SPARK_RAD;
+//      temp.endTime = this.now + Math.random() * 30;
+//      this.sparks.add(temp);
+//    }
+//  }
   this.sparks.advance(now);
 };
 

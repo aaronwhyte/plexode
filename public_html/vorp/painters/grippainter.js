@@ -36,7 +36,7 @@ GripPainter.prototype.setHolding = function(str) {
 
 GripPainter.prototype.setReleasing = function(kick) {
   this.isHolding = false;
-  this.tractorBeamPainter.setReleasing(kick);
+  this.tractorBeamPainter.setReleasing(0);
 };
 
 GripPainter.prototype.advance = function(now) {
