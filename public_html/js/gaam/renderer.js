@@ -1,13 +1,11 @@
 /**
- * Renders all of Fracas2 using an HTML5 canvas.
+ * Renders to a canvas using a Camera object to pan and zoom.
  * @constructor
  */
 function Renderer(canvas, camera) {
   this.canvas = canvas;
   this.camera = camera;
   this.context = canvas.getContext('2d');
-  this.context.font = "bold 14px monospace";
-  this.context.lineWidth = 2;
   this.canvasWidth = this.canvas ? this.canvas.width : 0;
   this.canvasHeight = this.canvas ? this.canvas.height : 0;
   this.lastTimeSec = (new Date()).getTime() / 1000;
@@ -28,10 +26,6 @@ Renderer.prototype.clear = function() {
   c.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 //  this.setFillStyle('rgba(0, 0, 0, 0.1)');
 //  c.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-
-  this.context.lineWidth = 100;
-  this.context.strokeStyle = 'rgb(255, 255, 255)';
-  this.context.fillStyle = 'rgb(255, 255, 255)';
 };
 
 Renderer.prototype.transformStart = function() {
@@ -58,9 +52,9 @@ Renderer.prototype.stats = function() {
   }
   c.restore();
   c.textBaseline = "top";
-  c.textSize = "14pt";
+  c.textSize = "15pt";
   c.fontFamily = "monospace";
-  this.setFillStyle("#444");
+  this.setFillStyle("#555");
   c.fillText(this.fps, 2, 2);
 };
 
