@@ -32,7 +32,7 @@ TractorBeamPainter.State = {
   RELEASING: 2
 };
 
-TractorBeamPainter.SPARK_RAD = 3;
+TractorBeamPainter.SPARK_RAD = 6;
 
 TractorBeamPainter.prototype.addRayScan = function(rayScan) {
   if (FLAGS && !FLAGS.get('tractorSparksWhileSeeking')) return;
