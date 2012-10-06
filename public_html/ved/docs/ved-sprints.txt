@@ -213,16 +213,24 @@ v title nav (turns out that was dumb but I did it)
 2012.09.26
 v VedApp level-not-found error
 
+2012.10.06
 Render level with model overlay
-- render level with injected camera zoom
-- render model on top of it with same camera
-  - crappy model renderer
-    - parts
-    - jacks
-    - links
+v render level with injected camera zoom
+v render model on top of it with same camera
+  v crappy model renderer
+    v parts
+    v jacks
+    v links
 
 Pan
-- use dragging and touchsc
+- arrows, dragging, and touch
+
+Redo nav
+- directory name are links to level/edit
+- peer level views are all crosslinked:
+  - edit
+  - play
+  - json
 
 System clips widget
 

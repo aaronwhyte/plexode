@@ -13,7 +13,7 @@ function LevelEd(model) {
   // TODO: This will need an opstor, too, and staged ops - the works.
 }
 
-LevelEd.JACK_DISTANCE = 10;
+LevelEd.JACK_DISTANCE = 20;
 
 LevelEd.prototype.getModel = function() {
   return this.model;

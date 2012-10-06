@@ -117,7 +117,7 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   // nuke button
   var nukeButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(nukeButton, 'vedButton');
-  plex.dom.ct('Nuke localstore', nukeButton);
+  plex.dom.ct('Clear localstore', nukeButton);
   var self = this;
   nukeButton.onclick = function() {
     self.nuke();
@@ -126,7 +126,7 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   // repopulate button
   var repopulateButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(repopulateButton, 'vedButton');
-  plex.dom.ct('Repopulate', repopulateButton);
+  plex.dom.ct('Populate localstore', repopulateButton);
   var self = this;
   repopulateButton.onclick = function() {
     self.repopulate(); // vorpLevels is populated by levels
@@ -162,7 +162,7 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
 
   // camera is shared by vorp and ved
   var camera = new Camera();
-  camera.setZoom(0.1);
+  camera.setZoom(0.2);
 
   // create vorp instance
   var renderer = new Renderer(canvas, camera);
@@ -171,13 +171,18 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
   vorp.editable = true;
 
+  var levelEd = new LevelEd(grafModel);
+  var grafRenderer = new GrafRenderer(grafModel, renderer, levelEd);
+
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
   transformer.transformModel(grafModel);
 
   // Just draw one frame
   vorp.clock();
+  vorp.clock();
   vorp.draw();
+  grafRenderer.draw();
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {

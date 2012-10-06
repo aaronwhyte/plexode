@@ -64,17 +64,19 @@ var vorpLevels = vorpLevels || {};
   wx(13);
   wy(13);
 
-  function buttonToggleZapper(bx, by, tx, ty, zx, zy) {
+  function buttonToggleZapper(bx, by, zx, zy) {
+    var tx = (bx + zx) / 2;
+    var ty = (by + zy) / 2;
     var buttonPos = mono(VedType.BUTTON, bx, by);
     var togglePos = mono(VedType.TOGGLE, tx, ty);
     var zapperPos = mono(VedType.ZAPPER, zx, zy);
     ed.link(buttonPos, togglePos);
     ed.link(togglePos, zapperPos);
   }
-  buttonToggleZapper(8.5, 6.2, -10, -10, 9, 6.5);
-  buttonToggleZapper(11.2, 9, -11, -11, 11.5, 8.5);
-  buttonToggleZapper(11.5, 11.8, -12, -12, 11.5, 10);
-  buttonToggleZapper(12.8, 12.5, -13, -13, 13, 11.5);
+  buttonToggleZapper(8.5, 6.2, 9, 6.5);
+  buttonToggleZapper(11.2, 9, 11.5, 8.5);
+  buttonToggleZapper(11.5, 11.8, 11.5, 10);
+  buttonToggleZapper(12.8, 12.5, 13, 11.5);
   mono(VedType.PLAYER_ASSEMBLER, 6.5, 7.8);
   mono(VedType.ZAPPER, 1.5, 4);
   mono(VedType.ZAPPER, 4, 6.5);

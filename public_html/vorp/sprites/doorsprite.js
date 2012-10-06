@@ -47,4 +47,5 @@ DoorSprite.prototype.setDimensions = function() {
         [this.x0, this.y0, this.x1, this.y1]);
   }
   this.prevClosedness = this.closedness;
+  this.dimensionsInitialized = true;
 };
