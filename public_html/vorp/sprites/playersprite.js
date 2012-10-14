@@ -32,6 +32,9 @@ PlayerSprite.Grip = {
 };
 
 PlayerSprite.GRIP_RANGE = 120;
+PlayerSprite.GRIP_SEEK_RANGE = 5 * PlayerSprite.GRIP_RANGE;
+PlayerSprite.PULL = 0.05;
+PlayerSprite.DAMP = 0.15;
 PlayerSprite.MAX_KICK_POW = 23;
 PlayerSprite.KICK_DECAY = 0.4;
 
@@ -67,15 +70,15 @@ PlayerSprite.prototype.act = function() {
     }
   } else if (this.grip == PlayerSprite.Grip.STIFF) {
     if (this.gripKeyDown()) {
-      this.kickPow = Math.min(++(this.kickPow), PlayerSprite.MAX_KICK_POW);
+      this.kickPow = Math.min(this.kickPow + 2, PlayerSprite.MAX_KICK_POW);
       this.stiffForce();
     } else {
       this.grip = PlayerSprite.Grip.LOOSE;
       this.looseForce();
     }
   }
-  this.painter.setHolderPos(this.getPos(this.pos));
   if (this.heldSprite) {
+    this.painter.setHolderPos(this.getPos(this.pos));
     //this.painter.setHeldPosVel(this.heldSprite.getPos(this.pos), this.heldSprite.getVel(this.vel));
     this.painter.setHeldPos(this.heldSprite.getPos(this.pos));
     this.painter.setHolding(5 + this.kickPow);
@@ -101,7 +104,7 @@ PlayerSprite.prototype.gripScan = function() {
 
   if (!this.keysVec.isZero()) {
     // long-range directional seek
-    this.scanInitVec.set(this.keysVec).scaleToLength(5 * PlayerSprite.GRIP_RANGE);
+    this.scanInitVec.set(this.keysVec).scaleToLength(PlayerSprite.GRIP_SEEK_RANGE);
     this.gripScanSweep(this.scanInitVec, 1/8, 16);
   } else {  
     // short-range circular seek
@@ -175,11 +178,16 @@ PlayerSprite.prototype.looseForce = function() {
     return;
   }
   var aimUnit = Vec2d.alloc().set(dPos).scale(1 / dist);
-  var pull = (PlayerSprite.GRIP_RANGE - dist) * 0.15;
+  var pull = (PlayerSprite.GRIP_RANGE - dist) * PlayerSprite.PULL;
   var dVel = Vec2d.alloc().set(this.vel).subtract(this.heldSprite.vel);
-  var dot = dVel.dot(dPos);
-  var damp = dot * 0.001;
-  var accel = aimUnit.scale(pull + damp).clipToMaxLength(5).scale(-1);
+  var damp = PlayerSprite.DAMP * dVel.dot(dPos) / dist;
+  var accel = aimUnit.scale(pull + damp).scale(-1);
+  if (dist > PlayerSprite.GRIP_RANGE) {
+    var distFactor = (PlayerSprite.GRIP_SEEK_RANGE - dist) / PlayerSprite.GRIP_SEEK_RANGE;
+    distFactor = Math.max(0.1, distFactor);
+    accel.scale(distFactor);
+  }
+  //accel.clipToMaxLength(PlayerSprite.MAX_TRACTOR_ACCEL);
   this.accelerate(accel);
   var massRatio = this.mass / this.heldSprite.mass;
   this.heldSprite.accelerate(accel.scale(-massRatio));
@@ -193,7 +201,7 @@ PlayerSprite.prototype.looseForce = function() {
 PlayerSprite.prototype.initStiffPose = function() {
   var playerPos = this.getPos(Vec2d.alloc());
   var dPos = this.heldSprite.getPos(Vec2d.alloc()).subtract(playerPos);
-  this.stiffPose.set(dPos).scaleToLength(PlayerSprite.GRIP_RANGE);
+  this.stiffPose.set(dPos).scaleToLength(PlayerSprite.GRIP_RANGE * 0.95);
   this.grip = PlayerSprite.Grip.STIFF;
   Vec2d.free(playerPos);
   Vec2d.free(dPos);
@@ -211,11 +219,14 @@ PlayerSprite.prototype.stiffForce = function() {
     return;
   }
   var dVel = this.getVel(Vec2d.alloc()).subtract(this.heldSprite.vel);
-  var DAMP = 0.3;
-  var PULL = 0.07;
-  var accel = Vec2d.alloc().set(dVel).scale(-DAMP);
-  accel.add(dPos.scale(PULL));
-  accel.clipToMaxLength(5);
+  var accel = Vec2d.alloc().set(dVel).scale(-PlayerSprite.DAMP);
+  accel.add(dPos.scale(PlayerSprite.PULL));
+  if (dist > PlayerSprite.GRIP_RANGE) {
+    var distFactor = (PlayerSprite.GRIP_SEEK_RANGE - dist) / PlayerSprite.GRIP_SEEK_RANGE;
+    distFactor = Math.max(0.1, distFactor);
+    accel.scale(distFactor);
+  }
+  //accel.clipToMaxLength(PlayerSprite.MAX_TRACTOR_ACCEL);
   this.accelerate(accel);
   var massRatio = this.mass / this.heldSprite.mass;
   this.heldSprite.accelerate(accel.scale(-massRatio));
@@ -228,7 +239,7 @@ PlayerSprite.prototype.stiffForce = function() {
 
 PlayerSprite.prototype.maybeBreakGrip = function(dist) {
    // distance check
-  if (dist > PlayerSprite.GRIP_RANGE * 5.1) {
+  if (dist > PlayerSprite.GRIP_SEEK_RANGE * 1.05) {
     this.breakGrip();
     return true;
   }
@@ -254,6 +265,9 @@ PlayerSprite.prototype.maybeBreakGrip = function(dist) {
 PlayerSprite.prototype.breakGrip = function(opt_kick) {
   if (this.grip == PlayerSprite.Grip.NONE) return;
   this.grip = PlayerSprite.Grip.NONE;
+  var holderSpritePos = this.getPos(Vec2d.alloc());
+  this.painter.setHolderPos(holderSpritePos);
+  Vec2d.free(holderSpritePos);
   this.heldSprite = null;
   this.kickPow = 0;
   this.painter.setReleasing(opt_kick || 0);

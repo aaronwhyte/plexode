@@ -60,6 +60,14 @@ PortalSprite.prototype.onSpriteHit = function(
 
   if (teleportOK) {
     var dVel = this.targetSprite.getVel(Vec2d.alloc()).subtract(this.vel);
+    // A little randomness, too.
+    dVel.addXY(0.001 * (Math.random() - 0.5), 0.001 * (Math.random() - 0.5));
+    // Break tractor grips
+    // TODO: Generalize so all (significant?) spacial discontinuity breaks all grips.
+    var player = this.world.getPlayerSprite();
+    if (player == hitSprite || player.heldSprite == hitSprite) {
+      player.breakGrip(0);
+    }
 
 //    var accel = Vec2d.alloc().set(this.vel).scale(-0.1);
 //    this.addVel(accel);
