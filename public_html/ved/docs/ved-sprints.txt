@@ -222,8 +222,42 @@ v render model on top of it with same camera
     v jacks
     v links
 
+Stop. Organize editor code.
+This stuff is for Graf, not Ved.
+StagedGrafStor(opStor, model):
+- listen to opstor and update model
+- setStagedOps(ops)
+- commitStagedOps
+- pubsub about data changes
+- undo history op pointers (in-memory per-tab for now)
+GrafEd(model) produced ops, does queries (split?)
+- Move LevelEd to Graf folder as GrafEd. (LevelProg stays in Ved)
+- ContinuousDrag
+- DeleteParts
+- DeleteLink
+- AddLink
+GedPainter(camera, GrafEd)
+- Reads from GrafEd, to find
+- Draws stuff graf, including Painter-ish effects.
+Selection()
+- set
+- add
+- clear (hey doesn't LevelEd do that?)
+GedActor(StagedGrafStor, GrafEd, GrafEdPainter)
+- Translates Gestures into
+  - changes to selection,
+  - continuous ops (dragging)
+  - and instant ops,
+  - produced by GrafEd and applied to StagedGrafStore
+GedGestures(selection, actor, camera)
+- Translate DOM events into Selection and Actor actions
+Camera()
+- viewport to world coord trans
+
 Pan
-- arrows, dragging, and touch
+- arrows
+- mouse drag
+- touch drag
 
 Redo nav
 - directory name are links to level/edit
