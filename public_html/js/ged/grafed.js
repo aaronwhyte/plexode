@@ -4,18 +4,16 @@
  * @param {GrafModel} model
  * @constructor
  */
-function LevelEd(model) {
+function GrafEd(model) {
   this.model = model;
 
   // Keys form the set of selected IDs. Values are all trueish.
   this.selection = {};
-
-  // TODO: This will need an opstor, too, and staged ops - the works.
 }
 
-LevelEd.JACK_DISTANCE = 20;
+GrafEd.JACK_DISTANCE = 20;
 
-LevelEd.prototype.getModel = function() {
+GrafEd.prototype.getModel = function() {
   return this.model;
 };
 
@@ -24,7 +22,7 @@ LevelEd.prototype.getModel = function() {
  * @param {Vec2d} offset
  * @return a map from the clipModel IDs to the level's model IDs
  */
-LevelEd.prototype.pasteWithOffset = function(clipModel, offset) {
+GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
   var tempModel = new GrafModel();
   tempModel.addModel(clipModel);
   for (var partId in tempModel.parts) {
@@ -39,7 +37,7 @@ LevelEd.prototype.pasteWithOffset = function(clipModel, offset) {
  * @param {GrafModel} clipModel
  * @return a map from the clipModel IDs to the level's model IDs
  */
-LevelEd.prototype.paste = function(clipModel) {
+GrafEd.prototype.paste = function(clipModel) {
   var ops = clipModel.createOps();
   var idMap = this.model.rewriteOpIds(ops);
   this.model.applyOps(ops);
@@ -56,9 +54,9 @@ LevelEd.prototype.paste = function(clipModel) {
  * @param {Vec2d=} opt_outVec
  * @return {Vec2d}
  */
-LevelEd.prototype.getJackOffset = function(isInput, opt_outVec) {
+GrafEd.prototype.getJackOffset = function(isInput, opt_outVec) {
   var retval = opt_outVec || new Vec2d();
-  return retval.setXY(0, LevelEd.JACK_DISTANCE * (isInput ? -1 : 1));
+  return retval.setXY(0, GrafEd.JACK_DISTANCE * (isInput ? -1 : 1));
 };
 
 /**
@@ -68,7 +66,7 @@ LevelEd.prototype.getJackOffset = function(isInput, opt_outVec) {
  * @param {Vec2d=} opt_outVec
  * @return {Vec2d}
  */
-LevelEd.prototype.getJackPos = function(jackId, opt_outVec) {
+GrafEd.prototype.getJackPos = function(jackId, opt_outVec) {
   // TODO: Link location, for deletion?
   var retval = opt_outVec || new Vec2d();
   var jack = this.model.getJack(jackId);
@@ -83,11 +81,11 @@ LevelEd.prototype.getJackPos = function(jackId, opt_outVec) {
  * @param {Vec2d} pos
  * @param {boolean} selected true if selecting or false if unselecting
  */
-LevelEd.prototype.selectNearest = function(pos, selected) {
+GrafEd.prototype.selectNearest = function(pos, selected) {
   this.selectById(this.getNearestId(pos), selected);
 };
 
-LevelEd.prototype.clearSelection = function() {
+GrafEd.prototype.clearSelection = function() {
   for (var id in this.selection) {
     delete this.selection[id];
   }
@@ -97,7 +95,7 @@ LevelEd.prototype.clearSelection = function() {
  * Moves all selected parts by the offset vector value.
  * @param {Vec2d} offset
  */
-LevelEd.prototype.moveSelectedParts = function(offset) {
+GrafEd.prototype.moveSelectedParts = function(offset) {
   var ops = [];
   for (var id in this.selection) {
     var part = this.model.getPart(id);
@@ -119,7 +117,7 @@ LevelEd.prototype.moveSelectedParts = function(offset) {
  * but not input/output jacks on the same part,
  * and not between jack pairs that are already linked to each other
  */
-LevelEd.prototype.linkSelectedJacks = function() {
+GrafEd.prototype.linkSelectedJacks = function() {
   var inputs = [];
   var outputs = [];
   for (var id in this.selection) {
@@ -158,7 +156,7 @@ LevelEd.prototype.linkSelectedJacks = function() {
   this.model.applyOps(ops);
 };
 
-LevelEd.prototype.setDataOnSelection = function(keyVals) {
+GrafEd.prototype.setDataOnSelection = function(keyVals) {
   for (var k in keyVals) {
     var v = keyVals[k];
     for (var objId in this.selection) {
@@ -181,7 +179,7 @@ LevelEd.prototype.setDataOnSelection = function(keyVals) {
  * @param {string} key The data key to set
  * @param {string} val The data value to set
  */
-LevelEd.prototype.setDataById = function(objId, key, val) {
+GrafEd.prototype.setDataById = function(objId, key, val) {
   this.model.applyOp({
     type: GrafOp.Type.SET_DATA,
     id: objId,
@@ -196,7 +194,7 @@ LevelEd.prototype.setDataById = function(objId, key, val) {
  * @param {number=} opt_maxDist
  * @return a model ID, either a partId or a jackId
  */
-LevelEd.prototype.getNearestId = function(pos, opt_maxDist) {
+GrafEd.prototype.getNearestId = function(pos, opt_maxDist) {
   var jackPos = Vec2d.alloc();
   var maxDist = opt_maxDist || 1;
   var partPos = new Vec2d();
@@ -228,7 +226,7 @@ LevelEd.prototype.getNearestId = function(pos, opt_maxDist) {
  * @param partOrJackId
  * @param {boolean} selected true if selecting or false if unselecting
  */
-LevelEd.prototype.selectById = function(partOrJackId, selected) {
+GrafEd.prototype.selectById = function(partOrJackId, selected) {
   if (selected) {
     this.selection[partOrJackId] = true;
   } else {
@@ -241,7 +239,7 @@ LevelEd.prototype.selectById = function(partOrJackId, selected) {
  * @param partOrJackIds
  * @param {boolean} selected true if selecting or false if unselecting
  */
-LevelEd.prototype.selectByIds = function(partOrJackIds, selected) {
+GrafEd.prototype.selectByIds = function(partOrJackIds, selected) {
   for (var i = 0; i < partOrJackIds.length; i++) {
     this.selectById(partOrJackIds[i], selected);
   }

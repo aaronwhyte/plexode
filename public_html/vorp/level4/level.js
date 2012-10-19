@@ -37,7 +37,7 @@ var vorpLevels = vorpLevels || {};
   mono(VedType.EXIT, 6, 3, {'url': '../level5/index.html'});
 
   var beamPos = mono(VedType.BEAM_SENSOR, 2.5, 1);
-  var timerPos = mono(VedType.TIMER, 3, 2, {'timeout': 40});
+  var timerPos = mono(VedType.TIMER, 3, 1, {'timeout': 40});
   var doorPos = mono(VedType.DOOR, 3.5, 1);
   ed.link(beamPos, timerPos);
   ed.link(timerPos, doorPos);

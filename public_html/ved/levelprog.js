@@ -1,17 +1,17 @@
 /**
  * Level editor API for programatic level creation, without an editor UI.
  * @constructor
- * @extends {LevelEd}
+ * @extends {GrafEd}
  */
 function LevelProg(model, sysClips) {
-  LevelEd.call(this, model);
+  GrafEd.call(this, model);
   this.sysClips = sysClips;
 
   // Vec2d
   this.wallCursor = null;
 }
-LevelProg.prototype = new LevelEd(null);
-LevelProg.prototype.constructor = LevelEd;
+LevelProg.prototype = new GrafEd(null);
+LevelProg.prototype.constructor = GrafEd;
 
 /**
  * Creates a normal everyday good old fashioned LevelProg instance.

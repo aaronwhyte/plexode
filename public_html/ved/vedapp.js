@@ -171,8 +171,8 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
   vorp.editable = true;
 
-  var levelEd = new LevelEd(grafModel);
-  var grafRenderer = new GrafRenderer(grafModel, renderer, levelEd);
+  var grafEd = new GrafEd(grafModel);
+  var grafRenderer = new GrafRenderer(grafModel, renderer, grafEd);
 
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);

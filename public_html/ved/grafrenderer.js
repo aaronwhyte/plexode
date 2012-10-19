@@ -1,7 +1,7 @@
-function GrafRenderer(grafModel, renderer, levelEd) {
+function GrafRenderer(grafModel, renderer, grafEd) {
   this.graf = grafModel;
   this.renderer = renderer;
-  this.levelEd = levelEd;
+  this.grafEd = grafEd;
 }
 
 GrafRenderer.prototype.draw = function() {
@@ -31,7 +31,7 @@ GrafRenderer.prototype.drawCluster = function(cluster) {
 GrafRenderer.prototype.drawPart = function(part) {
   this.renderer.strokeCirclePosXYRad(part.x, part.y, 40);
   for (var jackId in part.jacks) {
-    var jackPos = this.levelEd.getJackPos(jackId);
+    var jackPos = this.grafEd.getJackPos(jackId);
     this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, 10);
   }
 };
@@ -39,6 +39,6 @@ GrafRenderer.prototype.drawPart = function(part) {
 GrafRenderer.prototype.drawLink = function(link) {
   var jackPos1 =
   this.renderer.drawLineVV(
-      this.levelEd.getJackPos(link.jackId1),
-      this.levelEd.getJackPos(link.jackId2));
+      this.grafEd.getJackPos(link.jackId1),
+      this.grafEd.getJackPos(link.jackId2));
 };

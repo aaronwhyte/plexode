@@ -111,6 +111,7 @@ def getVorpJsFileNames():
   js = []
   prefix = 'public_html/js/'
   js.extend(getJsFileNamesInPath('%sgaam' % prefix))
+  js.extend(getJsFileNamesInPath('%sged' % prefix))
   js.extend(getJsFileNamesInPath('%sgraf' % prefix))
 
   js.extend(getJsFileNamesInPath('public_html/ved'))
@@ -147,6 +148,7 @@ def getVedJsFileNames():
   js = []
   prefix = 'public_html/js/'
   js.extend(getJsFileNamesInPath('%splex' % prefix))
+  js.extend(getJsFileNamesInPath('%sged' % prefix))
   js.extend(getJsFileNamesInPath('%sgraf' % prefix))
   js.extend(getJsFileNamesInPath('%sstor' % prefix))
   js.extend(getJsFileNamesInPath('%sopstor' % prefix))
