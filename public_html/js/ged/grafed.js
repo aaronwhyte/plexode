@@ -114,6 +114,22 @@ GrafEd.prototype.selectNearest = function(pos, selected) {
   this.selectById(this.getNearestId(pos), selected);
 };
 
+/**
+ * @param {Vec2d} pos
+ * @param {number=} opt_maxDist
+ * @return {Vec2d} the position of the object closest to "pos", or null
+ */
+GrafEd.prototype.getNearestPos = function(pos, opt_maxDist) {
+  var id = this.getNearestId(pos, opt_maxDist);
+  if (!id) return null;
+  var jack = this.model.getJack(id);
+  if (jack) {
+    return this.getJackPos(id);
+  }
+  var part = this.model.getPart(id);
+  return new Vec2d(part.x, part.y);
+};
+
 GrafEd.prototype.clearSelection = function() {
   for (var id in this.selection) {
     delete this.selection[id];
@@ -223,7 +239,7 @@ GrafEd.prototype.opForSetDataById = function(objId, key, val) {
 /**
  * @param {Vec2d} pos
  * @param {number=} opt_maxDist
- * @return a model ID, either a partId or a jackId
+ * @return a model ID, either a partId or a jackId, or null if nothing is close enough
  */
 GrafEd.prototype.getNearestId = function(pos, opt_maxDist) {
   var jackPos = Vec2d.alloc();

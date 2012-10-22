@@ -222,19 +222,24 @@ v render model on top of it with same camera
     v jacks
     v links
 
-2012.10.11 -
+2012.10.11 - 2012.10.21
 Stop. Organize editor code. This stuff is for Graf, not Ved.
 v Plan reorg
 v Move LevelEd to GrafEd
-- Redo VedApp in terms of GrafEd & GrafUi.
+v Redo VedApp in terms of GrafEd & GrafUi.
 
+2012.10.21
 Dragging parts - piped all the way through
-v GrafEd.commit()
-- gesture
-- query
-- selection
-- drag as an object
-- stage
+v loop in GrafUi
+v don't redraw if nothing changed
+v mouse-to-world trans
+v position query
+- toggle selection on click
+- begin drag selected on mouse-down
+- stage drag ops on move if dragging
+- end drag on mouse-up
+- set staged ops; reverses prev staged ops
+- commit staged ops
 
 Zooming
 - scroll-zoom at mouse point.

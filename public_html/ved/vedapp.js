@@ -33,9 +33,9 @@ VedApp.prototype.render = function() {
   }
 
   // Stop any running timer loops instance.
-  if (this.vorp) {
-    this.vorp.stopLoop();
-    this.vorp = null;
+  if (this.looper) {
+    this.looper.stopLoop();
+    this.looper = null;
   }
 
   // out-of-dom fragment to prevent rerendering as we go
@@ -114,11 +114,13 @@ VedApp.prototype.renderDirectory = function(appDiv) {
 
   plex.dom.ce('br', appDiv);
 
+  // for callbacks
+  var self = this;
+
   // nuke button
   var nukeButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(nukeButton, 'vedButton');
   plex.dom.ct('Clear ' + window.location.host + ' localStorage', nukeButton);
-  var self = this;
   nukeButton.onclick = function() {
     self.nuke();
     self.render();
@@ -127,7 +129,6 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   var repopulateButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(repopulateButton, 'vedButton');
   plex.dom.ct('Populate localStorage', repopulateButton);
-  var self = this;
   repopulateButton.onclick = function() {
     self.repopulate(); // vorpLevels is populated by levels
     self.render();
@@ -164,7 +165,8 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   var plugin = new VedUiPlugin(renderer);
   var grafUi = new GrafUi(grafEd, renderer, plugin);
 
-  grafUi.draw();
+  grafUi.startLoop();
+  this.looper = grafUi;
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {
@@ -194,7 +196,7 @@ VedApp.prototype.renderTesting = function(appDiv, levelName) {
 
   // Start the game up.
   vorp.startLoop();
-  this.vorp = vorp;
+  this.looper = vorp;
 };
 
 VedApp.prototype.nuke = function() {

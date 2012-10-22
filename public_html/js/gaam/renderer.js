@@ -1,5 +1,7 @@
 /**
  * Renders to a canvas using a Camera object to pan and zoom.
+ * @param canvas
+ * @param {Camera} camera
  * @constructor
  */
 function Renderer(canvas, camera) {
