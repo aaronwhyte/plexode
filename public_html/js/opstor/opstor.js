@@ -12,7 +12,7 @@ function OpStor(stor, name) {
 
 /**
  * Appends a new value to the stor. Creates a new names object if the name isn't in use.
- * @param clientOpId
+ * @param clientOpId used by clients to re-order non-idempotent ops when there are multiple clients. See design doc.
  * @param op The actual operation payload
  * @return the server ID of the appended value
  */

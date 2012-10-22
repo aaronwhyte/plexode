@@ -1,15 +1,44 @@
 /**
- * Methods for manipulating a graf,
- * using spacial terms like position and selection.
- * @param {GrafModel} model
+ * Supports high-level queries and operations on a GrafModel,
+ * optionally backed by an OpStor.
+ *
+ * It hides all GrafOp stuff from clients.
+ *
+ * State:
+ * - Maintains a GrafModel throughout all op changes from the client and from stor events.
+ * - Selection state
+ * - Drag-operation state?
+ *
+ * Queries:
+ * - Provides the GrafModel (read-only, honor system) to clients.
+ * - Handles spacial queries, like "get closest thing".
+ *
+ * Mutations:
+ * - Handles high-level operations like drag, copy/paste, link, edit field, etc,
+ *   so the UI never has to worry about operations.
+ * - Stages continuous-preview mutations like dragging, without flooding LocalStorage with changes.
+ *
+ * Notification:
+ * - PubSub says when the model changed due to another tab or something.
+ *
+ * @param {GrafModel} model  The already-populated model.
+ * @param {OpStor=} opt_opStor  Optional OpStor to write to (and subscribe to & read from)
  * @constructor
  */
-function GrafEd(model) {
+function GrafEd(model, opt_opStor) {
   this.model = model;
+  this.opStor = opt_opStor || null;
 
   // Keys form the set of selected IDs. Values are all trueish.
   this.selection = {};
 }
+
+GrafEd.createFromOpStor = function(opStor) {
+  var ops = opStor.getOpsAfterIndex(-1);
+  var model = new GrafModel();
+  model.applyOps(ops);
+  return new GrafEd(model, opStor);
+};
 
 GrafEd.JACK_DISTANCE = 20;
 
@@ -40,7 +69,7 @@ GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
 GrafEd.prototype.paste = function(clipModel) {
   var ops = clipModel.createOps();
   var idMap = this.model.rewriteOpIds(ops);
-  this.model.applyOps(ops);
+  this.commitOps(ops);
 
   this.clearSelection();
   this.selectByIds(plex.object.values(idMap), true);
@@ -109,7 +138,7 @@ GrafEd.prototype.moveSelectedParts = function(offset) {
       oldY: part.y
     });
   }
-  this.model.applyOps(ops);
+  this.commitOps(ops);
 };
 
 /**
@@ -153,19 +182,21 @@ GrafEd.prototype.linkSelectedJacks = function() {
       });
     }
   }
-  this.model.applyOps(ops);
+  this.commitOps(ops);
 };
 
 GrafEd.prototype.setDataOnSelection = function(keyVals) {
+  var ops = [];
   for (var k in keyVals) {
     var v = keyVals[k];
     for (var objId in this.selection) {
       var obj = this.model.objs[objId];
       if (k in obj.data) {
-        this.setDataById(objId, k, v);
+        ops.push(this.opForSetDataById(objId, k, v));
       }
     }
   }
+  this.commitOps(ops);
 };
 
 
@@ -179,14 +210,14 @@ GrafEd.prototype.setDataOnSelection = function(keyVals) {
  * @param {string} key The data key to set
  * @param {string} val The data value to set
  */
-GrafEd.prototype.setDataById = function(objId, key, val) {
-  this.model.applyOp({
+GrafEd.prototype.opForSetDataById = function(objId, key, val) {
+  return {
     type: GrafOp.Type.SET_DATA,
     id: objId,
     key: key,
     value: val,
     oldValue: this.model.objs[objId].data[key]
-  });
+  };
 };
 
 /**
@@ -243,4 +274,13 @@ GrafEd.prototype.selectByIds = function(partOrJackIds, selected) {
   for (var i = 0; i < partOrJackIds.length; i++) {
     this.selectById(partOrJackIds[i], selected);
   }
+};
+
+GrafEd.prototype.commitOps = function(ops) {
+  if (this.opStor) {
+    for (var i = 0; i < ops.length; i++) {
+      this.opStor.appendOp(i, ops[i]);
+    }
+  }
+  this.model.applyOps(ops);
 };

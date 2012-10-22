@@ -19,9 +19,52 @@
  * - Handles key/value input widgets.
  *
  *
- * @param {GrafStor} grafStor
+ * @param {GrafEd} grafEd
+ * @param {Renderer} renderer
  * @constructor
  */
-function GrafUi(grafStor) {
-  this.grafStor = grafStor;
+function GrafUi(grafEd, renderer) {
+  this.grafEd = grafEd;
+  this.renderer = renderer;
 }
+
+GrafUi.prototype.draw = function() {
+  this.renderer.transformStart();
+  this.renderer.setStrokeStyle('rgba(255, 255, 255, 0.6)');
+  this.renderer.context.lineWidth = 10;
+
+  var graf = this.grafEd.getModel();
+
+  // clusters, parts, jacks
+  for (var clusterId in graf.clusters) {
+    this.drawCluster(graf.getCluster(clusterId));
+  }
+
+  // links
+  for (var linkId in graf.links) {
+    this.drawLink(graf.links[linkId]);
+  }
+  this.renderer.transformEnd();
+};
+
+GrafUi.prototype.drawCluster = function(cluster) {
+  var parts = cluster.getPartList();
+  for (var i = 0; i < parts.length; i++) {
+    this.drawPart(parts[i]);
+  }
+};
+
+GrafUi.prototype.drawPart = function(part) {
+  this.renderer.strokeCirclePosXYRad(part.x, part.y, 40);
+  for (var jackId in part.jacks) {
+    var jackPos = this.grafEd.getJackPos(jackId);
+    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, 10);
+  }
+};
+
+GrafUi.prototype.drawLink = function(link) {
+  var jackPos1 =
+      this.renderer.drawLineVV(
+          this.grafEd.getJackPos(link.jackId1),
+          this.grafEd.getJackPos(link.jackId2));
+};

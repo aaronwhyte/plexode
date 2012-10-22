@@ -117,7 +117,7 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   // nuke button
   var nukeButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(nukeButton, 'vedButton');
-  plex.dom.ct('Clear localstore', nukeButton);
+  plex.dom.ct('Clear ' + window.location.host + ' localStorage', nukeButton);
   var self = this;
   nukeButton.onclick = function() {
     self.nuke();
@@ -126,7 +126,7 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   // repopulate button
   var repopulateButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(repopulateButton, 'vedButton');
-  plex.dom.ct('Populate localstore', repopulateButton);
+  plex.dom.ct('Populate localStorage', repopulateButton);
   var self = this;
   repopulateButton.onclick = function() {
     self.repopulate(); // vorpLevels is populated by levels
@@ -141,7 +141,7 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
   }
   var errorDiv = plex.dom.ce('div', appDiv);
   plex.dom.appendClass(errorDiv, 'vedError');
-  plex.dom.ct('The level "' + levelName + '" was not found in the localstore.', errorDiv);
+  plex.dom.ct('The level "' + levelName + '" was not found in localStorage.', errorDiv);
   return true;
 };
 
@@ -154,11 +154,8 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   canvas.height = 600;
   canvas.width = 600;
 
-  // get level graf
-  var opStor = new OpStor(this.stor, levelName);
-  var levelOps = opStor.getOpsAfterIndex(-1);
-  var grafModel = new GrafModel();
-  grafModel.applyOps(levelOps);
+  // Generate LevelEd
+  var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
 
   // camera is shared by vorp and ved
   var camera = new Camera();
@@ -171,18 +168,18 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
   vorp.editable = true;
 
-  var grafEd = new GrafEd(grafModel);
-  var grafRenderer = new GrafRenderer(grafModel, renderer, grafEd);
+  var grafUi = new GrafUi(grafEd, renderer);
 
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
-  transformer.transformModel(grafModel);
+  transformer.transformModel(grafEd.getModel());
 
   // Just draw one frame
+  // Clock twice 'cause the doors require it for some reason.
   vorp.clock();
   vorp.clock();
   vorp.draw();
-  grafRenderer.draw();
+  grafUi.draw();
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {

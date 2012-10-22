@@ -201,12 +201,20 @@ GrafModel.prototype.getLink = function(id) {
 
 /**
  * @param {GrafModel} model  something to paste into this model
+ * @return a
+ */
+GrafModel.prototype.opsForAddModel = function(model) {
+  var ops = model.createOps();
+  this.rewriteOpIds(ops);
+  return ops;
+};
+
+/**
+ * @param {GrafModel} model  something to paste into this model
  * @return a mapping from old obj IDs to new obj IDs
  */
 GrafModel.prototype.addModel = function(model) {
-  var ops = model.createOps();
-  this.rewriteOpIds(ops);
-  this.applyOps(ops);
+  this.applyOps(this.opsForAddModel(model));
 };
 
 /**
