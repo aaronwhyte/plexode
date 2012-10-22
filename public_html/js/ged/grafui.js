@@ -21,14 +21,18 @@
  *
  * @param {GrafEd} grafEd
  * @param {Renderer} renderer
+ * @param plugin  app-specific thing with invalidate() and render(model)
  * @constructor
  */
-function GrafUi(grafEd, renderer) {
+function GrafUi(grafEd, renderer, plugin) {
   this.grafEd = grafEd;
   this.renderer = renderer;
+  this.plugin = plugin;
 }
 
 GrafUi.prototype.draw = function() {
+  this.plugin.render(this.grafEd.getModel());
+
   this.renderer.transformStart();
   this.renderer.setStrokeStyle('rgba(255, 255, 255, 0.6)');
   this.renderer.context.lineWidth = 10;
@@ -63,8 +67,7 @@ GrafUi.prototype.drawPart = function(part) {
 };
 
 GrafUi.prototype.drawLink = function(link) {
-  var jackPos1 =
-      this.renderer.drawLineVV(
-          this.grafEd.getJackPos(link.jackId1),
-          this.grafEd.getJackPos(link.jackId2));
+  this.renderer.drawLineVV(
+      this.grafEd.getJackPos(link.jackId1),
+      this.grafEd.getJackPos(link.jackId2));
 };

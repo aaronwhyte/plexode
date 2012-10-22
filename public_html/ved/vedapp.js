@@ -157,28 +157,13 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   // Generate LevelEd
   var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
 
-  // camera is shared by vorp and ved
+  // renderer is shared by vorp and grafUi
   var camera = new Camera();
   camera.setZoom(0.2);
-
-  // create vorp instance
   var renderer = new Renderer(canvas, camera);
-  var gameClock = new GameClock();
-  var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
-  vorp.editable = true;
+  var plugin = new VedUiPlugin(renderer);
+  var grafUi = new GrafUi(grafEd, renderer, plugin);
 
-  var grafUi = new GrafUi(grafEd, renderer);
-
-  // Use Transformer to populate Vorp with Model.
-  var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
-  transformer.transformModel(grafEd.getModel());
-
-  // Just draw one frame
-  // Clock twice 'cause the doors require it for some reason.
-  vorp.clock();
-  vorp.clock();
-  vorp.draw();
   grafUi.draw();
 };
 
