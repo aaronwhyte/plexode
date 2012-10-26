@@ -1,0 +1,57 @@
+Ged is the Graf Editor. It is app-neutral, with a plugin point for rendering an app-specific layer under the graf.
+
+Gestures:
+Here I borrow a lot from Jef Raskin's "The Humane Interface", section 5-2.
+But I also added my own stuff.
+
+selection creation
+- begin new selection rect ... end new selection rect.
+- During new-selection rect, nodes are indicated but not selected yet.
+- targets can be optionally indicated on mouse hover
+- if anything was selected, it gets pushed onto the selection stack as the new s0.
+
+selection math:
+- add s0 to s1
+- subtract s0 from s1
+- pop s0 and promote s1
+
+cut/copy/paste
+- copy contents of s0 to clipboard
+- delete parts in s0 and pop selection
+  - jacks in s0 delete their links
+  - parts in s0 delete their jacks and links, obvs
+  - clusters in s0
+- paste clipboard where indicated and select the parts.
+
+moving things:
+- drag s0 quasimode (push to begin, release to end)
+- flip s0 over x/y axis at pos
+- rotate s0 90 degrees left/right around pos
+- scale s0 up/down around pos
+
+links:
+- create link between single jack in s0 and single jack in s1? or two jacks in s0?
+- break all links for jacks in s0
+
+history:
+- undo
+- redo
+
+The pointer just provides a location. All buttons have down-hold-up abilities, including the mouse buttons.
+
+Write the gesture handler code knowing only the pointer position (which can be null for touch),
+and the impulses like "undo" and "begin drag".
+To get the first action, "drag", we need these impulse functions:
+
+- begin selection rect at pointer and set rect end corner to same spot, and begin selrect mode
+- set selrect end corner
+- indicate selected nodes
+- draw selrect
+- end selrect mode
+
+- multi-layer selection stack
+- draw all selections, emphasizing s0 and s1
+
+- begin drag of s0 at position A
+- continue drag to position B (moves s0 parts by A->B)
+- end drag

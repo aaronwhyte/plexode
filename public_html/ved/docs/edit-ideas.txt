@@ -75,7 +75,7 @@ The main mouse interaction things are control points which can be..
   - delete a logic link
   - delete a waypoint or some such
 - mouse-downed, switching to grip mode sometimes
-- dragged when in grip node
+- dragged when in grip mode
 - mouse-down can also lead to creation of a new point, in grip mode
 - mouse-down can ALSO lead to logic-link-grip
 - logic-link-grip drag to another part's logic thing of opposite direction creates a logic link.
