@@ -44,7 +44,8 @@ GrafOp.Type = {
 GrafOp.isAddOpType = function(type) {
   return type == GrafOp.Type.ADD_CLUSTER ||
       type == GrafOp.Type.ADD_PART ||
-      type == GrafOp.Type.ADD_JACK;
+      type == GrafOp.Type.ADD_JACK ||
+      type == GrafOp.Type.ADD_LINK;
 };
 
 /**
