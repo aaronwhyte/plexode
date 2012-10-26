@@ -7,6 +7,8 @@ this.plex = this.plex || {};
  * @fileoverview Set of strings.
  */
 
+this.plex = this.plex || {};
+
 /**
  * @constructor
  */
@@ -27,12 +29,21 @@ plex.StringSet.prototype.contains = function(v) {
 
 plex.StringSet.prototype.remove = function(v) {
   delete this.m[plex.StringSet.PREFIX + v];
+  return this;
 };
 
-plex.StringSet.prototype.addStringSet = function(that) {
+plex.StringSet.prototype.add = function(that) {
   for (var key in that.m) {
     this.m[key] = true;
   }
+  return this;
+};
+
+plex.StringSet.prototype.subtract = function(that) {
+  for (var key in that.m) {
+    delete this.m[key];
+  }
+  return this;
 };
 
 /**

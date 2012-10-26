@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>SelStack tests</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/ged/selstack.js"></script>
+<script src="../../../public_html/js/plex/stringset.js"></script>
+<script>
+
+function assertStringSetEquals(expected, actual) {
+  var expectedVals = expected.getValues().sort();
+  var actualVals = actual.getValues().sort();
+  assertStringifyEquals(expectedVals, actualVals);
+}
+
+addTest(function testPushPeekPop() {
+  var selStack = new SelStack();
+  assertEquals(0, selStack.size());
+  var stringSet = new plex.StringSet();
+  stringSet.put("aa").put("bb");
+  selStack.push(stringSet);
+  assertEquals(stringSet, selStack.peek());
+  assertEquals(1, selStack.size());
+  assertEquals(stringSet, selStack.pop());
+  assertEquals(0, selStack.size());
+  assertEquals(null, selStack.pop());
+});
+
+addTest(function testAdd() {
+  var selStack = new SelStack();
+  assertEquals(0, selStack.size());
+  var set1 = new plex.StringSet();
+  set1.put("aa").put("bb");
+  var set2 = new plex.StringSet();
+  set2.put("bb").put("cc");
+  selStack.push(set1);
+  selStack.push(set2);
+  assertEquals(2, selStack.size());
+  selStack.add();
+  assertEquals(1, selStack.size());
+  var actual = selStack.peek();
+  var expected = new plex.StringSet();
+  expected.put("aa").put("bb").put("cc");
+  assertStringSetEquals(expected, actual);
+});
+
+addTest(function testSubtract() {
+  var selStack = new SelStack();
+  assertEquals(0, selStack.size());
+  var set1 = new plex.StringSet();
+  set1.put("aa").put("bb");
+  var set2 = new plex.StringSet();
+  set2.put("bb").put("cc");
+  selStack.push(set1);
+  selStack.push(set2);
+  assertEquals(2, selStack.size());
+  selStack.subtract();
+  assertEquals(1, selStack.size());
+  var actual = selStack.peek();
+  var expected = new plex.StringSet();
+  expected.put("aa");
+  assertStringSetEquals(expected, actual);
+});
+
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>
