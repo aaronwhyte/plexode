@@ -234,7 +234,37 @@ v loop in GrafUi
 v don't redraw if nothing changed
 v mouse-to-world trans
 v position query
-- toggle selection on click
+[paused for Selection]
+
+2012.10.27
+Selection
+v write & test SelStack
+- GrafEd
+  v SelStack for state
+  v support LevelProg levels :-/
+  - writes
+    -* startSelection(pos) // set start and end
+    - continueSelection(pos) // sent end
+    - endSelection() // push selection
+    (no Stage or Commit on selection.)
+  - reads
+    - getSelectionRect()
+    -* getIndicatedElements()
+      - query rect intersection
+    - getSelection(n)
+    - getSelectionsSize()
+- GrafUi
+  - gestures
+    -* modes enum: DEFAULT, SELECTING
+    -* selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
+    - mouseMove && mode==SELECTING: ed.continueSelection
+    - mouseUp && mode==SELECTIONG: ed.endSelection; mode=DEFAULT
+  - rendering
+    - selection rect
+    -* indicated elements
+    - selections 0..n
+- verify everything works
+
 - begin drag selected on mouse-down
 - stage drag ops on move if dragging
 - end drag on mouse-up
@@ -251,18 +281,6 @@ Panning
 //- arrows
 //- touch drag in empty space
 
-Redo nav
-- directory name are links to level/edit
-- peer level views are all crosslinked:
-  - edit
-  - play
-  - json
-
-System clips widget
-
-Add level
-
-Delete level
 
 Ved UI API:
 - iteration for rendering
@@ -287,6 +305,19 @@ Ved model for interactive editing
   - other wall endpoint moves minimum distance to remain coaxial
   - deleting any part deletes all jacks and links and data first
   - deleting last part in a cluster deletes cluster
+
+Redo nav
+- directory name are links to level/edit
+- peer level views are all crosslinked:
+  - edit
+  - play
+  - json
+
+System clips widget
+
+Add level
+
+Delete level
 
 LevelEd API II
 - levEd.deletedSelectedParts()

@@ -129,6 +129,7 @@ def getVorpJsFileNames():
     'plex/object.js',
     'plex/point.js',
     'plex/rect.js',
+    'plex/stringset.js',
     'plex/type.js',
   ]
   for dep in miscDeps:

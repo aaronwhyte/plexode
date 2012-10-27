@@ -29,8 +29,7 @@ function GrafEd(model, opt_opStor) {
   this.model = model;
   this.opStor = opt_opStor || null;
 
-  // Keys form the set of selected IDs. Values are all trueish.
-  this.selection = {};
+  this.selStack = new SelStack();
 }
 
 GrafEd.createFromOpStor = function(opStor) {
@@ -40,7 +39,7 @@ GrafEd.createFromOpStor = function(opStor) {
   return new GrafEd(model, opStor);
 };
 
-GrafEd.JACK_DISTANCE = 20;
+GrafEd.JACK_DISTANCE = 70;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
@@ -71,7 +70,6 @@ GrafEd.prototype.paste = function(clipModel) {
   var idMap = this.model.rewriteOpIds(ops);
   this.commitOps(ops);
 
-  this.clearSelection();
   this.selectByIds(plex.object.values(idMap), true);
 
   return idMap;
@@ -130,10 +128,15 @@ GrafEd.prototype.getNearestPos = function(pos, opt_maxDist) {
   return new Vec2d(part.x, part.y);
 };
 
+GrafEd.prototype.popSelection = function() {
+  return this.selStack.pop();
+};
+
+/**
+ * Pops all selections off the stack.
+ */
 GrafEd.prototype.clearSelection = function() {
-  for (var id in this.selection) {
-    delete this.selection[id];
-  }
+  while(this.selStack.pop());
 };
 
 /**
@@ -142,7 +145,9 @@ GrafEd.prototype.clearSelection = function() {
  */
 GrafEd.prototype.moveSelectedParts = function(offset) {
   var ops = [];
-  for (var id in this.selection) {
+  var ids = this.getSelectedIds();
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
     var part = this.model.getPart(id);
     if (!part) continue; // may be a jack
     ops.push({
@@ -157,6 +162,11 @@ GrafEd.prototype.moveSelectedParts = function(offset) {
   this.commitOps(ops);
 };
 
+GrafEd.prototype.getSelectedIds = function(opt_num) {
+  var num = opt_num || 0;
+  return this.selStack.peek(num).getValues();
+};
+
 /**
  * Creates links between all input jacks and all output jacks in the selection,
  * but not input/output jacks on the same part,
@@ -165,7 +175,9 @@ GrafEd.prototype.moveSelectedParts = function(offset) {
 GrafEd.prototype.linkSelectedJacks = function() {
   var inputs = [];
   var outputs = [];
-  for (var id in this.selection) {
+  var ids = this.getSelectedIds();
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
     var jack = this.model.getJack(id);
     if (!jack) continue; // may be a part
     if (jack.isInput()) {
@@ -203,12 +215,14 @@ GrafEd.prototype.linkSelectedJacks = function() {
 
 GrafEd.prototype.setDataOnSelection = function(keyVals) {
   var ops = [];
-  for (var k in keyVals) {
-    var v = keyVals[k];
-    for (var objId in this.selection) {
-      var obj = this.model.objs[objId];
+  var ids = this.getSelectedIds();
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var obj = this.model.objs[id];
+    for (var k in keyVals) {
+      var v = keyVals[k];
       if (k in obj.data) {
-        ops.push(this.opForSetDataById(objId, k, v));
+        ops.push(this.opForSetDataById(id, k, v));
       }
     }
   }
@@ -269,26 +283,34 @@ GrafEd.prototype.getNearestId = function(pos, opt_maxDist) {
 };
 
 /**
- * Selects or unselects a part or jack by ID.
+ * Adds or removes a partId or jackId to/from the head selection.
  * @param partOrJackId
  * @param {boolean} selected true if selecting or false if unselecting
  */
 GrafEd.prototype.selectById = function(partOrJackId, selected) {
+  this.selStack.push((new plex.StringSet()).put(partOrJackId));
   if (selected) {
-    this.selection[partOrJackId] = true;
+    this.selStack.add();
   } else {
-    delete this.selection[partOrJackId];
+    this.selStack.subtract();
   }
 };
 
 /**
- * Selects or unselects an array of parts or jacks by ID.
+ * Adds or removes partIds and jackIds to/from the head selection.
  * @param partOrJackIds
  * @param {boolean} selected true if selecting or false if unselecting
  */
 GrafEd.prototype.selectByIds = function(partOrJackIds, selected) {
+  var stringSet = new plex.StringSet();
   for (var i = 0; i < partOrJackIds.length; i++) {
-    this.selectById(partOrJackIds[i], selected);
+    stringSet.put(partOrJackIds[i]);
+  }
+  this.selStack.push(stringSet);
+  if (selected) {
+    this.selStack.add();
+  } else {
+    this.selStack.subtract();
   }
 };
 

@@ -31,11 +31,13 @@ SelStack.prototype.pop = function() {
 };
 
 /**
+ * @param {number?} opt_num  Distance from the head. Default is 0, the head.
  * @return {plex.StringSet?} or null
  */
-SelStack.prototype.peek = function() {
-  if (!this.stack.length) return null;
-  return this.stack[this.stack.length - 1];
+SelStack.prototype.peek = function(opt_num) {
+  var num = opt_num || 0;
+  if (this.stack.length <= num) return null;
+  return this.stack[this.stack.length - 1 - num] || null;
 };
 
 /**
