@@ -45,14 +45,10 @@ plex.rect.parseMeasurement = function(str) {
 /**
  * Creates a rect using the coordinates specified.
  * 
- * @param {number}
- *            x0 left
- * @param {number}
- *            y0 top
- * @param {number}
- *            x1 right
- * @param {number}
- *            y1 bottom
+ * @param {number} x0 left
+ * @param {number} y0 top
+ * @param {number} x1 right
+ * @param {number} y1 bottom
  * @return {plex.Rect} the new rect
  */
 plex.rect.createXyxy = function(x0, y0, x1, y1) {

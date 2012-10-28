@@ -30,6 +30,10 @@ function GrafEd(model, opt_opStor) {
   this.opStor = opt_opStor || null;
 
   this.selStack = new SelStack();
+
+  // two Vec2ds (or nulls)
+  this.selectionStart = null;
+  this.selectionEnd = null;
 }
 
 GrafEd.createFromOpStor = function(opStor) {
@@ -39,7 +43,10 @@ GrafEd.createFromOpStor = function(opStor) {
   return new GrafEd(model, opStor);
 };
 
+GrafEd.PART_RADIUS = 50;
 GrafEd.JACK_DISTANCE = 70;
+GrafEd.JACK_RADIUS = 20;
+GrafEd.SELECTION_PADDING = 20;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
@@ -227,6 +234,61 @@ GrafEd.prototype.setDataOnSelection = function(keyVals) {
     }
   }
   this.commitOps(ops);
+};
+
+GrafEd.prototype.startSelectionXY = function(x, y) {
+  this.selectionStart = new Vec2d(x, y);
+  this.selectionEnd = new Vec2d(x, y);
+};
+
+GrafEd.prototype.continueSelectionXY = function(x, y) {
+  this.selectionEnd.setXY(x, y);
+};
+
+GrafEd.prototype.endSelection = function() {
+  this.selStack.push(this.getHilitedIds());
+  this.selectionStart = null;
+  this.selectionEnd = null;
+};
+
+GrafEd.prototype.getHilitedIds = function() {
+  if (!this.selectionStart) return [];
+  var jackPos = Vec2d.alloc();
+  var idSet = new plex.StringSet();
+  for (var partId in this.model.parts) {
+    var part = this.model.getPart(partId);
+    var dist = aabb.rectCircleDist(
+        this.selectionStart.x, this.selectionStart.y,
+        this.selectionEnd.x, this.selectionEnd.y,
+        part.x, part.y);
+    if (dist < GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING) {
+      idSet.put(partId);
+    }
+    for (var jackId in part.jacks) {
+      this.getJackPos(jackId, jackPos);
+      var dist = aabb.rectCircleDist(
+          this.selectionStart.x, this.selectionStart.y,
+          this.selectionEnd.x, this.selectionEnd.y,
+          jackPos.x, jackPos.y);
+      if (dist < GrafEd.JACK_RADIUS + GrafEd.SELECTION_PADDING) {
+        idSet.put(jackId);
+      }
+    }
+  }
+  Vec2d.free(jackPos);
+  return idSet.getValues();
+};
+
+GrafEd.prototype.getPosById = function(id) {
+  var part = this.model.getPart(id);
+  if (part) {
+    return new Vec2d(part.x, part.y);
+  }
+  var jack = this.model.getJack(id);
+  if (jack) {
+    return this.getJackPos(id);
+  }
+  return null;
 };
 
 

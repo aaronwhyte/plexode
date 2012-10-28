@@ -29,6 +29,7 @@ function GrafUi(grafEd, renderer, plugin) {
   this.renderer = renderer;
   this.plugin = plugin;
   this.viewDirty = true;
+  this.mode = GrafUi.Mode.DEFAULT;
 
   this.loop = null;
   this.screenPos = new Vec2d(1, 1);
@@ -36,14 +37,21 @@ function GrafUi(grafEd, renderer, plugin) {
 }
 
 GrafUi.FPS = 30;
-GrafUi.HOVER_RADIUS = 90;
-GrafUi.PART_RADIUS = 50;
-GrafUi.JACK_RADIUS = 15;
+
+/**
+ * @enum {String}
+ */
+GrafUi.Mode = {
+  SELECTING: 'selecting',
+  DEFAULT: 'default'
+};
 
 GrafUi.prototype.startLoop = function() {
   // TODO: replace GU_startKeyListener with nicer thing
   GU_startKeyListener();
-  plex.event.addListener(this.renderer.canvas, 'mousemove', this.getMouseListener());
+  plex.event.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
+  plex.event.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
+  plex.event.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
   if (!this.loop) {
     var self = this;
     this.loop = new plex.Loop(
@@ -61,21 +69,64 @@ GrafUi.prototype.stopLoop = function() {
   }
 };
 
-GrafUi.prototype.getMouseListener = function() {
+GrafUi.prototype.getMouseMoveListener = function() {
   var self = this;
   return function(event) {
     self.viewDirty = true;
     var event = event || window.event;
-    var target = plex.event.getTarget(event);
-    self.setScreenPos(
-        event.pageX - target.offsetLeft,
-        event.pageY - target.offsetTop);
+    self.setScreenPosWithEvent(event);
+    if (self.mode == GrafUi.Mode.SELECTING) {
+      self.grafEd.continueSelectionXY(self.worldPos.x, self.worldPos.y);
+    }
   };
+};
+
+GrafUi.prototype.getMouseDownListener = function() {
+  var self = this;
+  return function(event) {
+    self.viewDirty = true;
+    var event = event || window.event;
+    self.setScreenPosWithEvent(event);
+    if (self.mode == GrafUi.Mode.DEFAULT) {
+      self.mode = GrafUi.Mode.SELECTING;
+      self.grafEd.startSelectionXY(self.worldPos.x, self.worldPos.y);
+    }
+  };
+};
+
+GrafUi.prototype.getMouseUpListener = function() {
+  var self = this;
+  return function(event) {
+    self.viewDirty = true;
+    var event = event || window.event;
+    self.setScreenPosWithEvent(event);
+    if (self.mode == GrafUi.Mode.SELECTING) {
+      self.grafEd.continueSelectionXY(self.worldPos.x, self.worldPos.y);
+      self.grafEd.endSelection();
+      self.mode = GrafUi.Mode.DEFAULT;
+    }
+  };
+};
+
+GrafUi.prototype.setScreenPosWithEvent = function(event) {
+  var target = plex.event.getTarget(event);
+  this.setScreenPos(
+      event.pageX - target.offsetLeft,
+      event.pageY - target.offsetTop);
 };
 
 GrafUi.prototype.setScreenPos = function(x, y) {
   this.screenPos.setXY(x, y);
+  this.updateWorldPos();
 };
+
+GrafUi.prototype.updateWorldPos = function() {
+  this.worldPos.set(this.screenPos)
+      .addXY(-this.renderer.canvasWidth/2, -this.renderer.canvasHeight/2)
+      .subtract(this.renderer.camera.pan)
+      .scale(1/this.renderer.camera.zoom);
+};
+
 
 GrafUi.prototype.clock = function() {
   this.draw();
@@ -102,16 +153,18 @@ GrafUi.prototype.draw = function() {
     this.drawLink(graf.links[linkId]);
   }
 
-  // mouse
-  this.worldPos.set(this.screenPos)
-      .addXY(-this.renderer.canvasWidth/2, -this.renderer.canvasHeight/2)
-      .subtract(this.renderer.camera.pan)
-      .scale(1/this.renderer.camera.zoom);
-  var hilitePos = this.grafEd.getNearestPos(this.worldPos, GrafUi.HOVER_RADIUS);
-  if (hilitePos) {
+  // hilite
+  var hilitedIds = this.grafEd.getHilitedIds();
+  if (hilitedIds.length) {
     this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.5)');
-    this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafUi.HOVER_RADIUS);
+    for (var i = 0; i < hilitedIds.length; i++) {
+      var id = hilitedIds[i];
+      var hilitePos = this.grafEd.getPosById(id);
+      this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafEd.PART_RADIUS); //TODO: more deets, not just pos.
+    }
   }
+
+
   this.renderer.transformEnd();
   this.viewDirty = false;
 };
@@ -124,10 +177,10 @@ GrafUi.prototype.drawCluster = function(cluster) {
 };
 
 GrafUi.prototype.drawPart = function(part) {
-  this.renderer.strokeCirclePosXYRad(part.x, part.y, GrafUi.PART_RADIUS);
+  this.renderer.strokeCirclePosXYRad(part.x, part.y, GrafEd.PART_RADIUS);
   for (var jackId in part.jacks) {
     var jackPos = this.grafEd.getJackPos(jackId);
-    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, GrafUi.JACK_RADIUS);
+    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, GrafEd.JACK_RADIUS);
   }
 };
 

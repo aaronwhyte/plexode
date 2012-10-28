@@ -228,8 +228,8 @@ v Plan reorg
 v Move LevelEd to GrafEd
 v Redo VedApp in terms of GrafEd & GrafUi.
 
-2012.10.21
-Dragging parts - piped all the way through
+2012.10.21 - 2012.10.27
+Dragging parts 1
 v loop in GrafUi
 v don't redraw if nothing changed
 v mouse-to-world trans
@@ -243,29 +243,29 @@ v write & test SelStack
   v SelStack for state
   v support LevelProg levels :-/
   - writes
-    -* startSelection(pos) // set start and end
-    - continueSelection(pos) // sent end
-    - endSelection() // push selection
-    (no Stage or Commit on selection.)
+    v startSelection(pos) // set start and end
+    v continueSelection(pos) // sent end
+    v endSelection() // push selection
   - reads
     - getSelectionRect()
-    -* getIndicatedElements()
-      - query rect intersection
+    v getHilitedIds()
+      v query rect intersection
     - getSelection(n)
     - getSelectionsSize()
 - GrafUi
   - gestures
-    -* modes enum: DEFAULT, SELECTING
-    -* selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
-    - mouseMove && mode==SELECTING: ed.continueSelection
-    - mouseUp && mode==SELECTIONG: ed.endSelection; mode=DEFAULT
+    v modes enum: DEFAULT, SELECTING
+    v selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
+    v mouseMove && mode==SELECTING: ed.continueSelection
+    v mouseUp && mode==SELECTING: ed.endSelection; mode=DEFAULT
   - rendering
     - selection rect
-    -* indicated elements
+    v indicated elements
     - selections 0..n
 - verify everything works
 
-- begin drag selected on mouse-down
+Dragging parts 2
+- begin drag-selected on mouse-down
 - stage drag ops on move if dragging
 - end drag on mouse-up
 - set staged ops; reverses prev staged ops

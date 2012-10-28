@@ -211,3 +211,9 @@ Vec2d.midpoint = function(a, b) {
       .add(b)
       .scale(0.5);
 };
+
+Vec2d.distance = function(x0, y0, x1, y1) {
+  var dx = x0 - x1;
+  var dy = y0 - y1;
+  return Math.sqrt((dx * dx) + (dy * dy));
+};
