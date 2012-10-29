@@ -251,6 +251,19 @@ GrafEd.prototype.endSelection = function() {
   this.selectionEnd = null;
 };
 
+/**
+ * @return {Array} of [x0, y0, x1, y1] or null
+ */
+GrafEd.prototype.getSelectionRect = function() {
+  if (!this.selectionStart) return null;
+  return [
+    this.selectionStart.x, this.selectionStart.y,
+    this.selectionEnd.x, this.selectionEnd.y];
+};
+
+/**
+ * @return {Array} of IDs. If there aren't any, returns empty array.
+ */
 GrafEd.prototype.getHilitedIds = function() {
   if (!this.selectionStart) return [];
   var jackPos = Vec2d.alloc();

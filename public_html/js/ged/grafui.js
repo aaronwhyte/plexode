@@ -154,14 +154,19 @@ GrafUi.prototype.draw = function() {
   }
 
   // hilite
+  var selectionRect = this.grafEd.getSelectionRect();
+  if (selectionRect) {
+    this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.2)');
+    this.renderer.strokeRectCornersXYXY(
+        selectionRect[0], selectionRect[1],
+        selectionRect[2], selectionRect[3]);
+  }
   var hilitedIds = this.grafEd.getHilitedIds();
-  if (hilitedIds.length) {
-    this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.5)');
-    for (var i = 0; i < hilitedIds.length; i++) {
-      var id = hilitedIds[i];
-      var hilitePos = this.grafEd.getPosById(id);
-      this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafEd.PART_RADIUS); //TODO: more deets, not just pos.
-    }
+  this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.5)');
+  for (var i = 0; i < hilitedIds.length; i++) {
+    var id = hilitedIds[i];
+    var hilitePos = this.grafEd.getPosById(id);
+    this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafEd.PART_RADIUS); //TODO: more deets, not just pos.
   }
 
 

@@ -242,24 +242,24 @@ v write & test SelStack
 - GrafEd
   v SelStack for state
   v support LevelProg levels :-/
-  - writes
+  v writes
     v startSelection(pos) // set start and end
     v continueSelection(pos) // sent end
     v endSelection() // push selection
   - reads
-    - getSelectionRect()
+    v getSelectionRect()
     v getHilitedIds()
       v query rect intersection
-    - getSelection(n)
     - getSelectionsSize()
+    - getSelection(n)
 - GrafUi
-  - gestures
+  v gestures
     v modes enum: DEFAULT, SELECTING
     v selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
     v mouseMove && mode==SELECTING: ed.continueSelection
     v mouseUp && mode==SELECTING: ed.endSelection; mode=DEFAULT
   - rendering
-    - selection rect
+    v selection rect
     v indicated elements
     - selections 0..n
 - verify everything works
