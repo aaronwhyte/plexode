@@ -236,40 +236,46 @@ v mouse-to-world trans
 v position query
 [paused for Selection]
 
-2012.10.27
-Selection
+2012.10.27 - 2012.10.28
+Selection 1
 v write & test SelStack
-- GrafEd
+v GrafEd
   v SelStack for state
   v support LevelProg levels :-/
   v writes
     v startSelection(pos) // set start and end
     v continueSelection(pos) // sent end
     v endSelection() // push selection
-  - reads
+  v reads
     v getSelectionRect()
     v getHilitedIds()
       v query rect intersection
-    - getSelectionsSize()
-    - getSelection(n)
-- GrafUi
+    v getSelectionsSize()
+    v getSelection(n)
+v GrafUi
   v gestures
     v modes enum: DEFAULT, SELECTING
     v selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
     v mouseMove && mode==SELECTING: ed.continueSelection
     v mouseUp && mode==SELECTING: ed.endSelection; mode=DEFAULT
-  - rendering
+  v rendering
     v selection rect
     v indicated elements
-    - selections 0..n
-- verify everything works
+    v selections 0..n (mostly picking good colors :-)
+v verify everything works
 
 Dragging parts 2
-- begin drag-selected on mouse-down
+- begin drag on mouse-down
 - stage drag ops on move if dragging
 - end drag on mouse-up
 - set staged ops; reverses prev staged ops
 - commit staged ops
+
+Selection 2: Set Math
+- select all
+- add
+- subtract
+- pop
 
 Zooming
 - scroll-zoom at mouse point.

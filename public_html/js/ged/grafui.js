@@ -38,6 +38,16 @@ function GrafUi(grafEd, renderer, plugin) {
 
 GrafUi.FPS = 30;
 
+GrafUi.HILITE_COLOR = 'rgba(255, 255, 255, 0.9)';
+
+GrafUi.SELECTION_COLORS = [
+  'rgba(0, 255, 100, 0.95)',
+  'rgba(220, 180, 0, 0.85)',
+  'rgba(210, 90, 0, 0.35)',
+  'rgba(200, 40, 0, 0.2)'
+];
+
+
 /**
  * @enum {String}
  */
@@ -153,22 +163,38 @@ GrafUi.prototype.draw = function() {
     this.drawLink(graf.links[linkId]);
   }
 
+  // selections
+  var selectionsSize = this.grafEd.getSelectionsSize();
+  var alpha = 0.9;
+  for (var i = 0; i < Math.min(selectionsSize, GrafUi.SELECTION_COLORS.length); i++) {
+    this.renderer.setStrokeStyle(GrafUi.SELECTION_COLORS[i]);
+    var selIds = this.grafEd.getSelection(i);
+    for (var s = 0; s < selIds.length; s++) {
+      var id = selIds[s];
+      var selPos = this.grafEd.getPosById(id);
+      var rad = GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING;
+      rad -= i * GrafEd.SELECTION_PADDING / GrafUi.SELECTION_COLORS.length;
+      this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, rad); //TODO: more deets, not just pos.
+    }
+    alpha *= 0.75;
+  }
+
   // hilite
-  var selectionRect = this.grafEd.getSelectionRect();
-  if (selectionRect) {
-    this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.2)');
+  this.renderer.setStrokeStyle(GrafUi.HILITE_COLOR);
+  var hiliteRect = this.grafEd.getHiliteRect();
+  if (hiliteRect) {
     this.renderer.strokeRectCornersXYXY(
-        selectionRect[0], selectionRect[1],
-        selectionRect[2], selectionRect[3]);
+        hiliteRect[0], hiliteRect[1],
+        hiliteRect[2], hiliteRect[3]);
   }
   var hilitedIds = this.grafEd.getHilitedIds();
-  this.renderer.setStrokeStyle('rgba(0, 255, 0, 0.5)');
+  var hoverId = this.grafEd.getNearestId(this.worldPos, GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING);
+  if (hoverId) hilitedIds.push(hoverId);
   for (var i = 0; i < hilitedIds.length; i++) {
     var id = hilitedIds[i];
     var hilitePos = this.grafEd.getPosById(id);
     this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafEd.PART_RADIUS); //TODO: more deets, not just pos.
   }
-
 
   this.renderer.transformEnd();
   this.viewDirty = false;

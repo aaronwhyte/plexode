@@ -46,7 +46,7 @@ GrafEd.createFromOpStor = function(opStor) {
 GrafEd.PART_RADIUS = 50;
 GrafEd.JACK_DISTANCE = 70;
 GrafEd.JACK_RADIUS = 20;
-GrafEd.SELECTION_PADDING = 20;
+GrafEd.SELECTION_PADDING = 30;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
@@ -246,7 +246,10 @@ GrafEd.prototype.continueSelectionXY = function(x, y) {
 };
 
 GrafEd.prototype.endSelection = function() {
-  this.selStack.push(this.getHilitedIds());
+  var ids = this.getHilitedIds();
+  if (ids.length) {
+    this.selStack.push(ids);
+  }
   this.selectionStart = null;
   this.selectionEnd = null;
 };
@@ -254,7 +257,7 @@ GrafEd.prototype.endSelection = function() {
 /**
  * @return {Array} of [x0, y0, x1, y1] or null
  */
-GrafEd.prototype.getSelectionRect = function() {
+GrafEd.prototype.getHiliteRect = function() {
   if (!this.selectionStart) return null;
   return [
     this.selectionStart.x, this.selectionStart.y,
@@ -292,6 +295,9 @@ GrafEd.prototype.getHilitedIds = function() {
   return idSet.getValues();
 };
 
+/**
+ * @return {Vec2d?}
+ */
 GrafEd.prototype.getPosById = function(id) {
   var part = this.model.getPart(id);
   if (part) {
@@ -302,6 +308,15 @@ GrafEd.prototype.getPosById = function(id) {
     return this.getJackPos(id);
   }
   return null;
+};
+
+GrafEd.prototype.getSelectionsSize = function() {
+  return this.selStack.size();
+};
+
+GrafEd.prototype.getSelection = function(opt_num) {
+  var num = opt_num || 0;
+  return this.selStack.peek(num);
 };
 
 
