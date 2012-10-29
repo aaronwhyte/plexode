@@ -229,7 +229,7 @@ v Move LevelEd to GrafEd
 v Redo VedApp in terms of GrafEd & GrafUi.
 
 2012.10.21 - 2012.10.27
-Dragging parts 1
+Dragging 1
 v loop in GrafUi
 v don't redraw if nothing changed
 v mouse-to-world trans
@@ -264,18 +264,27 @@ v GrafUi
     v selections 0..n (mostly picking good colors :-)
 v verify everything works
 
-Dragging parts 2
-- begin drag on mouse-down
-- stage drag ops on move if dragging
-- end drag on mouse-up
-- set staged ops; reverses prev staged ops
-- commit staged ops
-
-Selection 2: Set Math
-- select all
-- add
-- subtract
-- pop
+Dragging 2
+- GrafEd
+  - startDrag(pos)
+    - set dragStart and dragEnd vecs
+  - continueDrag(pos)
+    - set dragEnd
+    - unstage and stage
+  - endDrag()
+    - commit staged ops
+- GrafUi
+  - DRAGGING mode
+  - keys
+    - listener
+    - btn constants
+  - dragBtnDown - "d"? && mode=DEFAULT: ed.startDrag; mode=DRAGGING
+  - mouseMove && mode==DRAGGING: ed.continueDrag
+  - mouseUp && mode==DRAGGING: ed.endDrag; mode=DEFAULT
+  - Throttle mouse-move effect to be once per frame.
+    - dirtyMouse
+    - worldPos update
+    - move other logic to event loop.
 
 Zooming
 - scroll-zoom at mouse point.
@@ -283,17 +292,21 @@ Zooming
 //- pinch zoom at pinch center? It's totes doable.
 
 Panning
-- mouse grab-drag in empty space
-//- arrows
+- pan-key and drag
+- arrows
 //- touch drag in empty space
 
+Stor Events
+- multi-tab demo works
+
+Selection 2: Set Math
+- select all
+- add
+- subtract
+- pop
+- exchange s0 and s1?
 
 Ved UI API:
-- iteration for rendering
-  - spacial queries
-  - mouseover
-  - drag selection
-  - alter selection
 - copy selection to a clipboard
 - changes
   - paste from a clipboard
