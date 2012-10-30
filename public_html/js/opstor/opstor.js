@@ -18,7 +18,9 @@ function OpStor(stor, name) {
  */
 OpStor.prototype.appendOp = function(clientOpId, op) {
   var nextIndex = this.stor.getNextIndex(this.name);
-  var value = [nextIndex, clientOpId, op];
+  // TODO: Maybe really put that multi-client reordering stuff in.
+  //var value = [nextIndex, clientOpId, op];
+  var value = op;
   var actualIndex = this.stor.appendValue(this.name, value);
   if (nextIndex != actualIndex) throw Error("nextIndex " + nextIndex + " != actualIndex " + actualIndex);
   return actualIndex;

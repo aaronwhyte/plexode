@@ -19,6 +19,9 @@ SelStack.prototype.size = function() {
  * @param {plex.StringSet} selection
  */
 SelStack.prototype.push = function(selection) {
+  if (selection.constructor != plex.StringSet) {
+    throw Error("selection.constructor == " + (selection.constructor));
+  }
   this.stack.push(selection);
 };
 

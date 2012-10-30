@@ -23,6 +23,13 @@ plex.StringSet.prototype.put = function(v) {
   return this;
 };
 
+plex.StringSet.prototype.putArray = function(a) {
+  for (var i = 0; i < a.length; i++) {
+    this.m[plex.StringSet.PREFIX + a[i]] = true;
+  }
+  return this;
+};
+
 plex.StringSet.prototype.contains = function(v) {
   return !!this.m[plex.StringSet.PREFIX + v];
 };

@@ -264,27 +264,28 @@ v GrafUi
     v selections 0..n (mostly picking good colors :-)
 v verify everything works
 
+2012.10.29 - 2012.10.29
 Dragging 2
-- GrafEd
-  - startDrag(pos)
-    - set dragStart and dragEnd vecs
-  - continueDrag(pos)
-    - set dragEnd
-    - unstage and stage
-  - endDrag()
-    - commit staged ops
-- GrafUi
-  - DRAGGING mode
-  - keys
-    - listener
-    - btn constants
-  - dragBtnDown - "d"? && mode=DEFAULT: ed.startDrag; mode=DRAGGING
-  - mouseMove && mode==DRAGGING: ed.continueDrag
-  - mouseUp && mode==DRAGGING: ed.endDrag; mode=DEFAULT
-  - Throttle mouse-move effect to be once per frame.
-    - dirtyMouse
-    - worldPos update
-    - move other logic to event loop.
+v GrafEd
+  v startDrag(pos)
+    v set dragStart and dragEnd vecs
+  v continueDrag(pos)
+    v set dragEnd
+    v unstage and stage
+  v endDrag()
+    v commit staged ops
+v GrafUi
+  v DRAGGING mode
+  v keys
+    v listener
+    x btn constants
+  v dragBtnDown - "z"? && mode=DEFAULT: ed.startDrag; mode=DRAGGING
+  v mouseMove && mode==DRAGGING: ed.continueDrag
+  v dragBtnUp && mode==DRAGGING: ed.endDrag; mode=DEFAULT
+  v Throttle mouse-move effect to be once per frame.
+    v dirtyMouse
+    v worldPos update
+    v move other logic to event loop.
 
 Zooming
 - scroll-zoom at mouse point.

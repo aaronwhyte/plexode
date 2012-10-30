@@ -34,6 +34,14 @@ function GrafEd(model, opt_opStor) {
   // two Vec2ds (or nulls)
   this.selectionStart = null;
   this.selectionEnd = null;
+
+  // two Vec2ds (or nulls)
+  this.dragStart = null;
+  this.dragEnd = null;
+
+  // A list of GrafOps that are reflected in the GrafModel, but not commited to the OpStor.
+  // Used by continuous-preview changes, like dragging parts
+  this.stagedOps = [];
 }
 
 GrafEd.createFromOpStor = function(opStor) {
@@ -75,6 +83,7 @@ GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
 GrafEd.prototype.paste = function(clipModel) {
   var ops = clipModel.createOps();
   var idMap = this.model.rewriteOpIds(ops);
+  this.model.applyOps(ops);
   this.commitOps(ops);
 
   this.selectByIds(plex.object.values(idMap), true);
@@ -146,11 +155,7 @@ GrafEd.prototype.clearSelection = function() {
   while(this.selStack.pop());
 };
 
-/**
- * Moves all selected parts by the offset vector value.
- * @param {Vec2d} offset
- */
-GrafEd.prototype.moveSelectedParts = function(offset) {
+GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
   var ops = [];
   var ids = this.getSelectedIds();
   for (var i = 0; i < ids.length; i++) {
@@ -158,20 +163,31 @@ GrafEd.prototype.moveSelectedParts = function(offset) {
     var part = this.model.getPart(id);
     if (!part) continue; // may be a jack
     ops.push({
-      type: GrafOp.Type.MOVE_PART,
-      id: id,
-      x: part.x + offset.x,
-      y: part.y + offset.y,
-      oldX: part.x,
-      oldY: part.y
+      type:GrafOp.Type.MOVE_PART,
+      id:id,
+      x:part.x + offset.x,
+      y:part.y + offset.y,
+      oldX:part.x,
+      oldY:part.y
     });
   }
+  return ops;
+}
+
+/**
+ * Moves all selected parts by the offset vector value.
+ * @param {Vec2d} offset
+ */
+GrafEd.prototype.moveSelectedParts = function(offset) {
+  var ops = this.getMoveSelectedPartsOps(offset);
+  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
 GrafEd.prototype.getSelectedIds = function(opt_num) {
   var num = opt_num || 0;
-  return this.selStack.peek(num).getValues();
+  var stringSet = this.selStack.peek(num);
+  return stringSet ? stringSet.getValues() : [];
 };
 
 /**
@@ -217,6 +233,7 @@ GrafEd.prototype.linkSelectedJacks = function() {
       });
     }
   }
+  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
@@ -233,6 +250,7 @@ GrafEd.prototype.setDataOnSelection = function(keyVals) {
       }
     }
   }
+  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
@@ -248,7 +266,7 @@ GrafEd.prototype.continueSelectionXY = function(x, y) {
 GrafEd.prototype.endSelection = function() {
   var ids = this.getHilitedIds();
   if (ids.length) {
-    this.selStack.push(ids);
+    this.selStack.push((new plex.StringSet()).putArray(ids));
   }
   this.selectionStart = null;
   this.selectionEnd = null;
@@ -295,6 +313,26 @@ GrafEd.prototype.getHilitedIds = function() {
   return idSet.getValues();
 };
 
+GrafEd.prototype.startDragXY = function(x, y) {
+  this.dragStart = new Vec2d(x, y);
+  this.dragEnd = new Vec2d(x, y);
+};
+
+GrafEd.prototype.continueDragXY = function(x, y) {
+  this.dragEnd.setXY(x, y);
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  var offset = new Vec2d().set(this.dragEnd).subtract(this.dragStart);
+  this.stagedOps = this.getMoveSelectedPartsOps(offset);
+  this.model.applyOps(this.stagedOps);
+};
+
+GrafEd.prototype.endDrag = function() {
+  this.commitOps(this.stagedOps);
+  this.stagedOps.length = 0;
+  this.dragStart = null;
+  this.dragEnd = null;
+};
+
 /**
  * @return {Vec2d?}
  */
@@ -312,11 +350,6 @@ GrafEd.prototype.getPosById = function(id) {
 
 GrafEd.prototype.getSelectionsSize = function() {
   return this.selStack.size();
-};
-
-GrafEd.prototype.getSelection = function(opt_num) {
-  var num = opt_num || 0;
-  return this.selStack.peek(num);
 };
 
 
@@ -404,11 +437,14 @@ GrafEd.prototype.selectByIds = function(partOrJackIds, selected) {
   }
 };
 
+/**
+ * Writes ops to the opstor if there is one.
+ * @param {Array<GrafOp>} ops
+ */
 GrafEd.prototype.commitOps = function(ops) {
   if (this.opStor) {
     for (var i = 0; i < ops.length; i++) {
       this.opStor.appendOp(i, ops[i]);
     }
   }
-  this.model.applyOps(ops);
 };

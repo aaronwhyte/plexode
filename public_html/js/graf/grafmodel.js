@@ -109,8 +109,8 @@ GrafModel.prototype.applyOp = function(op) {
       part = this.getPart(op.id);
       assertObjExists(part);
       if (part.x != op.oldX || part.y != op.oldY) {
-        throw Error('Old coords ' + [part.x, part.y] +
-            'do not match op\'s expected coords. ' + dumpOp());
+        throw Error('Part\'s current coords ' + [part.x, part.y] +
+            ' do not match op\'s oldX/Y coords. ' + dumpOp());
       }
       part.x = op.x;
       part.y = op.y;

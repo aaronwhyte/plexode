@@ -29,6 +29,7 @@ function GrafUi(grafEd, renderer, plugin) {
   this.renderer = renderer;
   this.plugin = plugin;
   this.viewDirty = true;
+  this.pointerDirty = true;
   this.mode = GrafUi.Mode.DEFAULT;
 
   this.loop = null;
@@ -52,16 +53,17 @@ GrafUi.SELECTION_COLORS = [
  * @enum {String}
  */
 GrafUi.Mode = {
+  DRAGGING: 'dragging',
   SELECTING: 'selecting',
   DEFAULT: 'default'
 };
 
 GrafUi.prototype.startLoop = function() {
-  // TODO: replace GU_startKeyListener with nicer thing
-  GU_startKeyListener();
   plex.event.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
   plex.event.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
   plex.event.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
+  plex.event.addListener(document, 'keydown', this.getKeyDownListener());
+  plex.event.addListener(document, 'keyup', this.getKeyUpListener());
   if (!this.loop) {
     var self = this;
     this.loop = new plex.Loop(
@@ -80,14 +82,13 @@ GrafUi.prototype.stopLoop = function() {
 };
 
 GrafUi.prototype.getMouseMoveListener = function() {
+  // Because there can be lots of mousemoves between frames,
+  // defer handling moves until clock().
   var self = this;
   return function(event) {
-    self.viewDirty = true;
+    self.pointerDirty = true;
     var event = event || window.event;
     self.setScreenPosWithEvent(event);
-    if (self.mode == GrafUi.Mode.SELECTING) {
-      self.grafEd.continueSelectionXY(self.worldPos.x, self.worldPos.y);
-    }
   };
 };
 
@@ -101,6 +102,7 @@ GrafUi.prototype.getMouseDownListener = function() {
       self.mode = GrafUi.Mode.SELECTING;
       self.grafEd.startSelectionXY(self.worldPos.x, self.worldPos.y);
     }
+    self.pointerDirty = false;
   };
 };
 
@@ -113,6 +115,35 @@ GrafUi.prototype.getMouseUpListener = function() {
     if (self.mode == GrafUi.Mode.SELECTING) {
       self.grafEd.continueSelectionXY(self.worldPos.x, self.worldPos.y);
       self.grafEd.endSelection();
+      self.mode = GrafUi.Mode.DEFAULT;
+    } else if (self.mode == GrafUi.Mode.DRAGGING) {
+      self.grafEd.continueDragXY(self.worldPos.x, self.worldPos.y);
+      self.grafEd.endDrag();
+      self.plugin.invalidate();
+      self.mode = GrafUi.Mode.DEFAULT;
+    }
+    self.pointerDirty = false;
+  };
+};
+
+GrafUi.prototype.getKeyDownListener = function() {
+  var self = this;
+  return function(event) {
+    var event = event || window.event;
+    if (self.mode == GrafUi.Mode.DEFAULT && event.keyCode == VK_Z) {
+      self.mode = GrafUi.Mode.DRAGGING;
+      self.grafEd.startDragXY(self.worldPos.x, self.worldPos.y);
+    }
+  };
+};
+
+GrafUi.prototype.getKeyUpListener = function() {
+  var self = this;
+  return function(event) {
+    var event = event || window.event;
+    if (self.mode == GrafUi.Mode.DRAGGING && event.keyCode == VK_Z) {
+      self.grafEd.continueDragXY(self.worldPos.x, self.worldPos.y);
+      self.grafEd.endDrag();
       self.mode = GrafUi.Mode.DEFAULT;
     }
   };
@@ -139,6 +170,17 @@ GrafUi.prototype.updateWorldPos = function() {
 
 
 GrafUi.prototype.clock = function() {
+  if (this.pointerDirty) {
+    if (this.mode == GrafUi.Mode.SELECTING) {
+      this.grafEd.continueSelectionXY(this.worldPos.x, this.worldPos.y);
+      this.viewDirty = true;
+    } else if (this.mode == GrafUi.Mode.DRAGGING) {
+      this.grafEd.continueDragXY(this.worldPos.x, this.worldPos.y);
+      this.plugin.invalidate();
+      this.viewDirty = true;
+    }
+    this.pointerDirty = false;
+  }
   this.draw();
 };
 
@@ -168,7 +210,7 @@ GrafUi.prototype.draw = function() {
   var alpha = 0.9;
   for (var i = 0; i < Math.min(selectionsSize, GrafUi.SELECTION_COLORS.length); i++) {
     this.renderer.setStrokeStyle(GrafUi.SELECTION_COLORS[i]);
-    var selIds = this.grafEd.getSelection(i);
+    var selIds = this.grafEd.getSelectedIds(i);
     for (var s = 0; s < selIds.length; s++) {
       var id = selIds[s];
       var selPos = this.grafEd.getPosById(id);
