@@ -59,11 +59,14 @@ GrafUi.Mode = {
 };
 
 GrafUi.prototype.startLoop = function() {
-  plex.event.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
-  plex.event.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
-  plex.event.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
-  plex.event.addListener(document, 'keydown', this.getKeyDownListener());
-  plex.event.addListener(document, 'keyup', this.getKeyUpListener());
+  if (!this.listeners) {
+    this.listeners = new plex.event.ListenerTracker();
+    this.listeners.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
+    this.listeners.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
+    this.listeners.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
+    this.listeners.addListener(document, 'keydown', this.getKeyDownListener());
+    this.listeners.addListener(document, 'keyup', this.getKeyUpListener());
+  }
   if (!this.loop) {
     var self = this;
     this.loop = new plex.Loop(
@@ -76,6 +79,10 @@ GrafUi.prototype.startLoop = function() {
 };
 
 GrafUi.prototype.stopLoop = function() {
+  if (this.listeners) {
+    this.listeners.removeAllListeners();
+    this.listeners = null;
+  }
   if (this.loop) {
     this.loop.stop();
   }

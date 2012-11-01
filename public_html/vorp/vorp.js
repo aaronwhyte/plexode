@@ -89,8 +89,15 @@ Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
 };
 
 Vorp.prototype.startLoop = function() {
-  // TODO: replace GU_startKeyListener with nicer thing
-  GU_startKeyListener();
+  if (!this.editable) {
+    if (!this.listeners) {
+      // TODO: remove all GU_* stuff
+      GU_keys.length = 0;
+      this.listeners = new plex.event.ListenerTracker();
+      this.listeners.addListener(document, 'keydown', GU_keyDown);
+      this.listeners.addListener(document, 'keyup', GU_keyUp);
+    }
+  }
   if (!this.loop) {
     var self = this;
     this.loop = new plex.Loop(
@@ -103,6 +110,11 @@ Vorp.prototype.startLoop = function() {
 };
 
 Vorp.prototype.stopLoop = function() {
+  if (this.listeners) {
+    this.listeners.removeAllListeners();
+    this.listeners = null;
+    GU_keys.length = 0;
+  }
   if (this.loop) {
     this.loop.stop();
   }

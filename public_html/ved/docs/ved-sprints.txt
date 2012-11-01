@@ -287,6 +287,11 @@ v GrafUi
     v worldPos update
     v move other logic to event loop.
 
+Stor Events
+v remove listeners when navigating away. Otherwise you double edit & break op reversibility.
+- add stor event listeners
+- multi-tab demo works
+
 Zooming
 - scroll-zoom at mouse point.
 //- key-zoom at centermouse point
@@ -296,9 +301,6 @@ Panning
 - pan-key and drag
 - arrows
 //- touch drag in empty space
-
-Stor Events
-- multi-tab demo works
 
 Selection 2: Set Math
 - select all

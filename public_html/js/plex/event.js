@@ -170,3 +170,23 @@ plex.event.preventDefault = function(event) {
     event.cancelBubble = true;
   }
 };
+
+/**
+ * Tracks listeners so unlistening can be done easily.
+ * @constructor
+ */
+plex.event.ListenerTracker = function() {
+  this.listeners = [];
+};
+
+plex.event.ListenerTracker.prototype.addListener = function(element, eventName, fn) {
+  plex.event.addListener(element, eventName, fn);
+  this.listeners.push([element, eventName, fn]);
+};
+
+plex.event.ListenerTracker.prototype.removeAllListeners = function() {
+  var a;
+  while (a = this.listeners.pop()) {
+    plex.event.removeListener(a[0], a[1], a[2]);
+  }
+};
