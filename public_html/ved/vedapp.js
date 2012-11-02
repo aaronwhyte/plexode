@@ -180,10 +180,11 @@ VedApp.prototype.renderTesting = function(appDiv, levelName) {
 
   // get level graf
   var opStor = new OpStor(this.stor, levelName);
-  var levelOps = opStor.getOpsAfterIndex(-1);
+  var levelValues = opStor.getValuesAfterIndex(-1);
   var grafModel = new GrafModel();
-  grafModel.applyOps(levelOps);
-
+  for (var i = 0; i < levelValues.length; i++) {
+    grafModel.applyOp(levelValues[i][OpStor.field.OP]);
+  }
   // create vorp instance
   var renderer = new Renderer(canvas, new Camera());
   var gameClock = new GameClock();
@@ -207,7 +208,11 @@ VedApp.prototype.nuke = function() {
 
 VedApp.prototype.repopulate = function() {
   for (var levelName in this.testLevelMap) {
-    this.stor.appendValues(levelName, this.testLevelMap[levelName]);
+    var opStor = new OpStor(this.stor, levelName);
+    var ops = this.testLevelMap[levelName];
+    for (var i = 0; i < ops.length; i++) {
+      opStor.appendOp('repop_' + i, ops[i]);
+    }
   }
 };
 

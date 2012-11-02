@@ -2,11 +2,11 @@
 <html>
 <head>
 <title>OpStor tests</title>
-<script src="../../../public_html/js/testing.js"></script>
-<script src="../../../public_html/js/util.js"></script>
-<script src="../../../public_html/js/plex/pubsub.js"></script>
-<script src="../../../public_html/js/stor/stor.js"></script>
-<script src="../../../public_html/js/opstor/opstor.js"></script>
+<script src="../../../../public_html/js/testing.js"></script>
+<script src="../../../../public_html/js/util.js"></script>
+<script src="../../../../public_html/js/plex/pubsub.js"></script>
+<script src="../../../../public_html/js/stor/stor.js"></script>
+<script src="../../../../public_html/js/opstor/opstor.js"></script>
 <script>
 
 addTest(function testServerAssignedOpIds() {
@@ -22,12 +22,12 @@ addTest(function testServerAssignedOpIds() {
         [2, 'client2-100', {x:2}],
         [3, 'client1-101', {x:3}]
       ],
-      opStor.getOpsAfterIndex(-Infinity));
+      opStor.getValuesAfterIndex(-Infinity));
   assertStringifyEquals(
       [
         [3, 'client1-101', {x:3}]
       ],
-      opStor.getOpsAfterIndex(2));
+      opStor.getValuesAfterIndex(2));
 });
 
 </script>

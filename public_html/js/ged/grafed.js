@@ -45,9 +45,11 @@ function GrafEd(model, opt_opStor) {
 }
 
 GrafEd.createFromOpStor = function(opStor) {
-  var ops = opStor.getOpsAfterIndex(-1);
+  var values = opStor.getValuesAfterIndex(-1);
   var model = new GrafModel();
-  model.applyOps(ops);
+  for (var i = 0; i < values.length; i++) {
+    model.applyOp(values[i][OpStor.field.OP]);
+  }
   return new GrafEd(model, opStor);
 };
 

@@ -287,10 +287,24 @@ v GrafUi
     v worldPos update
     v move other logic to event loop.
 
-Stor Events
+2012.10.231 - 2012.10.31
+Listener disposal
 v remove listeners when navigating away. Otherwise you double edit & break op reversibility.
-- add stor event listeners
+  v ved
+  v vorp
+
+Pipe LocalStorage events to GrafUi
+- add stor pubsub subs (and remove them when appropriate)
+  - grafed subscribes to opstor
+  - grafui subscribes to grafed
 - multi-tab demo works
+  - changes are reflected immediately
+  - multitab editing doesn't cause reversibility check failure on op load
+
+Indicator polish
+- differentiate jacks and parts
+- restore hover indicator
+
 
 Zooming
 - scroll-zoom at mouse point.

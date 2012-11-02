@@ -11,6 +11,15 @@ function OpStor(stor, name) {
 }
 
 /**
+ * @enum {Number
+ */
+OpStor.field = {
+  OP_INDEX: 0,
+  CLIENT_OP_ID: 1,
+  OP: 2
+};
+
+/**
  * Appends a new value to the stor. Creates a new names object if the name isn't in use.
  * @param clientOpId used by clients to re-order non-idempotent ops when there are multiple clients. See design doc.
  * @param op The actual operation payload
@@ -18,9 +27,7 @@ function OpStor(stor, name) {
  */
 OpStor.prototype.appendOp = function(clientOpId, op) {
   var nextIndex = this.stor.getNextIndex(this.name);
-  // TODO: Maybe really put that multi-client reordering stuff in.
-  //var value = [nextIndex, clientOpId, op];
-  var value = op;
+  var value = [nextIndex, clientOpId, op];
   var actualIndex = this.stor.appendValue(this.name, value);
   if (nextIndex != actualIndex) throw Error("nextIndex " + nextIndex + " != actualIndex " + actualIndex);
   return actualIndex;
@@ -28,9 +35,9 @@ OpStor.prototype.appendOp = function(clientOpId, op) {
 
 /**
  * @param {number} afterIndex
- * @return {Array} ops
+ * @return {Array<Array>} an array of rows where each has the fields in OpStor.fields.
  */
-OpStor.prototype.getOpsAfterIndex = function(afterIndex) {
+OpStor.prototype.getValuesAfterIndex = function(afterIndex) {
   return this.stor.getValuesAfterIndex(this.name, afterIndex);
 };
 
