@@ -42,15 +42,19 @@ function GrafEd(model, opt_opStor) {
   // A list of GrafOps that are reflected in the GrafModel, but not commited to the OpStor.
   // Used by continuous-preview changes, like dragging parts
   this.stagedOps = [];
+
+  // for this to pass to OpStor
+  this.opStorCallback = null;
+  this.highestOpStorIndex = -1;
+
+  // for GrafUi to set
+  this.invalidationCallback = null;
 }
 
 GrafEd.createFromOpStor = function(opStor) {
-  var values = opStor.getValuesAfterIndex(-1);
-  var model = new GrafModel();
-  for (var i = 0; i < values.length; i++) {
-    model.applyOp(values[i][OpStor.field.OP]);
-  }
-  return new GrafEd(model, opStor);
+  var grafEd = new GrafEd(new GrafModel(), opStor);
+  grafEd.syncOps();
+  return grafEd;
 };
 
 GrafEd.PART_RADIUS = 50;
@@ -85,7 +89,6 @@ GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
 GrafEd.prototype.paste = function(clipModel) {
   var ops = clipModel.createOps();
   var idMap = this.model.rewriteOpIds(ops);
-  this.model.applyOps(ops);
   this.commitOps(ops);
 
   this.selectByIds(plex.object.values(idMap), true);
@@ -182,7 +185,6 @@ GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
  */
 GrafEd.prototype.moveSelectedParts = function(offset) {
   var ops = this.getMoveSelectedPartsOps(offset);
-  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
@@ -235,7 +237,6 @@ GrafEd.prototype.linkSelectedJacks = function() {
       });
     }
   }
-  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
@@ -252,7 +253,6 @@ GrafEd.prototype.setDataOnSelection = function(keyVals) {
       }
     }
   }
-  this.model.applyOps(ops);
   this.commitOps(ops);
 };
 
@@ -329,6 +329,7 @@ GrafEd.prototype.continueDragXY = function(x, y) {
 };
 
 GrafEd.prototype.endDrag = function() {
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   this.commitOps(this.stagedOps);
   this.stagedOps.length = 0;
   this.dragStart = null;
@@ -350,8 +351,29 @@ GrafEd.prototype.getPosById = function(id) {
   return null;
 };
 
+/**
+ * @return {Number}
+ */
 GrafEd.prototype.getSelectionsSize = function() {
   return this.selStack.size();
+};
+
+/**
+ * @param callback called with no params when the model changes due to LocalStorage stuff.
+ */
+GrafEd.prototype.setCallback = function(callback) {
+  this.invalidationCallback = function() {
+    callback.call(null);
+  };
+  if (this.opStor) {
+    this.subscribeToOpStor();
+  }
+};
+
+GrafEd.prototype.unsubscribe = function() {
+  if (this.opStor) {
+    this.unsubscribeFromOpStor();
+  }
 };
 
 
@@ -448,5 +470,37 @@ GrafEd.prototype.commitOps = function(ops) {
     for (var i = 0; i < ops.length; i++) {
       this.opStor.appendOp(i, ops[i]);
     }
+    this.syncOps();
+  } else {
+    // Can't bounce ops off opStor, so apply them directly.
+    this.model.applyOps(ops);
   }
+};
+
+GrafEd.prototype.syncOps = function() {
+  var opsSynced = 0;
+  var values = this.opStor.getValuesAfterIndex(this.highestOpStorIndex);
+  for (var i = 0; i < values.length; i++) {
+    this.model.applyOp(values[i][OpStor.field.OP]);
+    this.highestOpStorIndex = values[i][OpStor.field.OP_INDEX];
+    opsSynced++;
+  }
+  if (opsSynced && this.invalidationCallback) {
+    this.invalidationCallback.call(null);
+  }
+};
+
+GrafEd.prototype.subscribeToOpStor = function() {
+  if (this.opStorCallback) return;
+  var self = this;
+  this.opStorCallback = function() {
+    self.syncOps();
+  };
+  this.opStor.subscribe(this.opStorCallback);
+};
+
+GrafEd.prototype.unsubscribeFromOpStor = function() {
+  if (!this.opStorCallback) return;
+  this.opStor.unsubscribe(this.opStorCallback);
+  this.opStorCallback = null;
 };

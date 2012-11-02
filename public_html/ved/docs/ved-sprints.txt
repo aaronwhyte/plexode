@@ -287,19 +287,22 @@ v GrafUi
     v worldPos update
     v move other logic to event loop.
 
-2012.10.231 - 2012.10.31
+2012.10.31 - 2012.10.31
 Listener disposal
 v remove listeners when navigating away. Otherwise you double edit & break op reversibility.
   v ved
   v vorp
 
+2012.11.01 - 2012.11.01
 Pipe LocalStorage events to GrafUi
-- add stor pubsub subs (and remove them when appropriate)
-  - grafed subscribes to opstor
-  - grafui subscribes to grafed
-- multi-tab demo works
-  - changes are reflected immediately
-  - multitab editing doesn't cause reversibility check failure on op load
+v fix OpStor op wrapping
+v add stor pubsub subs (and remove them when appropriate)
+  v grafed subscribes to opstor
+  v grafui sets grafEd callback
+v multi-tab demo works
+  v committed changes are reflected immediately
+  v multitab editing doesn't cause reversibility check failure on op load
+
 
 Indicator polish
 - differentiate jacks and parts

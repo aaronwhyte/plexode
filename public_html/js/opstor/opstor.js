@@ -46,7 +46,9 @@ OpStor.prototype.getValuesAfterIndex = function(afterIndex) {
  * @param {function} callback
  */
 OpStor.prototype.subscribe = function(callback) {
-  this.stor.subscribe(function() {
-    callback();
-  });
+  this.stor.subscribe(callback);
+};
+
+OpStor.prototype.unsubscribe = function(callback) {
+  this.stor.unsubscribe(callback);
 };

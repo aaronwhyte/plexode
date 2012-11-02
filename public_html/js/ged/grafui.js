@@ -59,6 +59,7 @@ GrafUi.Mode = {
 };
 
 GrafUi.prototype.startLoop = function() {
+  this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   if (!this.listeners) {
     this.listeners = new plex.event.ListenerTracker();
     this.listeners.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
@@ -86,6 +87,15 @@ GrafUi.prototype.stopLoop = function() {
   if (this.loop) {
     this.loop.stop();
   }
+  this.grafEd.unsubscribe();
+};
+
+GrafUi.prototype.getGrafEdInvalidationCallback = function() {
+  var self = this;
+  return function() {
+    self.viewDirty = true;
+    self.plugin.invalidate();
+  };
 };
 
 GrafUi.prototype.getMouseMoveListener = function() {

@@ -108,9 +108,9 @@ Stor.prototype.appendValue = function(name, value) {
   // Cache the last index value, to avoid a chain of lookups next time.
   this.lastIndex[dataId] = nextIndex;
 
-  // Windows won't publish storage events they initiate, so publish one ourselves.
-  var self = this;
-  window.setTimeout(function(){self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, value)}, 0);
+//  // Windows won't publish storage events they initiate, so publish one ourselves.
+//  var self = this;
+//  window.setTimeout(function(){self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, value)}, 0);
 
   return this.lastIndex[dataId];
 };
@@ -166,6 +166,10 @@ Stor.prototype.getNextIndex = function(name) {
  */
 Stor.prototype.subscribe = function(fn) {
   this.pubsub.subscribe(fn);
+};
+
+Stor.prototype.unsubscribe = function(callback) {
+  this.pubsub.unsubscribe(callback);
 };
 
 /**

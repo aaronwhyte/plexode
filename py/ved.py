@@ -27,6 +27,7 @@ def formatVed(vorpJsName, vedJsName):
 var vedApp;
 function main() {
   var stor = new Stor(localStorage, 'ved');
+  stor.listenToStorage();
   vedApp = new VedApp(document.getElementById('vedroot'), stor, vorpLevels);
   vedApp.render();
 }
