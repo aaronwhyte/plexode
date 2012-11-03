@@ -5,6 +5,7 @@ function SparkList() {
   this.now = -1;
   this.sparks = [];
   this.size = 0;
+  this.lastAdvanceTime = -1;
 }
 
 //////////////
@@ -67,6 +68,7 @@ SparkList.prototype.add = function(src) {
  * Clears out the kaput sparks, and calls advanceSpark() on the rest
  */
 SparkList.prototype.advance = function(now) {
+  if (now == this.lastAdvanceTime) return;
   for (var i = 0; i < this.size; i++) {
     if (this.isKaput(this.sparks[i], now)) {
       if (i < this.size - 1) {
@@ -79,6 +81,7 @@ SparkList.prototype.advance = function(now) {
   for (var i = 0; i < this.size; i++) {
     this.advanceSpark(this.sparks[i], now);
   }
+  this.lastAdvanceTime = now;
 };
 
 /**

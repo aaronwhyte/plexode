@@ -304,9 +304,16 @@ v multi-tab demo works
   v multitab editing doesn't cause reversibility check failure on op load
 
 
-Indicator polish
-- differentiate jacks and parts
-- restore hover indicator
+2012.11.02 - 2012.11.02
+Some UI polish
+v expand mousemove listener to whole page
+v restore hover indicator
+v stop playersprite smoke from animating on vorp.draw()
+v separate selection mouse padding from rendering padding
+v fix slight mouse offset
+v differentiate jacks and parts - radius
+  v GrafUi lets GrafEd handle selection radii
+  v GrafEd reports position and radius of objects to GrafUi
 
 
 Zooming

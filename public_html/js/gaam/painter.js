@@ -5,6 +5,7 @@
 function Painter(opt_maxTrailLength) {
   this.events = new CircularQueue(opt_maxTrailLength || 1);
   this.now = 0;
+  this.lastAdvanceTime = -1;
 }
 
 /**
@@ -23,6 +24,9 @@ Painter.prototype.addEvent = function(event) {
  */
 Painter.prototype.advance = function(now) {
   this.now = now;
+  if (this.now == this.lastAdvanceTime) return;
+  // do stuff
+  this.lastAdvanceTime = this.now;
 };
 
 /**

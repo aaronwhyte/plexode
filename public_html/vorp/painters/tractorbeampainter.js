@@ -75,6 +75,7 @@ TractorBeamPainter.prototype.setReleasing = function(kick) {
 
 TractorBeamPainter.prototype.advance = function(now) {
   this.now = now;
+  if (this.now == this.lastAdvanceTime) return;
   if (this.state == TractorBeamPainter.State.RELEASING) {
     this.state = TractorBeamPainter.State.EMPTY;
     var temp = this.sparkTemplate;
@@ -90,6 +91,7 @@ TractorBeamPainter.prototype.advance = function(now) {
       temp.endTime = this.now + (Math.random() * (5 + this.kickStrength/3 + this.holdStrength/10));// * (1 - Math.abs(0.5 - i));
       this.sparks.add(temp);
     }
+    this.lastAdvanceTime = this.now;
   }
 
 //  if (this.state == TractorBeamPainter.State.HOLDING &&

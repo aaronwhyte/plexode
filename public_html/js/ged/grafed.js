@@ -58,9 +58,9 @@ GrafEd.createFromOpStor = function(opStor) {
 };
 
 GrafEd.PART_RADIUS = 50;
-GrafEd.JACK_DISTANCE = 70;
 GrafEd.JACK_RADIUS = 20;
-GrafEd.SELECTION_PADDING = 30;
+GrafEd.JACK_DISTANCE = GrafEd.PART_RADIUS + GrafEd.JACK_RADIUS / 2;
+GrafEd.SELECTION_PADDING = 10;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
@@ -69,7 +69,7 @@ GrafEd.prototype.getModel = function() {
 /**
  * @param {GrafModel} clipModel
  * @param {Vec2d} offset
- * @return a map from the clipModel IDs to the level's model IDs
+ * @return {Object} a map from the clipModel IDs to the level's model IDs
  */
 GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
   var tempModel = new GrafModel();
@@ -84,7 +84,7 @@ GrafEd.prototype.pasteWithOffset = function(clipModel, offset) {
 
 /**
  * @param {GrafModel} clipModel
- * @return a map from the clipModel IDs to the level's model IDs
+ * @return {Object} a map from the clipModel IDs to the level's model IDs
  */
 GrafEd.prototype.paste = function(clipModel) {
   var ops = clipModel.createOps();
@@ -315,6 +315,30 @@ GrafEd.prototype.getHilitedIds = function() {
   return idSet.getValues();
 };
 
+/**
+ * @return {Array} of IDs. If there aren't any, returns empty array.
+ */
+GrafEd.prototype.getHoverIds = function(x, y) {
+  var jackPos = Vec2d.alloc();
+  var idSet = new plex.StringSet();
+  for (var partId in this.model.parts) {
+    var part = this.model.getPart(partId);
+    var dist = Vec2d.distance(x, y, part.x, part.y);
+    if (dist < GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING) {
+      idSet.put(partId);
+    }
+    for (var jackId in part.jacks) {
+      this.getJackPos(jackId, jackPos);
+      var dist = Vec2d.distance(x, y, jackPos.x, jackPos.y);
+      if (dist < GrafEd.JACK_RADIUS + GrafEd.SELECTION_PADDING) {
+        idSet.put(jackId);
+      }
+    }
+  }
+  Vec2d.free(jackPos);
+  return idSet.getValues();
+};
+
 GrafEd.prototype.startDragXY = function(x, y) {
   this.dragStart = new Vec2d(x, y);
   this.dragEnd = new Vec2d(x, y);
@@ -347,6 +371,21 @@ GrafEd.prototype.getPosById = function(id) {
   var jack = this.model.getJack(id);
   if (jack) {
     return this.getJackPos(id);
+  }
+  return null;
+};
+
+/**
+ * @return {number?}
+ */
+GrafEd.prototype.getRadById = function(id) {
+  var part = this.model.getPart(id);
+  if (part) {
+    return GrafEd.PART_RADIUS;
+  }
+  var jack = this.model.getJack(id);
+  if (jack) {
+    return GrafEd.JACK_RADIUS;
   }
   return null;
 };

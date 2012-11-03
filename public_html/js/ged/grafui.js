@@ -41,6 +41,8 @@ GrafUi.FPS = 30;
 
 GrafUi.HILITE_COLOR = 'rgba(255, 255, 255, 0.9)';
 
+GrafUi.SELECTION_RENDER_PADDING = 5;
+
 GrafUi.SELECTION_COLORS = [
   'rgba(0, 255, 100, 0.95)',
   'rgba(220, 180, 0, 0.85)',
@@ -62,7 +64,7 @@ GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   if (!this.listeners) {
     this.listeners = new plex.event.ListenerTracker();
-    this.listeners.addListener(this.renderer.canvas, 'mousemove', this.getMouseMoveListener());
+    this.listeners.addListener(document, 'mousemove', this.getMouseMoveListener());
     this.listeners.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
     this.listeners.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
     this.listeners.addListener(document, 'keydown', this.getKeyDownListener());
@@ -168,9 +170,10 @@ GrafUi.prototype.getKeyUpListener = function() {
 
 GrafUi.prototype.setScreenPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
+  var canvas = this.renderer.canvas;
   this.setScreenPos(
-      event.pageX - target.offsetLeft,
-      event.pageY - target.offsetTop);
+      event.pageX - canvas.offsetLeft - canvas.clientLeft,
+      event.pageY - canvas.offsetTop - canvas.clientTop);
 };
 
 GrafUi.prototype.setScreenPos = function(x, y) {
@@ -188,13 +191,12 @@ GrafUi.prototype.updateWorldPos = function() {
 
 GrafUi.prototype.clock = function() {
   if (this.pointerDirty) {
+    this.viewDirty = true;
     if (this.mode == GrafUi.Mode.SELECTING) {
       this.grafEd.continueSelectionXY(this.worldPos.x, this.worldPos.y);
-      this.viewDirty = true;
     } else if (this.mode == GrafUi.Mode.DRAGGING) {
       this.grafEd.continueDragXY(this.worldPos.x, this.worldPos.y);
       this.plugin.invalidate();
-      this.viewDirty = true;
     }
     this.pointerDirty = false;
   }
@@ -225,15 +227,16 @@ GrafUi.prototype.draw = function() {
   // selections
   var selectionsSize = this.grafEd.getSelectionsSize();
   var alpha = 0.9;
+  this.renderer.context.lineWidth = 8;
   for (var i = 0; i < Math.min(selectionsSize, GrafUi.SELECTION_COLORS.length); i++) {
     this.renderer.setStrokeStyle(GrafUi.SELECTION_COLORS[i]);
     var selIds = this.grafEd.getSelectedIds(i);
     for (var s = 0; s < selIds.length; s++) {
       var id = selIds[s];
       var selPos = this.grafEd.getPosById(id);
-      var rad = GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING;
-      rad -= i * GrafEd.SELECTION_PADDING / GrafUi.SELECTION_COLORS.length;
-      this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, rad); //TODO: more deets, not just pos.
+      var selRad = this.grafEd.getRadById(id);
+      selRad += (GrafUi.SELECTION_COLORS.length - i) * GrafUi.SELECTION_RENDER_PADDING;
+      this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, selRad);
     }
     alpha *= 0.75;
   }
@@ -246,17 +249,20 @@ GrafUi.prototype.draw = function() {
         hiliteRect[0], hiliteRect[1],
         hiliteRect[2], hiliteRect[3]);
   }
-  var hilitedIds = this.grafEd.getHilitedIds();
-  var hoverId = this.grafEd.getNearestId(this.worldPos, GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING);
-  if (hoverId) hilitedIds.push(hoverId);
-  for (var i = 0; i < hilitedIds.length; i++) {
-    var id = hilitedIds[i];
-    var hilitePos = this.grafEd.getPosById(id);
-    this.renderer.strokeCirclePosXYRad(hilitePos.x, hilitePos.y, GrafEd.PART_RADIUS); //TODO: more deets, not just pos.
-  }
+  this.strokeHiliteForIds(this.grafEd.getHilitedIds());
+  this.strokeHiliteForIds(this.grafEd.getHoverIds(this.worldPos.x, this.worldPos.y));
 
   this.renderer.transformEnd();
   this.viewDirty = false;
+};
+
+GrafUi.prototype.strokeHiliteForIds = function(ids) {
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var pos = this.grafEd.getPosById(id);
+    var rad = this.grafEd.getRadById(id);
+    this.renderer.strokeCirclePosXYRad(pos.x, pos.y, rad);
+  }
 };
 
 GrafUi.prototype.drawCluster = function(cluster) {
