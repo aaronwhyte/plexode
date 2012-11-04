@@ -51,17 +51,16 @@ GrafUi.SELECTION_RENDER_PADDING = 8;
 GrafUi.SELECTION_COLORS = [
   'rgba(0, 255, 100, 0.95)',
   'rgba(220, 180, 0, 0.85)',
-  'rgba(210, 90, 0, 0.35)',
+  'rgba(210, 100, 0, 0.5)',
   'rgba(200, 40, 0, 0.2)'
 ];
-
 
 /**
  * @enum {String}
  */
 GrafUi.Mode = {
-  DRAG: 'dragging',
-  SELECT: 'selecting',
+  DRAG: 'drag',
+  SELECT: 'select',
   DEFAULT: 'default'
 };
 
@@ -70,6 +69,7 @@ GrafUi.Mode = {
  */
 GrafUi.KeyCodes = {
   DRAG: VK_D,
+  ADD_SELECTIONS: VK_A,
   SELECT: VK_S
 };
 
@@ -79,7 +79,7 @@ GrafUi.prototype.startLoop = function() {
     this.listeners = new plex.event.ListenerTracker();
     this.listeners.addListener(document, 'mousemove', this.getMouseMoveListener());
     this.listeners.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
-    this.listeners.addListener(this.renderer.canvas, 'mouseup', this.getMouseUpListener());
+    this.listeners.addListener(document, 'mouseup', this.getMouseUpListener());
     this.listeners.addListener(this.renderer.canvas, 'mousewheel', this.getMouseWheelListener());
     this.listeners.addListener(document, 'keydown', this.getKeyDownListener());
     this.listeners.addListener(document, 'keyup', this.getKeyUpListener());
@@ -167,11 +167,23 @@ GrafUi.prototype.getKeyDownListener = function() {
   var self = this;
   return function(event) {
     event = event || window.event;
+    var kc = event.keyCode;
+    if (kc == GrafUi.KeyCodes.ADD_SELECTIONS) {
+      self.viewDirty = true;
+      if (!event.shiftKey) {
+        self.grafEd.addSelections();
+      } else {
+        self.grafEd.subtractSelections();
+      }
+    }
+    if (event.shiftKey && kc == GrafUi.KeyCodes.SELECT) {
+      self.grafEd.popSelection();
+    }
     if (self.mode == GrafUi.Mode.DEFAULT) {
-      if (event.keyCode == GrafUi.KeyCodes.DRAG) {
+      if (kc == GrafUi.KeyCodes.DRAG) {
         self.mode = GrafUi.Mode.DRAG;
         self.grafEd.startDragVec(self.worldPos);
-      } else if (event.keyCode == GrafUi.KeyCodes.SELECT) {
+      } else if (kc == GrafUi.KeyCodes.SELECT) {
         self.mode = GrafUi.Mode.SELECT;
         self.grafEd.startSelectionVec(self.worldPos);
       }

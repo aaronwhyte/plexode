@@ -4,6 +4,7 @@
 
 var VK_UP=38, VK_RIGHT=39, VK_DOWN=40, VK_LEFT=37; // arrows
 var VK_SPACE = 32;
+var VK_A = 65;
 var VK_C = 67;
 var VK_D = 68;
 var VK_I = 73;

@@ -321,16 +321,18 @@ v mousewheel-zoom at mouse point.
 //- key-zoom at centermouse point
 //- pinch zoom at pinch center? It's totes doable.
 
+2012.11.03 - 2012.11.03
 Panning
-- pan-key and drag
-- arrows
+v mouse drag
+//- arrows
 //- touch drag in empty space
 
 
+2012.11.03 - 2012.11.03
 Selection 2: Set Math
-- add
-- subtract
-- pop
+v add - A
+v subtract - shift-A
+v pop - shift-S
 
 Clipboard work galore
 clipboard widget

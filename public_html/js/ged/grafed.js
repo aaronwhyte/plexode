@@ -177,7 +177,7 @@ GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
     });
   }
   return ops;
-}
+};
 
 /**
  * Moves all selected parts by the offset vector value.
@@ -279,6 +279,14 @@ GrafEd.prototype.endSelection = function() {
   }
   this.selectionStart = null;
   this.selectionEnd = null;
+};
+
+GrafEd.prototype.addSelections = function() {
+  this.selStack.add();
+};
+
+GrafEd.prototype.subtractSelections = function() {
+  this.selStack.subtract();
 };
 
 /**
