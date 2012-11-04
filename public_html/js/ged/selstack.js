@@ -58,7 +58,10 @@ SelStack.prototype.add = function() {
  */
 SelStack.prototype.subtract = function() {
   if (this.size() == 0) return;
-  if (this.size() == 1) this.pop();
+  if (this.size() == 1) {
+    this.pop();
+    return;
+  }
   var neg = this.pop();
   this.push(this.pop().subtract(neg));
 };
