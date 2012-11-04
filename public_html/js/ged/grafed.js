@@ -256,11 +256,18 @@ GrafEd.prototype.setDataOnSelection = function(keyVals) {
   this.commitOps(ops);
 };
 
+GrafEd.prototype.startSelectionVec = function(v) {
+  this.startSelectionXY(v.x, v.y);
+};
+
 GrafEd.prototype.startSelectionXY = function(x, y) {
   this.selectionStart = new Vec2d(x, y);
   this.selectionEnd = new Vec2d(x, y);
 };
 
+GrafEd.prototype.continueSelectionVec = function(v) {
+  this.continueSelectionXY(v.x, v.y);
+};
 GrafEd.prototype.continueSelectionXY = function(x, y) {
   this.selectionEnd.setXY(x, y);
 };
@@ -339,9 +346,17 @@ GrafEd.prototype.getHoverIds = function(x, y) {
   return idSet.getValues();
 };
 
+GrafEd.prototype.startDragVec = function(v) {
+  this.startDragXY(v.x, v.y);
+};
+
 GrafEd.prototype.startDragXY = function(x, y) {
   this.dragStart = new Vec2d(x, y);
   this.dragEnd = new Vec2d(x, y);
+};
+
+GrafEd.prototype.continueDragVec = function(v) {
+  this.continueDragXY(v.x, v.y);
 };
 
 GrafEd.prototype.continueDragXY = function(x, y) {

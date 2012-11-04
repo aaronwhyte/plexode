@@ -29,13 +29,14 @@ function GrafUi(grafEd, renderer, plugin) {
   this.renderer = renderer;
   this.plugin = plugin;
   this.viewDirty = true;
-  this.worldPosDirty = true;
+  this.pointerWorldPosChanged = false;
   this.mode = GrafUi.Mode.DEFAULT;
 
   this.loop = null;
   this.canvasPos = new Vec2d(1, 1);
   this.worldPos = new Vec2d();
   this.deltaZoom = 0;
+  this.panning = false;
 }
 
 GrafUi.FPS = 30;
@@ -59,8 +60,8 @@ GrafUi.SELECTION_COLORS = [
  * @enum {String}
  */
 GrafUi.Mode = {
-  DRAGGING: 'dragging',
-  SELECTING: 'selecting',
+  DRAG: 'dragging',
+  SELECT: 'selecting',
   DEFAULT: 'default'
 };
 
@@ -68,7 +69,8 @@ GrafUi.Mode = {
  * @enum {number}
  */
 GrafUi.KeyCodes = {
-  DRAG: VK_D
+  DRAG: VK_D,
+  SELECT: VK_S
 };
 
 GrafUi.prototype.startLoop = function() {
@@ -118,8 +120,13 @@ GrafUi.prototype.getMouseMoveListener = function() {
   var self = this;
   return function(event) {
     self.viewDirty = true;
-    self.worldPosDirty = true;
-    var event = event || window.event;
+    if (!self.panning) {
+      self.pointerWorldPosChanged = true;
+    }
+    // Else we are mouse-panning, so the pointer's world pos remains the same,
+    // even though the pointer's position on the viewport canvas changed.
+
+    event = event || window.event;
     self.setCanvasPosWithEvent(event);
   };
 };
@@ -128,12 +135,9 @@ GrafUi.prototype.getMouseDownListener = function() {
   var self = this;
   return function(event) {
     self.viewDirty = true;
-    var event = event || window.event;
+    event = event || window.event;
+    self.panning = true;
     self.setCanvasPosWithEvent(event);
-    if (self.mode == GrafUi.Mode.DEFAULT) {
-      self.mode = GrafUi.Mode.SELECTING;
-      self.grafEd.startSelectionXY(self.worldPos.x, self.worldPos.y);
-    }
   };
 };
 
@@ -141,18 +145,9 @@ GrafUi.prototype.getMouseUpListener = function() {
   var self = this;
   return function(event) {
     self.viewDirty = true;
-    var event = event || window.event;
+    event = event || window.event;
+    self.panning = false;
     self.setCanvasPosWithEvent(event);
-    if (self.mode == GrafUi.Mode.SELECTING) {
-      self.grafEd.continueSelectionXY(self.worldPos.x, self.worldPos.y);
-      self.grafEd.endSelection();
-      self.mode = GrafUi.Mode.DEFAULT;
-    } else if (self.mode == GrafUi.Mode.DRAGGING) {
-      self.grafEd.continueDragXY(self.worldPos.x, self.worldPos.y);
-      self.grafEd.endDrag();
-      self.plugin.invalidate();
-      self.mode = GrafUi.Mode.DEFAULT;
-    }
   };
 };
 
@@ -160,7 +155,7 @@ GrafUi.prototype.getMouseWheelListener = function() {
   var self = this;
   return function(event) {
     self.viewDirty = true;
-    var event = event || window.event;
+    event = event || window.event;
     //self.setCanvasPosWithEvent(event);
     self.deltaZoom += event['wheelDeltaY'];
     event.preventDefault();
@@ -171,10 +166,15 @@ GrafUi.prototype.getMouseWheelListener = function() {
 GrafUi.prototype.getKeyDownListener = function() {
   var self = this;
   return function(event) {
-    var event = event || window.event;
-    if (self.mode == GrafUi.Mode.DEFAULT && event.keyCode == GrafUi.KeyCodes.DRAG) {
-      self.mode = GrafUi.Mode.DRAGGING;
-      self.grafEd.startDragXY(self.worldPos.x, self.worldPos.y);
+    event = event || window.event;
+    if (self.mode == GrafUi.Mode.DEFAULT) {
+      if (event.keyCode == GrafUi.KeyCodes.DRAG) {
+        self.mode = GrafUi.Mode.DRAG;
+        self.grafEd.startDragVec(self.worldPos);
+      } else if (event.keyCode == GrafUi.KeyCodes.SELECT) {
+        self.mode = GrafUi.Mode.SELECT;
+        self.grafEd.startSelectionVec(self.worldPos);
+      }
     }
   };
 };
@@ -182,10 +182,17 @@ GrafUi.prototype.getKeyDownListener = function() {
 GrafUi.prototype.getKeyUpListener = function() {
   var self = this;
   return function(event) {
-    var event = event || window.event;
-    if (self.mode == GrafUi.Mode.DRAGGING && event.keyCode == GrafUi.KeyCodes.DRAG) {
-      self.grafEd.continueDragXY(self.worldPos.x, self.worldPos.y);
+    event = event || window.event;
+    if (self.mode == GrafUi.Mode.DRAG && event.keyCode == GrafUi.KeyCodes.DRAG) {
+      self.grafEd.continueDragVec(self.worldPos);
       self.grafEd.endDrag();
+      self.viewDirty = true;
+      self.mode = GrafUi.Mode.DEFAULT;
+    }
+    if (self.mode == GrafUi.Mode.SELECT && event.keyCode == GrafUi.KeyCodes.SELECT) {
+      self.grafEd.continueSelectionVec(self.worldPos);
+      self.grafEd.endSelection();
+      self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
   };
@@ -194,13 +201,9 @@ GrafUi.prototype.getKeyUpListener = function() {
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
   var canvas = this.renderer.canvas;
-  this.setCanvasPos(
+  this.canvasPos.setXY(
       event.pageX - canvas.offsetLeft - canvas.clientLeft,
       event.pageY - canvas.offsetTop - canvas.clientTop);
-};
-
-GrafUi.prototype.setCanvasPos = function(x, y) {
-  this.canvasPos.setXY(x, y);
 };
 
 GrafUi.prototype.getWorldPosOfCanvasPos = function() {
@@ -216,16 +219,19 @@ GrafUi.prototype.setWorldPos = function(pos) {
 };
 
 GrafUi.prototype.clock = function() {
-  if (this.worldPosDirty) {
+
+  if (this.pointerWorldPosChanged) {
     this.setWorldPos(this.getWorldPosOfCanvasPos());
-    if (this.mode == GrafUi.Mode.SELECTING) {
-      this.grafEd.continueSelectionXY(this.worldPos.x, this.worldPos.y);
-    } else if (this.mode == GrafUi.Mode.DRAGGING) {
-      this.grafEd.continueDragXY(this.worldPos.x, this.worldPos.y);
-      this.plugin.invalidate();
-    }
-    this.worldPosDirty = false;
+    this.pointerWorldPosChanged = false;
   }
+  if (this.mode == GrafUi.Mode.SELECT) {
+    this.grafEd.continueSelectionXY(this.worldPos.x, this.worldPos.y);
+  } else if (this.mode == GrafUi.Mode.DRAG) {
+    this.grafEd.continueDragXY(this.worldPos.x, this.worldPos.y);
+    this.plugin.invalidate();
+  }
+
+  // Zooming
   if (this.deltaZoom) {
     this.viewDirty = true;
     this.renderer.scaleZoom(Math.exp(this.deltaZoom/2000));
@@ -234,9 +240,15 @@ GrafUi.prototype.clock = function() {
     if (z > GrafUi.MAX_ZOOM) this.renderer.setZoom(GrafUi.MAX_ZOOM);
     this.deltaZoom = 0;
   }
+
+  // If the the pointer's screen position doesn't match the pointer's world position,
+  // then this will pan the canvas to adjust.
+  // This is the mechanism that makes the pointer stick to the world perfectly while zooming,
+  // and it's the way the view gets scrolled when panning.
   var worldPosOfCanvasPos = this.getWorldPosOfCanvasPos();
   var panCorrection = worldPosOfCanvasPos.subtract(this.worldPos).scale(-1);
   this.renderer.addPan(panCorrection);
+
   this.draw();
 };
 
