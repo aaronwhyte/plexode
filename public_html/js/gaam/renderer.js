@@ -25,6 +25,16 @@ Renderer.prototype.setZoom = function(zoom) {
   this.camera.setZoom(zoom);
 };
 
+Renderer.prototype.scaleZoom = function(factor) {
+  this.camera.setZoom(this.camera.getZoom() * factor);
+};
+
+Renderer.prototype.addPan = function(vec) {
+  this.camera.setPanXY(
+      this.camera.getPanX() + vec.x,
+      this.camera.getPanY() + vec.y);
+};
+
 Renderer.prototype.clear = function() {
   var c = this.context;
   c.clearRect(0, 0, this.canvasWidth, this.canvasHeight);

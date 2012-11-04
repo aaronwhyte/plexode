@@ -315,9 +315,9 @@ v differentiate jacks and parts - radius
   v GrafUi lets GrafEd handle selection radii
   v GrafEd reports position and radius of objects to GrafUi
 
-
+2012.11.03 - 2012.11.03
 Zooming
-- scroll-zoom at mouse point.
+v mousewheel-zoom at mouse point.
 //- key-zoom at centermouse point
 //- pinch zoom at pinch center? It's totes doable.
 
@@ -326,31 +326,30 @@ Panning
 - arrows
 //- touch drag in empty space
 
+
 Selection 2: Set Math
-- select all
 - add
 - subtract
 - pop
-- exchange s0 and s1?
 
-Ved UI API:
-- copy selection to a clipboard
-- changes
-  - paste from a clipboard
-  - link
-  - delete
-  - undo
-- previews
-  - linking
-  - paste preview
-  - dragging parts
+Clipboard work galore
+clipboard widget
+sysclips widget
+sysclip to clipboard
+selection to clipboard
+paste selected clipboard
 
-Ved model for interactive editing
-- write invariant-enforcing concequence computer
+More mutations, and invariants
+- delete parts
   - deleting one portal or wall-endpoint deletes the whole cluster
-  - other wall endpoint moves minimum distance to remain coaxial
   - deleting any part deletes all jacks and links and data first
   - deleting last part in a cluster deletes cluster
+- link jacks
+- unlink jacks
+- other wall endpoint moves minimum distance to remain coaxial
+
+Field editing
+- Modal HTML form showing all field key/value pairs for editing.
 
 Redo nav
 - directory name are links to level/edit
@@ -359,13 +358,10 @@ Redo nav
   - play
   - json
 
-System clips widget
-
 Add level
 
 Delete level
 
-LevelEd API II
-- levEd.deletedSelectedParts()
-- levEd.twistSelectedParts(LEFT90 | RIGHT90 | FLIP_X | FLIP_Y)
-
+========================================================
+== Milestone: Ship fun levels created entirely in Ved ==
+========================================================

@@ -4,17 +4,22 @@
 
 var VK_UP=38, VK_RIGHT=39, VK_DOWN=40, VK_LEFT=37; // arrows
 var VK_SPACE = 32;
-var VK_C = 67, VK_P = 80, VK_S = 83;
-var VK_I = 73, VK_L = 76, VK_K = 75, VK_J = 74;
-var VK_Z = 90, VK_X = 88;
+var VK_C = 67;
+var VK_D = 68;
+var VK_I = 73;
+var VK_J = 74;
+var VK_K = 75;
+var VK_L = 76;
+var VK_P = 80;
+var VK_Q = 81;
+var VK_S = 83;
+var VK_X = 88;
+var VK_Z = 90;
 var VK_BACKSLASH = 220;
-var VK_SEMICOLON = 186, VK_Q = 81;
+var VK_SEMICOLON = 186;
 var GU_keys = [];
 
-var GU_timeoutId = null;
 var GU_clientFunc;
-var GU_infoDiv;
-var GU_running = true;
 
 var GU_lastMeasureTime = -1;
 var GU_targetPeriod;

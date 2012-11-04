@@ -5,7 +5,7 @@
  */
 function Camera() {
   this.pan = new Vec2d();
-  this.zoom = 0;
+  this.zoom = 1;
 }
 
 
