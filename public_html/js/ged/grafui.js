@@ -29,11 +29,11 @@ function GrafUi(grafEd, renderer, plugin) {
   this.renderer = renderer;
   this.plugin = plugin;
   this.viewDirty = true;
-  this.pointerWorldPosChanged = false;
+  this.pointerWorldPosChanged = true;
   this.mode = GrafUi.Mode.DEFAULT;
 
   this.loop = null;
-  this.canvasPos = new Vec2d(1, 1);
+  this.canvasPos = null;
   this.worldPos = new Vec2d();
   this.deltaZoom = 0;
   this.panning = false;
@@ -213,6 +213,7 @@ GrafUi.prototype.getKeyUpListener = function() {
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
   var canvas = this.renderer.canvas;
+  if (!this.canvasPos) this.canvasPos = new Vec2d();
   this.canvasPos.setXY(
       event.pageX - canvas.offsetLeft - canvas.clientLeft,
       event.pageY - canvas.offsetTop - canvas.clientTop);
@@ -232,7 +233,7 @@ GrafUi.prototype.setWorldPos = function(pos) {
 
 GrafUi.prototype.clock = function() {
 
-  if (this.pointerWorldPosChanged) {
+  if (this.pointerWorldPosChanged && this.canvasPos) {
     this.setWorldPos(this.getWorldPosOfCanvasPos());
     this.pointerWorldPosChanged = false;
   }
@@ -253,13 +254,15 @@ GrafUi.prototype.clock = function() {
     this.deltaZoom = 0;
   }
 
-  // If the the pointer's screen position doesn't match the pointer's world position,
-  // then this will pan the canvas to adjust.
-  // This is the mechanism that makes the pointer stick to the world perfectly while zooming,
-  // and it's the way the view gets scrolled when panning.
-  var worldPosOfCanvasPos = this.getWorldPosOfCanvasPos();
-  var panCorrection = worldPosOfCanvasPos.subtract(this.worldPos).scale(-1);
-  this.renderer.addPan(panCorrection);
+  if (this.canvasPos) {
+    // If the the pointer's screen position doesn't match the pointer's world position,
+    // then this will pan the canvas to adjust.
+    // This is the mechanism that makes the pointer stick to the world perfectly while zooming,
+    // and it's the way the view gets scrolled when panning.
+    var worldPosOfCanvasPos = this.getWorldPosOfCanvasPos();
+    var panCorrection = worldPosOfCanvasPos.subtract(this.worldPos).scale(-1);
+    this.renderer.addPan(panCorrection);
+  }
 
   this.draw();
 };

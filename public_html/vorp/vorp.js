@@ -244,7 +244,7 @@ Vorp.prototype.draw = function() {
   var now = this.now();
   this.renderer.clear();
   if (!this.editable) {
-    this.renderer.setZoom(0.37);
+    this.renderer.setZoom(Vorp.ZOOM);
   }
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);

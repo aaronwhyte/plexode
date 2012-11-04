@@ -160,8 +160,8 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
 
   // renderer is shared by vorp and grafUi
   var camera = new Camera();
-  camera.setZoom(0.2);
-  camera.setPanXY(100, 100);
+  camera.setZoom(Vorp.ZOOM/2);
+  camera.setPanXY(0, 0);
   var renderer = new Renderer(canvas, camera);
   var plugin = new VedUiPlugin(renderer);
   var grafUi = new GrafUi(grafEd, renderer, plugin);
