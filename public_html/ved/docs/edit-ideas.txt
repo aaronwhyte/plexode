@@ -158,3 +158,11 @@ Pages:
 - Test Level (maybe with debug options?)
   - vorp/edit/#mode=test&level=<name>
 - Missing Level (fallback behavior for Edit or Test)
+
+
+Tips!
+Try to make everything obvious just by playing w mouse/touch. Don't rely on users knowing keys to press.
+Use the selections and model to offer more touchable buttons.
+- Offer link button if sel0 and sel1 each have one opposite jack with no existing link
+- On sel0, show handles for pan, del, and copy.
+-
