@@ -327,12 +327,24 @@ v mouse drag
 //- arrows
 //- touch drag in empty space
 
-
 2012.11.03 - 2012.11.03
 Selection 2: Set Math
 v add - A
 v subtract - shift-A
 v pop - shift-S
+
+deletion
+- delete parts, with invariants
+  - deleting one portal or wall-endpoint deletes the whole cluster
+  - deleting any part deletes all jacks and links and data first
+  - deleting last part in a cluster deletes cluster
+
+link mutations
+- link jacks: L
+- unlink jacks: shift-L
+
+wall invariant
+- other wall endpoint moves minimum distance to remain coaxial (may switch orientation)
 
 Clipboard work galore
 clipboard widget
@@ -340,15 +352,6 @@ sysclips widget
 sysclip to clipboard
 selection to clipboard
 paste selected clipboard
-
-More mutations, and invariants
-- delete parts
-  - deleting one portal or wall-endpoint deletes the whole cluster
-  - deleting any part deletes all jacks and links and data first
-  - deleting last part in a cluster deletes cluster
-- link jacks
-- unlink jacks
-- other wall endpoint moves minimum distance to remain coaxial
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
