@@ -168,6 +168,8 @@ GrafUi.prototype.getKeyDownListener = function() {
   return function(event) {
     event = event || window.event;
     var kc = event.keyCode;
+
+    // add/subtract selections
     if (kc == GrafUi.KeyCodes.ADD_SELECTIONS) {
       self.viewDirty = true;
       if (!event.shiftKey) {
@@ -176,17 +178,22 @@ GrafUi.prototype.getKeyDownListener = function() {
         self.grafEd.subtractSelections();
       }
     }
-    if (event.shiftKey && kc == GrafUi.KeyCodes.SELECT) {
-      self.grafEd.popSelection();
-    }
-    if (self.mode == GrafUi.Mode.DEFAULT) {
-      if (kc == GrafUi.KeyCodes.DRAG) {
-        self.mode = GrafUi.Mode.DRAG;
-        self.grafEd.startDragVec(self.worldPos);
-      } else if (kc == GrafUi.KeyCodes.SELECT) {
+
+    // select pseudomode, or undo (pop) selection
+    if (kc == GrafUi.KeyCodes.SELECT && self.mode == GrafUi.Mode.DEFAULT) {
+      self.viewDirty = true;
+      if (event.shiftKey) {
+        self.grafEd.popSelection();
+      } else {
         self.mode = GrafUi.Mode.SELECT;
         self.grafEd.startSelectionVec(self.worldPos);
       }
+    }
+
+    // drag
+    if (kc == GrafUi.KeyCodes.DRAG && self.mode == GrafUi.Mode.DEFAULT) {
+      self.mode = GrafUi.Mode.DRAG;
+      self.grafEd.startDragVec(self.worldPos);
     }
   };
 };
