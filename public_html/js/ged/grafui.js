@@ -78,9 +78,14 @@ GrafUi.prototype.startLoop = function() {
   if (!this.listeners) {
     this.listeners = new plex.event.ListenerTracker();
     this.listeners.addListener(document, 'mousemove', this.getMouseMoveListener());
+
     this.listeners.addListener(this.renderer.canvas, 'mousedown', this.getMouseDownListener());
     this.listeners.addListener(document, 'mouseup', this.getMouseUpListener());
+
     this.listeners.addListener(this.renderer.canvas, 'mousewheel', this.getMouseWheelListener());
+    this.listeners.addListener(this.renderer.canvas, 'DOMMouseScroll', this.getMouseWheelListener());
+    this.listeners.addListener(this.renderer.canvas, 'wheel', this.getMouseWheelListener());
+
     this.listeners.addListener(document, 'keydown', this.getKeyDownListener());
     this.listeners.addListener(document, 'keyup', this.getKeyUpListener());
   }
@@ -157,7 +162,13 @@ GrafUi.prototype.getMouseWheelListener = function() {
     self.viewDirty = true;
     event = event || window.event;
     //self.setCanvasPosWithEvent(event);
-    self.deltaZoom += event['wheelDeltaY'];
+    if ('wheelDeltaY' in event) {
+      self.deltaZoom += event['wheelDeltaY'];
+    } else if ('deltaY' in event) {
+      self.deltaZoom += event['deltaY'];
+    } else if ('detail' in event) {
+      self.deltaZoom += event['detail'] * -10;
+    }
     event.preventDefault();
     return false;
   };
