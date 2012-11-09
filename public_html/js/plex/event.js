@@ -76,9 +76,9 @@ plex.event.removeListener = function(element, eventName, fn) {
   if (element.removeEventListener) {
     // DOM level 2
     element.removeEventListener(eventName, fn, false);
-  } else if (element.detatchEvent) {
+  } else if (element['detatchEvent']) {
     // IE
-    element.detatchEvent('on' + eventname, fn);
+    element['detatchEvent']('on' + eventName, fn);
   }
 };
 

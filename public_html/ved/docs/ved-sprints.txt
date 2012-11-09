@@ -333,6 +333,23 @@ v add - A
 v subtract - shift-A
 v pop - shift-S
 
+2012.11
+layout & nav
+v directory names are links to level/edit
+v level view
+  v fullscreen layout
+  v directory button on the left
+  v title in the middle, left-aligned
+  v mode links on the right
+    v edit
+    v play
+
+fuller-screen vorp?
+
+Json view?
+
+insta-vorp?
+
 deletion
 - delete parts, with invariants
   - deleting one portal or wall-endpoint deletes the whole cluster
@@ -355,13 +372,6 @@ paste selected clipboard
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
-
-Redo nav
-- directory name are links to level/edit
-- peer level views are all crosslinked:
-  - edit
-  - play
-  - json
 
 Add level
 

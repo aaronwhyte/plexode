@@ -67,27 +67,11 @@ VedApp.prototype.getHashChangeListener = function() {
   };
 };
 
-VedApp.prototype.renderTopNav = function(appDiv, text, parentText, parentQuery) {
-  function slash() {
-    var slashSpan = plex.dom.ce('span', appDiv);
-    plex.dom.ct(" / ", slashSpan);
-  }
-  if (parentQuery) {
-    slash();
-    var parentLink = plex.dom.ce('a', appDiv);
-    parentLink.href = '#' + plex.url.encodeQuery(parentQuery);
-    plex.dom.ct(parentText, parentLink);
-    //plex.dom.appendClass(parentLink, 'vedNavLink');
-  }
-  slash();
-  var locSpan = plex.dom.ce('span', appDiv);
-  plex.dom.ct(text, locSpan);
-};
-
 VedApp.prototype.renderDirectory = function(appDiv) {
 
   // list of levels
   var levelNames = this.stor.getNames();
+  levelNames.sort();
   for (var i = 0; i < levelNames.length; i++) {
     var levelName = levelNames[i];
     var levelDiv = plex.dom.ce('div', appDiv);
@@ -98,18 +82,8 @@ VedApp.prototype.renderDirectory = function(appDiv) {
       mode: VedApp.Mode.EDIT,
       level: levelName
     });
-    plex.dom.ct('edit', editLink);
+    plex.dom.ct(levelName || ' ', editLink);
     plex.dom.appendClass(editLink, 'vedNavLink');
-
-    var testLink = plex.dom.ce('a', levelDiv);
-    testLink.href = '#' + plex.url.encodeQuery({
-      mode: VedApp.Mode.TEST,
-      level: levelName
-    });
-    plex.dom.ct('test', testLink);
-    plex.dom.appendClass(testLink, 'vedNavLink');
-
-    plex.dom.ct(levelName, levelDiv);
   }
 
   plex.dom.ce('br', appDiv);
@@ -136,6 +110,40 @@ VedApp.prototype.renderDirectory = function(appDiv) {
 };
 
 
+VedApp.prototype.renderLevelHeader = function(appDiv, levelName, renderMode) {
+  var leftLink = plex.dom.ce('a', appDiv);
+  leftLink.href = '#';
+  leftLink.innerHTML = '&laquo;';
+  leftLink.className = 'vedLeftLink';
+  //plex.dom.appendClass(parentLink, 'vedNavLink');
+
+  // left link
+  var modesDiv = plex.dom.ce('div', appDiv);
+  modesDiv.className = 'vedModesDiv';
+
+  // right mode switches
+  for (var k in VedApp.Mode) {
+    var mode = VedApp.Mode[k];
+    var modeElem;
+    if (renderMode == mode) {
+      modeElem = plex.dom.ce('span', modesDiv);
+    } else {
+      modeElem = plex.dom.ce('a', modesDiv);
+      modeElem.href = '#' + plex.url.encodeQuery({
+        mode: mode,
+        level: levelName
+      });
+    }
+    modeElem.className = 'vedModeLink';
+    plex.dom.ct(mode, modeElem);
+  }
+
+  // title
+  var titleSpan = plex.dom.ce('span', appDiv);
+  titleSpan.className = 'vedEditTitle';
+  plex.dom.ct(levelName, titleSpan);
+};
+
 VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
   if (plex.array.contains(this.stor.getNames(), levelName)) {
     return false;
@@ -147,13 +155,12 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
 };
 
 VedApp.prototype.renderEditing = function(appDiv, levelName) {
-  this.renderTopNav(appDiv, 'editing - ' + levelName, 'directory', {});
+  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.EDIT);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
   plex.dom.ce('br', appDiv);
   var canvas = plex.dom.ce('canvas', appDiv);
-  canvas.height = 600;
-  canvas.width = 600;
+  canvas.className = 'vedEditCanvas';
 
   // Generate LevelEd
   var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
@@ -171,7 +178,7 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {
-  this.renderTopNav(appDiv, 'testing - ' + levelName, 'directory', {});
+  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.TEST);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
   plex.dom.ce('br', appDiv);

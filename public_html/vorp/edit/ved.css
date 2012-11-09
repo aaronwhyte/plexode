@@ -1,5 +1,32 @@
-a.vedNavLink {
-  margin-right:0.8em;
+.vedLeftLink, .vedModesDiv, .vedEditTitle {
+  margin:0 0.5em;
+  padding:0.3em 0.8em;
+  background-color:rgba(64, 64, 64, 0.7);
+  border-radius: 0.75em;
+  font-weight:bold;
+}
+
+.vedEditTitle {
+  xcolor:silver;
+}
+
+.vedModeLink {
+  padding:0 0.8em;
+}
+
+span.vedModeLink {
+  padding:0.2 0.8em;
+  background:rgba(200, 200, 200, 0.5);
+  border-radius: 0.75em;
+  color:black;
+}
+
+a.vedModeLink {
+  xcolor:#008;
+}
+
+.vedModesDiv {
+  float:right;
 }
 
 .vedDirectoryRow {
@@ -7,12 +34,17 @@ a.vedNavLink {
   margin:0.25em;
 }
 
-.vedButton {
-  font-size:large;
+.vedError {
+  font-size:x-large;
+  color:#f44;
 }
 
-.vedError {
-    font-size:x-large;
-    color:#f44;
-
+canvas.vedEditCanvas {
+  position:absolute;
+  top:0;
+  left:0;
+  margin:0;
+  border:0;
+  padding:0;
+  z-index:-2;
 }

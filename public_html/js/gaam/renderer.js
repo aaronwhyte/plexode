@@ -10,8 +10,6 @@ function Renderer(canvas, camera) {
   this.context = canvas.getContext('2d');
   this.context.textBaseline = "top";
   this.context.font = "bold 14px monospace";
-  this.canvasWidth = this.canvas ? this.canvas.width : 0;
-  this.canvasHeight = this.canvas ? this.canvas.height : 0;
   this.lastTimeSec = (new Date()).getTime() / 1000;
   this.frameCount = 0;
   this.fps = 0;
@@ -37,7 +35,7 @@ Renderer.prototype.addPan = function(vec) {
 
 Renderer.prototype.clear = function() {
   var c = this.context;
-  c.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+  c.clearRect(0, 0, this.canvas.width, this.canvas.height);
 //  this.setFillStyle('rgba(0, 0, 0, 0.1)');
 //  c.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 };
@@ -45,7 +43,7 @@ Renderer.prototype.clear = function() {
 Renderer.prototype.transformStart = function() {
   var c = this.context;
   c.save();
-  c.translate(this.canvasWidth/2, this.canvasHeight/2);
+  c.translate(this.canvas.width/2, this.canvas.height/2);
   var zoom = this.camera.getZoom();
   c.scale(zoom, zoom);
   c.translate(-this.camera.getPanX(), -this.camera.getPanY());

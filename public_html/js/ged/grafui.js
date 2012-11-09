@@ -75,6 +75,7 @@ GrafUi.KeyCodes = {
 
 GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
+  this.resize();
   if (!this.listeners) {
     this.listeners = new plex.event.ListenerTracker();
     this.listeners.addListener(document, 'mousemove', this.getMouseMoveListener());
@@ -88,6 +89,8 @@ GrafUi.prototype.startLoop = function() {
 
     this.listeners.addListener(document, 'keydown', this.getKeyDownListener());
     this.listeners.addListener(document, 'keyup', this.getKeyUpListener());
+
+    this.listeners.addListener(window, 'resize', this.getResizeListener());
   }
   if (!this.loop) {
     var self = this;
@@ -228,6 +231,19 @@ GrafUi.prototype.getKeyUpListener = function() {
   };
 };
 
+GrafUi.prototype.getResizeListener = function() {
+  var self = this;
+  return function(event) {
+    self.resize();
+  };
+};
+
+GrafUi.prototype.resize = function() {
+  var s = plex.window.getSize();
+  this.renderer.canvas.width = s.width;
+  this.renderer.canvas.height = s.height;
+};
+
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
   var canvas = this.renderer.canvas;
@@ -240,7 +256,7 @@ GrafUi.prototype.setCanvasPosWithEvent = function(event) {
 GrafUi.prototype.getWorldPosOfCanvasPos = function() {
   return (new Vec2d())
       .set(this.canvasPos)
-      .addXY(-this.renderer.canvasWidth/2, -this.renderer.canvasHeight/2)
+      .addXY(-this.renderer.canvas.width/2, -this.renderer.canvas.height/2)
       .scale(1/this.renderer.camera.zoom)
       .add(this.renderer.camera.pan);
 };

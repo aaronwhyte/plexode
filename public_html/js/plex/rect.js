@@ -264,7 +264,7 @@ plex.Rect.prototype.getPercentPoint = function(xPercent, yPercent, opt_ptOut) {
  * @param {string=} opt_left
  * @return {plex.Rect}
  */
-plex.Rect.prototype.createInsetRect2 = function(
+plex.Rect.prototype.createInsetRect = function(
     top, opt_right, opt_bottom, opt_left) {
   var r = plex.rect;
   var right = (/** @type {string} */ opt_right || top);
