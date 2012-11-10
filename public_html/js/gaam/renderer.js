@@ -33,6 +33,11 @@ Renderer.prototype.addPan = function(vec) {
       this.camera.getPanY() + vec.y);
 };
 
+Renderer.prototype.getZoom = function() {
+  return this.camera.getZoom();
+};
+
+
 Renderer.prototype.clear = function() {
   var c = this.context;
   c.clearRect(0, 0, this.canvas.width, this.canvas.height);

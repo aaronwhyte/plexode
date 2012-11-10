@@ -384,6 +384,112 @@ GrafEd.prototype.endDrag = function() {
 };
 
 /**
+ * Deleting a jack only deletes its links, not the jack.
+ * Deleting a part deletes the part's entire cluster.
+ */
+GrafEd.prototype.deleteSelection = function() {
+  var self = this;
+  var deletedIds = {};
+  var ops = [];
+
+  function deleteCluster(cluster) {
+    if (deletedIds[cluster.id]) return;
+    deleteData(cluster);
+    for (var id in cluster.parts) {
+      deletePart(cluster.parts[id]);
+    }
+    ops.push({
+      type: GrafOp.Type.REMOVE_CLUSTER,
+      id: cluster.id
+    });
+    deletedIds[cluster.id] = true;
+  }
+
+  function deletePart(part) {
+    if (deletedIds[part.id]) return;
+    deleteData(part);
+    for (var id in part.jacks) {
+      deleteJack(part.jacks[id]);
+    }
+    ops.push({
+      type: GrafOp.Type.REMOVE_PART,
+      id: part.id,
+      clusterId: part.clusterId,
+      x: part.x,
+      y: part.y
+    });
+    deletedIds[part.id] = true;
+  }
+
+  function deleteJack(jack) {
+    if (deletedIds[jack.id]) return;
+    deleteData(jack);
+    deleteJackLinks(jack);
+    ops.push({
+      type: GrafOp.Type.REMOVE_JACK,
+      id: jack.id,
+      partId: jack.partId
+    })
+    deletedIds[jack.id] = true;
+  }
+
+  function deleteJackLinks(jack) {
+    for (var id in jack.links) {
+      deleteLink(self.model.getLink(id));
+    }
+  }
+
+  function deleteLink(link) {
+    if (deletedIds[link.id]) return;
+    deleteData(link);
+    ops.push({
+      type: GrafOp.Type.REMOVE_LINK,
+      id: link.id,
+      jackId1: link.jackId1,
+      jackId2: link.jackId2
+    });
+    deletedIds[link.id] = true;
+  }
+
+  function deleteData(obj) {
+    for (var key in obj.data) {
+      ops.push({
+        type: GrafOp.Type.SET_DATA,
+        id: obj.id,
+        key: key,
+        oldValue: obj.data[key]
+      });
+    }
+  }
+
+  var ids = this.getSelectedIds();
+
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+
+    var link = this.model.getLink(id);
+    if (link) {
+      // It's not actually possible to select a link directly yet, so this never happens.
+      deleteLink(link);
+    }
+    var jack = this.model.getJack(id);
+    if (jack) {
+      // just delete links, not the jack itself
+      deleteJackLinks(jack);
+    }
+    var part = this.model.getPart(id);
+    if (part) {
+      // nuke the whole cluster
+      var cluster = this.model.getCluster(part.clusterId);
+      if (cluster) {
+        deleteCluster(cluster);
+      }
+    }
+  }
+  this.commitOps(ops);
+};
+
+/**
  * @return {Vec2d?}
  */
 GrafEd.prototype.getPosById = function(id) {

@@ -333,7 +333,7 @@ v add - A
 v subtract - shift-A
 v pop - shift-S
 
-2012.11
+2012.11.08
 layout & nav
 v directory names are links to level/edit
 v level view
@@ -344,17 +344,10 @@ v level view
     v edit
     v play
 
-fuller-screen vorp?
-
-Json view?
-
-insta-vorp?
-
+2012.11.09
 deletion
-- delete parts, with invariants
-  - deleting one portal or wall-endpoint deletes the whole cluster
-  - deleting any part deletes all jacks and links and data first
-  - deleting last part in a cluster deletes cluster
+v deleting part deletes whole cluster
+v deleting jack only deleted links
 
 link mutations
 - link jacks: L
@@ -363,12 +356,13 @@ link mutations
 wall invariant
 - other wall endpoint moves minimum distance to remain coaxial (may switch orientation)
 
-Clipboard work galore
-clipboard widget
-sysclips widget
-sysclip to clipboard
-selection to clipboard
-paste selected clipboard
+Clip work galore
+- current clip widget
+- sysclips widget
+- sysclip to currentClip
+- selection to currentClip
+- paste currentClip
+- recent user clips
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
@@ -376,6 +370,12 @@ Field editing
 Add level
 
 Delete level
+
+fuller-screen vorp?
+
+Json view?
+
+insta-vorp?
 
 ========================================================
 == Milestone: Ship fun levels created entirely in Ved ==

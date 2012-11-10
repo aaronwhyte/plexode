@@ -3,7 +3,9 @@
 // TODO: move this to gaam?
 
 var VK_UP=38, VK_RIGHT=39, VK_DOWN=40, VK_LEFT=37; // arrows
+var VK_BACKSPACE = 8;
 var VK_SPACE = 32;
+var VK_DELETE = 46;
 var VK_A = 65;
 var VK_C = 67;
 var VK_D = 68;
@@ -16,8 +18,8 @@ var VK_Q = 81;
 var VK_S = 83;
 var VK_X = 88;
 var VK_Z = 90;
-var VK_BACKSLASH = 220;
 var VK_SEMICOLON = 186;
+var VK_BACKSLASH = 220;
 var GU_keys = [];
 
 var GU_clientFunc;

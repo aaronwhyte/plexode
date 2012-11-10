@@ -69,6 +69,8 @@ GrafUi.Mode = {
  */
 GrafUi.KeyCodes = {
   DRAG: VK_D,
+  DELETE: VK_DELETE,
+  DELETE2: VK_BACKSPACE,
   ADD_SELECTIONS: VK_A,
   SELECT: VK_S
 };
@@ -209,6 +211,14 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.mode = GrafUi.Mode.DRAG;
       self.grafEd.startDragVec(self.worldPos);
     }
+
+    // delete
+    if (kc == GrafUi.KeyCodes.DELETE || kc == GrafUi.KeyCodes.DELETE2) {
+      self.viewDirty = true;
+      self.plugin.invalidate();
+      self.grafEd.deleteSelection();
+      event.preventDefault();
+    }
   };
 };
 
@@ -242,6 +252,7 @@ GrafUi.prototype.resize = function() {
   var s = plex.window.getSize();
   this.renderer.canvas.width = s.width;
   this.renderer.canvas.height = s.height;
+  this.viewDirty = true;
 };
 
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
@@ -308,7 +319,7 @@ GrafUi.prototype.draw = function() {
 
   this.renderer.transformStart();
   this.renderer.setStrokeStyle('rgba(255, 255, 255, 0.2)');
-  this.renderer.context.lineWidth = 15;
+  this.renderer.context.lineWidth = 4 / this.renderer.getZoom();
 
   var graf = this.grafEd.getModel();
 
@@ -325,13 +336,14 @@ GrafUi.prototype.draw = function() {
   // selections
   var selectionsSize = this.grafEd.getSelectionsSize();
   var alpha = 0.9;
-  this.renderer.context.lineWidth = 8;
+  this.renderer.context.lineWidth = 2 / this.renderer.getZoom();
   for (var i = 0; i < Math.min(selectionsSize, GrafUi.SELECTION_COLORS.length); i++) {
     this.renderer.setStrokeStyle(GrafUi.SELECTION_COLORS[i]);
     var selIds = this.grafEd.getSelectedIds(i);
     for (var s = 0; s < selIds.length; s++) {
       var id = selIds[s];
       var selPos = this.grafEd.getPosById(id);
+      if (!selPos) continue;
       var selRad = this.grafEd.getRadById(id);
       selRad += (GrafUi.SELECTION_COLORS.length - i) * GrafUi.SELECTION_RENDER_PADDING;
       this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, selRad);
