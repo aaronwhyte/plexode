@@ -46,7 +46,7 @@ GrafUi.MIN_ZOOM = 0.01;
 
 GrafUi.HILITE_COLOR = 'rgba(255, 255, 255, 0.9)';
 
-GrafUi.SELECTION_RENDER_PADDING = 8;
+GrafUi.SELECTION_RENDER_PADDING = 2;
 
 GrafUi.SELECTION_COLORS = [
   'rgba(0, 255, 100, 0.95)',
@@ -55,23 +55,28 @@ GrafUi.SELECTION_COLORS = [
   'rgba(200, 40, 0, 0.2)'
 ];
 
+GrafUi.MODEL_LINE_WIDTH = 1.5;
+GrafUi.SELECTION_LINE_WIDTH = 2;
+GrafUi.HILITE_LINE_WIDTH = 1.5;
+
 /**
  * @enum {String}
  */
 GrafUi.Mode = {
+  DEFAULT: 'default',
   DRAG: 'drag',
-  SELECT: 'select',
-  DEFAULT: 'default'
+  SELECT: 'select'
 };
 
 /**
  * @enum {number}
  */
 GrafUi.KeyCodes = {
-  DRAG: VK_D,
+  ADD_SELECTIONS: VK_A,
   DELETE: VK_DELETE,
   DELETE2: VK_BACKSPACE,
-  ADD_SELECTIONS: VK_A,
+  DRAG: VK_D,
+  LINK: VK_L,
   SELECT: VK_S
 };
 
@@ -217,7 +222,15 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.deleteSelection();
+      // don't do browser "back" navigation
       event.preventDefault();
+    }
+
+    // link
+    if (kc == GrafUi.KeyCodes.LINK) {
+      self.viewDirty = true;
+      self.plugin.invalidate();
+      self.grafEd.linkSelectedJacks();
     }
   };
 };
@@ -319,7 +332,7 @@ GrafUi.prototype.draw = function() {
 
   this.renderer.transformStart();
   this.renderer.setStrokeStyle('rgba(255, 255, 255, 0.2)');
-  this.renderer.context.lineWidth = 4 / this.renderer.getZoom();
+  this.renderer.context.lineWidth = GrafUi.MODEL_LINE_WIDTH / this.renderer.getZoom();
 
   var graf = this.grafEd.getModel();
 
@@ -336,7 +349,7 @@ GrafUi.prototype.draw = function() {
   // selections
   var selectionsSize = this.grafEd.getSelectionsSize();
   var alpha = 0.9;
-  this.renderer.context.lineWidth = 2 / this.renderer.getZoom();
+  this.renderer.context.lineWidth = GrafUi.SELECTION_LINE_WIDTH / this.renderer.getZoom();
   for (var i = 0; i < Math.min(selectionsSize, GrafUi.SELECTION_COLORS.length); i++) {
     this.renderer.setStrokeStyle(GrafUi.SELECTION_COLORS[i]);
     var selIds = this.grafEd.getSelectedIds(i);
@@ -345,7 +358,7 @@ GrafUi.prototype.draw = function() {
       var selPos = this.grafEd.getPosById(id);
       if (!selPos) continue;
       var selRad = this.grafEd.getRadById(id);
-      selRad += (GrafUi.SELECTION_COLORS.length - i) * GrafUi.SELECTION_RENDER_PADDING;
+      selRad += (GrafUi.SELECTION_COLORS.length - i) * GrafUi.SELECTION_RENDER_PADDING / this.renderer.getZoom();
       this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, selRad);
     }
     alpha *= 0.75;
@@ -353,6 +366,7 @@ GrafUi.prototype.draw = function() {
 
   // hilite
   this.renderer.setStrokeStyle(GrafUi.HILITE_COLOR);
+  this.renderer.context.lineWidth = GrafUi.HILITEL_LINE_WIDTH / this.renderer.getZoom();
   var hiliteRect = this.grafEd.getHiliteRect();
   if (hiliteRect) {
     this.renderer.strokeRectCornersXYXY(

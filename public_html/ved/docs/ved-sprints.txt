@@ -349,23 +349,37 @@ deletion
 v deleting part deletes whole cluster
 v deleting jack only deleted links
 
+2012.11.11
 link mutations
-- link jacks: L
-- unlink jacks: shift-L
+v grafEd
+  v link selected
+  x unlink selected
+v grafUi
+  v link jacks: L
+  x unlink jacks: shift-L
 
-wall invariant
-- other wall endpoint moves minimum distance to remain coaxial (may switch orientation)
+undo/redo (v1: in-memory only)
+- grafEd
+  - keep undoStack of op-ranges committed from this window
+  - "undo" pops from the undoStack, commits its reverse, and pushes it to the redoStack.
+  - "redo" pops from the redoStack, applies that change, and pushes to the undoStack
+  - Any other commit clears the redo stack.
+- grafUi
+  - z is undo
+  - shift-z is redo
 
-Clip work galore
-- current clip widget
-- sysclips widget
-- sysclip to currentClip
-- selection to currentClip
+current clip widget
+sysclips widget
+copy sysclip to currentClip
+copy selection to currentClip
 - paste currentClip
 - recent user clips
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
+
+wall invariant
+- other wall endpoint moves minimum distance to remain coaxial (may switch orientation)
 
 Add level
 
@@ -377,6 +391,9 @@ Json view?
 
 insta-vorp?
 
-========================================================
-== Milestone: Ship fun levels created entirely in Ved ==
-========================================================
+Milestone: Ship fun levels created entirely in Ved
+- Ved usable by me.
+-
+
+
+*** Milestone: Ship Ved itself ***

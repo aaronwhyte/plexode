@@ -58,9 +58,9 @@ GrafEd.createFromOpStor = function(opStor) {
 };
 
 GrafEd.PART_RADIUS = 50;
-GrafEd.JACK_RADIUS = 20;
-GrafEd.JACK_DISTANCE = GrafEd.PART_RADIUS + GrafEd.JACK_RADIUS / 2;
-GrafEd.SELECTION_PADDING = 10;
+GrafEd.JACK_RADIUS = GrafEd.PART_RADIUS * 0.25;
+GrafEd.JACK_DISTANCE = GrafEd.PART_RADIUS + GrafEd.JACK_RADIUS;
+GrafEd.SELECTION_PADDING = 0;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
