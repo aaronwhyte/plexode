@@ -132,6 +132,7 @@ def getVorpJsFileNames():
     'plex/rect.js',
     'plex/stringset.js',
     'plex/type.js',
+    'plex/window.js',
   ]
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))

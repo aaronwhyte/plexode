@@ -3,11 +3,21 @@ body {
   color: #aaa;
 }
 
-.levelheader {
-  color:#888;
+#levelFooter {
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  padding:0.5em 0;
+  text-align:center;
 }
 
-.minihelp {
+#levelHeader {
+  color:#888;
+  padding-bottom:0.5em;
+}
+
+#miniHelp {
   color:#555;
   font-size:90%;
 }
@@ -15,7 +25,7 @@ body {
 a {
   font-weight:bold;
   text-decoration:none;
-  color:#85d;
+  color:#96e;
 }
 
 a.nav {
@@ -28,10 +38,14 @@ div.center {
   margin-right: auto;
 }
 
-canvas {
-  border: 2px solid #333;
-  margin: 0.6em;
+#canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  position:absolute;
+  top:0px;
   background: #000;
+  z-index:-2;
 }
 
 #levelCenter {

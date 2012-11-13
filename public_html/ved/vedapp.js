@@ -41,6 +41,8 @@ VedApp.prototype.render = function() {
   // out-of-dom fragment to prevent rerendering as we go
   // (no idea if that really works)
   var appDiv = plex.dom.ce('div');
+  this.rootNode.innerHTML = '';
+  this.rootNode.appendChild(appDiv);
 
   var hash = plex.url.getFragment();
   var query = plex.url.decodeQuery(hash);
@@ -54,10 +56,6 @@ VedApp.prototype.render = function() {
   } else {
     this.renderDirectory(appDiv);
   }
-
-  // put it all in the DOM
-  this.rootNode.innerHTML = '';
-  this.rootNode.appendChild(appDiv);
 };
 
 VedApp.prototype.getHashChangeListener = function() {
@@ -181,10 +179,15 @@ VedApp.prototype.renderTesting = function(appDiv, levelName) {
   this.renderLevelHeader(appDiv, levelName, VedApp.Mode.TEST);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
-  plex.dom.ce('br', appDiv);
+  // hacky fake header/footer to restrict the canvas positioning
+  // TODO: better canvas resize cues, maybe owned by the renderer
+  var fakeHeader = plex.dom.ce('div', appDiv);
+  fakeHeader.id = 'levelHeader';
+  var fakeFooter = plex.dom.ce('div', appDiv);
+  fakeFooter.id = 'levelFooter';
+
   var canvas = plex.dom.ce('canvas', appDiv);
-  canvas.height = 600;
-  canvas.width = 600;
+  canvas.id = 'canvas';
 
   // get level graf
   var opStor = new OpStor(this.stor, levelName);

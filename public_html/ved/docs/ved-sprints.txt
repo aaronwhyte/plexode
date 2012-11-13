@@ -358,6 +358,9 @@ v grafUi
   v link jacks: L
   x unlink jacks: shift-L
 
+2012.11.11 - 2012.11.12
+v fuller-screen vorp
+
 undo/redo (v1: in-memory only)
 - grafEd
   - keep undoStack of op-ranges committed from this window
@@ -384,8 +387,6 @@ wall invariant
 Add level
 
 Delete level
-
-fuller-screen vorp?
 
 Json view?
 

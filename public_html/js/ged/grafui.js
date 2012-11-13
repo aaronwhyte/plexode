@@ -171,13 +171,13 @@ GrafUi.prototype.getMouseWheelListener = function() {
   return function(event) {
     self.viewDirty = true;
     event = event || window.event;
-    //self.setCanvasPosWithEvent(event);
     if ('wheelDeltaY' in event) {
       self.deltaZoom += event['wheelDeltaY'];
     } else if ('deltaY' in event) {
       self.deltaZoom += event['deltaY'];
     } else if ('detail' in event) {
-      self.deltaZoom += event['detail'] * -10;
+      // Mozilla
+      self.deltaZoom += event['detail'] * -30;
     }
     event.preventDefault();
     return false;
@@ -366,7 +366,7 @@ GrafUi.prototype.draw = function() {
 
   // hilite
   this.renderer.setStrokeStyle(GrafUi.HILITE_COLOR);
-  this.renderer.context.lineWidth = GrafUi.HILITEL_LINE_WIDTH / this.renderer.getZoom();
+  this.renderer.context.lineWidth = GrafUi.HILITE_LINE_WIDTH / this.renderer.getZoom();
   var hiliteRect = this.grafEd.getHiliteRect();
   if (hiliteRect) {
     this.renderer.strokeRectCornersXYXY(

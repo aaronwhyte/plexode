@@ -90,12 +90,14 @@ Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
 
 Vorp.prototype.startLoop = function() {
   if (!this.editable) {
+    this.resize();
     if (!this.listeners) {
       // TODO: remove all GU_* stuff
       GU_keys.length = 0;
       this.listeners = new plex.event.ListenerTracker();
       this.listeners.addListener(document, 'keydown', GU_keyDown);
       this.listeners.addListener(document, 'keyup', GU_keyUp);
+      this.listeners.addListener(window, 'resize', this.getResizeListener());
     }
   }
   if (!this.loop) {
@@ -119,6 +121,39 @@ Vorp.prototype.stopLoop = function() {
     this.loop.stop();
   }
 };
+
+Vorp.prototype.getResizeListener = function() {
+  var self = this;
+  return function(event) {
+    self.resize();
+  };
+};
+
+Vorp.prototype.resize = function() {
+  var header = document.getElementById('levelHeader');
+  var headerHeight = (header && header.offsetHeight + header.offsetTop) || 0;
+  var footer = document.getElementById('levelFooter');
+  var footerHeight = (footer && footer.offsetHeight) || 0;
+
+  var s = plex.window.getSize();
+  var maxHeight = s.height - (footerHeight + headerHeight);
+  var maxWidth = s.width;
+  var dim = Math.min(maxWidth, maxHeight);
+  var canvas = this.renderer.canvas;
+  canvas.width = dim;
+  canvas.height = dim;
+  var left;
+  if (maxWidth < maxHeight) {
+    left = '0';
+  } else {
+    left = (s.width / 2 - dim / 2) + 'px';
+  }
+  canvas.style.left = left;
+  canvas.style.top = headerHeight + 'px';
+
+  this.canvasSize = dim;
+};
+
 
 Vorp.prototype.getBaseSpriteTemplate = function() {
   if (!this.baseSpriteTemplate) {
@@ -244,7 +279,7 @@ Vorp.prototype.draw = function() {
   var now = this.now();
   this.renderer.clear();
   if (!this.editable) {
-    this.renderer.setZoom(Vorp.ZOOM);
+    this.renderer.setZoom(Vorp.ZOOM * this.canvasSize / 600);
   }
   if (this.playerSprite) {
     this.playerSprite.getPos(this.cameraPos);

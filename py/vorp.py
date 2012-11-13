@@ -90,16 +90,24 @@ function main() {
 </head>
 <body onload="main()">
 <div id="levelCenter">
+
 <div id="game">
-<div class="levelheader"><a href="../">plexode:vorp</a> - """, description, """</div>
+<div id="levelHeader"><a href="../">plexode:vorp</a> - """, description, """</div>
 <canvas id="canvas" width=600 height=600></canvas>
-<div class="minihelp">arrows move, Z grabs, and X drops. tap X while holding Z to throw.</div>
 </div>
-<div id="settings">
+
+<!--<div id="settings">
 <div id="flags">flags</div>
+</div>-->
+
 </div>
+
+<div id="levelFooter">
+<div id="miniHelp">Arrows move, Z grabs, and X drops. Tap X while holding Z to throw.</div>
 </div>
+
 <div class="copyright">Copyright 2010 Aaron Whyte</div>
+
 </body>
 </html>
 """])

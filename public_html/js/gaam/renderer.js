@@ -8,8 +8,7 @@ function Renderer(canvas, camera) {
   this.canvas = canvas;
   this.camera = camera;
   this.context = canvas.getContext('2d');
-  this.context.textBaseline = "top";
-  this.context.font = "bold 14px monospace";
+  this.context.textBaseline = 'top';
   this.lastTimeSec = (new Date()).getTime() / 1000;
   this.frameCount = 0;
   this.fps = 0;
@@ -68,8 +67,9 @@ Renderer.prototype.stats = function() {
     this.frameCount = 0;
   }
   c.restore();
-  this.setFillStyle("#444");
-  c.fillText(this.fps, 2, 2);
+  this.setFillStyle('#555');
+  c.font = 'bold 15px monospace';
+  c.fillText(this.fps, 10, 20);
 };
 
 Renderer.prototype.setFillStyle = function(style) {
