@@ -372,7 +372,18 @@ v grafUi
   v z is undo
   v shift-z is redo
 
+GrafRenderer
+- Take GrafEd's geometry knowledge, and GrafUi's non-user-interactive rendering chunks,
+and pull them up into...
+- a class GrafGeom that knows the size of parts, where jacks are, etc
+- a basic rendering class GrafRend that uses a plugin, GrafGeom, and Renderer to center and draw.
+- GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
+
 current clip widget
+- stor (one-cell clipStor?)
+- model
+- GrafRend
+
 sysclips widget
 copy sysclip to currentClip
 copy selection to currentClip
@@ -394,8 +405,11 @@ Json view?
 insta-vorp?
 
 Milestone: Ship fun levels created entirely in Ved
-- Ved usable by me.
+- Ved usable by me for editing.
+- Some way to publish levels - JSON view + cut-n-paste etc.
+- Actually make new levels dawg.
+
+
+Milestone: Ship Ved itself
+- Move everything to new site (loopwood? photonpotato?) without eval XSS features.
 -
-
-
-*** Milestone: Ship Ved itself ***

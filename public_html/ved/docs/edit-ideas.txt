@@ -132,7 +132,7 @@ Now transform the GrafModel into a Vorp!
 * transformer.transformModel(grafModel)
 * Now your vorp is ready to play!
 ...
-In the distant future, the UI for building levels will use the processes above,
+In the distant future (it was November 2012!), the UI for building levels will use the processes above,
 but instead of playing the vorp, the UI will display it frozen in time, overlaid with the grafmodel.
 The user will manipulate the grafmodel using a generic graf editor UI that doesn't
 have to know about the Transformer or Vorp.
@@ -165,4 +165,57 @@ Try to make everything obvious just by playing w mouse/touch. Don't rely on user
 Use the selections and model to offer more touchable buttons.
 - Offer link button if sel0 and sel1 each have one opposite jack with no existing link
 - On sel0, show handles for pan, del, and copy.
--
+
+
+=============================================
+2012.11.13 Clips
+
+-------------------
+Current Clip Widget
+
+Render the model + vorp the same way the grafUi does, but center and zoom automatically.
+(GrafUi needs the same ability, for its initial view. Today the level is out of frame.)
+CurrClip's canvas is not interactive. No hovers, panning, etc. Static canvas, rendered once.
+
+Interface:
+- setModel, from a select+copy, or a sys-clip click
+  - saves to a stor. Not opstor - just a monolithic JSON blob.
+  - draw. No loop so don't bother with 'dirty' bit.
+- getModel, for paste.
+- draw
+  - causes transformation via plugin, new framing, and one render with plugin help.
+- resize.  Instant redraw.
+- Listens to stor changes, for cross-tab cut-n-paste.
+
+Deps:
+- stor (optional?)
+- model (empty, syncs from stor like GrafEd?)
+- renderer
+- plugin
+Like GrafEd + GrafUi, but simpler.
+
+------------
+System Clip
+
+Rendered exactly like Current Clip.
+Deps:
+- model, empty or initialized
+- renderer
+- plugin
+
+The list of system clips is its own widget, owned by VedApp, that manages a list of system clips.
+
+----------
+User Clips
+No different from system clips except that the list of them changes based on copy ops and clipstor events.
+
+
+So...
+ClipRenderer?
+Resizable, settable widget that only renders a clip Used by Current, User, and System clips.
+Hm. It needs to be consistent with GrafUi's rendering.
+GrafRenderer!
+Take GrafEd's graphics constants, and GrafUi's non-user-interactive rendering chunks,
+and pull them up into a constants class, and a basic rendering class.
+Today's GrafUi will own a basic graf renderer and pile other stuff onto it,
+like selection and hilite rendering, tips, etc.
