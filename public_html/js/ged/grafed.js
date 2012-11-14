@@ -49,6 +49,9 @@ function GrafEd(model, opt_opStor) {
 
   // for GrafUi to set
   this.invalidationCallback = null;
+
+  this.undoStack = [];
+  this.redoStack = [];
 }
 
 GrafEd.createFromOpStor = function(opStor) {
@@ -630,10 +633,42 @@ GrafEd.prototype.selectByIds = function(partOrJackIds, selected) {
 };
 
 /**
- * Writes ops to the opstor if there is one.
+ * Commits ops the user manually performed.
+ * Pushes to the undo stack and clears the redo stack.
  * @param {Array<GrafOp>} ops
  */
 GrafEd.prototype.commitOps = function(ops) {
+  this.commitOpsInternal(ops);
+  this.undoStack.push(ops.concat()); // copy the ops array
+  this.redoStack.length = 0;
+};
+
+/**
+ * Undoes the ops on the undo stack, moving them to the redo stack.
+ */
+GrafEd.prototype.undo = function() {
+  var ops = this.undoStack.pop();
+  if (!ops) return;
+  this.redoStack.push(ops);
+  this.commitOpsInternal(GrafOp.createReverses(ops));
+};
+
+/**
+ * Undoes the ops on the redo stack, moving them to the undo stack.
+ */
+GrafEd.prototype.redo = function() {
+  var ops = this.redoStack.pop();
+  if (!ops) return;
+  this.undoStack.push(ops);
+  this.commitOpsInternal(ops);
+};
+
+/**
+ * Writes ops to the opstor if there is one.
+ * Causes the model to be updated, maybe asynchronously.
+ * @param {Array<GrafOp>} ops
+ */
+GrafEd.prototype.commitOpsInternal = function(ops) {
   if (this.opStor) {
     for (var i = 0; i < ops.length; i++) {
       this.opStor.appendOp(i, ops[i]);

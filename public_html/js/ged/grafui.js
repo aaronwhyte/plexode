@@ -77,7 +77,8 @@ GrafUi.KeyCodes = {
   DELETE2: VK_BACKSPACE,
   DRAG: VK_D,
   LINK: VK_L,
-  SELECT: VK_S
+  SELECT: VK_S,
+  UNDO: VK_Z
 };
 
 GrafUi.prototype.startLoop = function() {
@@ -232,6 +233,18 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.plugin.invalidate();
       self.grafEd.linkSelectedJacks();
     }
+
+    // undo/redo
+    if (kc == GrafUi.KeyCodes.UNDO) {
+      self.viewDirty = true;
+      self.plugin.invalidate();
+      if (!event.shiftKey) {
+        self.grafEd.undo();
+      } else {
+        self.grafEd.redo();
+      }
+    }
+
   };
 };
 

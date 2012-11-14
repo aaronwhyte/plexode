@@ -361,15 +361,16 @@ v grafUi
 2012.11.11 - 2012.11.12
 v fuller-screen vorp
 
+2012.11.13
 undo/redo (v1: in-memory only)
-- grafEd
-  - keep undoStack of op-ranges committed from this window
-  - "undo" pops from the undoStack, commits its reverse, and pushes it to the redoStack.
-  - "redo" pops from the redoStack, applies that change, and pushes to the undoStack
-  - Any other commit clears the redo stack.
-- grafUi
-  - z is undo
-  - shift-z is redo
+v grafEd
+  v keep undoStack of op-ranges committed from this window
+  v "undo" pops from the undoStack, commits its reverse, and pushes it to the redoStack.
+  v "redo" pops from the redoStack, applies that change, and pushes to the undoStack
+  v Any other commit clears the redo stack.
+v grafUi
+  v z is undo
+  v shift-z is redo
 
 current clip widget
 sysclips widget
