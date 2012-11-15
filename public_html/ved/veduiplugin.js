@@ -1,3 +1,7 @@
+/**
+ * @param {Renderer} renderer
+ * @constructor
+ */
 function VedUiPlugin(renderer) {
   this.renderer = renderer;
   this.vorp = null;
