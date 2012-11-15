@@ -410,10 +410,10 @@ GrafUi.prototype.drawCluster = function(cluster) {
 };
 
 GrafUi.prototype.drawPart = function(part) {
-  this.renderer.strokeCirclePosXYRad(part.x, part.y, GrafEd.PART_RADIUS);
+  this.renderer.strokeCirclePosXYRad(part.x, part.y, GrafGeom.PART_RADIUS);
   for (var jackId in part.jacks) {
     var jackPos = this.grafEd.getJackPos(jackId);
-    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, GrafEd.JACK_RADIUS);
+    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, GrafGeom.JACK_RADIUS);
   }
 };
 

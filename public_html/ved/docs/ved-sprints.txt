@@ -374,15 +374,14 @@ v grafUi
 
 2012.11.13 -
 GrafRend & GrafGeom
-- Take GrafEd's geometry knowledge, and GrafUi's non-user-interactive rendering chunks,
-and pull them up into...
-- a class GrafGeom that knows the size of parts, where jacks are, etc
-- a basic rendering class GrafRend that uses a plugin, GrafGeom, and Renderer to center and draw.
+v Put GrafEd's geometry knowledge into new class GrafGeom that knows the size of parts, where jacks are, etc
+v GradEd owns a GrafGeom
+- Put GrafUi's non-user-interactive rendering chunks into new class GrafRend
+  that uses a plugin, GrafGeom, and Renderer to center and draw.
   - transformation via plugin
   - pan and zoom nicely (model only, or plugin help too?)
   - render with plugin help
 - GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
-- GradEd owns a GrafGeom
 
 current clip widget
 - deps

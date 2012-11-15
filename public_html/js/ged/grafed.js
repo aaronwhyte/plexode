@@ -27,6 +27,7 @@
  */
 function GrafEd(model, opt_opStor) {
   this.model = model;
+  this.geom = new GrafGeom(model);
   this.opStor = opt_opStor || null;
 
   this.selStack = new SelStack();
@@ -59,11 +60,6 @@ GrafEd.createFromOpStor = function(opStor) {
   grafEd.syncOps();
   return grafEd;
 };
-
-GrafEd.PART_RADIUS = 50;
-GrafEd.JACK_RADIUS = GrafEd.PART_RADIUS * 0.25;
-GrafEd.JACK_DISTANCE = GrafEd.PART_RADIUS + GrafEd.JACK_RADIUS;
-GrafEd.SELECTION_PADDING = 0;
 
 GrafEd.prototype.getModel = function() {
   return this.model;
@@ -100,14 +96,13 @@ GrafEd.prototype.paste = function(clipModel) {
 };
 
 /**
- * Gets the offset of a jack in the world, based on it's type.
+ * Gets the offset of a jack in the world, based on its type.
  * @param {boolean} isInput
  * @param {Vec2d=} opt_outVec
  * @return {Vec2d}
  */
 GrafEd.prototype.getJackOffset = function(isInput, opt_outVec) {
-  var retval = opt_outVec || new Vec2d();
-  return retval.setXY(0, GrafEd.JACK_DISTANCE * (isInput ? -1 : 1));
+  return this.geom.getJackOffset(isInput, opt_outVec);
 };
 
 /**
@@ -118,13 +113,7 @@ GrafEd.prototype.getJackOffset = function(isInput, opt_outVec) {
  * @return {Vec2d}
  */
 GrafEd.prototype.getJackPos = function(jackId, opt_outVec) {
-  // TODO: Link location, for deletion?
-  var retval = opt_outVec || new Vec2d();
-  var jack = this.model.getJack(jackId);
-  var part = this.model.getPart(jack.partId);
-  this.getJackOffset(jack.isInput(), retval);
-  retval.addXY(part.x, part.y);
-  return retval;
+  return this.geom.getJackPos(jackId, opt_outVec);
 };
 
 /**
@@ -133,23 +122,7 @@ GrafEd.prototype.getJackPos = function(jackId, opt_outVec) {
  * @param {boolean} selected true if selecting or false if unselecting
  */
 GrafEd.prototype.selectNearest = function(pos, selected) {
-  this.selectById(this.getNearestId(pos), selected);
-};
-
-/**
- * @param {Vec2d} pos
- * @param {number=} opt_maxDist
- * @return {Vec2d} the position of the object closest to "pos", or null
- */
-GrafEd.prototype.getNearestPos = function(pos, opt_maxDist) {
-  var id = this.getNearestId(pos, opt_maxDist);
-  if (!id) return null;
-  var jack = this.model.getJack(id);
-  if (jack) {
-    return this.getJackPos(id);
-  }
-  var part = this.model.getPart(id);
-  return new Vec2d(part.x, part.y);
+  this.selectById(this.geom.getNearestId(pos), selected);
 };
 
 GrafEd.prototype.popSelection = function() {
@@ -307,54 +280,16 @@ GrafEd.prototype.getHiliteRect = function() {
  */
 GrafEd.prototype.getHilitedIds = function() {
   if (!this.selectionStart) return [];
-  var jackPos = Vec2d.alloc();
-  var idSet = new plex.StringSet();
-  for (var partId in this.model.parts) {
-    var part = this.model.getPart(partId);
-    var dist = aabb.rectCircleDist(
-        this.selectionStart.x, this.selectionStart.y,
-        this.selectionEnd.x, this.selectionEnd.y,
-        part.x, part.y);
-    if (dist < GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING) {
-      idSet.put(partId);
-    }
-    for (var jackId in part.jacks) {
-      this.getJackPos(jackId, jackPos);
-      var dist = aabb.rectCircleDist(
-          this.selectionStart.x, this.selectionStart.y,
-          this.selectionEnd.x, this.selectionEnd.y,
-          jackPos.x, jackPos.y);
-      if (dist < GrafEd.JACK_RADIUS + GrafEd.SELECTION_PADDING) {
-        idSet.put(jackId);
-      }
-    }
-  }
-  Vec2d.free(jackPos);
-  return idSet.getValues();
+  return this.geom.getIdsInRect(
+      this.selectionStart.x, this.selectionStart.y,
+      this.selectionEnd.x, this.selectionEnd.y);
 };
 
 /**
  * @return {Array} of IDs. If there aren't any, returns empty array.
  */
 GrafEd.prototype.getHoverIds = function(x, y) {
-  var jackPos = Vec2d.alloc();
-  var idSet = new plex.StringSet();
-  for (var partId in this.model.parts) {
-    var part = this.model.getPart(partId);
-    var dist = Vec2d.distance(x, y, part.x, part.y);
-    if (dist < GrafEd.PART_RADIUS + GrafEd.SELECTION_PADDING) {
-      idSet.put(partId);
-    }
-    for (var jackId in part.jacks) {
-      this.getJackPos(jackId, jackPos);
-      var dist = Vec2d.distance(x, y, jackPos.x, jackPos.y);
-      if (dist < GrafEd.JACK_RADIUS + GrafEd.SELECTION_PADDING) {
-        idSet.put(jackId);
-      }
-    }
-  }
-  Vec2d.free(jackPos);
-  return idSet.getValues();
+  return this.geom.getIdsInRect(x, y, x, y);
 };
 
 GrafEd.prototype.startDragVec = function(v) {
@@ -496,30 +431,14 @@ GrafEd.prototype.deleteSelection = function() {
  * @return {Vec2d?}
  */
 GrafEd.prototype.getPosById = function(id) {
-  var part = this.model.getPart(id);
-  if (part) {
-    return new Vec2d(part.x, part.y);
-  }
-  var jack = this.model.getJack(id);
-  if (jack) {
-    return this.getJackPos(id);
-  }
-  return null;
+  return this.geom.getPosById(id);
 };
 
 /**
  * @return {number?}
  */
 GrafEd.prototype.getRadById = function(id) {
-  var part = this.model.getPart(id);
-  if (part) {
-    return GrafEd.PART_RADIUS;
-  }
-  var jack = this.model.getJack(id);
-  if (jack) {
-    return GrafEd.JACK_RADIUS;
-  }
-  return null;
+  return this.geom.getRadById(id);
 };
 
 /**
@@ -574,30 +493,7 @@ GrafEd.prototype.opForSetDataById = function(objId, key, val) {
  * @return a model ID, either a partId or a jackId, or null if nothing is close enough
  */
 GrafEd.prototype.getNearestId = function(pos, opt_maxDist) {
-  var jackPos = Vec2d.alloc();
-  var maxDist = opt_maxDist || 1;
-  var partPos = new Vec2d();
-  var leastDistSq = maxDist * maxDist;
-  var retId = null;
-  for (var partId in this.model.parts) {
-    var part = this.model.getPart(partId);
-    partPos.setXY(part.x, part.y);
-    var distSq = pos.distanceSquared(partPos);
-    if (distSq < leastDistSq) {
-      retId = partId;
-      leastDistSq = distSq;
-    }
-    for (var jackId in part.jacks) {
-      this.getJackPos(jackId, jackPos);
-      distSq = pos.distanceSquared(jackPos);
-      if (distSq < leastDistSq) {
-        retId = jackId;
-        leastDistSq = distSq;
-      }
-    }
-  }
-  Vec2d.free(jackPos);
-  return retId;
+  return this.geom.getNearestId(pos, opt_maxDist);
 };
 
 /**
