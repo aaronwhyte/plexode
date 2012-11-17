@@ -1,4 +1,5 @@
-Ged is the Graf Editor. It is app-neutral, with a plugin point for rendering an app-specific layer under the graf.
+Ged is the Graf Editor.
+It is app-neutral, with a plugin point for rendering an app-specific layer under the graf.
 
 Gestures:
 Here I borrow a lot from Jef Raskin's "The Humane Interface", section 5-2.
