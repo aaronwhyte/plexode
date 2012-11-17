@@ -372,16 +372,17 @@ v grafUi
   v z is undo
   v shift-z is redo
 
-2012.11.13 -
+2012.11.13 - 2012.11.16
 GrafRend & GrafGeom
 v Put GrafEd's geometry knowledge into new class GrafGeom that knows the size of parts, where jacks are, etc
 v GradEd owns a GrafGeom
-- Put GrafUi's non-user-interactive rendering chunks into new class GrafRend
+v Put GrafUi's non-user-interactive rendering chunks into new class GrafRend
   that uses a plugin, GrafGeom, and Renderer to center and draw.
-  - transformation via plugin
-  - pan and zoom nicely (model only, or plugin help too?)
-  - render with plugin help
-- GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
+  v transformation via plugin
+  v frame the graph nicely on the canvas (model only, or plugin help too?)
+  v render with plugin help
+v GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
+  v also it centers levels correctly on startup
 
 current clip widget
 - deps

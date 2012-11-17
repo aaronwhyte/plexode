@@ -162,6 +162,7 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
 
   // Generate LevelEd
   var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
+  var model = grafEd.getModel();
 
   // renderer is shared by vorp and grafUi
   var camera = new Camera();
@@ -169,8 +170,9 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   camera.setPanXY(0, 0);
   var renderer = new Renderer(canvas, camera);
   var plugin = new VedUiPlugin(renderer);
-  var grafUi = new GrafUi(grafEd, renderer, plugin);
-
+  var grafGeom = new GrafGeom(model);
+  var grafRend = new GrafRend(plugin, renderer, grafGeom);
+  var grafUi = new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin);
   grafUi.startLoop();
   this.looper = grafUi;
 };

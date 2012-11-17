@@ -81,6 +81,13 @@ GrafGeom.prototype.getIdsInRect = function(x0, y0, x1, y1) {
 };
 
 /**
+ * @return {Array} of IDs. If there aren't any, returns empty array.
+ */
+GrafGeom.prototype.getIdsAtXY = function(x, y) {
+  return this.getIdsInRect(x, y, x, y);
+};
+
+/**
  * @return {Vec2d?}
  */
 GrafGeom.prototype.getPosById = function(id) {
@@ -117,10 +124,12 @@ GrafGeom.prototype.getRadById = function(id) {
  */
 GrafGeom.prototype.getNearestId = function(pos, opt_maxDist) {
   var jackPos = Vec2d.alloc();
+  var partPos = Vec2d.alloc();
+
   var maxDist = opt_maxDist || 1;
-  var partPos = new Vec2d();
   var leastDistSq = maxDist * maxDist;
   var retId = null;
+
   for (var partId in this.model.parts) {
     var part = this.model.getPart(partId);
     partPos.setXY(part.x, part.y);
@@ -139,5 +148,36 @@ GrafGeom.prototype.getNearestId = function(pos, opt_maxDist) {
     }
   }
   Vec2d.free(jackPos);
+  Vec2d.free(partPos);
   return retId;
+};
+
+/**
+ * @return object representing rectangle {x0:.., y0:.., x1:.., y1:..}
+ * that encloses all parts and jacks, or null if there are no objects.
+ */
+GrafGeom.prototype.getBoundingRect = function() {
+  var jackPos = Vec2d.alloc();
+  var bounds = null;
+
+  function updateBounds(x, y, rad) {
+    if (!bounds) {
+      bounds = {x0: x, y0: y, x1: x, y1: y};
+    }
+    if (x - rad < bounds.x0) bounds.x0 = x - rad;
+    if (y - rad < bounds.y0) bounds.y0 = y - rad;
+    if (x + rad > bounds.x1) bounds.x1 = x + rad;
+    if (y + rad > bounds.y1) bounds.y1 = y + rad;
+  }
+
+  for (var partId in this.model.parts) {
+    var part = this.model.getPart(partId);
+    updateBounds(part.x, part.y, GrafGeom.PART_RADIUS);
+    for (var jackId in part.jacks) {
+      this.getJackPos(jackId, jackPos);
+      updateBounds(jackPos.x, jackPos.y, GrafGeom.JACK_RADIUS);
+    }
+  }
+  Vec2d.free(jackPos);
+  return bounds;
 };

@@ -285,13 +285,6 @@ GrafEd.prototype.getHilitedIds = function() {
       this.selectionEnd.x, this.selectionEnd.y);
 };
 
-/**
- * @return {Array} of IDs. If there aren't any, returns empty array.
- */
-GrafEd.prototype.getHoverIds = function(x, y) {
-  return this.geom.getIdsInRect(x, y, x, y);
-};
-
 GrafEd.prototype.startDragVec = function(v) {
   this.startDragXY(v.x, v.y);
 };
@@ -425,20 +418,6 @@ GrafEd.prototype.deleteSelection = function() {
     }
   }
   this.commitOps(ops);
-};
-
-/**
- * @return {Vec2d?}
- */
-GrafEd.prototype.getPosById = function(id) {
-  return this.geom.getPosById(id);
-};
-
-/**
- * @return {number?}
- */
-GrafEd.prototype.getRadById = function(id) {
-  return this.geom.getRadById(id);
 };
 
 /**

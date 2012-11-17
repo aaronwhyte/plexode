@@ -7,6 +7,7 @@
 function Renderer(canvas, camera) {
   this.canvas = canvas;
   this.camera = camera;
+
   this.context = canvas.getContext('2d');
   this.context.textBaseline = 'top';
   this.lastTimeSec = (new Date()).getTime() / 1000;

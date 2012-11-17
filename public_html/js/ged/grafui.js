@@ -21,22 +21,29 @@
  *
  * @param {GrafEd} grafEd
  * @param {Renderer} renderer
+ * @param {GrafRend} grafRend
+ * @param {GrafGeom} grafGeom
  * @param plugin  app-specific thing with invalidate() and render(model)
  * @constructor
  */
-function GrafUi(grafEd, renderer, plugin) {
+function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin) {
   this.grafEd = grafEd;
   this.renderer = renderer;
+  this.grafRend = grafRend;
+  this.grafGeom = grafGeom;
   this.plugin = plugin;
+
   this.viewDirty = true;
   this.pointerWorldPosChanged = true;
   this.mode = GrafUi.Mode.DEFAULT;
 
   this.loop = null;
-  this.canvasPos = null;
-  this.worldPos = new Vec2d();
+  this.canvasPos = new Vec2d(Math.Infinity, Math.Infinity);
+  this.worldPos = new Vec2d(Math.Infinity, Math.Infinity);
   this.deltaZoom = 0;
   this.panning = false;
+
+  this.contentsFramed = false;
 }
 
 GrafUi.FPS = 30;
@@ -84,6 +91,10 @@ GrafUi.KeyCodes = {
 GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
+  if (!this.contentsFramed) {
+    this.grafRend.frameContents();
+    this.contentsFramed = true;
+  }
   if (!this.listeners) {
     this.listeners = new plex.event.ListenerTracker();
     this.listeners.addListener(document, 'mousemove', this.getMouseMoveListener());
@@ -284,7 +295,6 @@ GrafUi.prototype.resize = function() {
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
   var canvas = this.renderer.canvas;
-  if (!this.canvasPos) this.canvasPos = new Vec2d();
   this.canvasPos.setXY(
       event.pageX - canvas.offsetLeft - canvas.clientLeft,
       event.pageY - canvas.offsetTop - canvas.clientTop);
@@ -304,7 +314,7 @@ GrafUi.prototype.setWorldPos = function(pos) {
 
 GrafUi.prototype.clock = function() {
 
-  if (this.pointerWorldPosChanged && this.canvasPos) {
+  if (this.pointerWorldPosChanged) {
     this.setWorldPos(this.getWorldPosOfCanvasPos());
     this.pointerWorldPosChanged = false;
   }
@@ -325,15 +335,13 @@ GrafUi.prototype.clock = function() {
     this.deltaZoom = 0;
   }
 
-  if (this.canvasPos) {
-    // If the the pointer's screen position doesn't match the pointer's world position,
-    // then this will pan the canvas to adjust.
-    // This is the mechanism that makes the pointer stick to the world perfectly while zooming,
-    // and it's the way the view gets scrolled when panning.
-    var worldPosOfCanvasPos = this.getWorldPosOfCanvasPos();
-    var panCorrection = worldPosOfCanvasPos.subtract(this.worldPos).scale(-1);
-    this.renderer.addPan(panCorrection);
-  }
+  // If the the pointer's screen position doesn't match the pointer's world position,
+  // then this will pan the canvas to adjust.
+  // This is the mechanism that makes the pointer stick to the world perfectly while zooming,
+  // and it's the way the view gets scrolled when panning.
+  var worldPosOfCanvasPos = this.getWorldPosOfCanvasPos();
+  var panCorrection = worldPosOfCanvasPos.subtract(this.worldPos).scale(-1);
+  this.renderer.addPan(panCorrection);
 
   this.draw();
 };
@@ -341,23 +349,9 @@ GrafUi.prototype.clock = function() {
 GrafUi.prototype.draw = function() {
   if (!this.viewDirty) return;
 
-  this.plugin.render(this.grafEd.getModel());
+  this.grafRend.draw();
 
   this.renderer.transformStart();
-  this.renderer.setStrokeStyle('rgba(255, 255, 255, 0.2)');
-  this.renderer.context.lineWidth = GrafUi.MODEL_LINE_WIDTH / this.renderer.getZoom();
-
-  var graf = this.grafEd.getModel();
-
-  // clusters, parts, jacks
-  for (var clusterId in graf.clusters) {
-    this.drawCluster(graf.getCluster(clusterId));
-  }
-
-  // links
-  for (var linkId in graf.links) {
-    this.drawLink(graf.links[linkId]);
-  }
 
   // selections
   var selectionsSize = this.grafEd.getSelectionsSize();
@@ -368,10 +362,11 @@ GrafUi.prototype.draw = function() {
     var selIds = this.grafEd.getSelectedIds(i);
     for (var s = 0; s < selIds.length; s++) {
       var id = selIds[s];
-      var selPos = this.grafEd.getPosById(id);
+      var selPos = this.grafGeom.getPosById(id);
       if (!selPos) continue;
-      var selRad = this.grafEd.getRadById(id);
-      selRad += (GrafUi.SELECTION_COLORS.length - i) * GrafUi.SELECTION_RENDER_PADDING / this.renderer.getZoom();
+      var selRad = this.grafGeom.getRadById(id);
+      selRad += (GrafUi.SELECTION_COLORS.length - i) *
+          GrafUi.SELECTION_RENDER_PADDING / this.renderer.getZoom();
       this.renderer.strokeCirclePosXYRad(selPos.x, selPos.y, selRad);
     }
     alpha *= 0.75;
@@ -387,7 +382,7 @@ GrafUi.prototype.draw = function() {
         hiliteRect[2], hiliteRect[3]);
   }
   this.strokeHiliteForIds(this.grafEd.getHilitedIds());
-  this.strokeHiliteForIds(this.grafEd.getHoverIds(this.worldPos.x, this.worldPos.y));
+  this.strokeHiliteForIds(this.grafGeom.getIdsAtXY(this.worldPos.x, this.worldPos.y));
 
   this.renderer.transformEnd();
   this.viewDirty = false;
@@ -396,29 +391,8 @@ GrafUi.prototype.draw = function() {
 GrafUi.prototype.strokeHiliteForIds = function(ids) {
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
-    var pos = this.grafEd.getPosById(id);
-    var rad = this.grafEd.getRadById(id);
+    var pos = this.grafGeom.getPosById(id);
+    var rad = this.grafGeom.getRadById(id);
     this.renderer.strokeCirclePosXYRad(pos.x, pos.y, rad);
   }
-};
-
-GrafUi.prototype.drawCluster = function(cluster) {
-  var parts = cluster.getPartList();
-  for (var i = 0; i < parts.length; i++) {
-    this.drawPart(parts[i]);
-  }
-};
-
-GrafUi.prototype.drawPart = function(part) {
-  this.renderer.strokeCirclePosXYRad(part.x, part.y, GrafGeom.PART_RADIUS);
-  for (var jackId in part.jacks) {
-    var jackPos = this.grafEd.getJackPos(jackId);
-    this.renderer.strokeCirclePosXYRad(jackPos.x, jackPos.y, GrafGeom.JACK_RADIUS);
-  }
-};
-
-GrafUi.prototype.drawLink = function(link) {
-  this.renderer.drawLineVV(
-      this.grafEd.getJackPos(link.jackId1),
-      this.grafEd.getJackPos(link.jackId2));
 };
