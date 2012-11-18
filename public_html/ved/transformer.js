@@ -165,7 +165,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       controlVec = new Vec2d(part.x, part.y);
       template = this.createBaseTemplate()
           .makeImmovable()
-          .setPainter(new RectPainter("#0f0"))
+          .setPainter(new RectPainter("#080"))
           .setPos(controlVec)
           .setRadXY(Transformer.BOX_RADIUS * 1.5, Transformer.BOX_RADIUS * 1.5);
       sprite = new ExitSprite(template);

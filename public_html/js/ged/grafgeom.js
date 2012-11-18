@@ -7,8 +7,8 @@ function GrafGeom(model) {
   this.model = model;
 }
 
-GrafGeom.PART_RADIUS = 50;
-GrafGeom.JACK_RADIUS = GrafGeom.PART_RADIUS * 0.25;
+GrafGeom.PART_RADIUS = 30;
+GrafGeom.JACK_RADIUS = 10;
 GrafGeom.JACK_DISTANCE = GrafGeom.PART_RADIUS + GrafGeom.JACK_RADIUS;
 GrafGeom.SELECTION_PADDING = 0;
 
