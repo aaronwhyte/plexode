@@ -1,20 +1,23 @@
 /**
+ * @param {number} timestamp
+ * @param {string} id
+ * @param {GrafModel} model
  * @constructor
  */
-function Clip(timestamp, id, grafModel) {
+function Clip(timestamp, id, model) {
   this.timestamp = timestamp;
   this.id = id;
-  this.grafModel = grafModel;
+  this.model = model;
 }
 
 /**
- * Creates a clip from a ClipListOp of type ADD_CLIP.
- * @param op
+ * Creates a clip from a ClipListOp of type SET_CLIP.
+ * @param {ClipListOp} op
  * @return {Clip}
  */
 Clip.createClipFromOp = function(op) {
-  if (op.type != ClipListOp.Type.ADD_CLIP) {
-    throw Error('expected op.type ' + ClipListOp.Type.ADD_CLIP + ' but got ' + op.type);
+  if (op.type != ClipListOp.Type.SET_CLIP) {
+    throw Error('expected op.type ' + ClipListOp.Type.SET_CLIP + ' but got ' + op.type);
   }
   var grafModel = new GrafModel();
   grafModel.applyOps(op.grafOps);

@@ -5,29 +5,32 @@
  * { type:”addClip”, timestamp:1234567890, id:"clientx-456", grafOps: [{...}, {...}, {...} ...] }
  * { type:”removeClip”, id:"clientx-456" }
  * Unlike GrafOps, ClipListOps are not reversible.
+ * @param {ClipListOp.Type} type
+ * @param {string} id
+ * @param {number=} opt_timestamp
+ * @param {Object=} opt_grafOps
+ *
+ * @constructor
  */
-function ClipListOp() {}
+function ClipListOp(type, id, opt_timestamp, opt_grafOps) {
+  this.type = type;
+  this.id = id;
+  if (typeof opt_timestamp != "undefined") this.timestamp = opt_timestamp;
+  if (typeof opt_grafOps != "undefined") this.grafOps = opt_grafOps;
+}
 
 /**
  * @enum {string}
  */
 ClipListOp.Type = {
-  ADD_CLIP: 'addClip',
-  REMOVE_CLIP: 'removeClip'
+  SET_CLIP: 'setClip',
+  DELETE_CLIP: 'deleteClip'
 };
 
 ClipListOp.createAdd = function(timestamp, id, grafOps) {
-  return {
-    type: ClipListOp.Type.ADD_CLIP,
-    timestamp: timestamp,
-    id: id,
-    grafOps: grafOps
-  };
+  return new ClipListOp(ClipListOp.Type.SET_CLIP, id, timestamp, grafOps);
 };
 
 ClipListOp.createRemove = function(id) {
-  return {
-    type: ClipListOp.Type.REMOVE_CLIP,
-    id: id
-  };
+  return new ClipListOp(ClipListOp.Type.DELETE_CLIP, id);
 };

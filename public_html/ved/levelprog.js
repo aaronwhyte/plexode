@@ -22,7 +22,7 @@ LevelProg.create = function() {
 };
 
 LevelProg.prototype.wall = function(x1, y1, x2, y2) {
-  this.pasteWithPositions(this.sysClips.getClipById(VedType.WALL).grafModel, [new Vec2d(x1, y1), new Vec2d(x2, y2)]);
+  this.pasteWithPositions(this.sysClips.getClipById(VedType.WALL).model, [new Vec2d(x1, y1), new Vec2d(x2, y2)]);
 };
 
 LevelProg.prototype.wallStart = function(x, y) {
@@ -52,7 +52,7 @@ LevelProg.prototype.wallToY = function(y) {
  * @return {Vec2d} vector at x, y
  */
 LevelProg.prototype.mono = function(type, x, y, opt_data) {
-  this.pasteWithOffset(this.sysClips.getClipById(type).grafModel, new Vec2d(x, y));
+  this.pasteWithOffset(this.sysClips.getClipById(type).model, new Vec2d(x, y));
   opt_data && this.setDataOnSelection(opt_data);
   return new Vec2d(x, y);
 };
@@ -62,7 +62,7 @@ LevelProg.prototype.mono = function(type, x, y, opt_data) {
  * @param {Object=} opt_data optional object with key/value pairs to set on the pasted model objects.
  */
 LevelProg.prototype.double = function(type, x1, y1, x2, y2, opt_data) {
-  this.pasteWithPositions(this.sysClips.getClipById(type).grafModel, [new Vec2d(x1, y1), new Vec2d(x2, y2)]);
+  this.pasteWithPositions(this.sysClips.getClipById(type).model, [new Vec2d(x1, y1), new Vec2d(x2, y2)]);
   opt_data && this.setDataOnSelection(opt_data);
 };
 

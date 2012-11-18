@@ -10,10 +10,10 @@ function ClipList() {
 
 ClipList.prototype.applyOp = function(clipListOp) {
   switch (clipListOp.type) {
-    case ClipListOp.Type.ADD_CLIP:
+    case ClipListOp.Type.SET_CLIP:
       this.addClip(clipListOp.id, Clip.createClipFromOp(clipListOp));
       break;
-    case ClipListOp.Type.REMOVE_CLIP:
+    case ClipListOp.Type.DELETE_CLIP:
       this.removeClip(clipListOp.id);
       break;
     default:

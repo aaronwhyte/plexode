@@ -38,7 +38,7 @@ addTest(function testAddAndGetClipOp() {
   var clipList = new ClipList();
   clipList.applyOp(addOp);
   var clip = clipList.getClipByOrder(0);
-  assertStringifyEquals(createGrafOps(), clip.grafModel.createOps());
+  assertStringifyEquals(createGrafOps(), clip.model.createOps());
 });
 
 </script>
