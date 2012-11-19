@@ -23,6 +23,7 @@ plex.object.set = function(obj, attrs) {
   for (var a in attrs) {
     obj[a] = attrs[a];
   }
+  return obj;
 };
 
 plex.object.keys = function(obj) {
@@ -48,3 +49,13 @@ plex.object.values = function(obj) {
   }
   return values;
 };
+
+plex.object.clear = function(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      delete obj[key];
+    }
+  }
+  return obj;
+};
+

@@ -420,6 +420,30 @@ GrafEd.prototype.deleteSelection = function() {
   this.commitOps(ops);
 };
 
+GrafEd.prototype.copySelectedModel = function() {
+  if (!this.selStack.size()) {
+    return null;
+  }
+
+  // collect cluster IDs to copy
+  var ids = this.getSelectedIds();
+  var clusterIds = [];
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
+    var jack = this.model.getJack(id);
+    if (jack) {
+      var part = this.model.getPart(jack.partId);
+      clusterIds.push(part.clusterId);
+    }
+    var part = this.model.getPart(id);
+    if (part) {
+      clusterIds.push(part.clusterId);
+    }
+  }
+  var copy = this.model.copyClusters(clusterIds);
+  return copy;
+};
+
 /**
  * @return {Number}
  */

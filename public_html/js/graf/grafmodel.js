@@ -7,8 +7,9 @@ function GrafModel() {
   this.parts = {};
   this.jacks = {};
   this.links = {};
-  this.lastId = 0;
   this.size = 0;
+
+  this.lastId = 0;
 }
 
 /**
@@ -217,6 +218,15 @@ GrafModel.prototype.addModel = function(model) {
   this.applyOps(this.opsForAddModel(model));
 };
 
+GrafModel.prototype.clear = function() {
+  plex.object.clear(this.objs);
+  plex.object.clear(this.clusters);
+  plex.object.clear(this.parts);
+  plex.object.clear(this.jacks);
+  plex.object.clear(this.links);
+  this.size = 0;
+};
+
 /**
  * @return a JSON array of ops that can be used to create an identical model.
  * Since that re-uses this model's IDs, it can't be added to this model.
@@ -346,4 +356,40 @@ GrafModel.prototype.getLinksBetweenJacks = function(jackId1, jackId2) {
     }
   }
   return links;
+};
+
+/**
+ * @param clusterIds the IDs of clusters in this model to copy.
+ * @return {GrafModel} A new model containing only the clusters in clusterIds,
+ * plus the links between jacks in those clusters.
+ */
+GrafModel.prototype.copyClusters = function(clusterIds) {
+  // Copy just the references into an empty model,
+  // and then create an independent copy-by-value using op-based copying.
+
+  var refCopy = new GrafModel();
+  var jackIds = {};
+  for (var i = 0; i < clusterIds.length; i++) {
+    var id = clusterIds[i];
+    var cluster = this.getCluster(id);
+    refCopy.clusters[id] = cluster;
+    refCopy.objs[id] = cluster;
+    for (var partId in cluster.parts) {
+      var part = cluster.parts[partId];
+      for (var jackId in part.jacks) {
+        jackIds[jackId] = true;
+      }
+    }
+  }
+  for (var linkId in this.links) {
+    var link = this.getLink(linkId);
+    if (jackIds[link.jackId1] && jackIds[link.jackId2]) {
+      refCopy.links[linkId] = link;
+      refCopy.objs[linkId] = link;
+    }
+  }
+  var ops = refCopy.createOps();
+  var valCopy = new GrafModel();
+  valCopy.applyOps(ops);
+  return valCopy;
 };

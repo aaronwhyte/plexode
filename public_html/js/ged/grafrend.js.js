@@ -24,7 +24,7 @@ GrafRend.prototype.resize = function(width, height) {
   this.viewDirty = true;
 };
 
-GrafRend.prototype.frameContents = function() {
+GrafRend.prototype.frameContents = function(scale) {
   var bounds = this.geom.getBoundingRect();
   if (!bounds) return;
   this.renderer.setCenter(
@@ -35,11 +35,26 @@ GrafRend.prototype.frameContents = function() {
   var xZoom = this.renderer.canvas.width / boundsWidth;
   var yZoom = this.renderer.canvas.height / boundsHeight;
   this.renderer.setZoom(Math.min(xZoom, yZoom));
-  this.renderer.scaleZoom(2/3);
+  this.renderer.scaleZoom(scale);
+};
+
+/**
+ * @param {GrafModel} model
+ */
+GrafRend.prototype.setModelContents = function(model) {
+  this.geom.setModelContents(model);
+  this.plugin.invalidate();
+};
+
+/**
+ * @return {GrafModel}
+ */
+GrafRend.prototype.getModel = function() {
+  return this.geom.getModel();
 };
 
 GrafRend.prototype.draw = function() {
-  var model = this.geom.model;
+  var model = this.geom.getModel();
 
   this.plugin.render(model);
 

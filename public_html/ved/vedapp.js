@@ -9,8 +9,10 @@ function VedApp(rootNode, stor, opt_testLevelMap) {
   this.listeningToHashChanges = false;
 }
 
+VedApp.CLIPBOARD_STORAGE_KEY = 'vedClipBoard';
+
 /**
- * @type {enum}
+ * @enum {string}
  */
 VedApp.Params = {
   MODE: 'mode',
@@ -18,7 +20,7 @@ VedApp.Params = {
 };
 
 /**
- * @type {enum}
+ * @enum {string}
  */
 VedApp.Mode = {
   EDIT: 'edit',
@@ -155,26 +157,39 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
 VedApp.prototype.renderEditing = function(appDiv, levelName) {
   this.renderLevelHeader(appDiv, levelName, VedApp.Mode.EDIT);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
-
   plex.dom.ce('br', appDiv);
+
+  var clipboard = this.createClipboard(appDiv);
+  var grafUi = this.createGrafUi(appDiv, levelName, clipboard);
+  grafUi.startLoop();
+  this.looper = grafUi;
+};
+
+VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard) {
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.className = 'vedEditCanvas';
-
-  // Generate LevelEd
   var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
   var model = grafEd.getModel();
-
-  // renderer is shared by vorp and grafUi
   var camera = new Camera();
-  camera.setZoom(Vorp.ZOOM/2);
-  camera.setPanXY(0, 0);
   var renderer = new Renderer(canvas, camera);
   var plugin = new VedUiPlugin(renderer);
   var grafGeom = new GrafGeom(model);
   var grafRend = new GrafRend(plugin, renderer, grafGeom);
-  var grafUi = new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin);
-  grafUi.startLoop();
-  this.looper = grafUi;
+  return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard);
+};
+
+VedApp.prototype.createClipboard = function(appDiv) {
+  var canvas = plex.dom.ce('canvas', appDiv);
+  canvas.className = 'vedClipboard';
+  canvas.height = 100;
+  canvas.width = 100;
+  var model = new GrafModel();
+  var camera = new Camera();
+  var renderer = new Renderer(canvas, camera);
+  var grafGeom = new GrafGeom(model);
+  var plugin = new VedUiPlugin(renderer);
+  var grafRend = new GrafRend(plugin, renderer, grafGeom);
+  return new Clipboard(grafRend, localStorage, VedApp.CLIPBOARD_STORAGE_KEY);
 };
 
 VedApp.prototype.renderTesting = function(appDiv, levelName) {

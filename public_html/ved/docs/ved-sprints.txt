@@ -384,19 +384,36 @@ v Put GrafUi's non-user-interactive rendering chunks into new class GrafRend
 v GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
   v also it centers levels correctly on startup
 
-current clip widget
-- deps
-  - stor (optional?)
-  - GrafRend (model, renderer, plugin, GrafGeom)
-- api
-  - setModel, from a select+copy, or a sys-clip click
-    - saves to a monolithic JSON blob stor
-    - redraws
-  - getModel, for paste.
-  - draw
-  - resize, triggers redraw
-- Listens to stor changes, for cross-tab cut-n-paste.
-  - triggers setModel
+2012.11.18
+Clipboard
+v deps
+  v stor (optional?)
+  v GrafRend (model, renderer, plugin, GrafGeom)
+v api
+  v setModel, from a select+copy, or a sys-clip click
+    v saves to a monolithic JSON blob stor
+    v redraws
+  v getModel, for paste.
+  v draw
+  v resize, triggers redraw
+v Listens to stor changes, for cross-tab cut-n-paste.
+  v triggers setModel
+  v test
+v init clipboard on start
+
+2012.11.18
+Copy and Paste
+v copy selection
+  v grafui
+  v grafed
+    v grafmodel
+- paste
+  - grafui
+    - startPaste
+    - endPaste
+  - grafed
+    - startPaste, a lot like drag
+    - endPaste
 
 sysclips widget
 copy sysclip to currentClip

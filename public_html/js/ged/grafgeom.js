@@ -13,6 +13,22 @@ GrafGeom.JACK_DISTANCE = GrafGeom.PART_RADIUS + GrafGeom.JACK_RADIUS;
 GrafGeom.SELECTION_PADDING = 0;
 
 /**
+ * Sets the model contents, keeping the model reference.
+ * @param {GrafModel} model
+ */
+GrafGeom.prototype.setModelContents = function(model) {
+  this.model.clear();
+  this.model.addModel(model);
+};
+
+/**
+ * @return {GrafModel} reference to internal model
+ */
+GrafGeom.prototype.getModel = function() {
+  return this.model;
+};
+
+/**
  * Gets the offset of a jack in the world, based on its type.
  * @param {boolean} isInput
  * @param {Vec2d=} opt_outVec

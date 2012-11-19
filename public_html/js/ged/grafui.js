@@ -24,14 +24,16 @@
  * @param {GrafRend} grafRend
  * @param {GrafGeom} grafGeom
  * @param plugin  app-specific thing with invalidate() and render(model)
+ * @param {Clipboard} clipboard
  * @constructor
  */
-function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin) {
+function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard) {
   this.grafEd = grafEd;
   this.renderer = renderer;
   this.grafRend = grafRend;
   this.grafGeom = grafGeom;
   this.plugin = plugin;
+  this.clipboard = clipboard;
 
   this.viewDirty = true;
   this.pointerWorldPosChanged = true;
@@ -80,10 +82,12 @@ GrafUi.Mode = {
  */
 GrafUi.KeyCodes = {
   ADD_SELECTIONS: VK_A,
+  COPY: VK_C,
   DELETE: VK_DELETE,
   DELETE2: VK_BACKSPACE,
   DRAG: VK_D,
   LINK: VK_L,
+  PASTE: VK_V,
   SELECT: VK_S,
   UNDO: VK_Z
 };
@@ -91,8 +95,9 @@ GrafUi.KeyCodes = {
 GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
+  this.clipboard.start();
   if (!this.contentsFramed) {
-    this.grafRend.frameContents();
+    this.grafRend.frameContents(0.66);
     this.contentsFramed = true;
   }
   if (!this.listeners) {
@@ -123,6 +128,7 @@ GrafUi.prototype.startLoop = function() {
 };
 
 GrafUi.prototype.stopLoop = function() {
+  this.clipboard.stop();
   if (this.listeners) {
     this.listeners.removeAllListeners();
     this.listeners = null;
@@ -229,6 +235,17 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.grafEd.linkSelectedJacks();
     }
 
+    // copy
+    if (kc == GrafUi.KeyCodes.COPY) {
+      self.copy();
+    }
+
+    // paste
+    // TODO(awhyte): startPaste on keydown, like drag, endPAste on keyup.
+    if (kc == GrafUi.KeyCodes.PASTE) {
+      self.paste();
+    }
+
     // undo/redo
     if (kc == GrafUi.KeyCodes.UNDO) {
       self.viewDirty = true;
@@ -294,6 +311,18 @@ GrafUi.prototype.resize = function() {
   this.renderer.canvas.width = s.width;
   this.renderer.canvas.height = s.height;
   this.viewDirty = true;
+};
+
+GrafUi.prototype.copy = function() {
+  var model = this.grafEd.copySelectedModel();
+  if (model) {
+    this.clipboard.setModel(model);
+  }
+};
+
+GrafUi.prototype.paste = function() {
+  //TODO: add model at location
+  //TODO: preview on keydown, commit on keyup
 };
 
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
