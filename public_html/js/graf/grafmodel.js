@@ -299,7 +299,7 @@ GrafModel.prototype.createOps = function() {
 /**
  * Overwrites the op IDs to new IDs from this model's ID generator,
  * so the ops can be applied to this model.
- * @return {Object} idMap
+ * @return {Object} idMap from old ID to new ID
  */
 GrafModel.prototype.rewriteOpIds = function(ops) {
   var self = this;

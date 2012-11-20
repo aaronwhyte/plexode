@@ -197,3 +197,10 @@ GrafGeom.prototype.getBoundingRect = function() {
   Vec2d.free(jackPos);
   return bounds;
 };
+
+GrafGeom.prototype.getCenter = function() {
+  var brect = this.getBoundingRect();
+  var cx = (brect.x0 + brect.x1) / 2;
+  var cy = (brect.y0 + brect.y1) / 2;
+  return new Vec2d(cx, cy);
+};

@@ -401,19 +401,22 @@ v Listens to stor changes, for cross-tab cut-n-paste.
   v test
 v init clipboard on start
 
-2012.11.18
+2012.11.18 - 2012.11.19
 Copy and Paste
 v copy selection
   v grafui
   v grafed
     v grafmodel
-- paste
-  - grafui
-    - startPaste
-    - endPaste
-  - grafed
-    - startPaste, a lot like drag
-    - endPaste
+v paste
+  v grafed
+    v startPaste, a lot like drag
+    v continuePaste
+    v endPaste
+  v grafui
+    v startPaste
+    v continuePaste
+    v endPaste
+  v auto-select pasted stuff
 
 sysclips widget
 copy sysclip to currentClip

@@ -155,6 +155,19 @@ GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
   return ops;
 };
 
+GrafEd.prototype.getPasteModelOps = function(offset) {
+  var tempModel = new GrafModel();
+  tempModel.addModel(this.pasteModel);
+  for (var partId in tempModel.parts) {
+    var part = tempModel.parts[partId];
+    part.x += offset.x;
+    part.y += offset.y;
+  }
+  var ops = tempModel.createOps();
+  this.pasteIdMap = this.model.rewriteOpIds(ops);
+  return ops;
+};
+
 /**
  * Moves all selected parts by the offset vector value.
  * @param {Vec2d} offset
@@ -312,6 +325,44 @@ GrafEd.prototype.endDrag = function() {
   this.stagedOps.length = 0;
   this.dragStart = null;
   this.dragEnd = null;
+};
+
+GrafEd.prototype.startPasteVec = function(model, v) {
+  this.startPasteXY(model, v.x, v.y);
+};
+
+GrafEd.prototype.startPasteXY = function(model, x, y) {
+  this.pasteModel = model;
+  var geom = new GrafGeom(model);
+  var center = geom.getCenter();
+  this.pasteStart = new Vec2d(center.x, center.y);
+  this.pasteEnd = new Vec2d(x, y);
+};
+
+GrafEd.prototype.continuePasteVec = function(v) {
+  this.continuePasteXY(v.x, v.y);
+};
+
+GrafEd.prototype.continuePasteXY = function(x, y) {
+  this.pasteEnd.setXY(x, y);
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  var offset = new Vec2d().set(this.pasteEnd).subtract(this.pasteStart);
+  this.stagedOps = this.getPasteModelOps(offset);
+  this.model.applyOps(this.stagedOps);
+};
+
+GrafEd.prototype.endPaste = function() {
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  this.commitOps(this.stagedOps);
+
+  // auto-select pasted stuff
+  var pastedIds = plex.object.values(this.pasteIdMap);
+  this.selStack.push((new plex.StringSet()).putArray(pastedIds));
+  this.pasteIdMap = null;
+
+  this.stagedOps.length = 0;
+  this.pasteStart = null;
+  this.pasteEnd = null;
 };
 
 /**
