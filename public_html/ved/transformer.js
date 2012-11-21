@@ -15,13 +15,16 @@ function Transformer(vorp, gameClock, sledgeInvalidator) {
 
 Transformer.BOX_RADIUS = 20;
 Transformer.WALL_RADIUS = 24;
+
 Transformer.CARDINAL_DIRECTIONS = [
   new Vec2d(0, -1),
   new Vec2d(1, 0),
   new Vec2d(0, 1),
   new Vec2d(-1, 0)
 ];
-Transformer.MAX_HUG_DIST = 1000;
+
+Transformer.MAX_HUG_DIST = 2000;
+Transformer.FREE_FLOATING_DIST = 15;
 
 /**
  * @param {GrafModel} model  stuff to add to Vorp
@@ -148,13 +151,16 @@ Transformer.prototype.transformCluster = function(cluster) {
 
       // DoorSprite x2
       hugPoints = this.calcDoubleHugPoints(controlVec);
-      var midpoint = Vec2d.midpoint(hugPoints[0], hugPoints[1]);
+      var butts = [];
+      butts[0] = this.getButt(hugPoints[0], controlVec, 0);
+      butts[1] = this.getButt(hugPoints[1], controlVec, 0);
+      var midpoint = Vec2d.midpoint(butts[0], butts[1]);
       for (var i = 0; i < 2; i++) {
         template = this.createBaseTemplate()
             .makeImmovable()
             .setPainter(new RectPainter("#aaa"));
-        var hug = hugPoints[i];
-        sprite = new DoorSprite(template, hug.x, hug.y, midpoint.x, midpoint.y);
+        //var butt = this.getButt(hugPoints[i], midpoint, 0);
+        sprite = new DoorSprite(template, butts[i].x, butts[i].y, midpoint.x, midpoint.y);
         controlSprite.addDoorSprite(sprite);
         sprites.push(sprite);
       }
@@ -278,19 +284,21 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprites.push(controlSprite);
 
       // ZapperSprite
+      var butt0 = this.getButt(hugPoints[0], controlVec, 0.1);
+      var butt1 = this.getButt(hugPoints[1], controlVec, 0.1);
       template = this.createBaseTemplate()
           .makeImmovable()
           .setGroup(Vorp.ZAPPER_GROUP)
           .setPainter(new ZapperPainter(true))
-          .setPos(Vec2d.midpoint(hugPoints[0], hugPoints[1]))
+          .setPos(Vec2d.midpoint(butt0, butt1))
           .setRadXY(
-              this.rad(hugPoints[0].x, hugPoints[1].x, Transformer.WALL_RADIUS * 0.4),
-              this.rad(hugPoints[0].y, hugPoints[1].y, Transformer.WALL_RADIUS * 0.4));
+              this.rad(butt0.x, butt1.x, Transformer.WALL_RADIUS * 0.4),
+              this.rad(butt0.y, butt1.y, Transformer.WALL_RADIUS * 0.4));
       sprite = new ZapperSprite(template);
       controlSprite.setZapperSprite(sprite);
       sprites.push(sprite);
 
-      // WallSprite x2
+      // Zapper's WallSprite x2
       for (var i = 0; i < 2; i++) {
         template = this.createBaseTemplate()
             .makeImmovable()
@@ -349,8 +357,9 @@ Transformer.prototype.positionMonoHugger = function(template, controlVec, width,
  * @param height
  */
 Transformer.prototype.positionHugger = function(template, hugPoint, facingPoint, width, height) {
-  var normalUnitVec = new Vec2d().set(facingPoint).subtract(hugPoint).scaleToLength(1);
-  template.pos.set(normalUnitVec).scaleToLength(height / 2).add(hugPoint);
+  var butt = this.getButt(hugPoint, facingPoint, height);
+  var normalUnitVec = new Vec2d().set(facingPoint).subtract(butt).scaleToLength(1);
+  template.pos.set(normalUnitVec).scaleToLength(height / 2).add(butt);
 
   template.rad.set(normalUnitVec).scaleToLength(height / 2);
   template.rad.add(normalUnitVec.rot90Right().scaleToLength(width / 2));
@@ -359,20 +368,21 @@ Transformer.prototype.positionHugger = function(template, hugPoint, facingPoint,
 
 Transformer.prototype.calcMonoHugPoint = function(controlVec) {
   var hugPoints = this.calcHugPoints(controlVec);
-  var index = this.indexOfClosestPoint(controlVec, hugPoints);
+  var index = this.indexOfClosestTouchingPoint(controlVec, hugPoints);
   return hugPoints[index];
 };
 
 Transformer.prototype.calcDoubleHugPoints = function(controlVec) {
   var hugPoints = this.calcHugPoints(controlVec);
-  var index = this.indexOfClosestPoint(controlVec, hugPoints);
+  var index = this.indexOfClosestTouchingPoint(controlVec, hugPoints);
   var oppositeIndex = (index + 2) % 4;
   return [hugPoints[index], hugPoints[oppositeIndex]];
 };
 
 /**
  * @param {Vec2d} controlVec
- * @return an array of four points in cardinal directions from controlVec,
+ * @return {Array<HugPoint>} an array of four HugPoint objs
+ * in cardinal directions from controlVec,
  * where a rayscan intersected a wall, or at the maximum scan length.
  */
 Transformer.prototype.calcHugPoints = function(controlVec) {
@@ -387,21 +397,51 @@ Transformer.prototype.calcHugPoints = function(controlVec) {
         targetPos.x, targetPos.y,
         1, 1);
     // time is zero to one
-    var time = this.vorp.rayScan(rayScan, Vorp.GENERAL_GROUP) ? rayScan.time : 1;
-    hugPoints[i] = Vec2d.alongRayFraction(controlVec, targetPos, time);
+    var time, touches;
+    if (this.vorp.rayScan(rayScan, Vorp.GENERAL_GROUP)) {
+      time = rayScan.time;
+      touches = true;
+    } else {
+      time = 1;
+      touches = false;
+    }
+    hugPoints[i] = new HugPoint(Vec2d.alongRayFraction(controlVec, targetPos, time), touches);
   }
   return hugPoints;
 };
 
-Transformer.prototype.indexOfClosestPoint = function(controlVec, hugPoints) {
+Transformer.prototype.indexOfClosestTouchingPoint = function(controlVec, hugPoints) {
   var lowestDistSquared = Infinity;
-  var index;
+  var index = 0;
   for (var i = 0; i < hugPoints.length; i++) {
-    var distSquared = hugPoints[i].distanceSquared(controlVec);
-    if (distSquared < lowestDistSquared) {
-      lowestDistSquared = distSquared;
-      index = i;
+    if (hugPoints[i].touches) {
+      var distSquared = hugPoints[i].vec.distanceSquared(controlVec);
+      if (distSquared < lowestDistSquared) {
+        lowestDistSquared = distSquared;
+        index = i;
+      }
     }
   }
   return index;
+};
+
+/**
+ * If a hugpoint is touching its target, then it is returned unchanged.
+ * If it's hanging in space, then this returns a vec that's much closer
+ * to the contronVec, not one that's out at the max scan distance.
+ * @param {HugPoint} hugPoint
+ * @param {Vec2d} contronVec
+ * @param {number} height
+ * @return {Vec2d}
+ */
+Transformer.prototype.getButt = function(hugPoint, contronVec, height) {
+  var butt;
+  if (hugPoint.touches) {
+    butt = hugPoint.vec;
+  } else {
+    butt = new Vec2d().set(hugPoint.vec).subtract(contronVec)
+        .scaleToLength(Transformer.FREE_FLOATING_DIST + height)
+        .add(contronVec);
+  }
+  return butt;
 };
