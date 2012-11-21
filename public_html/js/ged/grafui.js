@@ -53,6 +53,7 @@ GrafUi.FPS = 30;
 GrafUi.MAX_ZOOM = 10;
 GrafUi.MIN_ZOOM = 0.01;
 
+GrafUi.HOVER_COLOR = 'rgba(255, 255, 255, 0.5)';
 GrafUi.HILITE_COLOR = 'rgba(255, 255, 255, 0.9)';
 
 GrafUi.SELECTION_RENDER_PADDING = 2;
@@ -65,7 +66,7 @@ GrafUi.SELECTION_COLORS = [
 ];
 
 GrafUi.MODEL_LINE_WIDTH = 1.5;
-GrafUi.SELECTION_LINE_WIDTH = 2;
+GrafUi.SELECTION_LINE_WIDTH = 1.5;
 GrafUi.HILITE_LINE_WIDTH = 1.5;
 
 /**
@@ -431,6 +432,9 @@ GrafUi.prototype.draw = function() {
         hiliteRect[2], hiliteRect[3]);
   }
   this.strokeHiliteForIds(this.grafEd.getHilitedIds());
+
+  // hover
+  this.renderer.setStrokeStyle(GrafUi.HOVER_COLOR);
   this.strokeHiliteForIds(this.grafGeom.getIdsAtXY(this.worldPos.x, this.worldPos.y));
 
   this.renderer.transformEnd();

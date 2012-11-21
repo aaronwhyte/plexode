@@ -10,7 +10,7 @@ function GrafGeom(model) {
 GrafGeom.PART_RADIUS = 30;
 GrafGeom.JACK_RADIUS = 10;
 GrafGeom.JACK_DISTANCE = GrafGeom.PART_RADIUS + GrafGeom.JACK_RADIUS;
-GrafGeom.SELECTION_PADDING = 0;
+GrafGeom.SELECTION_PADDING = 2;
 
 /**
  * Sets the model contents, keeping the model reference.
