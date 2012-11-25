@@ -175,7 +175,8 @@ VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard) {
   var plugin = new VedUiPlugin(renderer);
   var grafGeom = new GrafGeom(model);
   var grafRend = new GrafRend(plugin, renderer, grafGeom);
-  return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard);
+  var keys = new plex.Keys();
+  return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, keys);
 };
 
 VedApp.prototype.createClipboard = function(appDiv) {

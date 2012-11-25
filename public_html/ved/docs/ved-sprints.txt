@@ -418,6 +418,13 @@ v paste
     v endPaste
   v auto-select pasted stuff
 
+2012.11.21 -
+Ged help & keyboard refactoring
+v Create messages file for i18n.
+v Pull VK_* stuff into a plex/key.js file.
+v Make Ged use plex.key stuff for event handling.
+- Add help page into editor.
+
 sysclips widget
 copy sysclip to currentClip
 copy selection to currentClip

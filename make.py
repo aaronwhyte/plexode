@@ -126,6 +126,7 @@ def getVorpJsFileNames():
     'plex/array.js',
     'plex/event.js',
     'plex/key.js',
+    'plex/keys.js',
     'plex/loop.js',
     'plex/map.js',
     'plex/object.js',

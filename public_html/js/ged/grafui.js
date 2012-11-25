@@ -23,17 +23,19 @@
  * @param {Renderer} renderer
  * @param {GrafRend} grafRend
  * @param {GrafGeom} grafGeom
- * @param plugin  app-specific thing with invalidate() and render(model)
+ * @param plugin app-specific thing with invalidate() and render(model)
  * @param {Clipboard} clipboard
+ * @param {plex.Keys} keys
  * @constructor
  */
-function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard) {
+function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, keys) {
   this.grafEd = grafEd;
   this.renderer = renderer;
   this.grafRend = grafRend;
   this.grafGeom = grafGeom;
   this.plugin = plugin;
   this.clipboard = clipboard;
+  this.keys = keys;
 
   this.viewDirty = true;
   this.pointerWorldPosChanged = true;
@@ -79,22 +81,22 @@ GrafUi.Mode = {
   SELECT: 'select'
 };
 
-/**
- * @enum {number}
- */
-GrafUi.KeyCodes = {
-  ADD_SELECTIONS: VK_A,
-  COPY: VK_C,
-  DELETE: VK_DELETE,
-  DELETE2: VK_BACKSPACE,
-  DRAG: VK_D,
-  LINK: VK_L,
-  PASTE: VK_V,
-  SELECT: VK_S,
-  UNDO: VK_Z
+GrafUi.prototype.initKeyCodes = function() {
+  this.keyCodes = {
+    ADD_SELECTIONS: this.keys.getKeyCodeForName('a'),
+    COPY: this.keys.getKeyCodeForName('c'),
+    DELETE: this.keys.getKeyCodeForName(plex.Key.Name.DELETE),
+    DELETE2: this.keys.getKeyCodeForName(plex.Key.Name.BACKSPACE),
+    DRAG: this.keys.getKeyCodeForName('d'),
+    LINK: this.keys.getKeyCodeForName('l'),
+    PASTE: this.keys.getKeyCodeForName('v'),
+    SELECT: this.keys.getKeyCodeForName('s'),
+    UNDO: this.keys.getKeyCodeForName('z')
+  };
 };
 
 GrafUi.prototype.startLoop = function() {
+  this.initKeyCodes();
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
   this.clipboard.start();
@@ -212,7 +214,7 @@ GrafUi.prototype.getKeyDownListener = function() {
     var kc = event.keyCode;
 
     // add/subtract selections
-    if (kc == GrafUi.KeyCodes.ADD_SELECTIONS) {
+    if (kc == self.keyCodes.ADD_SELECTIONS) {
       self.viewDirty = true;
       if (!event.shiftKey) {
         self.grafEd.addSelections();
@@ -222,7 +224,7 @@ GrafUi.prototype.getKeyDownListener = function() {
     }
 
     // delete
-    if (kc == GrafUi.KeyCodes.DELETE || kc == GrafUi.KeyCodes.DELETE2) {
+    if (kc == self.keyCodes.DELETE || kc == self.keyCodes.DELETE2) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.deleteSelection();
@@ -231,19 +233,19 @@ GrafUi.prototype.getKeyDownListener = function() {
     }
 
     // link
-    if (kc == GrafUi.KeyCodes.LINK) {
+    if (kc == self.keyCodes.LINK) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.linkSelectedJacks();
     }
 
     // copy
-    if (kc == GrafUi.KeyCodes.COPY) {
+    if (kc == self.keyCodes.COPY) {
       self.copy();
     }
 
     // undo/redo
-    if (kc == GrafUi.KeyCodes.UNDO) {
+    if (kc == self.keyCodes.UNDO) {
       self.viewDirty = true;
       self.plugin.invalidate();
       if (!event.shiftKey) {
@@ -256,7 +258,7 @@ GrafUi.prototype.getKeyDownListener = function() {
     // mouse-motion pseudomodes only work once we know where the mouse is
     if (self.canvasPos) {
       // select pseudomode, or undo (pop) selection
-      if (kc == GrafUi.KeyCodes.SELECT && self.mode == GrafUi.Mode.DEFAULT) {
+      if (kc == self.keyCodes.SELECT && self.mode == GrafUi.Mode.DEFAULT) {
         self.viewDirty = true;
         if (event.shiftKey) {
           self.grafEd.popSelection();
@@ -267,13 +269,13 @@ GrafUi.prototype.getKeyDownListener = function() {
       }
 
       // drag pseudomode
-      if (kc == GrafUi.KeyCodes.DRAG && self.mode == GrafUi.Mode.DEFAULT) {
+      if (kc == self.keyCodes.DRAG && self.mode == GrafUi.Mode.DEFAULT) {
         self.mode = GrafUi.Mode.DRAG;
         self.grafEd.startDragVec(self.worldPos);
       }
 
       // paste pseudomode
-      if (kc == GrafUi.KeyCodes.PASTE && self.mode == GrafUi.Mode.DEFAULT) {
+      if (kc == self.keyCodes.PASTE && self.mode == GrafUi.Mode.DEFAULT) {
         var pasteModel = self.clipboard.getModel();
         if (pasteModel) {
           self.mode = GrafUi.Mode.PASTE;
@@ -290,19 +292,19 @@ GrafUi.prototype.getKeyUpListener = function() {
   var self = this;
   return function(event) {
     event = event || window.event;
-    if (self.mode == GrafUi.Mode.PASTE && event.keyCode == GrafUi.KeyCodes.PASTE) {
+    if (self.mode == GrafUi.Mode.PASTE && event.keyCode == self.keyCodes.PASTE) {
       self.grafEd.continuePasteVec(self.worldPos);
       self.grafEd.endPaste();
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.DRAG && event.keyCode == GrafUi.KeyCodes.DRAG) {
+    if (self.mode == GrafUi.Mode.DRAG && event.keyCode == self.keyCodes.DRAG) {
       self.grafEd.continueDragVec(self.worldPos);
       self.grafEd.endDrag();
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.SELECT && event.keyCode == GrafUi.KeyCodes.SELECT) {
+    if (self.mode == GrafUi.Mode.SELECT && event.keyCode == self.keyCodes.SELECT) {
       self.grafEd.continueSelectionVec(self.worldPos);
       self.grafEd.endSelection();
       self.viewDirty = true;
