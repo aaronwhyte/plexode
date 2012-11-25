@@ -125,6 +125,7 @@ def getVorpJsFileNames():
     'vec2d.js',
     'plex/array.js',
     'plex/event.js',
+    'plex/key.js',
     'plex/loop.js',
     'plex/map.js',
     'plex/object.js',
@@ -159,30 +160,6 @@ def getVedJsFileNames():
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
   js.extend(getJsFileNamesInPath('public_html/ved'))
-  return js
-
-
-def getMinigame1JsFileNames():
-  js = []
-  prefix = 'public_html/js/'
-  js.extend(getJsFileNamesInPath('%sgaam' % prefix))
-  miscDeps = [
-    'circularqueue.js',
-    'depinj.js',
-    'gameutil.js',
-    'skipqueue.js',
-    'util.js',
-    'vec2d.js',
-    'plex/array.js',
-    'plex/point.js',
-    'plex/rect.js',
-    'plex/type.js',
-  ]
-  for dep in miscDeps:
-    js.append('%s%s' % (prefix, dep))
-  gameJs = getJsFileNamesInPath('public_html/minigames/1')
-  for dep in gameJs:
-    js.append(dep)
   return js
 
 def concatenateJs(bdir, sourcePaths, outputPublicHtmlPath):

@@ -19,6 +19,8 @@ function GripSprite(spriteTemplate) {
 GripSprite.prototype = new Sprite(null);
 GripSprite.prototype.constructor = GripSprite;
 
+GripSprite.GRIP_STRENGTH = 0.014;
+
 GripSprite.prototype.outputIds = {
   GRIPPING: 0
 };
@@ -89,7 +91,7 @@ GripSprite.prototype.gripScanSweep = function(vec, arc, scans) {
 
 GripSprite.prototype.gripForce = function() {
   var heldPos = this.heldSprite.getPos(this.heldPos);
-  this.accel.set(this.targetPos).subtract(heldPos).scale(0.025 / this.heldSprite.mass);
+  this.accel.set(this.targetPos).subtract(heldPos).scale(GripSprite.GRIP_STRENGTH / this.heldSprite.mass);
   this.heldSprite.accelerate(this.accel);
 
   this.painter.setHolding(3); // TODO what's the real strength?

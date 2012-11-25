@@ -26,9 +26,9 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
 
-Vorp.FRICTION = 0.1;
+Vorp.FRICTION = 0.07;
 
-Vorp.ZOOM = 0.37;
+Vorp.ZOOM = 0.34;
 
 // Target frames per second.
 Vorp.FPS = 60;
@@ -447,8 +447,18 @@ Vorp.prototype.getSprite = function(id) {
 };
 
 
+/**
+ * Extent to which one object will pull another along perpendicular to the collision axis.
+ * @type {Number}
+ */
 Vorp.GRIP = 0.5;
-Vorp.ELASTICITY = 0.8;
+
+/**
+ * How much things bounce off of each other along the collision axis.
+ * Weird interpenetration stuff happens at less than 0.5.
+ * @type {Number}
+ */
+Vorp.ELASTICITY = 0.6;
 
 /**
  * Mutates sprites.
