@@ -37,6 +37,31 @@ Renderer.prototype.getZoom = function() {
   return this.camera.getZoom();
 };
 
+Renderer.prototype.getPan = function() {
+  return this.camera.getPan();
+};
+
+Renderer.prototype.getCanvasHeight = function() {
+  return this.canvas.height;
+};
+
+Renderer.prototype.getCanvasWidth = function() {
+  return this.canvas.width;
+};
+
+Renderer.prototype.getCanvasPageX = function() {
+  return this.canvas.offsetLeft + this.canvas.clientLeft;
+};
+
+Renderer.prototype.getCanvasPageY = function() {
+  return this.canvas.offsetTop + this.canvas.clientTop;
+};
+
+
+Renderer.prototype.setCanvasWidthHeight = function(w, h) {
+  this.canvas.width = w;
+  this.canvas.height = h;
+};
 
 Renderer.prototype.clear = function() {
   var c = this.context;

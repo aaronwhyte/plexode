@@ -29,3 +29,7 @@ Camera.prototype.getPanY = function() {
 Camera.prototype.getZoom = function() {
   return this.zoom;
 };
+
+Camera.prototype.getPan = function() {
+  return this.pan;
+};

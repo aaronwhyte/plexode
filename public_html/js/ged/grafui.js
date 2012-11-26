@@ -19,9 +19,9 @@
  * - Handles key/value input widgets.
  *
  *
- * @param {GrafEd} grafEd
- * @param {Renderer} renderer
- * @param {GrafRend} grafRend
+ * @param {GrafEd} grafEd for editing
+ * @param {Renderer} renderer for muching with the camera and measuring the canvas
+ * @param {GrafRend} grafRend for uuuuh
  * @param {GrafGeom} grafGeom
  * @param plugin app-specific thing with invalidate() and render(model)
  * @param {Clipboard} clipboard
@@ -322,8 +322,7 @@ GrafUi.prototype.getResizeListener = function() {
 
 GrafUi.prototype.resize = function() {
   var s = plex.window.getSize();
-  this.renderer.canvas.width = s.width;
-  this.renderer.canvas.height = s.height;
+  this.renderer.setCanvasWidthHeight(s.width, s.height);
   this.viewDirty = true;
 };
 
@@ -341,19 +340,18 @@ GrafUi.prototype.paste = function() {
 
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
   var target = plex.event.getTarget(event);
-  var canvas = this.renderer.canvas;
   if (!this.canvasPos) this.canvasPos = new Vec2d();
   this.canvasPos.setXY(
-      event.pageX - canvas.offsetLeft - canvas.clientLeft,
-      event.pageY - canvas.offsetTop - canvas.clientTop);
+      event.pageX - this.renderer.getCanvasPageX(),
+      event.pageY - this.renderer.getCanvasPageY());
 };
 
 GrafUi.prototype.getWorldPosOfCanvasPos = function() {
   return (new Vec2d())
       .set(this.canvasPos)
-      .addXY(-this.renderer.canvas.width/2, -this.renderer.canvas.height/2)
-      .scale(1/this.renderer.camera.zoom)
-      .add(this.renderer.camera.pan);
+      .addXY(-this.renderer.getCanvasWidth() / 2, -this.renderer.getCanvasHeight() / 2)
+      .scale(1 / this.renderer.getZoom())
+      .add(this.renderer.getPan());
 };
 
 GrafUi.prototype.setWorldPos = function(pos) {
@@ -380,7 +378,7 @@ GrafUi.prototype.clock = function() {
   if (this.deltaZoom) {
     this.viewDirty = true;
     this.renderer.scaleZoom(Math.exp(this.deltaZoom/2000));
-    var z = this.renderer.camera.getZoom();
+    var z = this.renderer.getZoom();
     if (z < GrafUi.MIN_ZOOM) this.renderer.setZoom(GrafUi.MIN_ZOOM);
     if (z > GrafUi.MAX_ZOOM) this.renderer.setZoom(GrafUi.MAX_ZOOM);
     this.deltaZoom = 0;
