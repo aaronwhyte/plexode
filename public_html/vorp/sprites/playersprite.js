@@ -31,16 +31,16 @@ PlayerSprite.Grip = {
   LOOSE: 3
 };
 
-PlayerSprite.GRIP_RANGE = 120;
+PlayerSprite.GRIP_RANGE = 140;
 PlayerSprite.GRIP_SEEK_RANGE = 5 * PlayerSprite.GRIP_RANGE;
 PlayerSprite.PULL = 0.024;
 PlayerSprite.DAMP = 0.15;
-PlayerSprite.MAX_KICK_POW = 23;
-PlayerSprite.KICK_FORCE_MAGNIFIER = 1;
+PlayerSprite.MAX_KICK_POW = 24;
+PlayerSprite.KICK_FORCE_MAGNIFIER = 1.1;
 PlayerSprite.KICK_DECAY = 0.4;
 
-PlayerSprite.ACCEL = 1.2;
-PlayerSprite.BRAKE = 0.05;
+PlayerSprite.ACCEL = 1.4;
+PlayerSprite.BRAKE = 0.0;
 
 PlayerSprite.prototype.act = function() {
   this.painter.clearRayScans();
