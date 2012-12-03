@@ -157,7 +157,9 @@ def getVedJsFileNames():
   js.extend(getJsFileNamesInPath('%sgraf' % prefix))
   js.extend(getJsFileNamesInPath('%sstor' % prefix))
   js.extend(getJsFileNamesInPath('%sopstor' % prefix))
-  miscDeps = []
+  miscDeps = [
+    'plex/array.js',
+  ]
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
   js.extend(getJsFileNamesInPath('public_html/ved'))

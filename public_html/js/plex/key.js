@@ -22,7 +22,7 @@ plex.Key.Name = {
   RIGHT: 'right',
   BACKSPACE: 'backspace',
   DELETE: 'delete',
-  SPACE: ' ',
+  SPACE: 'space',
   SEMICOLON: ';',
   BACKSLASH: '\\'
 };

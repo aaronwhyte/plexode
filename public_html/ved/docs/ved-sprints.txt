@@ -423,6 +423,8 @@ Ged help & keyboard refactoring
 v Create messages file for i18n.
 v Pull VK_* stuff into a plex/key.js file.
 v Make Ged use plex.key stuff for event handling.
+v Make key, shift-state, action part of one structure
+  v redo all key listeners to use that
 - Add help page into editor.
 
 sysclips widget
@@ -445,14 +447,16 @@ Delete level
 
 Json view?
 
-insta-vorp?
-
 Milestone: Ship fun levels created entirely in Ved
 - Ved usable by me for editing.
-- Some way to publish levels - JSON view + cut-n-paste etc.
+- Some way to publish levels
+  - JSON view + cut-n-paste?
+  - insta-vorp URLs?
+    - better link compressor
+      - linkifier-friendly
+      - plugin dictionary support.
 - Actually make new levels dawg.
 
+Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
 
 Milestone: Ship Ved itself
-- Move everything to new site (loopwood? photonpotato?) without eval XSS features.
--

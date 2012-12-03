@@ -25,17 +25,17 @@
  * @param {GrafGeom} grafGeom
  * @param plugin app-specific thing with invalidate() and render(model)
  * @param {Clipboard} clipboard
- * @param {plex.Keys} keys
+ * @param {GrafUiKeyCombos} keyCombos
  * @constructor
  */
-function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, keys) {
+function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, keyCombos) {
   this.grafEd = grafEd;
   this.renderer = renderer;
   this.grafRend = grafRend;
   this.grafGeom = grafGeom;
   this.plugin = plugin;
   this.clipboard = clipboard;
-  this.keys = keys;
+  this.keyCombos = keyCombos;
 
   this.viewDirty = true;
   this.pointerWorldPosChanged = true;
@@ -72,6 +72,7 @@ GrafUi.SELECTION_LINE_WIDTH = 1.5;
 GrafUi.HILITE_LINE_WIDTH = 1.5;
 
 /**
+ * Quasimodes the user can be in by holding a key.
  * @enum {String}
  */
 GrafUi.Mode = {
@@ -81,22 +82,28 @@ GrafUi.Mode = {
   SELECT: 'select'
 };
 
-GrafUi.prototype.initKeyCodes = function() {
-  this.keyCodes = {
-    ADD_SELECTIONS: this.keys.getKeyCodeForName('a'),
-    COPY: this.keys.getKeyCodeForName('c'),
-    DELETE: this.keys.getKeyCodeForName(plex.Key.Name.DELETE),
-    DELETE2: this.keys.getKeyCodeForName(plex.Key.Name.BACKSPACE),
-    DRAG: this.keys.getKeyCodeForName('d'),
-    LINK: this.keys.getKeyCodeForName('l'),
-    PASTE: this.keys.getKeyCodeForName('v'),
-    SELECT: this.keys.getKeyCodeForName('s'),
-    UNDO: this.keys.getKeyCodeForName('z')
-  };
+/**
+ * Names of the actions the user can in the grafui.
+ * @enum {string}
+ */
+GrafUi.Action = {
+  SELECT: 'select',
+  UNSELECT: 'unselect',
+  ADD_SELECTIONS: 'add_selections',
+  SUBTRACT_SELECTIONS: 'subtract_selections',
+
+  COPY: 'copy',
+  PASTE: 'paste',
+  DELETE: 'delete',
+
+  DRAG: 'drag',
+  LINK: 'link',
+
+  UNDO: 'undo',
+  REDO: 'redo'
 };
 
 GrafUi.prototype.startLoop = function() {
-  this.initKeyCodes();
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
   this.clipboard.start();
@@ -211,20 +218,18 @@ GrafUi.prototype.getKeyDownListener = function() {
   var self = this;
   return function(event) {
     event = event || window.event;
-    var kc = event.keyCode;
 
-    // add/subtract selections
-    if (kc == self.keyCodes.ADD_SELECTIONS) {
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.ADD_SELECTIONS)) {
       self.viewDirty = true;
-      if (!event.shiftKey) {
-        self.grafEd.addSelections();
-      } else {
-        self.grafEd.subtractSelections();
-      }
+      self.grafEd.addSelections();
+    }
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.SUBTRACT_SELECTIONS)) {
+      self.viewDirty = true;
+      self.grafEd.subtractSelections();
     }
 
     // delete
-    if (kc == self.keyCodes.DELETE || kc == self.keyCodes.DELETE2) {
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DELETE)) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.deleteSelection();
@@ -233,49 +238,52 @@ GrafUi.prototype.getKeyDownListener = function() {
     }
 
     // link
-    if (kc == self.keyCodes.LINK) {
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.LINK)) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.linkSelectedJacks();
     }
 
     // copy
-    if (kc == self.keyCodes.COPY) {
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.COPY)) {
       self.copy();
     }
 
     // undo/redo
-    if (kc == self.keyCodes.UNDO) {
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNDO)) {
       self.viewDirty = true;
       self.plugin.invalidate();
-      if (!event.shiftKey) {
-        self.grafEd.undo();
-      } else {
-        self.grafEd.redo();
-      }
+      self.grafEd.undo();
+    }
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.REDO)) {
+      self.viewDirty = true;
+      self.plugin.invalidate();
+      self.grafEd.redo();
     }
 
-    // mouse-motion pseudomodes only work once we know where the mouse is
-    if (self.canvasPos) {
+    // Mouse-motion quasimodes only work once we know where the mouse is.
+    // Only allow one quasimode at a time.
+    if (self.canvasPos && self.mode == GrafUi.Mode.DEFAULT) {
+
       // select pseudomode, or undo (pop) selection
-      if (kc == self.keyCodes.SELECT && self.mode == GrafUi.Mode.DEFAULT) {
+      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
         self.viewDirty = true;
-        if (event.shiftKey) {
-          self.grafEd.popSelection();
-        } else {
-          self.mode = GrafUi.Mode.SELECT;
-          self.grafEd.startSelectionVec(self.worldPos);
-        }
+        self.mode = GrafUi.Mode.SELECT;
+        self.grafEd.startSelectionVec(self.worldPos);
+      }
+      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNSELECT)) {
+        self.viewDirty = true;
+        self.grafEd.popSelection();
       }
 
       // drag pseudomode
-      if (kc == self.keyCodes.DRAG && self.mode == GrafUi.Mode.DEFAULT) {
+      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG)) {
         self.mode = GrafUi.Mode.DRAG;
         self.grafEd.startDragVec(self.worldPos);
       }
 
       // paste pseudomode
-      if (kc == self.keyCodes.PASTE && self.mode == GrafUi.Mode.DEFAULT) {
+      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
         var pasteModel = self.clipboard.getModel();
         if (pasteModel) {
           self.mode = GrafUi.Mode.PASTE;
@@ -292,19 +300,22 @@ GrafUi.prototype.getKeyUpListener = function() {
   var self = this;
   return function(event) {
     event = event || window.event;
-    if (self.mode == GrafUi.Mode.PASTE && event.keyCode == self.keyCodes.PASTE) {
+    if (self.mode == GrafUi.Mode.PASTE &&
+        self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
       self.grafEd.continuePasteVec(self.worldPos);
       self.grafEd.endPaste();
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.DRAG && event.keyCode == self.keyCodes.DRAG) {
+    if (self.mode == GrafUi.Mode.DRAG &&
+        self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG)) {
       self.grafEd.continueDragVec(self.worldPos);
       self.grafEd.endDrag();
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.SELECT && event.keyCode == self.keyCodes.SELECT) {
+    if (self.mode == GrafUi.Mode.SELECT &&
+        self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
       self.grafEd.continueSelectionVec(self.worldPos);
       self.grafEd.endSelection();
       self.viewDirty = true;
@@ -331,11 +342,6 @@ GrafUi.prototype.copy = function() {
   if (model) {
     this.clipboard.setModel(model);
   }
-};
-
-GrafUi.prototype.paste = function() {
-  //TODO: add model at location
-  //TODO: preview on keydown, commit on keyup
 };
 
 GrafUi.prototype.setCanvasPosWithEvent = function(event) {
