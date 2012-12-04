@@ -1,7 +1,7 @@
 plex = plex || {};
 
 /**
- * Translates between numeric keycodes and programmer-friendly names.
+ * Simply associates numeric keycodes  programmer-friendly names.
  * @constructor
  */
 plex.Keys = function() {

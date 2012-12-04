@@ -157,15 +157,37 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
 VedApp.prototype.renderEditing = function(appDiv, levelName) {
   this.renderLevelHeader(appDiv, levelName, VedApp.Mode.EDIT);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
-  plex.dom.ce('br', appDiv);
+
+  var plexKeys = new plex.Keys();
+  var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
+
+  // help
+  var gedHelp = new GedHelp(GedMsgs, plexKeys, grafUiKeyCombos);
+
+  var helpToggle = plex.dom.ce('button', appDiv);
+  helpToggle.id = 'gedHelpToggle';
+  helpToggle.onclick = this.getHelpToggleFunc();
+  helpToggle.innerHTML = GedMsgs.help.HELP;
+
+  var helpWrapper = plex.dom.ce('div', appDiv);
+  helpWrapper.id = 'gedHelpWrapper';
+  helpWrapper.style.display = 'none';
+  helpWrapper.innerHTML = gedHelp.formatHtml();
 
   var clipboard = this.createClipboard(appDiv);
-  var grafUi = this.createGrafUi(appDiv, levelName, clipboard);
+  var grafUi = this.createGrafUi(appDiv, levelName, clipboard, grafUiKeyCombos);
   grafUi.startLoop();
   this.looper = grafUi;
 };
 
-VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard) {
+VedApp.prototype.getHelpToggleFunc = function() {
+  return function() {
+    var helpDiv = document.getElementById('gedHelpWrapper');
+    helpDiv.style.display = helpDiv.style.display == 'none' ? 'block' : 'none';
+  };
+};
+
+VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKeyCombos) {
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.className = 'vedEditCanvas';
   var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
@@ -175,7 +197,6 @@ VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard) {
   var plugin = new VedUiPlugin(renderer);
   var grafGeom = new GrafGeom(model);
   var grafRend = new GrafRend(plugin, renderer, grafGeom);
-  var grafUiKeyCombos = new GrafUiKeyCombos(new plex.Keys());
   return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, grafUiKeyCombos);
 };
 

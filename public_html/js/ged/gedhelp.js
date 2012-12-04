@@ -15,7 +15,8 @@ function GedHelp(msgs, keys, keyCombos) {
  * @return {string}
  */
 GedHelp.prototype.formatHtml = function() {
-  var help = this.msgs.help;
+  var self = this;
+  var helpMsgs = this.msgs.help;
   var html = [];
 
   function h() {
@@ -31,39 +32,41 @@ GedHelp.prototype.formatHtml = function() {
     h('</ul>');
   }
 
-  h('<div id="gedHelpWrapper">');
-
-  section(help.MOUSE_CONTROLS, [
-      help.MOUSE_PAN,
-      help.MOUSE_ZOOM
+  section(helpMsgs.MOUSE_CONTROLS, [
+    helpMsgs.MOUSE_PAN,
+    helpMsgs.MOUSE_ZOOM
   ]);
 
   function kb(msg, combos) {
     var comboHtmls = [];
     for (var i = 0; i < combos.length; i++) {
       var combo = combos[i];
-      var shift = combo.modifiers[plex.KeyModifier.SHIFT];
+      var shift = plex.array.contains(combo.modifiers, plex.KeyModifier.SHIFT);;
+      console.log(combo);
       var keyName = self.keys.getNameForKeyCode(combo.keyCode);
-      comboHtmls.push(shift ? help.SHIFT_MODIFIER_FN(keyName) : keyName);
+      comboHtmls.push(
+          '<span class="gedHelpKeyCombo">' +
+          (shift ? helpMsgs.SHIFT_MODIFIER_FN(keyName) : keyName) +
+          '</span>'
+      );
     }
-    h(help.KEYBOARD_CONTROL_FN(comboHtmls, msg));
+    return helpMsgs.KEYBOARD_CONTROL_FN(comboHtmls.join(', '), msg);
   }
 
   var allCombos = this.keyCombos.getAll();
-  section(help.KEYBOARD_CONTROLS, [
-      kb(help.SELECT, allCombos[GrafUi.Action.SELECT]),
-      kb(help.UNSELECT, allCombos[GrafUi.Action.UNSELECT]),
-      kb(help.ADD_SELECTIONS, allCombos[GrafUi.Action.ADD_SELECTIONS]),
-      kb(help.SUBTRACT_SELECTIONS, allCombos[GrafUi.Action.SUBTRACT_SELECTIONS]),
-      kb(help.DRAG, allCombos[GrafUi.Action.DRAG]),
-      kb(help.LINK, allCombos[GrafUi.Action.LINK]),
-      kb(help.DELETE, allCombos[GrafUi.Action.DELETE]),
-      kb(help.COPY, allCombos[GrafUi.Action.COPY]),
-      kb(help.PASTE, allCombos[GrafUi.Action.PASTE]),
-      kb(help.UNDO, allCombos[GrafUi.Action.UNDO]),
-      kb(help.REDO, allCombos[GrafUi.Action.REDO])
+  section(helpMsgs.KEYBOARD_CONTROLS, [
+      kb(helpMsgs.SELECT, allCombos[GrafUi.Action.SELECT]),
+      kb(helpMsgs.UNSELECT, allCombos[GrafUi.Action.UNSELECT]),
+      kb(helpMsgs.ADD_SELECTIONS, allCombos[GrafUi.Action.ADD_SELECTIONS]),
+      kb(helpMsgs.SUBTRACT_SELECTIONS, allCombos[GrafUi.Action.SUBTRACT_SELECTIONS]),
+      kb(helpMsgs.DRAG, allCombos[GrafUi.Action.DRAG]),
+      kb(helpMsgs.LINK, allCombos[GrafUi.Action.LINK]),
+      kb(helpMsgs.DELETE, allCombos[GrafUi.Action.DELETE]),
+      kb(helpMsgs.COPY, allCombos[GrafUi.Action.COPY]),
+      kb(helpMsgs.PASTE, allCombos[GrafUi.Action.PASTE]),
+      kb(helpMsgs.UNDO, allCombos[GrafUi.Action.UNDO]),
+      kb(helpMsgs.REDO, allCombos[GrafUi.Action.REDO])
   ]);
 
-  h('</div>');
   return html.join('');
 };
