@@ -1,11 +1,11 @@
 GedMsgs = {
   help: {
     HELP: 'help',
-    MOUSE_CONTROLS: 'Mouse Controls',
-    MOUSE_ZOOM: '<b>Zoom</b> by vertically scrolling the mouse.',
-    MOUSE_PAN: '<b>Pan</b> by holding the mouse button down and moving the pointer.',
+    MOUSE_CONTROLS: 'mouse',
+    MOUSE_PAN: '<span class="getHelpMouseControl">Pan</span> by dragging the canvas, while holding the mouse button down.',
+    MOUSE_ZOOM: '<span class="getHelpMouseControl">Zoom</span> by scrolling with the mousewheel, or using the two-finger trackpad up/down gesture, or whatevs.',
 
-    KEYBOARD_CONTROLS: 'Keyboard Controls',
+    KEYBOARD_CONTROLS: 'keyboard',
     KEYBOARD_CONTROL_FN: function(keyCombo, desc) {return keyCombo + ': ' + desc;},
     SHIFT_MODIFIER_FN: function(keyName) {return 'shift + ' + keyName;},
 
