@@ -70,7 +70,6 @@ canvas.vedClipboard {
   position:absolute;
   bottom: 0.5em;
   right: 0.5em;
-  color:#afa;
   font-size:110%;
 }
 
@@ -86,10 +85,13 @@ canvas.vedClipboard {
   overflow:auto;
 }
 
+#gedHelpWrapper h1, #gedHelpToggle{
+  font-size:large;
+  color:#6b6;
+}
 
 #gedHelpWrapper h1 {
   font-size:large;
-  color:#afa;
 }
 
 .getHelpMouseControl, .gedHelpKeyCombo {
