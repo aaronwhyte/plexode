@@ -50,7 +50,7 @@ GedHelp.prototype.formatHtml = function() {
           '</span>'
       );
     }
-    return helpMsgs.KEYBOARD_CONTROL_FN(comboHtmls.join(', '), msg);
+    return helpMsgs.KEYBOARD_CONTROL_FN(comboHtmls, msg);
   }
 
   var allCombos = this.keyCombos.getAll();

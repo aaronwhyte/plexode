@@ -85,8 +85,11 @@ canvas.vedClipboard {
   overflow:auto;
 }
 
-#gedHelpWrapper h1, #gedHelpToggle{
+#gedHelpWrapper h1 {
   font-size:large;
+}
+
+#gedHelpWrapper h1, #gedHelpToggle {
   color:#6b6;
 }
 
