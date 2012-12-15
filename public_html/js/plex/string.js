@@ -53,7 +53,7 @@ plex.string.textToHtml = function(text, opt_preserveSpaces) {
  * Converts text to a string that can go between single-quotes in a JS string
  * literal.
  * @param {String} text
- * @param {String} the JS literal, with single-quotes escaped.
+ * @return {String} the JS literal, with single-quotes escaped.
  */
 plex.string.textToSingleQuoteJsLiteral = function(text) {
   return String(text).

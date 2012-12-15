@@ -12,12 +12,15 @@ this.plex = this.plex || {};
  */
 plex.Map = function() {
   this.m = {};
+  this.length = 0;
 };
 
 plex.Map.PREFIX = '=';
 
 plex.Map.prototype.set = function(k, v) {
-  this.m[plex.Map.PREFIX + k] = v;
+  var objKey = plex.Map.PREFIX + k;
+  if (!this.m[objKey]) this.length++;
+  this.m[objKey] = v;
   return this;
 };
 
@@ -25,8 +28,14 @@ plex.Map.prototype.get = function(k) {
   return this.m[plex.Map.PREFIX + k];
 };
 
+plex.Map.prototype.contains = function(k) {
+  return this.get(k) !== undefined;
+};
+
 plex.Map.prototype.delete = function(k) {
-  delete this.m[plex.Map.PREFIX + k];
+  var objKey = plex.Map.PREFIX + k;
+  if (this.m[objKey]) this.length--;
+  delete this.m[objKey];
 };
 
 /**
