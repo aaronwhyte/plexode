@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>plex.bitqueue test</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/string.js"></script>
+<script src="../../../public_html/js/plex/bitqueue.js"></script>
+<script>
+addTest(function encodeDecodeNumbers() {
+  var q = new plex.BitQueue();
+  q.enqueueNumber(100, 7);
+  q.enqueueNumber(200, 10);
+  assertEquals(100, q.dequeueNumber(7));
+  q.enqueueNumber(300, 20);
+  assertEquals(200, q.dequeueNumber(10));
+  assertEquals(300, q.dequeueNumber(20));
+});
+
+addTest(function overconsume() {
+  var q = new plex.BitQueue();
+  q.enqueueNumber(1, 4);
+  q.enqueueNumber(1, 4);
+  try {
+    assertEquals(100, q.dequeueNumber(9));
+    fail();
+  } catch (e) {
+    // success
+  }
+});
+
+addTest(function notEnoughBits() {
+  var q = new plex.BitQueue();
+  q.enqueueNumber(255, 8);
+  try {
+    q.enqueueNumber(255, 7);
+    fail();
+  } catch (e) {
+    // success
+  }
+});
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>

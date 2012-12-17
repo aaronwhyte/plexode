@@ -68,3 +68,11 @@ plex.string.replace = function(text, oldStr, newStr) {
   var sub = newStr.replace(/\$/g, "$$$$"); // Replaces one dollar-sign with two.
   return text.replace(re, sub);
 };
+
+plex.string.repeat = function(str, count) {
+  var out = [];
+  for (var i = 0; i < count; i++) {
+    out.push(str);
+  }
+  return out.join('');
+};
