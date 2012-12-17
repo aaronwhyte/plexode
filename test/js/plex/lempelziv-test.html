@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>plex.lempelziv test</title>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/map.js"></script>
+<script src="../../../public_html/js/plex/lempelziv.js"></script>
+<script>
+addTest(function encodeDecode() {
+  var lz = new plex.LempelZiv('ab');
+  var str = 'abababa';
+  var ints = lz.compressToIntegers(str);
+  assertEquals(4, ints.length);
+  var str2 = lz.decompressFromIntegers(ints);
+  assertEquals(str2, str);
+});
+</script>
+</head>
+<body onload="runTests()"></body>
+</html>
