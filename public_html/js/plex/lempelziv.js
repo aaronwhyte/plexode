@@ -1,4 +1,4 @@
-plex = plex || {};
+this.plex = this.plex || {};
 
 /**
  * @param alphabet A string made of all the legal characters in the input.
