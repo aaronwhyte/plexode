@@ -17,11 +17,7 @@ plex.BitQueue.prototype.enqueueNumber = function(num, bitCount) {
   if (bitStr.length > bitCount) {
     throw Error('number ' + num + ' has more bits than bitCount ' + bitCount);
   }
-  var padding = bitCount - bitStr.length;
-  if (padding) {
-    bitStr = plex.string.repeat('0', padding) + bitStr;
-  }
-  this.queue.push(bitStr);
+  this.queue.push(plex.string.padLeft(bitStr, '0', bitCount));
 };
 
 /**

@@ -119,3 +119,38 @@ plex.url.tokenizeEncodedUrl = function(url) {
   }
   return tokens;
 };
+
+/**
+ * @param {String} c  A single character to encode.
+ * @return {String} A percent-encoded string of the unicode codepoint number of the char,
+ * even if it's in the ASCII range, 0-127.
+ */
+plex.url.percentEscapeCharacter = function(c) {
+  if (c.length != 1) {
+    throw Error('Expected exactly one character, but got "' + c + '".');
+  }
+  var num = c.charCodeAt(0);
+  if (num < 128) {
+    var hex = Number(num).toString(16);
+    return '%' + plex.string.padLeft(hex, '0', 2);
+  } else {
+    // Anything above 127 will be escaped by encodeURI.
+    var encoded = encodeURIComponent(c);
+    if (encoded.charAt(0) != '%') {
+      throw Error('expected char "' + c +
+          '" to get percent-escaped by encodeURI, but it turned into "' + encoded + '"');
+    }
+    return encoded;
+  }
+};
+
+plex.url.percentEncodeUnwhitelistedChars = function(url, whitelist) {
+  var tokens = plex.url.tokenizeEncodedUrl(url);
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+    if (token.length == 1 && whitelist.indexOf(token) == -1) {
+      tokens[i] = plex.url.percentEscapeCharacter(token);
+    }
+  }
+  return tokens.join('');
+};

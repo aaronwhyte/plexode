@@ -2,20 +2,32 @@
 <html>
 <head>
 <title>plex.url test</title>
-<script src="../../jsunit/app/jsUnitCore.js"></script>
-<script src="../../js/plex/object.js"></script>
-<script src="../../js/plex/url.js"></script>
-</head>
-<body>
+<script src="../../../public_html/js/testing.js"></script>
+<script src="../../../public_html/js/util.js"></script>
+<script src="../../../public_html/js/plex/string.js"></script>
+<script src="../../../public_html/js/plex/url.js"></script>
 <script>
 
-function testEncodeDecodeObject() {
-  var a = {a:1, b:2, 'a&b=c\nd e':'e&f=g\nh i'};
-  var q = encodeObjectAsQuery(a);
-  var b = decodeQueryAsObject(q);
-  assertEquals(plex.object.expose(a), plex.object.expose(b));
-}
+addTest(function tokenizeEncodedUrl() {
+  assertStringifyEquals(['a', '%20', 'b'], plex.url.tokenizeEncodedUrl('a%20b'));
+  assertStringifyEquals(['c', ' ', 'd'], plex.url.tokenizeEncodedUrl('c d'));
+});
+
+addTest(function percentEscapeCharacter() {
+  assertEquals('%20', plex.url.percentEscapeCharacter(' '));
+  assertEquals('%C3%BF', plex.url.percentEscapeCharacter('\u00FF'));
+});
+
+addTest(function percentEncodeUnwhitelistedChars() {
+  assertEquals('a c', plex.url.percentEncodeUnwhitelistedChars('a c', 'abc '));
+  assertEquals('a%20c', plex.url.percentEncodeUnwhitelistedChars('a c', 'abc'));
+  assertEquals('a%20c', plex.url.percentEncodeUnwhitelistedChars('a%20c', 'abc'));
+  assertEquals('a\u00FFc', plex.url.percentEncodeUnwhitelistedChars('a\u00FFc', '\u00FFabc'));
+  assertEquals('a%C3%BFc', plex.url.percentEncodeUnwhitelistedChars('a\u00FFc', 'abc'));
+  assertEquals('a%C3%BFc', plex.url.percentEncodeUnwhitelistedChars('a%C3%BFc', 'abc'));
+});
 
 </script>
-</body>
+</head>
+<body onload="runTests()"></body>
 </html>

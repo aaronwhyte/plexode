@@ -69,6 +69,18 @@ plex.string.replace = function(text, oldStr, newStr) {
   return text.replace(re, sub);
 };
 
+plex.string.padLeft = function(strToPad, paddingChar, padToLength) {
+  if (paddingChar.length != 1) {
+    throw Error('Expected exactly one character, but got "' + paddingChar + '".');
+  }
+  var padSize = padToLength - strToPad.length;
+  if (padSize <= 0) {
+    return strToPad;
+  } else {
+    return plex.string.repeat(paddingChar, padSize) + strToPad;
+  }
+};
+
 plex.string.repeat = function(str, count) {
   var out = [];
   for (var i = 0; i < count; i++) {
