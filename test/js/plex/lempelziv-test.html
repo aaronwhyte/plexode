@@ -7,13 +7,38 @@
 <script src="../../../public_html/js/plex/map.js"></script>
 <script src="../../../public_html/js/plex/lempelziv.js"></script>
 <script>
-addTest(function encodeDecode() {
+addTest(function oneCharEncodeDecode() {
+  var lz = new plex.LempelZiv('ab');
+  var str = 'b';
+  var ints = lz.encodeToIntegers(str);
+  var str2 = lz.decodeFromIntegers(ints);
+  assertEquals(str, str2);
+});
+
+addTest(function abababaEncodeDecode() {
   var lz = new plex.LempelZiv('ab');
   var str = 'abababa';
   var ints = lz.encodeToIntegers(str);
-  assertEquals(4, ints.length);
+  assertEquals(5, ints.length);
   var str2 = lz.decodeFromIntegers(ints);
-  assertEquals(str2, str);
+  assertEquals(str, str2);
+});
+
+addTest(function longerEncodeDecode() {
+  var lz = new plex.LempelZiv('abcdefghijklmnopqrstuvwxyz');
+  var str = 'caaababababccccacacacbacbacabcbcbcacbabcaabababbb' +
+      'ccbcbcbcababcabacbcbcccbcabcabababcabcacacabcabcbcaba';
+  var ints = lz.encodeToIntegers(str);
+  var str2 = lz.decodeFromIntegers(ints);
+  assertEquals(str, str2);
+});
+
+addTest(function emptyStringEncodeDecode() {
+  var lz = new plex.LempelZiv('abcdefghijklmnopqrstuvwxyz');
+  var str = '';
+  var ints = lz.encodeToIntegers(str);
+  var str2 = lz.decodeFromIntegers(ints);
+  assertEquals(str, str2);
 });
 </script>
 </head>
