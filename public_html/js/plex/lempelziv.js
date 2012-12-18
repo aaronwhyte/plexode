@@ -8,7 +8,7 @@ plex.LempelZiv = function(alphabet) {
   this.alphabet = alphabet;
 };
 
-plex.LempelZiv.STOP = 0;
+plex.LempelZiv.STOPCODE = 0;
 
 /**
  * @param {string} str  A string made up only of what's in the alphabet.
@@ -16,7 +16,7 @@ plex.LempelZiv.STOP = 0;
  */
 plex.LempelZiv.prototype.encodeToIntegers = function(str) {
   if (str == '') {
-    return [plex.LempelZiv.STOP];
+    return [plex.LempelZiv.STOPCODE];
   }
   var w = '';
   var result = [];
@@ -37,7 +37,7 @@ plex.LempelZiv.prototype.encodeToIntegers = function(str) {
   if (w !== "") {
     result.push(dict.get(w));
   }
-  result.push(plex.LempelZiv.STOP);
+  result.push(plex.LempelZiv.STOPCODE);
   return result;
 };
 
@@ -46,7 +46,7 @@ plex.LempelZiv.prototype.encodeToIntegers = function(str) {
  * @return {string} A string made up only of what's in the alphabet.
  */
 plex.LempelZiv.prototype.decodeFromIntegers = function(ints) {
-  if (ints.length == 1 && ints[0] == plex.LempelZiv.STOP) {
+  if (ints.length == 1 && ints[0] == plex.LempelZiv.STOPCODE) {
     return '';
   }
   var entry = '';
@@ -56,7 +56,7 @@ plex.LempelZiv.prototype.decodeFromIntegers = function(ints) {
 
   for (var i = 1; i < ints.length; i++) {
     var k = ints[i];
-    if (k == plex.LempelZiv.STOP) {
+    if (k == plex.LempelZiv.STOPCODE) {
       break;
     }
     if (dict.contains(k)) {
@@ -76,10 +76,34 @@ plex.LempelZiv.prototype.decodeFromIntegers = function(ints) {
     w = entry;
   }
   if (k != 0) {
-    throw Error('k:' + k + ' but expected stop-code:' + plex.LempelZiv.STOP);
+    throw Error('k:' + k + ' but expected stop-code:' + plex.LempelZiv.STOPCODE);
   }
   return result;
+};
 
+plex.LempelZiv.prototype.encodeToBitQueue = function(str, opt_bitQueue) {
+  var ints = this.encodeToIntegers(str);
+  var bitQueue = opt_bitQueue || new plex.BitQueue();
+  var highestValuePossible = this.alphabet.length + 1; // +1 for stopcode
+  for (var i = 0; i < ints.length; i++) {
+    var bitsNeeded = Number(highestValuePossible).toString(2).length;
+    bitQueue.enqueueNumber(ints[i], bitsNeeded);
+    highestValuePossible++;
+  }
+  return bitQueue;
+};
+
+plex.LempelZiv.prototype.decodeFromBitQueue = function(bitQueue) {
+  var highestValuePossible = this.alphabet.length + 1; // +1 for stopcode
+  var ints = [];
+  var num = -1;
+  while (num != plex.LempelZiv.STOPCODE) {
+    var bitsNeeded = Number(highestValuePossible).toString(2).length;
+    num = bitQueue.dequeueNumber(bitsNeeded);
+    ints.push(num);
+    highestValuePossible++;
+  }
+  return this.decodeFromIntegers(ints);
 };
 
 plex.LempelZiv.prototype.createEncodingDictionary = function() {
