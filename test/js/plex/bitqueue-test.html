@@ -39,6 +39,16 @@ addTest(function notEnoughBits() {
     // success
   }
 });
+
+addTest(function dequeueToBytesAndPadZerosRight() {
+  var q = new plex.BitQueue();
+  q.enqueueNumber(3, 8);
+  q.enqueueNumber(3, 2);
+  var bytes = q.dequeueToBytesAndPadZerosRight();
+  assertEquals(2, bytes.length);
+  assertEquals(3, bytes.charCodeAt(0));
+  assertEquals(128 + 64, bytes.charCodeAt(1));
+});
 </script>
 </head>
 <body onload="runTests()"></body>

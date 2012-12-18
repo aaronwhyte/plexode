@@ -5,6 +5,7 @@ plex.BitQueue = function() {
   // consolidate into a single string when reading.
   this.queue = [];
   this.nextReadPos = 0;
+  this.length = 0;
 };
 
 /**
@@ -18,6 +19,7 @@ plex.BitQueue.prototype.enqueueNumber = function(num, bitCount) {
     throw Error('number ' + num + ' has more bits than bitCount ' + bitCount);
   }
   this.queue.push(plex.string.padLeft(bitStr, '0', bitCount));
+  this.length += bitCount;
 };
 
 /**
@@ -38,5 +40,19 @@ plex.BitQueue.prototype.dequeueNumber = function(bitCount) {
   var bitStr = queueStr.substr(this.nextReadPos, bitCount);
   var num = parseInt(bitStr, 2);
   this.nextReadPos += bitCount;
+  this.length -= bitCount;
   return num;
+};
+
+plex.BitQueue.prototype.dequeueToBytesAndPadZerosRight = function() {
+  var bytesArray = [];
+  var tailLength = this.length % 8;
+  if (tailLength) {
+    this.enqueueNumber(0, 8 - tailLength);
+  }
+  while (this.length) {
+    var num = this.dequeueNumber(8);
+    bytesArray.push(String.fromCharCode(num));
+  }
+  return bytesArray.join('');
 };
