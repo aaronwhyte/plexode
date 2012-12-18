@@ -84,7 +84,7 @@ plex.LempelZiv.prototype.decodeFromIntegers = function(ints) {
 plex.LempelZiv.prototype.encodeToBitQueue = function(str, opt_bitQueue) {
   var ints = this.encodeToIntegers(str);
   var bitQueue = opt_bitQueue || new plex.BitQueue();
-  var highestValuePossible = this.alphabet.length + 1; // +1 for stopcode
+  var highestValuePossible = this.createEncodingDictionary().length + 1; // +1 for stopcode
   for (var i = 0; i < ints.length; i++) {
     var bitsNeeded = Number(highestValuePossible).toString(2).length;
     bitQueue.enqueueNumber(ints[i], bitsNeeded);
@@ -94,7 +94,7 @@ plex.LempelZiv.prototype.encodeToBitQueue = function(str, opt_bitQueue) {
 };
 
 plex.LempelZiv.prototype.decodeFromBitQueue = function(bitQueue) {
-  var highestValuePossible = this.alphabet.length + 1; // +1 for stopcode
+  var highestValuePossible = this.createEncodingDictionary().length + 1; // +1 for stopcode
   var ints = [];
   var num = -1;
   while (num != plex.LempelZiv.STOPCODE) {
@@ -106,18 +106,39 @@ plex.LempelZiv.prototype.decodeFromBitQueue = function(bitQueue) {
   return this.decodeFromIntegers(ints);
 };
 
+/**
+ * @param str The string to encode.
+ * @return {String} of chars whose charCodes are from 0-255
+ */
+plex.LempelZiv.prototype.encodeToBytes = function(str) {
+  var q = this.encodeToBitQueue(str);
+  return q.dequeueToBytesAndPadZerosRight();
+};
+
+/**
+ * @param {String} bytes  String of chars whose charCodes are from 0-255
+ * @return {String} the decoded string
+ */
+plex.LempelZiv.prototype.decodeFromBytes = function(bytes) {
+  var q = new plex.BitQueue();
+  q.enqueueBytes(bytes);
+  return this.decodeFromBitQueue(q);
+};
+
 plex.LempelZiv.prototype.createEncodingDictionary = function() {
   var dict = new plex.Map();
+  var nextKey = 1;
   for (var i = 0; i < this.alphabet.length; i++) {
-    dict.set(this.alphabet.charAt(i), i + 1);
+    dict.set(this.alphabet.charAt(i), nextKey++);
   }
   return dict;
 };
 
 plex.LempelZiv.prototype.createDecodingDictionary = function() {
   var dict = new plex.Map();
+  var nextKey = 1;
   for (var i = 0; i < this.alphabet.length; i++) {
-    dict.set(i + 1, this.alphabet.charAt(i));
+    dict.set(nextKey++, this.alphabet.charAt(i));
   }
   return dict;
 };

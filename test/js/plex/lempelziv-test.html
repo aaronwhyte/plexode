@@ -7,8 +7,9 @@
 <script src="../../../public_html/js/plex/bitqueue.js"></script>
 <script src="../../../public_html/js/plex/map.js"></script>
 <script src="../../../public_html/js/plex/string.js"></script>
+<script src="../../../public_html/js/plex/url.js"></script>
 
-  <script src="../../../public_html/js/plex/lempelziv.js"></script>
+<script src="../../../public_html/js/plex/lempelziv.js"></script>
 <script>
 
 function testNumberEncoding(str, alphabet) {
@@ -63,6 +64,45 @@ addTest(function longerBitQueue() {
 addTest(function emptyStringBitQueue() {
   testBitQueueEncoding('', 'abcdefghijklmnopqrstuvwxyz');
 });
+
+function testByteEncoding(str, alphabet) {
+  var lz = new plex.LempelZiv(alphabet);
+  var bytes = lz.encodeToBytes(str);
+  var str2 = lz.decodeFromBytes(bytes);
+  assertEquals(str, str2);
+}
+
+addTest(function shortBytes() {
+  testByteEncoding('b', 'ab');
+});
+
+addTest(function abababaBytes() {
+  testByteEncoding('abababa', 'ab');
+});
+
+addTest(function longerBytes() {
+  testByteEncoding(
+      'caaababababccccacacacbacbacabcbcbcacbabcaabababbb' +
+          'ccbcbcbcababcabacbcbcccbcabcabababcabcacacabcabcbcaba',
+      'abcdefghijklmnopqrstuvwxyz');
+});
+
+addTest(function emptyStringBytes() {
+  testByteEncoding('', 'abcdefghijklmnopqrstuvwxyz');
+});
+
+addTest(function compressionRatio() {
+  var alphabet = plex.url.URI_CHARS + "%";
+  var lz = new plex.LempelZiv(alphabet);
+  var url = 'http://plexode.com/eval3/#ht=%3Ccanvas%20height%3D300%20width%3D600%20id%3D%22can%22%20style%3D%22xborder%3A1px%20solid%20red%3B%20position%3Aabsolute%3B%20top%3A130px%22%3E%3C%2Fcanvas%3E%0A%3Ch1%3E%20Michael...%20%20%20Michael%2C%20give%20us%20our%20precious%20gems!%20GEMS%20MICHAEL.&jt=document.title%3D%22GEMS%20MICHAEL%22%3B%0A%0Afunction%20body()%20%7B%0Acc.fillStyle%3D%22%23fdd%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1%2C%20-1)%3B%0Acc.lineTo(1%2C%20-1)%3B%0Acc.lineTo(1%2C%200.9)%3B%0Acc.lineTo(-1%2C%200.9)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20beard()%20%7B%0Acc.fillStyle%3D%22%23ddd%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1.1%2C%200.9)%3B%0Acc.lineTo(-1.1%2C%200)%3B%0Acc.lineTo(0%2C%20-0.1)%3B%0Acc.lineTo(1.1%2C%200)%3B%0Acc.lineTo(1.1%2C%200.9)%3B%0Acc.lineTo(0%2C%201.1)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20eyes()%20%7B%0Acc.fillStyle%3D%22%23000%22%3B%0Acc.beginPath()%3B%0Acc.arc(-0.5%2C%20-0.5%2C%200.08%2C%200%2C%20-0.001)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0Acc.beginPath()%3B%0Acc.arc(0.5%2C%20-0.5%2C%200.08%2C%200%2C%20-0.001)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20nose()%20%7B%0Acc.beginPath()%3B%0Acc.fillStyle%3D%22%23fdd%22%3B%0Acc.arc(0%2C%20-0.25%2C%200.27%2C%200-0.4%2C%20Math.PI%2B0.4)%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20mouth()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(-0.4%2C%200.3)%3B%0Acc.lineTo(0.4%2C%200.3)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20hat()%20%7B%0Acc.fillStyle%3D%22%23f00%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1.15%2C%20-0.8)%3B%0Acc.lineTo(0%2C%20-2.7)%3B%0Acc.lineTo(1.15%2C%20-0.8)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20arm()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(0%2C%200)%3B%0Acc.quadraticCurveTo(0.5%2C%200.1%2C%200.6%2C%200.6)%3B%0Acc.stroke()%3B%0Acc.beginPath()%3B%0Acc.arc(0.6%2C%200.8%2C%200.2%2C%20-Math.PI%2C%201)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20arms(t)%20%7B%0Acc.save()%3B%0Acc.lineWidth%20%3D%200.15%3B%0Acc.translate(1%2C%200.1)%3B%0Acc.rotate(Math.sin(t*0.6)%20%2F%202%20-%200.4)%3B%0Aarm()%3B%0Acc.restore()%3B%0Acc.save()%3B%0Acc.lineWidth%20%3D%200.15%3B%0Acc.scale(-1%2C%201)%3B%0Acc.translate(1%2C%200.1)%3B%0Acc.rotate(Math.sin(t*0.65)%20%2F%202%20-%200.4)%3B%0Aarm()%3B%0Acc.restore()%0A%7D%0A%0Afunction%20leg()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(0%2C%200)%3B%0Acc.quadraticCurveTo(0.2%2C%200.4%2C%200.1%2C%200.8)%3B%0Acc.lineTo(0.5%2C%200.9)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20legs(t)%20%7B%0Acc.save()%3B%0Acc.lineWidth%3D%200.15%3B%0Acc.save()%3B%0Acc.translate(0.5%2C%200.9)%3B%0Acc.rotate(Math.sin(t)%20%2F%202)%3B%0Aleg()%3B%0Acc.restore()%3B%0Acc.save()%3B%0Acc.scale(-1%2C%201)%3B%0Acc.translate(0.5%2C%200.9)%3B%0Acc.rotate(Math.sin(t*1.02)%2F2)%3B%0Aleg()%3B%0Acc.restore()%3B%0Acc.restore()%3B%0A%7D%0A%0Aca%20%3D%20gebi(%22can%22)%3B%0Acc%20%3D%20ca.getContext(\'2d\')%3B%0A%0Afunction%20gnome(x%2C%20y%2C%20h%2C%20v%2C%20t)%20%7B%0A%20%20cc.lineWidth%20%3D%200.1%3B%0A%20%20cc.strokeStyle%20%3D%20%22%23000%22%3B%0A%20%20cc.save()%3B%0A%20%20cc.translate(x%2C%20y)%3B%0A%20%20cc.rotate(Math.sin(t*0.8)*%200.1)%3B%0A%20%20cc.scale(50%2C%2050)%3B%0A%20%20body()%3B%0A%20%20arms(t)%3B%0A%20%20legs(t)%3B%0A%20%20beard()%3B%0A%20%20nose()%3B%0A%20%20eyes()%3B%0A%20%20mouth()%3B%0A%20%20hat()%3B%0A%20%20cc.restore()%3B%0A%7D%0A%0A%2F%2Ffor%20(var%20y%20%3D%200%3B%20y%20%3C%20300%3B%20y%20%2B%3D%20Math.random()%20*%2030)%20%7B%0A%2F%2F%20%20gnome(Math.random()%20*%20300%2C%20y)%3B%0A%2F%2F%7D%0Avar%20t%20%3D%20(new%20Date()).getTime()%20%2F%20100%3B%0Agnome(300%2C%20150%2C%200%2C%200%2C%20t%2F4)%3B%0Agnome(150%2C%20180%2C%200%2C%200%2C%20t)%3B%0Agnome(600%20-%20150%2C%20180%2C%200%2C%200%2C%20t%2F2)%3B%0At%3B%0A&ms=10&oth=1&otj=1';
+  //var url = 'http://plexode.com/eval3/#ht=DUDE%20OMG%20%3Cb%20id%3D%22wave%22%20style%3D%22font-size%3A150%25%3B%20color%3Agreen%22%3E%3C%2Fb%3E%20IT%20IS%20A%20SNAKE&jt=var%20a%20%3D%20%5B%5D%3B%0Avar%20n%20%3D%20(new%20Date()).getTime()%3B%0Afor%20(var%20i%20%3D%200%3B%20i%20%3C%2020%3B%20%2B%2Bi)%20%7B%0A%20%20var%20s%20%3D%20Math.sin(n%2F210%20%2B%20i%2F1.1)%20*%2025%20%2B%20Math.sin(n%2F240%20%2B%20i%2F3)%20*%2025%3B%0A%20%20var%20c%20%3D%20-Math.cos(n%2F200%20%2B%20i%2F2)%20*%2025%20-%20Math.cos(n%2F260%20%2B%20i%2F2.9)%20*%2025%3B%0A%20%20a.push(\'%3Cb%20style%3D%22position%3Arelative%3Bleft%3A\'%2C%20s%2C%20\'px%3Btop%3A\'%2C%20c%2C%20\'px%22%3Es%3C%2Fb%3E%20\')%3B%0A%7D%0Agebi(\'wave\').innerHTML%20%3D%20a.join(\'\')%3B%0A%0An%20%25%20100000%3B%0A&ms=30&otj=1'
+
+  var bytes = lz.encodeToBytes(url);
+  var base64 = btoa(bytes);
+  console.log(url.length + ' to ' + base64.length);
+  console.log(base64);
+});
+
 
 </script>
 </head>

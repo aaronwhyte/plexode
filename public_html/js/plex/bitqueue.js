@@ -44,6 +44,12 @@ plex.BitQueue.prototype.dequeueNumber = function(bitCount) {
   return num;
 };
 
+plex.BitQueue.prototype.enqueueBytes = function(bytes) {
+  for (var i = 0; i < bytes.length; i++) {
+    this.enqueueNumber(bytes.charCodeAt(i), 8);
+  }
+};
+
 plex.BitQueue.prototype.dequeueToBytesAndPadZerosRight = function() {
   var bytesArray = [];
   var tailLength = this.length % 8;
