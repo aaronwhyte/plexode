@@ -9,15 +9,15 @@ plex.LempelZiv = function(alphabet) {
 };
 
 /**
- * @param {string} uncompressed  A string made up only of what's in the alphabet.
+ * @param {string} str  A string made up only of what's in the alphabet.
  * @return {Array} An array of integers.
  */
-plex.LempelZiv.prototype.compressToIntegers = function(uncompressed) {
+plex.LempelZiv.prototype.encodeToIntegers = function(str) {
   var w = '';
   var result = [];
-  var dict = this.createCompressionDictionary();
-  for (var i = 0; i < uncompressed.length; i++) {
-    var c = uncompressed.charAt(i);
+  var dict = this.createEncodingDictionary();
+  for (var i = 0; i < str.length; i++) {
+    var c = str.charAt(i);
     var wc = w + c;
     if (dict.contains(wc)) {
       w = wc;
@@ -36,17 +36,17 @@ plex.LempelZiv.prototype.compressToIntegers = function(uncompressed) {
 };
 
 /**
- * @param {Array} compressed  An array of integers.
- * @return {string} uncompressed  A string made up only of what's in the alphabet.
+ * @param {Array} ints  An array of integers.
+ * @return {string} A string made up only of what's in the alphabet.
  */
-plex.LempelZiv.prototype.decompressFromIntegers = function(compressed) {
+plex.LempelZiv.prototype.decodeFromIntegers = function(ints) {
   var entry = '';
-  var dict = this.createDecompressionDictionary();
-  var w = dict.get(compressed[0]);
+  var dict = this.createDecodingDictionary();
+  var w = dict.get(ints[0]);
   var result = w;
 
-  for (var i = 1; i < compressed.length; i += 1) {
-    var k = compressed[i];
+  for (var i = 1; i < ints.length; i += 1) {
+    var k = ints[i];
     if (dict.contains(k)) {
       entry = dict.get(k);
     } else {
@@ -67,7 +67,7 @@ plex.LempelZiv.prototype.decompressFromIntegers = function(compressed) {
 
 };
 
-plex.LempelZiv.prototype.createCompressionDictionary = function() {
+plex.LempelZiv.prototype.createEncodingDictionary = function() {
   var dict = new plex.Map();
   for (var i = 0; i < this.alphabet.length; i++) {
     dict.set(this.alphabet.charAt(i), i);
@@ -75,7 +75,7 @@ plex.LempelZiv.prototype.createCompressionDictionary = function() {
   return dict;
 };
 
-plex.LempelZiv.prototype.createDecompressionDictionary = function() {
+plex.LempelZiv.prototype.createDecodingDictionary = function() {
   var dict = new plex.Map();
   for (var i = 0; i < this.alphabet.length; i++) {
     dict.set(i, this.alphabet.charAt(i));

@@ -10,9 +10,9 @@
 addTest(function encodeDecode() {
   var lz = new plex.LempelZiv('ab');
   var str = 'abababa';
-  var ints = lz.compressToIntegers(str);
+  var ints = lz.encodeToIntegers(str);
   assertEquals(4, ints.length);
-  var str2 = lz.decompressFromIntegers(ints);
+  var str2 = lz.decodeFromIntegers(ints);
   assertEquals(str2, str);
 });
 </script>
