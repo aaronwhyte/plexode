@@ -131,7 +131,7 @@ plex.url.percentEscapeCharacter = function(c) {
   }
   var num = c.charCodeAt(0);
   if (num < 128) {
-    var hex = Number(num).toString(16);
+    var hex = Number(num).toString(16).toUpperCase();
     return '%' + plex.string.padLeft(hex, '0', 2);
   } else {
     // Anything above 127 will be escaped by encodeURI.
@@ -144,8 +144,8 @@ plex.url.percentEscapeCharacter = function(c) {
   }
 };
 
-plex.url.percentEncodeUnwhitelistedChars = function(url, whitelist) {
-  var tokens = plex.url.tokenizeEncodedUrl(url);
+plex.url.percentEncodeUnwhitelistedChars = function(str, whitelist) {
+  var tokens = plex.url.tokenizeEncodedUrl(str);
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
     if (token.length == 1 && whitelist.indexOf(token) == -1) {
