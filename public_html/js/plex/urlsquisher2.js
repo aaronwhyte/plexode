@@ -7,7 +7,6 @@ plex.UrlSquisher2 = function(subWords) {
 
 plex.UrlSquisher2.prototype.squishToBase64 = function(url) {
   url = this.compressWithDictionary(url);
-  console.log(url);
   var lz = new plex.LempelZiv(this.getAlphabet());
   var bytes = lz.encodeToBytes(url);
   return btoa(bytes);
@@ -23,7 +22,6 @@ plex.UrlSquisher2.prototype.unsquishFromBase64 = function(base64) {
 
 plex.UrlSquisher2.prototype.compressWithDictionary = function(url) {
   var dict = this.getDictionary();
-  console.log(dict);
   for (var i = 0; i < dict.length; i++) {
     var entry = dict[i];
     var byteChar = entry[0];
