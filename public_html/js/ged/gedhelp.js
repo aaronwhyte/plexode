@@ -41,8 +41,7 @@ GedHelp.prototype.formatHtml = function() {
     var comboHtmls = [];
     for (var i = 0; i < combos.length; i++) {
       var combo = combos[i];
-      var shift = plex.array.contains(combo.modifiers, plex.KeyModifier.SHIFT);;
-      console.log(combo);
+      var shift = plex.array.contains(combo.modifiers, plex.KeyModifier.SHIFT);
       var keyName = self.keys.getNameForKeyCode(combo.keyCode);
       comboHtmls.push(
           '<span class="gedHelpKeyCombo">' +
