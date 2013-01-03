@@ -1,4 +1,4 @@
-plex = plex || {};
+this.plex = this.plex || {};
 
 /**
  * Simply associates numeric keycodes  programmer-friendly names.

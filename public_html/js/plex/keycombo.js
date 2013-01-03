@@ -1,4 +1,4 @@
-plex = plex || {};
+this.plex = this.plex || {};
 
 /**
  * @param {number} keyCode

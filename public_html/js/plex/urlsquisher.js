@@ -1,3 +1,5 @@
+this.plex = this.plex || {};
+
 /**
  * @constructor
  */
@@ -282,7 +284,7 @@ plex.UrlSquisher.RepLevel.prototype.getKey = function(startPos) {
 };
 
 plex.UrlSquisher.RepLevel.prototype.remove = function(key) {
-  this.map.delete(key);
+  this.map.remove(key);
   this.length--;
 };
 

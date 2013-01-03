@@ -5,6 +5,7 @@
  * @fileoverview  Rectangle math
  */
 
+this.plex = this.plex || {};
 plex.rect = {};
 
 plex.rect.HORIZ = 1;

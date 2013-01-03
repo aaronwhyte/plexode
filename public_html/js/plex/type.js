@@ -5,6 +5,7 @@
  * @fileoverview Code for figuring out the type of an object.
  */
 
+this.plex = this.plex || {};
 plex.type = {};
 
 /**

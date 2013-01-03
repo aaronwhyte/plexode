@@ -6,6 +6,7 @@
  * @author Aaron Whyte
  */
 
+this.plex = this.plex || {};
 plex.debug = {};
 
 /**

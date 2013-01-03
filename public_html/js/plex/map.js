@@ -32,7 +32,7 @@ plex.Map.prototype.contains = function(k) {
   return this.get(k) !== undefined;
 };
 
-plex.Map.prototype.delete = function(k) {
+plex.Map.prototype.remove = function(k) {
   var objKey = plex.Map.PREFIX + k;
   if (this.m[objKey]) this.length--;
   delete this.m[objKey];

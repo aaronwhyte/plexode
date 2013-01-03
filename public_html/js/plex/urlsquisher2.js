@@ -1,3 +1,5 @@
+this.plex = this.plex || {};
+
 /**
  * @constructor
  */

@@ -1,11 +1,7 @@
 // Copyright 2006 Aaron Whyte
 // All Rights Reserved.
 
-/**
- * @fileoverview
- */
 this.plex = this.plex || {};
-
 plex.window = {};
   
 /**
