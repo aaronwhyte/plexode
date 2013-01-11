@@ -270,6 +270,12 @@ GrafEd.prototype.endSelection = function() {
   this.selectionEnd = null;
 };
 
+GrafEd.prototype.createSelectionWithId = function(id) {
+  this.selStack.push((new plex.StringSet()).put(id));
+  this.selectionStart = null;
+  this.selectionEnd = null;
+};
+
 GrafEd.prototype.addSelections = function() {
   this.selStack.add();
 };

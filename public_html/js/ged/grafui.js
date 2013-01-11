@@ -77,6 +77,7 @@ GrafUi.HILITE_LINE_WIDTH = 1.5;
  */
 GrafUi.Mode = {
   DEFAULT: 'default',
+  DRAG_UNSELECTED: 'drag_unsel',
   DRAG: 'drag',
   PASTE: 'paste',
   SELECT: 'select'
@@ -180,8 +181,21 @@ GrafUi.prototype.getMouseDownListener = function() {
   return function(event) {
     self.viewDirty = true;
     event = event || window.event;
-    self.panning = true;
-    self.setCanvasPosWithEvent(event);
+    // panning, dragging, or linking, depending on what was touched.
+    var id = self.grafGeom.getIdAtVec(self.getWorldPosOfCanvasPos());
+    if (id == null) {
+      self.panning = true;
+      self.setCanvasPosWithEvent(event);
+    } else {
+      var part = self.grafEd.getModel().getPart(id);
+      if (part) {
+        // start to drag that part
+        self.grafEd.createSelectionWithId(id);
+        self.mode = GrafUi.Mode.DRAG_UNSELECTED;
+        self.grafEd.startDragVec(self.worldPos);
+      }
+      // TODO: else start link drag
+    }
   };
 };
 
@@ -192,6 +206,15 @@ GrafUi.prototype.getMouseUpListener = function() {
     event = event || window.event;
     self.panning = false;
     self.setCanvasPosWithEvent(event);
+
+    // end drag unselected
+    if (self.mode == GrafUi.Mode.DRAG_UNSELECTED) {
+      self.grafEd.continueDragVec(self.worldPos);
+      self.grafEd.endDrag();
+      self.grafEd.popSelection();
+      self.viewDirty = true;
+      self.mode = GrafUi.Mode.DEFAULT;
+    }
   };
 };
 
@@ -372,7 +395,7 @@ GrafUi.prototype.clock = function() {
   }
   if (this.mode == GrafUi.Mode.SELECT) {
     this.grafEd.continueSelectionVec(this.worldPos);
-  } else if (this.mode == GrafUi.Mode.DRAG) {
+  } else if (this.mode == GrafUi.Mode.DRAG_UNSELECTED || this.mode == GrafUi.Mode.DRAG) {
     this.grafEd.continueDragVec(this.worldPos);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.PASTE) {

@@ -217,3 +217,9 @@ Vec2d.distance = function(x0, y0, x1, y1) {
   var dy = y0 - y1;
   return Math.sqrt((dx * dx) + (dy * dy));
 };
+
+Vec2d.distanceSq = function(x0, y0, x1, y1) {
+  var dx = x0 - x1;
+  var dy = y0 - y1;
+  return (dx * dx) + (dy * dy);
+};

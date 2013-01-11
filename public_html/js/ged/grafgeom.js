@@ -97,10 +97,48 @@ GrafGeom.prototype.getIdsInRect = function(x0, y0, x1, y1) {
 };
 
 /**
+ * @return one ID, or null.
+ */
+GrafGeom.prototype.getIdAtVec = function(vec) {
+  var jackPos = Vec2d.alloc();
+  var lowestDistSq = Infinity;
+  var retId = null;
+  var maxPartDist = GrafGeom.PART_RADIUS + GrafGeom.SELECTION_PADDING;
+  var maxPartDistSq = maxPartDist * maxPartDist;
+  var maxJackDist = GrafGeom.JACK_RADIUS + GrafGeom.SELECTION_PADDING;
+  var maxJackDistSq = maxJackDist * maxJackDist;
+  for (var partId in this.model.parts) {
+    var part = this.model.getPart(partId);
+    var distSq = Vec2d.distanceSq(vec.x, vec.y, part.x, part.y);
+    if (distSq < maxPartDistSq && distSq < lowestDistSq) {
+      retId = partId;
+      lowestDistSq = distSq;
+    }
+    for (var jackId in part.jacks) {
+      this.getJackPos(jackId, jackPos);
+      var distSq = Vec2d.distanceSq(vec.x, vec.y, jackPos.x, jackPos.y);
+      if (distSq < maxJackDistSq && distSq < lowestDistSq) {
+        retId = partId;
+        lowestDistSq = distSq;
+      }
+    }
+  }
+  Vec2d.free(jackPos);
+  return retId;
+};
+
+/**
  * @return {Array} of IDs. If there aren't any, returns empty array.
  */
 GrafGeom.prototype.getIdsAtXY = function(x, y) {
   return this.getIdsInRect(x, y, x, y);
+};
+
+/**
+ * @return {Array} of IDs. If there aren't any, returns empty array.
+ */
+GrafGeom.prototype.getIdsAtVec = function(v) {
+  return this.getIdsInRect(v.x, v.y, v.x, v.y);
 };
 
 /**

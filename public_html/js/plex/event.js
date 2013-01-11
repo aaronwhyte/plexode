@@ -171,6 +171,11 @@ plex.event.preventDefault = function(event) {
   }
 };
 
+plex.event.isRightClick = function(mouseClickEvent) {
+  // see http://www.quirksmode.org/js/events_properties.html#button
+  return mouseClickEvent.button == 2;
+};
+
 /**
  * Tracks listeners so unlistening can be done easily.
  * @constructor
