@@ -1,0 +1,428 @@
+v Hella design work
+
+2011.08.26 - 2011.08.31
+Graf op JSON format
+v JSON schema for ops
+v Op reversal fn
+v unit test op reversal
+
+2011.08.31 - 2011.09.04
+GrafModel basics
+v build from ops
+v basic queries
+v unit tests
+
+2011.09.24 - 2011.09.25
+Graf Paste
+v descend through clusters, parts, jacks
+v grafModel allocates new IDs
+v grafModel.paste(grafModel) returns ID map
+v unit tests
+
+Refactor "phy" out of sprite constructors
+v Wrap Phy methods/fields in Game:
+  v rayscan
+  v getSpriteBySledgeId - always follows rayscan... Make it automatic?
+  v FRICTION
+  v invalidateSledgeForSpriteId
+x Pass Game in where needed.
+  x act()
+  x onSpriteHit()
+v Remove Phy from concrete sprite types. Only access Game fields.
+v Remove Phy from gaam.Sprite
+
+v Vorp Logic: Part 1
+v Logic support in Vorp
+v Test level (not using transformer or prefabs)
+
+
+Transformer 1
+v walls
+v one-point wall-huggers
+  v assembler
+  v button
+  v grip
+
+2012.03.25 - 2012.07.05
+ClipList
+Whole cliplist will be one Stor object.
+Need a replay strategy that does two things:
+1: Preserve op numbers
+2: Eliminate obsolete ops
+After a replay, the remaining ops should have no redundant information.
+v add pubsub to Stor events
+... 2012.07.03 resuming ...
+v write real cross-tab Stor demo
+v write OpStor
+  v server-assigned IDs
+  v get changes after server ID X
+  v test
+  v invalidation pubsub
+v ClipListOp
+  v addClip(timestamp(order), id, grafModelOps)
+    v serialize a Graf to a list of ops, which are by nature JSON
+  v removeClip(clientOpId)
+v Clip
+  v (timestamp(order), id, grafModel)
+v ClipList
+  v list of clips, sorted by timestamp
+  v applyOp(clipListOp)
+  v basic test
+
+2012.07.20 - 2012.07.28
+SysClipList 1
+It's a ClipList instance, initialized with static data.
+v static SysClipListBuilder.build(json)
+v static system data JSON
+  v wall
+  v assembler
+v use it to build a level
+  v walls
+  v assembler
+  v play it
+  v grip
+  v button
+  v play it again
+
+2012.07.28 - 2012.08.12
+SysClipList & Transformer: Part II
+v SysClips for everything
+v Transformer for everything
+  v block
+  v door
+  v zapper
+  v beamsensor
+  v timer
+    v timeout value
+  v portal pair
+  v exit
+    v body
+    v URL
+
+2012.08.12 - 2012.08.19
+Transformer III: Transform Links
+v Remember how links work by looking at level 8
+v Add jacks to sys clip models
+  v beamsensor
+  v button
+  v door
+  v grip
+  v timer
+  v zapper
+v Populate transformer jackMap when transforming clusters
+  v beamsensor
+  v button
+  v door
+  v grip
+  v timer
+  v zapper
+v Make transformer links work
+v test in level 9 or so
+  v beamsensor
+  v button
+  v door
+  v grip
+  v timer
+  v zapper
+
+2012.08.19 - 2012.08.19
+Transformer IV: Automatic Jacks
+v Add jack type and name as data in sys clips, automatically, based on sprite constants.
+v Populate transformer jackmap automatically as well.
+
+2012.08.20 - 2012.08.21
+v fix link aggregation
+  v or
+  v and
+
+2012.08.21 - 2012.08.21
+v fix some alloc/free GC issues
+
+2012.08.22 - 2012.08.26
+LevelEd API I
+v levelEd.pasteClip(clip, loc)
+v partOrJackId levEd.getNearest(loc, opt_maxDist)
+  v parts
+  v accessible vector offsets for input + output jacks
+v levelEd.setSelected(partOrJackId, selected)
+v levelEd.clearSelection()
+v levelEd.translateSelectedParts(deltaPos)
+v levelEd.linkSelectedJacks()
+v Create test level
+v data support
+v easy wall positioning
+
+2012.08.28 - 2012.08.29
+LevelProg: The new programatic level building interface
+v refactor from LevelEd and level 10 code.
+v startVorp
+v test to make sure it works
+v improve how key/value pairs are set - no more objIds in tuples.
+
+2012.08.30 - 2012.09.01
+Replace the old levels with LevelProg code.
+v level 1
+  v add wall-chaining API
+v level 2
+  v fix player-killing code to not use prefabs
+    v consolidate sprite template code from transformer and vorp
+    v add some kinda sprite-spawning code.
+  v delete obsolete sprite logic event handler methods
+  v delete LevelBuilder
+  v delete Prefabs
+  v create and use ToggleSprite
+  v streamline part and link creation
+v level 3
+v level 4
+v level 5
+v level 6
+
+v Merge year-old vorplogic branch into the main branch!
+
+v Deploy to plexode.
+
+============== VED UI ============
+
+2012.09.08 - 2012.09.08
+Access Existing Level Models
+v alter py level HTML template to expect a vorpLevels object with one key/value and start Vorp with it.
+v alter level.js's to supply vorpLevels = vorpLevels || {}, and vorpLevels['levelX'] = {...}
+
+2012.09.12 - 2012.09.15
+VedApp directory
+v Make a space for the code, manual testing
+v Add button to nuke localstorage and repopulate it with real level1-6 data :-o
+v render level names
+
+2012.09.16 - 2012.09.16
+VedApp navigation
+v parse URL hash params and draw with directory or testing renderer
+  v levelname param
+  v mode param: testing (editing later)
+v rerender on hashchange event
+v fake testing renderer
+v fake editing renderer
+v hyperlink from directory to test
+
+2012.09.16 - 2012.09.26
+VedApp testing page
+v playable
+v clean up on exit. Could be...tricky
+v title nav (turns out that was dumb but I did it)
+
+2012.09.26
+v VedApp level-not-found error
+
+2012.10.06
+Render level with model overlay
+v render level with injected camera zoom
+v render model on top of it with same camera
+  v crappy model renderer
+    v parts
+    v jacks
+    v links
+
+2012.10.11 - 2012.10.21
+Stop. Organize editor code. This stuff is for Graf, not Ved.
+v Plan reorg
+v Move LevelEd to GrafEd
+v Redo VedApp in terms of GrafEd & GrafUi.
+
+2012.10.21 - 2012.10.27
+Dragging 1
+v loop in GrafUi
+v don't redraw if nothing changed
+v mouse-to-world trans
+v position query
+[paused for Selection]
+
+2012.10.27 - 2012.10.28
+Selection 1
+v write & test SelStack
+v GrafEd
+  v SelStack for state
+  v support LevelProg levels :-/
+  v writes
+    v startSelection(pos) // set start and end
+    v continueSelection(pos) // sent end
+    v endSelection() // push selection
+  v reads
+    v getSelectionRect()
+    v getHilitedIds()
+      v query rect intersection
+    v getSelectionsSize()
+    v getSelection(n)
+v GrafUi
+  v gestures
+    v modes enum: DEFAULT, SELECTING
+    v selectDown(select = left mouse for now?) && mode=DEFAULT: ed.startSelection; mode=SELECTING
+    v mouseMove && mode==SELECTING: ed.continueSelection
+    v mouseUp && mode==SELECTING: ed.endSelection; mode=DEFAULT
+  v rendering
+    v selection rect
+    v indicated elements
+    v selections 0..n (mostly picking good colors :-)
+v verify everything works
+
+2012.10.29 - 2012.10.29
+Dragging 2
+v GrafEd
+  v startDrag(pos)
+    v set dragStart and dragEnd vecs
+  v continueDrag(pos)
+    v set dragEnd
+    v unstage and stage
+  v endDrag()
+    v commit staged ops
+v GrafUi
+  v DRAGGING mode
+  v keys
+    v listener
+    x btn constants
+  v dragBtnDown - "z"? && mode=DEFAULT: ed.startDrag; mode=DRAGGING
+  v mouseMove && mode==DRAGGING: ed.continueDrag
+  v dragBtnUp && mode==DRAGGING: ed.endDrag; mode=DEFAULT
+  v Throttle mouse-move effect to be once per frame.
+    v dirtyMouse
+    v worldPos update
+    v move other logic to event loop.
+
+2012.10.31 - 2012.10.31
+Listener disposal
+v remove listeners when navigating away. Otherwise you double edit & break op reversibility.
+  v ved
+  v vorp
+
+2012.11.01 - 2012.11.01
+Pipe LocalStorage events to GrafUi
+v fix OpStor op wrapping
+v add stor pubsub subs (and remove them when appropriate)
+  v grafed subscribes to opstor
+  v grafui sets grafEd callback
+v multi-tab demo works
+  v committed changes are reflected immediately
+  v multitab editing doesn't cause reversibility check failure on op load
+
+
+2012.11.02 - 2012.11.02
+Some UI polish
+v expand mousemove listener to whole page
+v restore hover indicator
+v stop playersprite smoke from animating on vorp.draw()
+v separate selection mouse padding from rendering padding
+v fix slight mouse offset
+v differentiate jacks and parts - radius
+  v GrafUi lets GrafEd handle selection radii
+  v GrafEd reports position and radius of objects to GrafUi
+
+2012.11.03 - 2012.11.03
+Zooming
+v mousewheel-zoom at mouse point.
+//- key-zoom at centermouse point
+//- pinch zoom at pinch center? It's totes doable.
+
+2012.11.03 - 2012.11.03
+Panning
+v mouse drag
+//- arrows
+//- touch drag in empty space
+
+2012.11.03 - 2012.11.03
+Selection 2: Set Math
+v add - A
+v subtract - shift-A
+v pop - shift-S
+
+2012.11.08
+layout & nav
+v directory names are links to level/edit
+v level view
+  v fullscreen layout
+  v directory button on the left
+  v title in the middle, left-aligned
+  v mode links on the right
+    v edit
+    v play
+
+2012.11.09
+deletion
+v deleting part deletes whole cluster
+v deleting jack only deleted links
+
+2012.11.11
+link mutations
+v grafEd
+  v link selected
+  x unlink selected
+v grafUi
+  v link jacks: L
+  x unlink jacks: shift-L
+
+2012.11.11 - 2012.11.12
+v fuller-screen vorp
+
+2012.11.13
+undo/redo (v1: in-memory only)
+v grafEd
+  v keep undoStack of op-ranges committed from this window
+  v "undo" pops from the undoStack, commits its reverse, and pushes it to the redoStack.
+  v "redo" pops from the redoStack, applies that change, and pushes to the undoStack
+  v Any other commit clears the redo stack.
+v grafUi
+  v z is undo
+  v shift-z is redo
+
+2012.11.13 - 2012.11.16
+GrafRend & GrafGeom
+v Put GrafEd's geometry knowledge into new class GrafGeom that knows the size of parts, where jacks are, etc
+v GradEd owns a GrafGeom
+v Put GrafUi's non-user-interactive rendering chunks into new class GrafRend
+  that uses a plugin, GrafGeom, and Renderer to center and draw.
+  v transformation via plugin
+  v frame the graph nicely on the canvas (model only, or plugin help too?)
+  v render with plugin help
+v GrafUi owns a GrafRend, shares its Renderer, and adds rendering for selection and hilite.
+  v also it centers levels correctly on startup
+
+2012.11.18
+Clipboard
+v deps
+  v stor (optional?)
+  v GrafRend (model, renderer, plugin, GrafGeom)
+v api
+  v setModel, from a select+copy, or a sys-clip click
+    v saves to a monolithic JSON blob stor
+    v redraws
+  v getModel, for paste.
+  v draw
+  v resize, triggers redraw
+v Listens to stor changes, for cross-tab cut-n-paste.
+  v triggers setModel
+  v test
+v init clipboard on start
+
+2012.11.18 - 2012.11.19
+Copy and Paste
+v copy selection
+  v grafui
+  v grafed
+    v grafmodel
+v paste
+  v grafed
+    v startPaste, a lot like drag
+    v continuePaste
+    v endPaste
+  v grafui
+    v startPaste
+    v continuePaste
+    v endPaste
+  v auto-select pasted stuff
+
+2012.11.21 - 2012.12.04
+Ged help & keyboard refactoring
+v Create messages file for i18n.
+v Pull VK_* stuff into a plex/key.js file.
+v Make Ged use plex.key stuff for event handling.
+v Make key, shift-state, action part of one structure
+  v redo all key listeners to use that
+v Add help page into editor.
