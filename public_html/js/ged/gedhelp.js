@@ -58,7 +58,7 @@ GedHelp.prototype.formatHtml = function() {
       kb(helpMsgs.UNSELECT, allCombos[GrafUi.Action.UNSELECT]),
       kb(helpMsgs.ADD_SELECTIONS, allCombos[GrafUi.Action.ADD_SELECTIONS]),
       kb(helpMsgs.SUBTRACT_SELECTIONS, allCombos[GrafUi.Action.SUBTRACT_SELECTIONS]),
-      kb(helpMsgs.DRAG, allCombos[GrafUi.Action.DRAG]),
+      kb(helpMsgs.DRAG_SELECTION, allCombos[GrafUi.Action.DRAG_SELECTION]),
       kb(helpMsgs.LINK, allCombos[GrafUi.Action.LINK]),
       kb(helpMsgs.DELETE, allCombos[GrafUi.Action.DELETE]),
       kb(helpMsgs.COPY, allCombos[GrafUi.Action.COPY]),

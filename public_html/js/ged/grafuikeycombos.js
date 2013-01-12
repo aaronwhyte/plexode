@@ -37,7 +37,7 @@ GrafUiKeyCombos.prototype.getAll = function() {
     ked(GrafUi.Action.DELETE, plex.Key.Name.DELETE);
     ked(GrafUi.Action.DELETE, plex.Key.Name.BACKSPACE);
 
-    ked(GrafUi.Action.DRAG, 'd');
+    ked(GrafUi.Action.DRAG_SELECTION, 'd');
     ked(GrafUi.Action.LINK, 'l');
 
     ked(GrafUi.Action.UNDO, 'z');

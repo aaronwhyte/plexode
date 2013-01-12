@@ -77,8 +77,9 @@ GrafUi.HILITE_LINE_WIDTH = 1.5;
  */
 GrafUi.Mode = {
   DEFAULT: 'default',
-  DRAG_UNSELECTED: 'drag_unsel',
-  DRAG: 'drag',
+  DRAG_PART: 'drag_part',
+  DRAG_JACK: 'drag_jack',
+  DRAG_SELECTION: 'drag_sel',
   PASTE: 'paste',
   SELECT: 'select'
 };
@@ -97,7 +98,7 @@ GrafUi.Action = {
   PASTE: 'paste',
   DELETE: 'delete',
 
-  DRAG: 'drag',
+  DRAG_SELECTION: 'drag',
   LINK: 'link',
 
   UNDO: 'undo',
@@ -187,14 +188,11 @@ GrafUi.prototype.getMouseDownListener = function() {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
     } else {
-      var part = self.grafEd.getModel().getPart(id);
-      if (part) {
-        // start to drag that part
-        self.grafEd.createSelectionWithId(id);
-        self.mode = GrafUi.Mode.DRAG_UNSELECTED;
-        self.grafEd.startDragVec(self.worldPos);
+      if (self.grafEd.getPart(id)) {
+        self.startDragPart(id);
+      } else if (self.grafEd.getJack(id)) {
+        self.startDragJack(id);
       }
-      // TODO: else start link drag
     }
   };
 };
@@ -207,14 +205,13 @@ GrafUi.prototype.getMouseUpListener = function() {
     self.panning = false;
     self.setCanvasPosWithEvent(event);
 
-    // end drag unselected
-    if (self.mode == GrafUi.Mode.DRAG_UNSELECTED) {
-      self.grafEd.continueDragVec(self.worldPos);
-      self.grafEd.endDrag();
-      self.grafEd.popSelection();
-      self.viewDirty = true;
-      self.mode = GrafUi.Mode.DEFAULT;
+    if (self.mode == GrafUi.Mode.DRAG_PART) {
+      self.endDragPart();
     }
+    if (self.mode == GrafUi.Mode.DRAG_JACK) {
+      self.endDragJack();
+    }
+
   };
 };
 
@@ -300,8 +297,8 @@ GrafUi.prototype.getKeyDownListener = function() {
       }
 
       // drag pseudomode
-      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG)) {
-        self.mode = GrafUi.Mode.DRAG;
+      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
+        self.mode = GrafUi.Mode.DRAG_SELECTION;
         self.grafEd.startDragVec(self.worldPos);
       }
 
@@ -330,8 +327,8 @@ GrafUi.prototype.getKeyUpListener = function() {
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.DRAG &&
-        self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG)) {
+    if (self.mode == GrafUi.Mode.DRAG_SELECTION &&
+        self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
       self.grafEd.continueDragVec(self.worldPos);
       self.grafEd.endDrag();
       self.viewDirty = true;
@@ -346,6 +343,47 @@ GrafUi.prototype.getKeyUpListener = function() {
     }
   };
 };
+
+/**
+ * Start to drag a previously unselected part.
+ * Creates a temporary selection.
+ * @param partId
+ */
+GrafUi.prototype.startDragPart = function(partId) {
+  this.grafEd.createSelectionWithId(partId);
+  this.mode = GrafUi.Mode.DRAG_PART;
+  this.grafEd.startDragVec(this.worldPos);
+};
+
+GrafUi.prototype.endDragPart = function() {
+  this.grafEd.continueDragVec(this.worldPos);
+  this.grafEd.endDrag();
+  this.grafEd.popSelection();
+  this.viewDirty = true;
+  this.mode = GrafUi.Mode.DEFAULT;
+};
+
+/**
+ * Start to drag any jack, to form a link between two jacks.
+ * Creates a temporary selection.
+ * @param jackId
+ */
+GrafUi.prototype.startDragJack = function(jackId) {
+  this.grafEd.createSelectionWithId(jackId);
+  this.mode = GrafUi.Mode.DRAG_JACK;
+  this.grafEd.startDragVec(this.worldPos);
+};
+
+GrafUi.prototype.endDragJack = function() {
+  // TODO: link if we reached a good target jack
+  this.grafEd.continueDragVec(this.worldPos);
+  this.grafEd.endDrag();
+  this.grafEd.popSelection();
+  this.viewDirty = true;
+  this.mode = GrafUi.Mode.DEFAULT;
+};
+
+
 
 GrafUi.prototype.getResizeListener = function() {
   var self = this;
@@ -395,7 +433,7 @@ GrafUi.prototype.clock = function() {
   }
   if (this.mode == GrafUi.Mode.SELECT) {
     this.grafEd.continueSelectionVec(this.worldPos);
-  } else if (this.mode == GrafUi.Mode.DRAG_UNSELECTED || this.mode == GrafUi.Mode.DRAG) {
+  } else if (this.mode == GrafUi.Mode.DRAG_PART || this.mode == GrafUi.Mode.DRAG_SELECTION) {
     this.grafEd.continueDragVec(this.worldPos);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.PASTE) {

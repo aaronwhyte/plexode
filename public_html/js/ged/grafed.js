@@ -65,6 +65,14 @@ GrafEd.prototype.getModel = function() {
   return this.model;
 };
 
+GrafEd.prototype.getPart = function(id) {
+  return this.model.getPart(id);
+};
+
+GrafEd.prototype.getJack = function(id) {
+  return this.model.getJack(id);
+};
+
 /**
  * @param {GrafModel} clipModel
  * @param {Vec2d} offset

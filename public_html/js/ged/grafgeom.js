@@ -118,7 +118,7 @@ GrafGeom.prototype.getIdAtVec = function(vec) {
       this.getJackPos(jackId, jackPos);
       var distSq = Vec2d.distanceSq(vec.x, vec.y, jackPos.x, jackPos.y);
       if (distSq < maxJackDistSq && distSq < lowestDistSq) {
-        retId = partId;
+        retId = jackId;
         lowestDistSq = distSq;
       }
     }
