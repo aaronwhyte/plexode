@@ -299,7 +299,7 @@ GrafUi.prototype.getKeyDownListener = function() {
       // drag pseudomode
       if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
         self.mode = GrafUi.Mode.DRAG_SELECTION;
-        self.grafEd.startDraggingPartsVec(self.worldPos);
+        self.grafEd.startDraggingSelectionVec(self.worldPos);
       }
 
       // paste pseudomode
@@ -329,8 +329,8 @@ GrafUi.prototype.getKeyUpListener = function() {
     }
     if (self.mode == GrafUi.Mode.DRAG_SELECTION &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
-      self.grafEd.continueDraggingPartsVec(self.worldPos);
-      self.grafEd.endDraggingParts();
+      self.grafEd.continueDraggingSelectionVec(self.worldPos);
+      self.grafEd.endDraggingSelection();
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
@@ -350,15 +350,15 @@ GrafUi.prototype.getKeyUpListener = function() {
  * @param partId
  */
 GrafUi.prototype.startDraggingPart = function(partId) {
-  this.grafEd.createSelectionWithId(partId);
+  //this.grafEd.createSelectionWithId(partId);
   this.mode = GrafUi.Mode.DRAGGING_PART;
-  this.grafEd.startDraggingPartsVec(this.worldPos);
+  this.grafEd.startDraggingPartVec(partId, this.worldPos);
 };
 
 GrafUi.prototype.endDragPart = function() {
-  this.grafEd.continueDraggingPartsVec(this.worldPos);
-  this.grafEd.endDraggingParts();
-  this.grafEd.popSelection();
+  this.grafEd.continueDraggingPartVec(this.worldPos);
+  this.grafEd.endDraggingPart();
+  //this.grafEd.popSelection();
   this.viewDirty = true;
   this.mode = GrafUi.Mode.DEFAULT;
 };
@@ -369,7 +369,6 @@ GrafUi.prototype.endDragPart = function() {
  * @param jackId
  */
 GrafUi.prototype.startDraggingJack = function(jackId) {
-  this.grafEd.createSelectionWithId(jackId);
   this.mode = GrafUi.Mode.DRAGGING_JACK;
   this.grafEd.startDraggingJack(jackId, this.worldPos);
 };
@@ -377,11 +376,9 @@ GrafUi.prototype.startDraggingJack = function(jackId) {
 GrafUi.prototype.endDraggingJack = function() {
   this.grafEd.continueDraggingJackVec(this.worldPos);
   this.grafEd.endDraggingJack();
-  this.grafEd.popSelection();
   this.viewDirty = true;
   this.mode = GrafUi.Mode.DEFAULT;
 };
-
 
 
 GrafUi.prototype.getResizeListener = function() {
@@ -432,8 +429,11 @@ GrafUi.prototype.clock = function() {
   }
   if (this.mode == GrafUi.Mode.SELECT) {
     this.grafEd.continueSelectionVec(this.worldPos);
-  } else if (this.mode == GrafUi.Mode.DRAGGING_PART || this.mode == GrafUi.Mode.DRAG_SELECTION) {
-    this.grafEd.continueDraggingPartsVec(this.worldPos);
+  } else if (this.mode == GrafUi.Mode.DRAG_SELECTION) {
+    this.grafEd.continueDraggingSelectionVec(this.worldPos);
+    this.plugin.invalidate();
+  } else if (this.mode == GrafUi.Mode.DRAGGING_PART) {
+    this.grafEd.continueDraggingPartVec(this.worldPos);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.DRAGGING_JACK) {
     this.grafEd.continueDraggingJackVec(this.worldPos);

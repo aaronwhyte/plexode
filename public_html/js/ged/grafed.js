@@ -32,13 +32,16 @@ function GrafEd(model, opt_opStor) {
 
   this.selStack = new SelStack();
 
-  // Vec2d (or null)
   this.selectionStart = null;
   this.selectionEnd = null;
 
-  // Vec2d (or null)
-  this.dragPartsStart = null;
-  this.dragPartsEnd = null;
+  this.dragSelectionStart = null;
+  this.dragSelectionEnd = null;
+
+  this.dragPartId = null;
+  this.dragPartStart = null;
+  this.dragPartEnd = null;
+
   this.dragJackId = null;
   this.dragJackEnd = null;
 
@@ -153,16 +156,21 @@ GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
     var id = ids[i];
     var part = this.model.getPart(id);
     if (!part) continue; // may be a jack
-    ops.push({
-      type:GrafOp.Type.MOVE_PART,
-      id:id,
-      x:part.x + offset.x,
-      y:part.y + offset.y,
-      oldX:part.x,
-      oldY:part.y
-    });
+    ops.push(this.getMovePartOp(id, offset));
   }
   return ops;
+};
+
+GrafEd.prototype.getMovePartOp = function(partId, offset) {
+  var part = this.model.getPart(partId);
+  return {
+    type:GrafOp.Type.MOVE_PART,
+    id:partId,
+    x:part.x + offset.x,
+    y:part.y + offset.y,
+    oldX:part.x,
+    oldY:part.y
+  };
 };
 
 GrafEd.prototype.getPasteModelOps = function(offset) {
@@ -194,14 +202,14 @@ GrafEd.prototype.getSelectedIds = function(opt_num) {
 };
 
 /**
- * Creates links between all input jacks and all output jacks in the selection,
+ * Creates links between all input jacks and all output jacks in the top two selections,
  * but not input/output jacks on the same part,
  * and not between jack pairs that are already linked to each other
  */
 GrafEd.prototype.linkSelectedJacks = function() {
   var inputs = [];
   var outputs = [];
-  var ids = this.getSelectedIds();
+  var ids = this.getSelectedIds(0).concat(this.getSelectedIds(1));
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
     var jack = this.model.getJack(id);
@@ -312,33 +320,57 @@ GrafEd.prototype.getHilitedIds = function() {
 };
 
 
-GrafEd.prototype.startDraggingPartsVec = function(v) {
-  this.startDraggingPartsXY(v.x, v.y);
+GrafEd.prototype.startDraggingSelectionVec = function(v) {
+  this.startDraggingSelectionXY(v.x, v.y);
 };
 
-GrafEd.prototype.startDraggingPartsXY = function(x, y) {
-  this.dragPartsStart = new Vec2d(x, y);
-  this.dragPartsEnd = new Vec2d(x, y);
+GrafEd.prototype.startDraggingSelectionXY = function(x, y) {
+  this.dragSelectionStart = new Vec2d(x, y);
+  this.dragSelectionEnd = new Vec2d(x, y);
 };
 
-GrafEd.prototype.continueDraggingPartsVec = function(v) {
-  this.continueDraggingPartsXY(v.x, v.y);
+GrafEd.prototype.continueDraggingSelectionVec = function(v) {
+  this.continueDraggingSelectionXY(v.x, v.y);
 };
 
-GrafEd.prototype.continueDraggingPartsXY = function(x, y) {
-  this.dragPartsEnd.setXY(x, y);
+GrafEd.prototype.continueDraggingSelectionXY = function(x, y) {
+  this.dragSelectionEnd.setXY(x, y);
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
-  var offset = new Vec2d().set(this.dragPartsEnd).subtract(this.dragPartsStart);
+  var offset = new Vec2d().set(this.dragSelectionEnd).subtract(this.dragSelectionStart);
   this.stagedOps = this.getMoveSelectedPartsOps(offset);
   this.model.applyOps(this.stagedOps);
 };
 
-GrafEd.prototype.endDraggingParts = function() {
+GrafEd.prototype.endDraggingSelection = function() {
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   this.commitOps(this.stagedOps);
   this.stagedOps.length = 0;
-  this.dragPartsStart = null;
-  this.dragPartsEnd = null;
+  this.dragSelectionStart = null;
+  this.dragSelectionEnd = null;
+};
+
+
+GrafEd.prototype.startDraggingPartVec = function(partId, v) {
+  this.dragPartId = partId;
+  this.dragPartStart = new Vec2d().set(v);
+  this.dragPartEnd = new Vec2d().set(v);
+};
+
+GrafEd.prototype.continueDraggingPartVec = function(v) {
+  this.dragPartEnd.set(v);
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  var offset = new Vec2d().set(this.dragPartEnd).subtract(this.dragPartStart);
+  this.stagedOps = [this.getMovePartOp(this.dragPartId, offset)];
+  this.model.applyOps(this.stagedOps);
+};
+
+GrafEd.prototype.endDraggingPart = function() {
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  this.commitOps(this.stagedOps);
+  this.stagedOps.length = 0;
+  this.dragPartId = null;
+  this.dragPartStart = null;
+  this.dragPartEnd = null;
 };
 
 
