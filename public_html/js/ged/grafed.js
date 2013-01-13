@@ -32,13 +32,15 @@ function GrafEd(model, opt_opStor) {
 
   this.selStack = new SelStack();
 
-  // two Vec2ds (or nulls)
+  // Vec2d (or null)
   this.selectionStart = null;
   this.selectionEnd = null;
 
-  // two Vec2ds (or nulls)
-  this.dragStart = null;
-  this.dragEnd = null;
+  // Vec2d (or null)
+  this.dragPartsStart = null;
+  this.dragPartsEnd = null;
+  this.dragJackId = null;
+  this.dragJackEnd = null;
 
   // A list of GrafOps that are reflected in the GrafModel, but not commited to the OpStor.
   // Used by continuous-preview changes, like dragging parts
@@ -215,26 +217,23 @@ GrafEd.prototype.linkSelectedJacks = function() {
     var input = inputs[inputIndex];
     for (var outputIndex = 0; outputIndex < outputs.length; outputIndex++) {
       var output = outputs[outputIndex];
-      if (output.partId == input.partId) {
-        // Don't link a part to itself.
-//        console.log('not linking a part to itself');
-        continue;
+      if (output.partId != input.partId &&
+          0 == this.model.getLinksBetweenJacks(output.id, input.id).length) {
+        ops.push(this.getLinkOp(output.id, input.id));
       }
-      // Make sure they're not already linked.
-      if (this.model.getLinksBetweenJacks(output.id, input.id).length) {
-//        console.log('not linking jacks that are already linked');
-        continue;
-      }
-//      console.log(['linking jacks:', input.id, output.id].join(' '));
-      ops.push({
-        type: GrafOp.Type.ADD_LINK,
-        id: this.model.newId(),
-        jackId1: output.id,
-        jackId2: input.id
-      });
     }
   }
   this.commitOps(ops);
+};
+
+GrafEd.prototype.getLinkOp = function(jackId1, jackId2) {
+  // console.log(['linking jacks:', input.id, output.id].join(' '));
+  return {
+    type: GrafOp.Type.ADD_LINK,
+    id: this.model.newId(),
+    jackId1: jackId1,
+    jackId2: jackId2
+  };
 };
 
 GrafEd.prototype.setDataOnSelection = function(keyVals) {
@@ -312,34 +311,76 @@ GrafEd.prototype.getHilitedIds = function() {
       this.selectionEnd.x, this.selectionEnd.y);
 };
 
-GrafEd.prototype.startDragVec = function(v) {
-  this.startDragXY(v.x, v.y);
+
+GrafEd.prototype.startDraggingPartsVec = function(v) {
+  this.startDraggingPartsXY(v.x, v.y);
 };
 
-GrafEd.prototype.startDragXY = function(x, y) {
-  this.dragStart = new Vec2d(x, y);
-  this.dragEnd = new Vec2d(x, y);
+GrafEd.prototype.startDraggingPartsXY = function(x, y) {
+  this.dragPartsStart = new Vec2d(x, y);
+  this.dragPartsEnd = new Vec2d(x, y);
 };
 
-GrafEd.prototype.continueDragVec = function(v) {
-  this.continueDragXY(v.x, v.y);
+GrafEd.prototype.continueDraggingPartsVec = function(v) {
+  this.continueDraggingPartsXY(v.x, v.y);
 };
 
-GrafEd.prototype.continueDragXY = function(x, y) {
-  this.dragEnd.setXY(x, y);
+GrafEd.prototype.continueDraggingPartsXY = function(x, y) {
+  this.dragPartsEnd.setXY(x, y);
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
-  var offset = new Vec2d().set(this.dragEnd).subtract(this.dragStart);
+  var offset = new Vec2d().set(this.dragPartsEnd).subtract(this.dragPartsStart);
   this.stagedOps = this.getMoveSelectedPartsOps(offset);
   this.model.applyOps(this.stagedOps);
 };
 
-GrafEd.prototype.endDrag = function() {
+GrafEd.prototype.endDraggingParts = function() {
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   this.commitOps(this.stagedOps);
   this.stagedOps.length = 0;
-  this.dragStart = null;
-  this.dragEnd = null;
+  this.dragPartsStart = null;
+  this.dragPartsEnd = null;
 };
+
+
+GrafEd.prototype.startDraggingJack = function(jackId, endVec) {
+  this.dragJackId = jackId;
+  this.dragJackEnd = new Vec2d().set(endVec);
+};
+
+GrafEd.prototype.continueDraggingJackVec = function(v) {
+  this.dragJackEnd.set(v);
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  // maybe create link ops
+  var linkableJack = this.getLinkableJack(this.dragJackId, this.dragJackEnd);
+  if (linkableJack) {
+    this.stagedOps = [this.getLinkOp(this.dragJackId, linkableJack.id)];
+  } else {
+    this.stagedOps.length = 0;
+  }
+  this.model.applyOps(this.stagedOps);
+};
+
+GrafEd.prototype.getLinkableJack = function(fromJackId, toVec) {
+  var fromJack = this.model.getJack(fromJackId);
+  var toJack = this.geom.getNearestJack(toVec);
+  if (toJack && toJack.isInput() != fromJack.isInput() &&
+      0 == this.model.getLinksBetweenJacks(fromJack.id, toJack.id).length) {
+    return toJack;
+  }
+  return null;
+};
+
+
+GrafEd.prototype.endDraggingJack = function() {
+  this.model.applyOps(GrafOp.createReverses(this.stagedOps));
+  if (this.stagedOps.length) {
+    this.commitOps(this.stagedOps);
+    this.stagedOps.length = 0;
+  }
+  this.dragJackId = null;
+  this.dragJackEnd = null;
+};
+
 
 GrafEd.prototype.startPasteVec = function(model, v) {
   this.startPasteXY(model, v.x, v.y);
@@ -378,6 +419,7 @@ GrafEd.prototype.endPaste = function() {
   this.pasteStart = null;
   this.pasteEnd = null;
 };
+
 
 /**
  * Deleting a jack only deletes its links, not the jack.

@@ -177,7 +177,56 @@ GrafGeom.prototype.getRadById = function(id) {
  * @return a model ID, either a partId or a jackId, or null if nothing is close enough
  */
 GrafGeom.prototype.getNearestId = function(pos, opt_maxDist) {
+  var obj = this.getNearestPartOrJack(pos, opt_maxDist);
+  return obj ? obj.id : null;
+};
+
+/**
+ * @param {Vec2d} pos
+ * @param {number=} opt_maxDist
+ * @return {GrafJack | GrafPart | null}
+ */
+GrafGeom.prototype.getNearestPartOrJack = function(pos, opt_maxDist) {
+  var part = this.getNearestPart(pos, opt_maxDist);
+  var jack = this.getNearestJack(pos, opt_maxDist);
+  if (part && jack) {
+    var partDistSq = Vec2d.distanceSq(pos.x, pos.y, part.x, part.y);
+    var jackDistSq = Vec2d.distanceSq(pos.x, pos.y, jack.x, jack.y);
+    return jackDistSq < partDistSq ? jack : part;
+  }
+  return part || jack;
+};
+
+/**
+ * @param {Vec2d} pos
+ * @param {number=} opt_maxDist defaults to jack radius + padding
+ * @return {GrafJack?} a jack, or null
+ */
+GrafGeom.prototype.getNearestJack = function(pos, opt_maxDist) {
   var jackPos = Vec2d.alloc();
+
+  var maxDist = opt_maxDist || (GrafGeom.JACK_RADIUS + GrafGeom.SELECTION_PADDING);
+  var leastDistSq = maxDist * maxDist;
+  var retId = null;
+
+  for (var jackId in this.model.jacks) {
+    this.getJackPos(jackId, jackPos);
+    var distSq = pos.distanceSquared(jackPos);
+    if (distSq < leastDistSq) {
+      retId = jackId;
+      leastDistSq = distSq;
+    }
+  }
+  Vec2d.free(jackPos);
+  return this.model.getJack(retId);
+};
+
+/**
+ * @param {Vec2d} pos
+ * @param {number=} opt_maxDist defaults to defaults to part radius + padding
+ * @return {GrafPart?} a part, or null
+ */
+GrafGeom.prototype.getNearestPart = function(pos, opt_maxDist) {
   var partPos = Vec2d.alloc();
 
   var maxDist = opt_maxDist || 1;
@@ -192,18 +241,9 @@ GrafGeom.prototype.getNearestId = function(pos, opt_maxDist) {
       retId = partId;
       leastDistSq = distSq;
     }
-    for (var jackId in part.jacks) {
-      this.getJackPos(jackId, jackPos);
-      distSq = pos.distanceSquared(jackPos);
-      if (distSq < leastDistSq) {
-        retId = jackId;
-        leastDistSq = distSq;
-      }
-    }
   }
-  Vec2d.free(jackPos);
   Vec2d.free(partPos);
-  return retId;
+  return this.model.getPart(retId);
 };
 
 /**
