@@ -77,8 +77,8 @@ GrafUi.HILITE_LINE_WIDTH = 1.5;
  */
 GrafUi.Mode = {
   DEFAULT: 'default',
-  DRAGGING_PART: 'drag_part',
-  DRAGGING_JACK: 'drag_jack',
+  DRAG_PART: 'drag_part',
+  DRAG_JACK: 'drag_jack',
   DRAG_SELECTION: 'drag_sel',
   PASTE: 'paste',
   SELECT: 'select'
@@ -188,7 +188,9 @@ GrafUi.prototype.getMouseDownListener = function() {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
     } else {
-      if (self.grafEd.getPart(id)) {
+      if (self.grafEd.isSelected(id)) {
+        self.startDraggingSelection();
+      } else if (self.grafEd.getPart(id)) {
         self.startDraggingPart(id);
       } else if (self.grafEd.getJack(id)) {
         self.startDraggingJack(id);
@@ -205,10 +207,13 @@ GrafUi.prototype.getMouseUpListener = function() {
     self.panning = false;
     self.setCanvasPosWithEvent(event);
 
-    if (self.mode == GrafUi.Mode.DRAGGING_PART) {
-      self.endDragPart();
+    if (self.mode == GrafUi.Mode.DRAG_SELECTION) {
+      self.endDraggingSelection();
     }
-    if (self.mode == GrafUi.Mode.DRAGGING_JACK) {
+    if (self.mode == GrafUi.Mode.DRAG_PART) {
+      self.endDraggingPart();
+    }
+    if (self.mode == GrafUi.Mode.DRAG_JACK) {
       self.endDraggingJack();
     }
 
@@ -329,10 +334,7 @@ GrafUi.prototype.getKeyUpListener = function() {
     }
     if (self.mode == GrafUi.Mode.DRAG_SELECTION &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
-      self.grafEd.continueDraggingSelectionVec(self.worldPos);
-      self.grafEd.endDraggingSelection();
-      self.viewDirty = true;
-      self.mode = GrafUi.Mode.DEFAULT;
+      self.endDraggingSelection();
     }
     if (self.mode == GrafUi.Mode.SELECT &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
@@ -344,6 +346,20 @@ GrafUi.prototype.getKeyUpListener = function() {
   };
 };
 
+
+GrafUi.prototype.startDraggingSelection = function() {
+  this.mode = GrafUi.Mode.DRAG_SELECTION;
+  this.grafEd.startDraggingSelectionVec(this.worldPos);
+};
+
+GrafUi.prototype.endDraggingSelection = function() {
+  this.grafEd.continueDraggingSelectionVec(this.worldPos);
+  this.grafEd.endDraggingSelection();
+  this.viewDirty = true;
+  this.mode = GrafUi.Mode.DEFAULT;
+};
+
+
 /**
  * Start dragging a previously unselected part.
  * Creates a temporary selection.
@@ -351,11 +367,11 @@ GrafUi.prototype.getKeyUpListener = function() {
  */
 GrafUi.prototype.startDraggingPart = function(partId) {
   //this.grafEd.createSelectionWithId(partId);
-  this.mode = GrafUi.Mode.DRAGGING_PART;
+  this.mode = GrafUi.Mode.DRAG_PART;
   this.grafEd.startDraggingPartVec(partId, this.worldPos);
 };
 
-GrafUi.prototype.endDragPart = function() {
+GrafUi.prototype.endDraggingPart = function() {
   this.grafEd.continueDraggingPartVec(this.worldPos);
   this.grafEd.endDraggingPart();
   //this.grafEd.popSelection();
@@ -369,7 +385,7 @@ GrafUi.prototype.endDragPart = function() {
  * @param jackId
  */
 GrafUi.prototype.startDraggingJack = function(jackId) {
-  this.mode = GrafUi.Mode.DRAGGING_JACK;
+  this.mode = GrafUi.Mode.DRAG_JACK;
   this.grafEd.startDraggingJack(jackId, this.worldPos);
 };
 
@@ -432,10 +448,10 @@ GrafUi.prototype.clock = function() {
   } else if (this.mode == GrafUi.Mode.DRAG_SELECTION) {
     this.grafEd.continueDraggingSelectionVec(this.worldPos);
     this.plugin.invalidate();
-  } else if (this.mode == GrafUi.Mode.DRAGGING_PART) {
+  } else if (this.mode == GrafUi.Mode.DRAG_PART) {
     this.grafEd.continueDraggingPartVec(this.worldPos);
     this.plugin.invalidate();
-  } else if (this.mode == GrafUi.Mode.DRAGGING_JACK) {
+  } else if (this.mode == GrafUi.Mode.DRAG_JACK) {
     this.grafEd.continueDraggingJackVec(this.worldPos);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.PASTE) {

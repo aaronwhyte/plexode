@@ -195,6 +195,12 @@ GrafEd.prototype.moveSelectedParts = function(offset) {
   this.commitOps(ops);
 };
 
+GrafEd.prototype.isSelected = function(id, opt_num) {
+  var num = opt_num || 0;
+  var stringSet = this.selStack.peek(num);
+  return stringSet && stringSet.contains(id);
+};
+
 GrafEd.prototype.getSelectedIds = function(opt_num) {
   var num = opt_num || 0;
   var stringSet = this.selStack.peek(num);

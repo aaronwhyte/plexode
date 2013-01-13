@@ -25,7 +25,9 @@ Selection Itself
 - subtract top selection from prev selection: soft button?
 - forget top selection: soft button?
 With Selected Items
-- drag selected: down on selected, drag, up. Remove "D".
+- drag selected:
+  v down on selected, drag, up.
+  - Remove "D".
 - delete selected: button on select-box, or soft "delete" button, or "delete" key
 - copy selected: button on select-box, or soft "copy" button, or "c" key
 - paste: This one is hard. Maybe drag from the pastable thing to the canvas. Or click the pastable thing to enter Paste Mode
