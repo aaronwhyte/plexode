@@ -15,18 +15,22 @@ New design:
   v mouse: mouse-drag empty area
 Without Selection
 v drag unselected: down on unselected, drag, up
-- link: down on linkpoint, drag to other linkpoint, up
+v link: down on linkpoint, drag to other linkpoint, up
 - delete unselected? nah
-With Selection
+Selection Itself
 - select:
   touch: down on empty space, drag, up
-  mouse: right-mouse drag? Shift-drag? HM.
-- drag selected: down on selected, drag, up
+  mouse: right-mouse drag? Shift-drag? HM. Remove "S".
+- combine top two selections: soft button?
+- subtract top selection from prev selection: soft button?
+- forget top selection: soft button?
+With Selected Items
+- drag selected: down on selected, drag, up. Remove "D".
 - delete selected: button on select-box, or soft "delete" button, or "delete" key
 - copy selected: button on select-box, or soft "copy" button, or "c" key
 - paste: This one is hard. Maybe drag from the pastable thing to the canvas. Or click the pastable thing to enter Paste Mode
 Other:
-- undo/redo: soft buttons, or Z/shift-Z
+- undo/redo: soft buttons, and Z/shift-Z
 
 InstaVorp
 - super basic url
