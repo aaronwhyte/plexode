@@ -22,7 +22,6 @@ GedMsgs = {
     SUBTRACT_SELECTIONS: 'Subtract the current selection from the previous selection. ' +
         '<br>You know, push(subtract(pop(), pop())',
 
-    DRAG_SELECTION: 'Drag the selected parts by holding the key down and moving the pointer.',
     LINK: 'Link any input and output jacks in the current selection. ' +
         'Input jacks are on top of parts. Output jacks are on the bottom.',
     DELETE: 'Delete parts in the current selection, or delete links to selected jacks.',

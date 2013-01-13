@@ -98,7 +98,6 @@ GrafUi.Action = {
   PASTE: 'paste',
   DELETE: 'delete',
 
-  DRAG_SELECTION: 'drag',
   LINK: 'link',
 
   UNDO: 'undo',
@@ -292,19 +291,11 @@ GrafUi.prototype.getKeyDownListener = function() {
 
       // select pseudomode, or undo (pop) selection
       if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
-        self.viewDirty = true;
-        self.mode = GrafUi.Mode.SELECT;
-        self.grafEd.startSelectionVec(self.worldPos);
+        self.startSelection();
       }
       if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNSELECT)) {
         self.viewDirty = true;
         self.grafEd.popSelection();
-      }
-
-      // drag pseudomode
-      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
-        self.mode = GrafUi.Mode.DRAG_SELECTION;
-        self.grafEd.startDraggingSelectionVec(self.worldPos);
       }
 
       // paste pseudomode
@@ -332,18 +323,25 @@ GrafUi.prototype.getKeyUpListener = function() {
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }
-    if (self.mode == GrafUi.Mode.DRAG_SELECTION &&
-        self.keyCombos.eventMatchesAction(event, GrafUi.Action.DRAG_SELECTION)) {
-      self.endDraggingSelection();
-    }
     if (self.mode == GrafUi.Mode.SELECT &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
-      self.grafEd.continueSelectionVec(self.worldPos);
-      self.grafEd.endSelection();
-      self.viewDirty = true;
-      self.mode = GrafUi.Mode.DEFAULT;
+      self.endSelection();
     }
   };
+};
+
+
+GrafUi.prototype.startSelection = function() {
+  this.viewDirty = true;
+  this.mode = GrafUi.Mode.SELECT;
+  this.grafEd.startSelectionVec(this.worldPos);
+};
+
+GrafUi.prototype.endSelection = function() {
+  this.grafEd.continueSelectionVec(this.worldPos);
+  this.grafEd.endSelection();
+  this.viewDirty = true;
+  this.mode = GrafUi.Mode.DEFAULT;
 };
 
 

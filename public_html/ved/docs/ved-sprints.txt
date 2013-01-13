@@ -14,20 +14,26 @@ New design:
   - touch: 2-finger drag
   v mouse: mouse-drag empty area
 Without Selection
-v drag unselected: down on unselected, drag, up
-v link: down on linkpoint, drag to other linkpoint, up
-- delete unselected? nah
+- drag unselected: down on unselected, drag, up
+  v mouse
+  - touch
+- link: down on linkpoint, drag to other linkpoint, up
+  v mouse
+  - touch
+x delete unselected? nah
 Selection Itself
 - select:
   touch: down on empty space, drag, up
-  mouse: right-mouse drag? Shift-drag? HM. Remove "S".
-- combine top two selections: soft button?
+  mouse: Shift-drag? "S"?
+- add top two selections: soft button?
 - subtract top selection from prev selection: soft button?
 - forget top selection: soft button?
 With Selected Items
 - drag selected:
-  v down on selected, drag, up.
-  - Remove "D".
+  - down on selected, drag, up.
+    v mouse
+    - touch
+  v Remove "D".
 - delete selected: button on select-box, or soft "delete" button, or "delete" key
 - copy selected: button on select-box, or soft "copy" button, or "c" key
 - paste: This one is hard. Maybe drag from the pastable thing to the canvas. Or click the pastable thing to enter Paste Mode
