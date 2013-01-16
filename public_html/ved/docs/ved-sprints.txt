@@ -5,40 +5,37 @@ Primary UX study findings:
 * People can't find the help.
 * Even with help, everything's a little hard, and two
 * Linking things is totes imposs-EE-blay for people.
+Mouse UI adjustments:
+v pan: mouse-drag empty area
+Without Selection
+v drag unselected: down on unselected, drag, up
+- link:
+  v down on linkpoint, drag to other linkpoint, up
+  - linking-mode indicator, like a dotted line from the start to the cursor
+With Selected Items
+v drag selected:
+  v down on selected, drag, up.
+  v Remove "D".
 
-New design:
-- zoom:
-  - touch: pinch
-  v mouse: wheel
-- pan:
-  - touch: 2-finger drag
-  v mouse: mouse-drag empty area
+
+Touch UI
+- zoom pinch
+- pan: 2-finger drag
 Without Selection
 - drag unselected: down on unselected, drag, up
-  v mouse
-  - touch
 - link: down on linkpoint, drag to other linkpoint, up
-  v mouse
-  - touch
-x delete unselected? nah
 Selection Itself
-- select:
-  touch: down on empty space, drag, up
-  mouse: Shift-drag? "S"?
-- add top two selections: soft button?
-- subtract top selection from prev selection: soft button?
+- select: touch: down on empty space, drag, up
+- add top two selections: soft button
+- subtract top selection from prev selection: soft button
 - forget top selection: soft button?
 With Selected Items
-- drag selected:
-  - down on selected, drag, up.
-    v mouse
-    - touch
-  v Remove "D".
-- delete selected: button on select-box, or soft "delete" button, or "delete" key
-- copy selected: button on select-box, or soft "copy" button, or "c" key
+- drag selected: down on selected, drag, up.
+- delete selected: button on select-box, or soft "delete" button
+- copy selected: button on select-box, or soft "copy" button
 - paste: This one is hard. Maybe drag from the pastable thing to the canvas. Or click the pastable thing to enter Paste Mode
 Other:
-- undo/redo: soft buttons, and Z/shift-Z
+- undo/redo: soft buttons
 
 InstaVorp
 - super basic url
@@ -55,10 +52,6 @@ Field editing
 - Modal HTML form showing all field key/value pairs for editing.
 
 Draw portal link or cluster hilite or something.
-
-Ved Touch Controls
-
-Vorp touch controls
 
 Add level
 

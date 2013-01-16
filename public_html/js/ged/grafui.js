@@ -181,19 +181,20 @@ GrafUi.prototype.getMouseDownListener = function() {
   return function(event) {
     self.viewDirty = true;
     event = event || window.event;
-    // panning, dragging, or linking, depending on what was touched.
     var id = self.grafGeom.getIdAtVec(self.getWorldPosOfCanvasPos());
+    var inDefaultMode = self.mode == GrafUi.Mode.DEFAULT;
+//    if (inDefaultMode && event.shiftKey) {
+//      self.startSelection();
+//    }
     if (id == null) {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
-    } else {
-      if (self.grafEd.isSelected(id)) {
-        self.startDraggingSelection();
-      } else if (self.grafEd.getPart(id)) {
-        self.startDraggingPart(id);
-      } else if (self.grafEd.getJack(id)) {
-        self.startDraggingJack(id);
-      }
+    } else if (inDefaultMode && self.grafEd.isSelected(id)) {
+      self.startDraggingSelection();
+    } else if (inDefaultMode && self.grafEd.getPart(id)) {
+      self.startDraggingPart(id);
+    } else if (inDefaultMode && self.grafEd.getJack(id)) {
+      self.startDraggingJack(id);
     }
   };
 };
@@ -206,16 +207,16 @@ GrafUi.prototype.getMouseUpListener = function() {
     self.panning = false;
     self.setCanvasPosWithEvent(event);
 
+//    if (self.mode == GrafUi.Mode.SELECT) {
+//      self.endSelection();
+//    }
     if (self.mode == GrafUi.Mode.DRAG_SELECTION) {
       self.endDraggingSelection();
-    }
-    if (self.mode == GrafUi.Mode.DRAG_PART) {
+    } else if (self.mode == GrafUi.Mode.DRAG_PART) {
       self.endDraggingPart();
-    }
-    if (self.mode == GrafUi.Mode.DRAG_JACK) {
+    } else if (self.mode == GrafUi.Mode.DRAG_JACK) {
       self.endDraggingJack();
     }
-
   };
 };
 
@@ -285,6 +286,11 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.grafEd.redo();
     }
 
+    // unselect
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNSELECT)) {
+      self.viewDirty = true;
+      self.grafEd.popSelection();
+    }
     // Mouse-motion quasimodes only work once we know where the mouse is.
     // Only allow one quasimode at a time.
     if (self.canvasPos && self.mode == GrafUi.Mode.DEFAULT) {
@@ -292,10 +298,6 @@ GrafUi.prototype.getKeyDownListener = function() {
       // select pseudomode, or undo (pop) selection
       if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.SELECT)) {
         self.startSelection();
-      }
-      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNSELECT)) {
-        self.viewDirty = true;
-        self.grafEd.popSelection();
       }
 
       // paste pseudomode
