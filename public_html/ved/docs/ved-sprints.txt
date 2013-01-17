@@ -1,5 +1,5 @@
-2013.01.04 -
-New Dev Key/Mouse Controls
+2013.01.04 - 2013.01.16
+Improved Dev Key/Mouse Controls
 Primary UX study findings:
 * People can't figure out how it works without extensively studying the help.
 * People can't find the help.
@@ -9,14 +9,48 @@ Mouse UI adjustments:
 v pan: mouse-drag empty area
 Without Selection
 v drag unselected: down on unselected, drag, up
-- link:
+v link:
   v down on linkpoint, drag to other linkpoint, up
-  - linking-mode indicator, like a dotted line from the start to the cursor
+  v linking-mode indicator, like a dimmed line from the start to the cursor
 With Selected Items
 v drag selected:
   v down on selected, drag, up.
   v Remove "D".
 
+sysclips widget
+copy sysclip to currentClip
+copy selection to currentClip
+- paste currentClip
+- recent user clips
+
+Field editing
+- Modal HTML form showing all field key/value pairs for editing.
+
+Draw portal link or cluster hilite or something.
+
+
+Milestone: Ship fun levels created entirely in Ved
+- Ved usable by me for editing.
+- Some way to publish levels
+  - JSON view + cut-n-paste?
+  - insta-vorp URLs?
+    - better link compressor
+      - linkifier-friendly
+      - plugin dictionary support.
+- Actually make new levels.
+
+Add level
+Delete level
+Rename level
+
+InstaVorp
+- super basic url
+- figure out best dictionary
+- maybe round floating-pt precision
+
+Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
+
+Milestone: Ship Ved itself
 
 Touch UI
 - zoom pinch
@@ -36,37 +70,3 @@ With Selected Items
 - paste: This one is hard. Maybe drag from the pastable thing to the canvas. Or click the pastable thing to enter Paste Mode
 Other:
 - undo/redo: soft buttons
-
-InstaVorp
-- super basic url
-- figure out best dictionary
-- maybe round floating-pt precision
-
-sysclips widget
-copy sysclip to currentClip
-copy selection to currentClip
-- paste currentClip
-- recent user clips
-
-Field editing
-- Modal HTML form showing all field key/value pairs for editing.
-
-Draw portal link or cluster hilite or something.
-
-Add level
-
-Delete level
-
-Milestone: Ship fun levels created entirely in Ved
-- Ved usable by me for editing.
-- Some way to publish levels
-  - JSON view + cut-n-paste?
-  - insta-vorp URLs?
-    - better link compressor
-      - linkifier-friendly
-      - plugin dictionary support.
-- Actually make new levels.
-
-Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
-
-Milestone: Ship Ved itself

@@ -522,8 +522,18 @@ GrafUi.prototype.draw = function() {
   this.renderer.setStrokeStyle(GrafUi.HOVER_COLOR);
   this.strokeHiliteForIds(this.grafGeom.getIdsAtXY(this.worldPos.x, this.worldPos.y));
 
+  // link-mode indicator, when there's no staged link operation
+  if (this.mode == GrafUi.Mode.DRAG_JACK && !this.grafEd.hasStagedOps()) {
+    this.renderer.context.lineWidth = GrafRend.MODEL_LINE_WIDTH / this.renderer.getZoom();
+    this.renderer.setStrokeStyle(GrafRend.MODEL_PREVIEW_STROKE_STYLE);
+    this.renderer.drawLineVV(
+        this.grafGeom.getPosById(this.grafEd.dragJackId),
+        this.grafEd.dragJackEnd);
+  }
+
   this.renderer.transformEnd();
   this.viewDirty = false;
+
 };
 
 GrafUi.prototype.strokeHiliteForIds = function(ids) {

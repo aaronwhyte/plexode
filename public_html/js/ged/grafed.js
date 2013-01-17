@@ -390,12 +390,18 @@ GrafEd.prototype.continueDraggingJackVec = function(v) {
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   // maybe create link ops
   var linkableJack = this.getLinkableJack(this.dragJackId, this.dragJackEnd);
+  this.stagedOps.length = 0;
   if (linkableJack) {
-    this.stagedOps = [this.getLinkOp(this.dragJackId, linkableJack.id)];
-  } else {
-    this.stagedOps.length = 0;
+    this.stagedOps.push(this.getLinkOp(this.dragJackId, linkableJack.id));
   }
   this.model.applyOps(this.stagedOps);
+};
+
+/**
+ * @return {boolean}
+ */
+GrafEd.prototype.hasStagedOps = function() {
+  return this.stagedOps && this.stagedOps.length > 0;
 };
 
 GrafEd.prototype.getLinkableJack = function(fromJackId, toVec) {

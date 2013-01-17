@@ -15,8 +15,9 @@ function GrafRend(plugin, renderer, geom) {
   this.viewDirty = true;
 }
 
-GrafRend.MODEL_LINE_WIDTH = 2;
-GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.25)';
+GrafRend.MODEL_LINE_WIDTH = 3;
+GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
+GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.17)';
 
 GrafRend.prototype.resize = function(width, height) {
   this.renderer.canvas.width = width;
