@@ -232,9 +232,10 @@ Transformer.prototype.transformCluster = function(cluster) {
       controlVec = new Vec2d(part.x, part.y);
       template = this.createBaseTemplate()
           .makeIntangible()
+          .setPainter(new TimerPainter())
           .setPos(controlVec);
       sprite = new TimerSprite(template);
-      sprite.setTimeoutLength(parts[0].data['timeout']);
+      sprite.setTimeoutLength(Number(parts[0].data['timeout']));
       this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;

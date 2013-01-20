@@ -189,12 +189,12 @@ GrafUi.prototype.getMouseDownListener = function() {
     if (id == null) {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
+    } else if (inDefaultMode && self.grafEd.getJack(id)) {
+      self.startDraggingJack(id);
     } else if (inDefaultMode && self.grafEd.isSelected(id)) {
       self.startDraggingSelection();
     } else if (inDefaultMode && self.grafEd.getPart(id)) {
       self.startDraggingPart(id);
-    } else if (inDefaultMode && self.grafEd.getJack(id)) {
-      self.startDraggingJack(id);
     }
   };
 };

@@ -9,10 +9,8 @@ TimerPainter.prototype = new Painter(1);
 TimerPainter.prototype.constructor = TimerPainter;
 
 TimerPainter.prototype.paint = function(renderer, layer) {
-//  renderer.setFillStyle('#000');
-//  e = this.events.getFromHead(0);
-//  e.moveToTime(this.now);
-//  renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+  if (layer == Vorp.LAYER_EDIT) {
+  }
 };
 
 TimerPainter.prototype.isKaput = function() {

@@ -74,9 +74,11 @@ Vorp.CELL_SIZE = 100;
 Vorp.LAYERS = [
   Vorp.LAYER_SPARKS = 'sparks',
   Vorp.LAYER_MASSES = 'masses',
-  Vorp.LAYER_SUPERSPARKS = 'oversparks',
-  Vorp.LAYER_DEBUG = 'debug'
+  Vorp.LAYER_SUPERSPARKS = 'oversparks'
 ];
+// optional layers
+Vorp.LAYER_DEBUG = 'debug';
+Vorp.LAYER_EDIT = 'edit';
 
 Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
@@ -366,13 +368,11 @@ Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos
     this.renderer.context.clip();
   }
 
-  // painters paint in layers
   for (var i = 0; i < Vorp.LAYERS.length; i++) {
-    var layer = Vorp.LAYERS[i];
-    for (var j = 0; j < this.painters.length; j++) {
-      var painter = this.painters[j];
-      painter.paint(this.renderer, layer);
-    }
+    this.drawLayer(Vorp.LAYERS[i]);
+  }
+  if (this.editable) {
+    this.drawLayer(Vorp.LAYER_EDIT);
   }
 
   if (opt_drawColliderDebugging) {
@@ -381,6 +381,13 @@ Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos
   }
 
   this.renderer.transformEnd();
+};
+
+Vorp.prototype.drawLayer = function(layer) {
+  for (var j = 0; j < this.painters.length; j++) {
+    var painter = this.painters[j];
+    painter.paint(this.renderer, layer);
+  }
 };
 
 Vorp.prototype.now = function() {

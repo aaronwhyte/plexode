@@ -17,11 +17,11 @@ v drag selected:
   v down on selected, drag, up.
   v Remove "D".
 
+2013.01.19
+v Text labels on parts
+
 sysclips widget
-copy sysclip to currentClip
-copy selection to currentClip
-- paste currentClip
-- recent user clips
+- copy sysclip to currentClip
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.

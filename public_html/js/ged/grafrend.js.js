@@ -17,7 +17,12 @@ function GrafRend(plugin, renderer, geom) {
 
 GrafRend.MODEL_LINE_WIDTH = 3;
 GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
-GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.17)';
+GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.15)';
+
+GrafRend.LABEL_STROKE_STYLE = 'rgba(0, 0, 0, 0.3)';
+GrafRend.LABEL_FILL_STYLE = 'rgba(255, 255, 255, 0.3)';
+//GrafRend.LABEL_FILL_STYLE = GrafRend.MODEL_STROKE_STYLE;
+GrafRend.LABEL_FONT = '14pt Lucida Grande, Courier New, sans serif';
 
 GrafRend.prototype.resize = function(width, height) {
   this.renderer.canvas.width = width;
@@ -60,17 +65,29 @@ GrafRend.prototype.draw = function() {
   this.plugin.render(model);
 
   this.renderer.transformStart();
+
   this.renderer.setStrokeStyle(GrafRend.MODEL_STROKE_STYLE);
+  this.renderer.setFillStyle(GrafRend.MODEL_STROKE_STYLE);
   this.renderer.context.lineWidth = GrafRend.MODEL_LINE_WIDTH / this.renderer.getZoom();
+
+  // links
+  for (var linkId in model.links) {
+    this.drawLink(model.links[linkId]);
+  }
 
   // clusters, parts, jacks
   for (var clusterId in model.clusters) {
     this.drawCluster(model.getCluster(clusterId));
   }
 
-  // links
-  for (var linkId in model.links) {
-    this.drawLink(model.links[linkId]);
+  // labels
+  this.renderer.context.font = GrafRend.LABEL_FONT;;
+  this.renderer.context.textAlign = 'center';
+  this.renderer.context.textBaseline = 'middle';
+  this.renderer.setStrokeStyle(GrafRend.LABEL_STROKE_STYLE);
+  this.renderer.setFillStyle(GrafRend.LABEL_FILL_STYLE);
+  for (var clusterId in model.clusters) {
+    this.drawClusterLabels(model.getCluster(clusterId));
   }
 
   this.renderer.transformEnd();
@@ -97,3 +114,20 @@ GrafRend.prototype.drawLink = function(link) {
       this.geom.getJackPos(link.jackId1),
       this.geom.getJackPos(link.jackId2));
 };
+
+GrafRend.prototype.drawClusterLabels = function(cluster) {
+  var parts = cluster.getPartList();
+  for (var i = 0; i < parts.length; i++) {
+    this.drawPartLabels(parts[i], cluster);
+  }
+};
+
+GrafRend.prototype.drawPartLabels = function(part, cluster) {
+  var text = part.data.type || cluster.data.type || null;
+  if (text) {
+    text = text.replace('_', ' ');
+    this.renderer.context.strokeText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
+    this.renderer.context.fillText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
+  }
+};
+
