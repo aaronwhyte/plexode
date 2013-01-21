@@ -20,7 +20,9 @@ v drag selected:
 2013.01.19
 v Text labels on parts
 
+2013.01.19
 sysclips widget
+- help-like expand/collapse widget
 - copy sysclip to currentClip
 
 Field editing

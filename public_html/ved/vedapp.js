@@ -160,31 +160,48 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
 
   var plexKeys = new plex.Keys();
   var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
-
-  // help
-  var gedHelp = new GedHelp(GedMsgs, plexKeys, grafUiKeyCombos);
-
-  var helpToggle = plex.dom.ce('button', appDiv);
-  helpToggle.id = 'gedHelpToggle';
-  helpToggle.onclick = this.getHelpToggleFunc();
-  helpToggle.innerHTML = GedMsgs.help.HELP;
-
-  var helpWrapper = plex.dom.ce('div', appDiv);
-  helpWrapper.id = 'gedHelpWrapper';
-  helpWrapper.style.display = 'none';
-  helpWrapper.innerHTML = gedHelp.formatHtml();
-
+  this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
+  this.renderSysClips(appDiv);
   var clipboard = this.createClipboard(appDiv);
   var grafUi = this.createGrafUi(appDiv, levelName, clipboard, grafUiKeyCombos);
   grafUi.startLoop();
   this.looper = grafUi;
 };
 
-VedApp.prototype.getHelpToggleFunc = function() {
+VedApp.prototype.renderHelp = function(appDiv, plexKeys, grafUiKeyCombos) {
+  var wrapper = plex.dom.ce('div', appDiv);
+  wrapper.id = 'gedHelpWrapper';
+  wrapper.style.display = 'none';
+  var gedHelp = new GedHelp(GedMsgs, plexKeys, grafUiKeyCombos);
+  wrapper.innerHTML = gedHelp.formatHtml();
+
+  var toggle = plex.dom.ce('button', appDiv);
+  toggle.id = 'gedHelpToggle';
+  toggle.onclick = this.getToggleFunc(wrapper.id);
+  toggle.innerHTML = GedMsgs.help.HELP;
+};
+
+VedApp.prototype.getToggleFunc = function(idToToggle) {
   return function() {
-    var helpDiv = document.getElementById('gedHelpWrapper');
+    var helpDiv = document.getElementById(idToToggle);
     helpDiv.style.display = helpDiv.style.display == 'none' ? 'block' : 'none';
   };
+};
+
+VedApp.prototype.renderSysClips = function(appDiv) {
+  var wrapper = plex.dom.ce('div', appDiv);
+  wrapper.id = 'gedSysClipsWrapper';
+  wrapper.style.display = 'none';
+  var h = [];
+  for (var i = 0; i < 1000; i++) {
+    h.push(' sysclipse go here ' + i);
+  }
+  wrapper.innerHTML = h.join('');
+
+  var toggle = plex.dom.ce('button', appDiv);
+  toggle.id = 'gedSysClipsToggle';
+  toggle.onclick = this.getToggleFunc(wrapper.id);
+  toggle.innerHTML = GedMsgs.SYSCLIPS_TOGGLE;
 };
 
 VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKeyCombos) {

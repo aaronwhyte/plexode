@@ -1,4 +1,5 @@
 GedMsgs = {
+  SYSCLIPS_TOGGLE: 'Sys Clips',
   help: {
     HELP: 'help',
     MOUSE_CONTROLS: 'mouse',

@@ -6,7 +6,7 @@ body {
   -ms-user-select: none;
 }
 
-.vedLeftLink, .vedEditTitle, .vedModesDiv, #gedHelpToggle {
+.vedLeftLink, .vedEditTitle, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
   margin:0 0.5em;
   padding:0.3em 0.8em;
   background-color:rgba(64, 64, 64, 0.7);
@@ -93,8 +93,12 @@ canvas.vedClipboard {
   font-size:large;
 }
 
-#gedHelpWrapper h1, #gedHelpToggle {
+#gedHelpWrapper h1, #gedHelpToggle, #gedSysClipsToggle {
   color:#6b6;
+}
+
+#gedHelpToggle:hover, #gedSysClipsToggle:hover {
+  color:#6f6;
 }
 
 #gedHelpWrapper h1 {
@@ -121,3 +125,26 @@ ul.gedHelpList {
 li.gedHelpListItem {
   margin:0.6em 0;
 }
+
+#gedSysClipsToggle {
+  border:0;
+  position:absolute;
+  bottom: 8em;
+  left: 0.5em;
+  font-size:110%;
+}
+
+#gedSysClipsWrapper {
+  position:absolute;
+  bottom:11em;
+  left:2em;
+  right:2em;
+  top:6em;
+  overflow:auto;
+  padding:1em;
+  background-color:rgba(30, 30, 30, 0.93);
+  border-radius: 0.75em;
+  z-index:9;
+  overflow:auto;
+}
+
