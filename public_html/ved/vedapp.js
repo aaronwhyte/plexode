@@ -161,7 +161,6 @@ VedApp.prototype.renderEditing = function(appDiv, levelName) {
   var plexKeys = new plex.Keys();
   var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
   this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
-  this.renderSysClips(appDiv);
   var clipboard = this.createClipboard(appDiv);
   var grafUi = this.createGrafUi(appDiv, levelName, clipboard, grafUiKeyCombos);
   grafUi.startLoop();
@@ -188,20 +187,16 @@ VedApp.prototype.getToggleFunc = function(idToToggle) {
   };
 };
 
-VedApp.prototype.renderSysClips = function(appDiv) {
+VedApp.prototype.renderSysClipWrapper = function(appDiv) {
   var wrapper = plex.dom.ce('div', appDiv);
   wrapper.id = 'gedSysClipsWrapper';
   wrapper.style.display = 'none';
-  var h = [];
-  for (var i = 0; i < 1000; i++) {
-    h.push(' sysclipse go here ' + i);
-  }
-  wrapper.innerHTML = h.join('');
 
   var toggle = plex.dom.ce('button', appDiv);
   toggle.id = 'gedSysClipsToggle';
   toggle.onclick = this.getToggleFunc(wrapper.id);
   toggle.innerHTML = GedMsgs.SYSCLIPS_TOGGLE;
+  return wrapper;
 };
 
 VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKeyCombos) {
@@ -212,9 +207,21 @@ VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKey
   var camera = new Camera();
   var renderer = new Renderer(canvas, camera);
   var plugin = new VedUiPlugin(renderer);
+
+  var pluginFactory = {
+    create: function(renderer) {
+      return new VedUiPlugin(renderer);
+    }
+  };
+  var clipMenu = new ClipMenu(
+      VedSysClipListBuilder.createDefaultInstance(),
+      pluginFactory,
+      this.renderSysClipWrapper(appDiv));
   var grafGeom = new GrafGeom(model);
   var grafRend = new GrafRend(plugin, renderer, grafGeom);
-  return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, grafUiKeyCombos);
+  return new GrafUi(grafEd, renderer, grafRend, grafGeom, plugin,
+      clipboard, clipMenu,
+      grafUiKeyCombos);
 };
 
 VedApp.prototype.createClipboard = function(appDiv) {

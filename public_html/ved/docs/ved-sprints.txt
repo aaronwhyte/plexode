@@ -22,8 +22,14 @@ v Text labels on parts
 
 2013.01.19
 sysclips widget
-- help-like expand/collapse widget
-- copy sysclip to currentClip
+v help-like expand/collapse widget
+v get all items to render in wrapper
+- selection
+  - attach click/select event from item canvas to gedui
+    - embed canvases in buttons?
+    - identify which clip was selected
+  - copy sysclip to currentClip
+  - collapse menu
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.

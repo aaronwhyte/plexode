@@ -251,7 +251,6 @@ GrafGeom.prototype.getNearestPart = function(pos, opt_maxDist) {
  * that encloses all parts and jacks, or null if there are no objects.
  */
 GrafGeom.prototype.getBoundingRect = function() {
-  var jackPos = Vec2d.alloc();
   var bounds = null;
 
   function updateBounds(x, y, rad) {
@@ -266,13 +265,10 @@ GrafGeom.prototype.getBoundingRect = function() {
 
   for (var partId in this.model.parts) {
     var part = this.model.getPart(partId);
-    updateBounds(part.x, part.y, GrafGeom.PART_RADIUS);
-    for (var jackId in part.jacks) {
-      this.getJackPos(jackId, jackPos);
-      updateBounds(jackPos.x, jackPos.y, GrafGeom.JACK_RADIUS);
-    }
+    // Incorporate the jack radius into every part,
+    // so the clip menu parts will all be on the same center lines.
+    updateBounds(part.x, part.y, GrafGeom.PART_RADIUS + 2 * GrafGeom.JACK_RADIUS);
   }
-  Vec2d.free(jackPos);
   return bounds;
 };
 

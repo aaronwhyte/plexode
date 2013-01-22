@@ -2,21 +2,21 @@
  * Static namespace only.
  * @type {Object}
  */
-SysClipListBuilder = {};
+VedSysClipListBuilder = {};
 
 /**
  * @return {ClipList}
  */
-SysClipListBuilder.createDefaultInstance = function() {
-  return SysClipListBuilder.createFromMap(
-      SysClipListBuilder.createDefaultDataMap());
+VedSysClipListBuilder.createDefaultInstance = function() {
+  return VedSysClipListBuilder.createFromMap(
+      VedSysClipListBuilder.createDefaultDataMap());
 };
 
 /**
  * @param {plex.Map} idToGraf map from ved type name to graf op JSON for that clip
  * @return {ClipList}
  */
-SysClipListBuilder.createFromMap = function(idToGraf) {
+VedSysClipListBuilder.createFromMap = function(idToGraf) {
   var clipList = new ClipList();
   var ids = idToGraf.getKeys();
   for (var i = 0; i < ids.length; i++) {
@@ -31,7 +31,7 @@ SysClipListBuilder.createFromMap = function(idToGraf) {
 /**
  * @return {plex.Map} from ved type to graf op JSON for that clip
  */
-SysClipListBuilder.createDefaultDataMap = function() {
+VedSysClipListBuilder.createDefaultDataMap = function() {
   var map = new plex.Map();
 
   function opsToAddCluster(id, type) {
@@ -109,8 +109,8 @@ SysClipListBuilder.createDefaultDataMap = function() {
   function addBiPartCluster(type) {
     addOpsToMap(type, [].concat(
         opsToAddCluster(1, type),
-        opsToAddPart(2, 1, 0, -Transformer.WALL_RADIUS * 2),
-        opsToAddPart(3, 1, 0, Transformer.WALL_RADIUS * 2)));
+        opsToAddPart(2, 1, -Transformer.WALL_RADIUS * 1.5, 0),
+        opsToAddPart(3, 1, Transformer.WALL_RADIUS * 1.5, 0)));
   }
 
   addOpsToMap(VedType.BEAM_SENSOR, [].concat(

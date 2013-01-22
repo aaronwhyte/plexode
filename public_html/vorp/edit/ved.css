@@ -148,3 +148,6 @@ li.gedHelpListItem {
   overflow:auto;
 }
 
+.gedSysClip {
+  float:left;
+}

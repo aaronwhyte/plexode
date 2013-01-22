@@ -25,16 +25,18 @@
  * @param {GrafGeom} grafGeom
  * @param plugin app-specific thing with invalidate() and render(model)
  * @param {Clipboard} clipboard
+ * @param {ClipMenu} clipMenu
  * @param {GrafUiKeyCombos} keyCombos
  * @constructor
  */
-function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, keyCombos) {
+function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, clipMenu, keyCombos) {
   this.grafEd = grafEd;
   this.renderer = renderer;
   this.grafRend = grafRend;
   this.grafGeom = grafGeom;
   this.plugin = plugin;
   this.clipboard = clipboard;
+  this.clipMenu = clipMenu;
   this.keyCombos = keyCombos;
 
   this.viewDirty = true;
@@ -108,6 +110,11 @@ GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
   this.clipboard.start();
+
+  // TODO: overwrite the clipboard with the clip menu item.
+  this.clipMenu.onSelect = function(x){console.log(x)};
+  this.clipMenu.render();
+
   if (!this.contentsFramed) {
     this.grafRend.frameContents(0.66);
     this.contentsFramed = true;

@@ -1,11 +1,15 @@
 /**
  * @param {Renderer} renderer
+ * @extends GedUiPlugin
  * @constructor
  */
 function VedUiPlugin(renderer) {
+  GedUiPlugin.call(this);
   this.renderer = renderer;
   this.vorp = null;
 }
+VedUiPlugin.prototype = new GedUiPlugin();
+VedUiPlugin.prototype.constructor = VedUiPlugin;
 
 VedUiPlugin.prototype.invalidate = function() {
   this.vorp = null;
@@ -33,3 +37,4 @@ VedUiPlugin.prototype.createVorp = function(grafModel) {
   vorp.clock();
   return vorp;
 };
+

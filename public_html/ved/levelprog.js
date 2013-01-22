@@ -18,7 +18,7 @@ LevelProg.prototype.constructor = GrafEd;
  * @return {LevelProg}
  */
 LevelProg.create = function() {
-  return new LevelProg(new GrafModel(), SysClipListBuilder.createDefaultInstance());
+  return new LevelProg(new GrafModel(), VedSysClipListBuilder.createDefaultInstance());
 };
 
 LevelProg.prototype.wall = function(x1, y1, x2, y2) {
