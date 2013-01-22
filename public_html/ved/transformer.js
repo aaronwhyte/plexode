@@ -56,7 +56,7 @@ Transformer.prototype.transformModel = function(model) {
   this.vorp.addSprites(sprites);
 
   for (id in model.links) {
-    this.transformLink(model.links[id]);
+    this.transformLink(model.links[id], model);
   }
 };
 
@@ -331,10 +331,23 @@ Transformer.prototype.transformJacks = function(sprite, jackList) {
 
 /**
  * @param {GrafLink} link
+ * @param {GrafModel} model
  */
-Transformer.prototype.transformLink = function(link) {
+Transformer.prototype.transformLink = function(link, model) {
+  var jack1 = model.getJack(link.jackId1);
+  var jack2 = model.getJack(link.jackId2);
+  if (jack1.isOutput() == jack2.isOutput()) {
+    throw Error('Both jacks are ' + (jack1.isOutput() ? 'output' : 'input'));
+  }
   var ja1 = this.jackMap[link.jackId1];
   var ja2 = this.jackMap[link.jackId2];
+  if (jack1.isInput()) {
+    // Logic links require the first jack to be output, and the second to be input.
+    // They're backwards, so swap them.
+    var tmp = ja1;
+    ja1 = ja2;
+    ja2 = tmp;
+  }
   this.vorp.addLogicLink(new LogicLink(ja1.sprite.id, ja1.index, ja2.sprite.id, ja2.index));
 };
 
