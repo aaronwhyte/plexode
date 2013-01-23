@@ -63,7 +63,8 @@ GedHelp.prototype.formatHtml = function() {
       kb(helpMsgs.COPY, allCombos[GrafUi.Action.COPY]),
       kb(helpMsgs.PASTE, allCombos[GrafUi.Action.PASTE]),
       kb(helpMsgs.UNDO, allCombos[GrafUi.Action.UNDO]),
-      kb(helpMsgs.REDO, allCombos[GrafUi.Action.REDO])
+      kb(helpMsgs.REDO, allCombos[GrafUi.Action.REDO]),
+      kb(helpMsgs.TOGGLE_CLIP_MENU, allCombos[GrafUi.Action.TOGGLE_CLIP_MENU])
   ]);
 
   return html.join('');

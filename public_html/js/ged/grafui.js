@@ -103,16 +103,16 @@ GrafUi.Action = {
   LINK: 'link',
 
   UNDO: 'undo',
-  REDO: 'redo'
+  REDO: 'redo',
+
+  TOGGLE_CLIP_MENU: 'toggle_clip_menu'
 };
 
 GrafUi.prototype.startLoop = function() {
   this.grafEd.setCallback(this.getGrafEdInvalidationCallback());
   this.resize();
   this.clipboard.start();
-
-  // TODO: overwrite the clipboard with the clip menu item.
-  this.clipMenu.onSelect = function(x){console.log(x)};
+  this.clipMenu.setOnSelect(this.getSelectClipMenuItemFn());
   this.clipMenu.render();
 
   if (!this.contentsFramed) {
@@ -156,6 +156,14 @@ GrafUi.prototype.stopLoop = function() {
     this.loop.stop();
   }
   this.grafEd.unsubscribe();
+};
+
+GrafUi.prototype.getSelectClipMenuItemFn = function() {
+  var self = this;
+  return function(clip) {
+    self.clipboard.setModel(clip.getModel());
+    self.clipMenu.hide();
+  };
 };
 
 GrafUi.prototype.getGrafEdInvalidationCallback = function() {
@@ -293,6 +301,11 @@ GrafUi.prototype.getKeyDownListener = function() {
       self.grafEd.redo();
     }
 
+    // toggle menu
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.TOGGLE_CLIP_MENU)) {
+      self.clipMenu.toggle();
+    }
+
     // unselect
     if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNSELECT)) {
       self.viewDirty = true;
@@ -328,7 +341,7 @@ GrafUi.prototype.getKeyUpListener = function() {
     if (self.mode == GrafUi.Mode.PASTE &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
       self.grafEd.continuePasteVec(self.worldPos);
-      self.grafEd.endPaste();
+      self.grafEd.endPaste(false);
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
     }

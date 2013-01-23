@@ -195,7 +195,7 @@ VedApp.prototype.renderSysClipWrapper = function(appDiv) {
   var toggle = plex.dom.ce('button', appDiv);
   toggle.id = 'gedSysClipsToggle';
   toggle.onclick = this.getToggleFunc(wrapper.id);
-  toggle.innerHTML = GedMsgs.SYSCLIPS_TOGGLE;
+  toggle.innerHTML = GedMsgs.TOGGLE_CLIP_MENU;
   return wrapper;
 };
 

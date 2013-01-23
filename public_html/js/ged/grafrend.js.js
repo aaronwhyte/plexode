@@ -19,10 +19,9 @@ GrafRend.MODEL_LINE_WIDTH = 3;
 GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
 GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.15)';
 
-GrafRend.LABEL_STROKE_STYLE = 'rgba(0, 0, 0, 0.3)';
-GrafRend.LABEL_FILL_STYLE = 'rgba(255, 255, 255, 0.3)';
-//GrafRend.LABEL_FILL_STYLE = GrafRend.MODEL_STROKE_STYLE;
-GrafRend.LABEL_FONT = '14pt Lucida Grande, Courier New, sans serif';
+GrafRend.LABEL_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
+GrafRend.LABEL_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
+GrafRend.LABEL_FONT = '12pt Lucida Grande, Courier New, sans serif';
 
 GrafRend.prototype.resize = function(width, height) {
   this.renderer.canvas.width = width;

@@ -23,3 +23,7 @@ Clip.createClipFromOp = function(op) {
   grafModel.applyOps(op.grafOps);
   return new Clip(op.timestamp, op.id, grafModel);
 };
+
+Clip.prototype.getModel = function() {
+  return this.model;
+};

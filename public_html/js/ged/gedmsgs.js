@@ -1,5 +1,5 @@
 GedMsgs = {
-  SYSCLIPS_TOGGLE: 'Sys Clips',
+  TOGGLE_CLIP_MENU: 'clip menu',
   help: {
     HELP: 'help',
     MOUSE_CONTROLS: 'mouse',
@@ -33,6 +33,8 @@ GedMsgs = {
 
     UNDO: 'Undo',
     REDO: 'Redo',
+
+    TOGGLE_CLIP_MENU: 'Toggle the Clip Menu',
 
     $:''
   }

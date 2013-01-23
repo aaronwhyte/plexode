@@ -20,7 +20,7 @@ ClipMenu.prototype.render = function() {
     canvas.className = 'gedSysClip';
     canvas.width = 200;
     canvas.height = 150;
-    canvas.id = clip.id;
+    canvas.onclick = this.getClickHandler(clip.id);
     var renderer = new Renderer(canvas, new Camera());
     var grafRend = new GrafRend(
         this.pluginFactory.create(renderer),
@@ -29,4 +29,26 @@ ClipMenu.prototype.render = function() {
     grafRend.frameContents(0.8);
     grafRend.draw();
   }
+};
+
+ClipMenu.prototype.hide = function() {
+  this.wrapper.style.display = 'none';
+};
+
+ClipMenu.prototype.toggle = function() {
+  this.wrapper.style.display = this.wrapper.style.display == 'none' ? 'block' : 'none';
+};
+
+ClipMenu.prototype.setOnSelect = function(fn) {
+  this.onSelect = fn;
+};
+
+ClipMenu.prototype.getClickHandler = function(clipId) {
+  var self = this;
+  return function() {
+    var clip = self.clipList.getClipById(clipId);
+    if (self.onSelect) {
+      self.onSelect(clip);
+    }
+  };
 };

@@ -42,6 +42,8 @@ GrafUiKeyCombos.prototype.getAll = function() {
 
     ked(GrafUi.Action.UNDO, 'z');
     ked(GrafUi.Action.REDO, 'z', SHIFT);
+
+    ked(GrafUi.Action.TOGGLE_CLIP_MENU, 'm');
   }
   return this.keyEventDescs;
 };

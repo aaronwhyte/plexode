@@ -20,21 +20,24 @@ v drag selected:
 2013.01.19
 v Text labels on parts
 
-2013.01.19
+2013.01.19 - 2013.01.22
 sysclips widget
 v help-like expand/collapse widget
 v get all items to render in wrapper
-- selection
-  - attach click/select event from item canvas to gedui
-    - embed canvases in buttons?
-    - identify which clip was selected
-  - copy sysclip to currentClip
-  - collapse menu
+v selection
+  v attach click/select event from item canvas to gedui
+    x embed canvases in buttons?
+    v identify which clip was selected
+  v copy sysclip to currentClip
+  v collapse menu
+v BONUS toggle menu key 'm' with help doc
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
 
-Draw portal link or cluster hilite or something.
+JSON import/export mode
+
+
 
 
 Milestone: Ship fun levels created entirely in Ved
@@ -46,6 +49,8 @@ Milestone: Ship fun levels created entirely in Ved
       - linkifier-friendly
       - plugin dictionary support.
 - Actually make new levels.
+
+Draw portal link or cluster hilite or something.
 
 Add level
 Delete level
