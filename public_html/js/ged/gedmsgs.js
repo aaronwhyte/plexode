@@ -21,7 +21,7 @@ GedMsgs = {
     ADD_SELECTIONS: 'Add the current selection to the previous selection. ' +
         '<br>My people: Think push(add(pop(), pop())',
     SUBTRACT_SELECTIONS: 'Subtract the current selection from the previous selection. ' +
-        '<br>You know, push(subtract(pop(), pop())',
+        '<br>You know, push(subtract(pop(), pop()))',
 
     LINK: 'Link any input and output jacks in the current selection. ' +
         'Input jacks are on top of parts. Output jacks are on the bottom.',
