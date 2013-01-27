@@ -153,7 +153,7 @@ VedApp.prototype.getModeLinkFn = function(mode, levelName) {
       mode: mode,
       level: levelName
     });
-    history.replaceState({href:href}, document.title, href);
+    history.replaceState(null, document.title, href);
     self.render();
   };
 };
