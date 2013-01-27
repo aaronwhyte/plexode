@@ -32,10 +32,14 @@ v selection
   v collapse menu
 v BONUS toggle menu key 'm' with help doc
 
+2013.01.26 -
+Unify modes: edit & play
+
+JSON import/export mode
+
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
 
-JSON import/export mode
 
 
 

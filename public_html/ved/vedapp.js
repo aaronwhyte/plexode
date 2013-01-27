@@ -24,7 +24,7 @@ VedApp.Params = {
  */
 VedApp.Mode = {
   EDIT: 'edit',
-  TEST: 'test'
+  PLAY: 'play'
 };
 
 VedApp.prototype.render = function() {
@@ -51,8 +51,8 @@ VedApp.prototype.render = function() {
   var level = query[VedApp.Params.LEVEL];
   var mode = query[VedApp.Params.MODE];
 
-  if (mode == VedApp.Mode.TEST) {
-    this.renderTesting(appDiv, level);
+  if (mode == VedApp.Mode.PLAY) {
+    this.renderPlaying(appDiv, level);
   } else if (mode == VedApp.Mode.EDIT) {
     this.renderEditing(appDiv, level);
   } else {
@@ -133,6 +133,7 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelName, renderMode) {
         mode: mode,
         level: levelName
       });
+      modeElem.onclick = this.getModeLinkFn(mode, levelName);
     }
     modeElem.className = 'vedModeLink';
     plex.dom.ct(mode, modeElem);
@@ -142,6 +143,19 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelName, renderMode) {
   var titleSpan = plex.dom.ce('span', appDiv);
   titleSpan.className = 'vedEditTitle';
   plex.dom.ct(levelName, titleSpan);
+};
+
+VedApp.prototype.getModeLinkFn = function(mode, levelName) {
+  var self = this;
+  return function(event) {
+    event.preventDefault();
+    var href = '#' + plex.url.encodeQuery({
+      mode: mode,
+      level: levelName
+    });
+    history.replaceState({href:href}, document.title, href);
+    self.render();
+  };
 };
 
 VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
@@ -238,8 +252,8 @@ VedApp.prototype.createClipboard = function(appDiv) {
   return new Clipboard(grafRend, localStorage, VedApp.CLIPBOARD_STORAGE_KEY);
 };
 
-VedApp.prototype.renderTesting = function(appDiv, levelName) {
-  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.TEST);
+VedApp.prototype.renderPlaying = function(appDiv, levelName) {
+  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.PLAY);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
   // hacky fake header/footer to restrict the canvas positioning
