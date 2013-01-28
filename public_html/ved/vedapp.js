@@ -24,7 +24,8 @@ VedApp.Params = {
  */
 VedApp.Mode = {
   EDIT: 'edit',
-  PLAY: 'play'
+  PLAY: 'play',
+  JSON: 'json'
 };
 
 VedApp.prototype.render = function() {
@@ -52,9 +53,11 @@ VedApp.prototype.render = function() {
   var mode = query[VedApp.Params.MODE];
 
   if (mode == VedApp.Mode.PLAY) {
-    this.renderPlaying(appDiv, level);
+    this.renderPlayMode(appDiv, level);
   } else if (mode == VedApp.Mode.EDIT) {
-    this.renderEditing(appDiv, level);
+    this.renderEditMode(appDiv, level);
+  } else if (mode == VedApp.Mode.JSON) {
+    this.renderJsonMode(appDiv, level);
   } else {
     this.renderDirectory(appDiv);
   }
@@ -168,7 +171,7 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
   return true;
 };
 
-VedApp.prototype.renderEditing = function(appDiv, levelName) {
+VedApp.prototype.renderEditMode = function(appDiv, levelName) {
   this.renderLevelHeader(appDiv, levelName, VedApp.Mode.EDIT);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
@@ -252,7 +255,7 @@ VedApp.prototype.createClipboard = function(appDiv) {
   return new Clipboard(grafRend, localStorage, VedApp.CLIPBOARD_STORAGE_KEY);
 };
 
-VedApp.prototype.renderPlaying = function(appDiv, levelName) {
+VedApp.prototype.renderPlayMode = function(appDiv, levelName) {
   this.renderLevelHeader(appDiv, levelName, VedApp.Mode.PLAY);
   if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
 
@@ -287,6 +290,25 @@ VedApp.prototype.renderPlaying = function(appDiv, levelName) {
   vorp.startLoop();
   this.looper = vorp;
 };
+
+VedApp.prototype.renderJsonMode = function(appDiv, levelName) {
+  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.JSON);
+  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+
+  var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
+  var model = grafEd.getModel();
+  var div = plex.dom.ce('div', appDiv);
+  div.style.clear = 'both';
+  div.style.fontSize = '10%';
+  div.className = 'selectable';
+  var ops = model.createOps();
+  var html = plex.string.textToHtml(JSON.stringify(ops));
+//  var html = plex.string.textToHtml(JSON.stringify(ops, null, "  "));
+  html = plex.string.replace(html, "  ", "&nbsp; ");
+//  html = plex.string.replace(html, "\n", "<br>");
+  div.innerHTML = html;
+};
+
 
 VedApp.prototype.nuke = function() {
   // TODO: stor.deleteAll()

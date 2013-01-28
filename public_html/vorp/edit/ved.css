@@ -6,6 +6,13 @@ body {
   -ms-user-select: none;
 }
 
+.selectable {
+  user-select: text;
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+}
+
 .vedLeftLink, .vedEditTitle, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
   margin:0 0.5em;
   padding:0.3em 0.8em;
