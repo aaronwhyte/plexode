@@ -32,42 +32,44 @@ v selection
   v collapse menu
 v BONUS toggle menu key 'm' with help doc
 
-2013.01.26 -
-Unify modes: edit & play
-
-JSON import/export mode
+2013.01.27
+v JSON export mode
 
 Field editing
 - Modal HTML form showing all field key/value pairs for editing.
 
-
-
-
-
 Milestone: Ship fun levels created entirely in Ved
 - Ved usable by me for editing.
-- Some way to publish levels
-  - JSON view + cut-n-paste?
-  - insta-vorp URLs?
-    - better link compressor
-      - linkifier-friendly
-      - plugin dictionary support.
+v Some way to publish levels
+  v JSON view + cut-n-paste?
+v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
 - Actually make new levels.
+- Push
+- Publicize
+
+===================================================================================
+
+Add real Loopwood front page.
+Add loopwood.com/vorp
+Unify modes: edit & play
 
 Draw portal link or cluster hilite or something.
 
+Level management?
 Add level
 Delete level
 Rename level
+
+Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
+
+Milestone: Ship Ved itself
+
+
 
 InstaVorp
 - super basic url
 - figure out best dictionary
 - maybe round floating-pt precision
-
-Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
-
-Milestone: Ship Ved itself
 
 Touch UI
 - zoom pinch
