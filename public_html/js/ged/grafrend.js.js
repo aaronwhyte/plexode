@@ -19,9 +19,15 @@ GrafRend.MODEL_LINE_WIDTH = 3;
 GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
 GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.15)';
 
+GrafRend.LABEL_LINE_WIDTH = 0.5;
 GrafRend.LABEL_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
 GrafRend.LABEL_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
 GrafRend.LABEL_FONT = '12pt Lucida Grande, Courier New, sans serif';
+
+GrafRend.DATA_LINE_WIDTH = 0.1;
+GrafRend.DATA_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
+GrafRend.DATA_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
+GrafRend.DATA_FONT = '6pt Lucida Grande, Courier New, sans serif';
 
 GrafRend.prototype.resize = function(width, height) {
   this.renderer.canvas.width = width;
@@ -80,13 +86,25 @@ GrafRend.prototype.draw = function() {
   }
 
   // labels
-  this.renderer.context.font = GrafRend.LABEL_FONT;;
+  this.renderer.context.lineWidth = GrafRend.LABEL_LINE_WIDTH;
+  this.renderer.context.font = GrafRend.LABEL_FONT;
   this.renderer.context.textAlign = 'center';
   this.renderer.context.textBaseline = 'middle';
   this.renderer.setStrokeStyle(GrafRend.LABEL_STROKE_STYLE);
   this.renderer.setFillStyle(GrafRend.LABEL_FILL_STYLE);
   for (var clusterId in model.clusters) {
     this.drawClusterLabels(model.getCluster(clusterId));
+  }
+
+  // data
+  this.renderer.context.lineWidth = GrafRend.DATA_LINE_WIDTH;
+  this.renderer.context.font = GrafRend.DATA_FONT;
+  this.renderer.context.textAlign = 'left';
+  this.renderer.context.textBaseline = 'top';
+  this.renderer.setStrokeStyle(GrafRend.DATA_STROKE_STYLE);
+  this.renderer.setFillStyle(GrafRend.DATA_FILL_STYLE);
+  for (var clusterId in model.clusters) {
+    this.drawClusterData(model.getCluster(clusterId));
   }
 
   this.renderer.transformEnd();
@@ -127,6 +145,25 @@ GrafRend.prototype.drawPartLabels = function(part, cluster) {
     text = text.replace('_', ' ');
     this.renderer.context.strokeText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
     this.renderer.context.fillText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
+  }
+};
+
+GrafRend.prototype.drawClusterData = function(cluster) {
+  var parts = cluster.getPartList();
+  for (var i = 0; i < parts.length; i++) {
+    this.drawPartData(parts[i], cluster);
+  }
+};
+
+GrafRend.prototype.drawPartData = function(part, cluster) {
+  var x = part.x + GrafGeom.PART_RADIUS * Math.SQRT1_2 * 1.05;
+  var y = part.y + GrafGeom.PART_RADIUS * Math.SQRT1_2 * 1.05;
+  for (var key in part.data) {
+    var val = part.data[key];
+    var text = key + ': ' + val;
+    this.renderer.context.strokeText(text, x, y);
+    this.renderer.context.fillText(text, x, y);
+    y += 12;
   }
 };
 

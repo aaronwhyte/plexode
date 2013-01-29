@@ -54,7 +54,7 @@ function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, clipMen
 
 GrafUi.FPS = 30;
 
-GrafUi.MAX_ZOOM = 10;
+GrafUi.MAX_ZOOM = 50;
 GrafUi.MIN_ZOOM = 0.01;
 
 GrafUi.HOVER_COLOR = 'rgba(255, 255, 255, 0.5)';

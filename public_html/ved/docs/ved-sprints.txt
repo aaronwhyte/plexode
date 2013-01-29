@@ -35,8 +35,12 @@ v BONUS toggle menu key 'm' with help doc
 2013.01.27
 v JSON export mode
 
+2013.01.28
 Field editing
-- Modal HTML form showing all field key/value pairs for editing.
+v Render data
+- Edit button
+- Edit form
+- Save and stuff
 
 Milestone: Ship fun levels created entirely in Ved
 - Ved usable by me for editing.
