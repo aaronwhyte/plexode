@@ -11,6 +11,7 @@ GrafGeom.PART_RADIUS = 30;
 GrafGeom.JACK_RADIUS = 10;
 GrafGeom.JACK_DISTANCE = GrafGeom.PART_RADIUS + GrafGeom.JACK_RADIUS;
 GrafGeom.SELECTION_PADDING = 2;
+GrafGeom.EDIT_RADIUS = 8;
 
 /**
  * Sets the model contents, keeping the model reference.
@@ -53,6 +54,14 @@ GrafGeom.prototype.getJackPos = function(jackId, opt_outVec) {
   var part = this.model.getPart(jack.partId);
   this.getJackOffset(jack.isInput(), retval);
   retval.addXY(part.x, part.y);
+  return retval;
+};
+
+GrafGeom.prototype.getEditButtonPos = function(partId, opt_outVec) {
+  var retval = opt_outVec || new Vec2d();
+  var part = this.model.getPart(partId);
+  var offset = Math.SQRT1_2 * (GrafGeom.PART_RADIUS + GrafGeom.EDIT_RADIUS);
+  retval.setXY(part.x + offset, part.y + offset);
   return retval;
 };
 
@@ -169,6 +178,29 @@ GrafGeom.prototype.getRadById = function(id) {
     return GrafGeom.JACK_RADIUS;
   }
   return null;
+};
+
+/**
+ * @param {Vec2d} pos
+ * @return a part ID, or null if nothing is close enough
+ */
+GrafGeom.prototype.getNearestEditButtonPartId = function(pos) {
+  var editPos = Vec2d.alloc();
+
+  var maxDist = GrafGeom.EDIT_RADIUS + GrafGeom.SELECTION_PADDING;
+  var leastDistSq = maxDist * maxDist;
+  var retId = null;
+
+  for (var partId in this.model.parts) {
+    this.getEditButtonPos(partId, editPos);
+    var distSq = pos.distanceSquared(editPos);
+    if (distSq < leastDistSq) {
+      retId = partId;
+      leastDistSq = distSq;
+    }
+  }
+  Vec2d.free(editPos);
+  return retId;
 };
 
 /**

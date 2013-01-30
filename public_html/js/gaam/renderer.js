@@ -144,6 +144,12 @@ Renderer.prototype.strokeCirclePosXYRad = function(px, py, r) {
   this.context.stroke();
 };
 
+Renderer.prototype.fillCirclePosXYRad = function(px, py, r) {
+  this.context.beginPath();
+  this.context.arc(px, py, r, 0, Math.PI * 2);
+  this.context.fill();
+};
+
 Renderer.prototype.drawLineXYXY = function(x0, y0, x1, y1) {
   this.context.beginPath();
   this.context.moveTo(x0, y0);

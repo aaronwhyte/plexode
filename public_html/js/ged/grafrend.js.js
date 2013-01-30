@@ -27,7 +27,9 @@ GrafRend.LABEL_FONT = '12pt Lucida Grande, Courier New, sans serif';
 GrafRend.DATA_LINE_WIDTH = 0.1;
 GrafRend.DATA_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
 GrafRend.DATA_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
-GrafRend.DATA_FONT = '6pt Lucida Grande, Courier New, sans serif';
+GrafRend.DATA_FONT = '7pt Lucida Grande, Courier New, sans serif';
+
+GrafRend.EDIT_BUTTON_FONT = '8pt Lucida Grande, Courier New, sans serif';
 
 GrafRend.prototype.resize = function(width, height) {
   this.renderer.canvas.width = width;
@@ -143,27 +145,39 @@ GrafRend.prototype.drawPartLabels = function(part, cluster) {
   var text = part.data.type || cluster.data.type || null;
   if (text) {
     text = text.replace('_', ' ');
-    this.renderer.context.strokeText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
-    this.renderer.context.fillText(text, part.x, part.y);//, GrafGeom.PART_RADIUS * 4);
+    this.renderer.context.strokeText(text, part.x, part.y);
+    this.renderer.context.fillText(text, part.x, part.y);
   }
 };
 
 GrafRend.prototype.drawClusterData = function(cluster) {
   var parts = cluster.getPartList();
   for (var i = 0; i < parts.length; i++) {
-    this.drawPartData(parts[i], cluster);
+    if (parts[i].hasData()) {
+      this.drawPartData(parts[i], cluster);
+    }
   }
 };
 
 GrafRend.prototype.drawPartData = function(part, cluster) {
-  var x = part.x + GrafGeom.PART_RADIUS * Math.SQRT1_2 * 1.05;
-  var y = part.y + GrafGeom.PART_RADIUS * Math.SQRT1_2 * 1.05;
+  var editPos = Vec2d.alloc();
+  this.geom.getEditButtonPos(part.id, editPos);
+  var text = '\u270E';
+  this.renderer.context.textAlign = 'center';
+  this.renderer.context.textBaseline = 'middle';
+  this.renderer.context.strokeText(text, editPos.x, editPos.y);
+  this.renderer.context.fillText(text, editPos.x, editPos.y);
+  this.renderer.fillCirclePosXYRad(editPos.x, editPos.y, GrafGeom.EDIT_RADIUS);
+
+  var x = editPos.x + GrafGeom.EDIT_RADIUS * 1.2;
+  var y = editPos.y;
+  this.renderer.context.textAlign = 'left';
   for (var key in part.data) {
     var val = part.data[key];
-    var text = key + ': ' + val;
+    var text = key + ':' + val;
     this.renderer.context.strokeText(text, x, y);
     this.renderer.context.fillText(text, x, y);
-    y += 12;
+    y += 9;
   }
 };
 

@@ -196,14 +196,19 @@ GrafUi.prototype.getMouseDownListener = function() {
   return function(event) {
     self.viewDirty = true;
     event = event || window.event;
-    var id = self.grafGeom.getIdAtVec(self.getWorldPosOfCanvasPos());
+    var worldPos = self.getWorldPosOfCanvasPos();
+    var id = self.grafGeom.getIdAtVec(worldPos);
+    var editId = self.grafGeom.getNearestEditButtonPartId(worldPos);
     var inDefaultMode = self.mode == GrafUi.Mode.DEFAULT;
 //    if (inDefaultMode && event.shiftKey) {
 //      self.startSelection();
 //    }
-    if (id == null) {
+    if (id == null && editId == null) {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
+    } else if (editId) {
+      // TODO(awhyte): open edit dialog
+      alert('TODO! edit part ID ' + editId + '\n' + JSON.stringify(self.grafEd.getPart(editId).data, null, '  '));
     } else if (inDefaultMode && self.grafEd.getJack(id)) {
       self.startDraggingJack(id);
     } else if (inDefaultMode && self.grafEd.isSelected(id)) {
@@ -541,6 +546,7 @@ GrafUi.prototype.draw = function() {
   // hover
   this.renderer.setStrokeStyle(GrafUi.HOVER_COLOR);
   this.strokeHiliteForIds(this.grafGeom.getIdsAtXY(this.worldPos.x, this.worldPos.y));
+  this.strokeHiliteForEditButton(this.grafGeom.getNearestEditButtonPartId(this.worldPos));
 
   // link-mode indicator, when there's no staged link operation
   if (this.mode == GrafUi.Mode.DRAG_JACK && !this.grafEd.hasStagedOps()) {
@@ -563,4 +569,10 @@ GrafUi.prototype.strokeHiliteForIds = function(ids) {
     var rad = this.grafGeom.getRadById(id);
     this.renderer.strokeCirclePosXYRad(pos.x, pos.y, rad);
   }
+};
+
+GrafUi.prototype.strokeHiliteForEditButton = function(id) {
+  if (!id) return;
+  var pos = this.grafGeom.getEditButtonPos(id);
+  this.renderer.strokeCirclePosXYRad(pos.x, pos.y, GrafGeom.EDIT_RADIUS);
 };

@@ -35,10 +35,10 @@ v BONUS toggle menu key 'm' with help doc
 2013.01.27
 v JSON export mode
 
-2013.01.28
+2013.01.28 -
 Field editing
 v Render data
-- Edit button
+v Edit button
 - Edit form
 - Save and stuff
 

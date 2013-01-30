@@ -16,6 +16,10 @@ GrafPart.prototype.isEmpty = function() {
   return true;
 };
 
+GrafPart.prototype.hasData = function() {
+  for (var d in this.data) return true;
+  return false;
+};
 
 GrafPart.prototype.addJack = function(jack) {
   this.jacks[jack.id] = jack;
