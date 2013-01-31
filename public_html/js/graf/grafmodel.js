@@ -200,6 +200,10 @@ GrafModel.prototype.getLink = function(id) {
   return this.links[id];
 };
 
+GrafModel.prototype.getObj = function(id) {
+  return this.objs[id];
+};
+
 /**
  * @param {GrafModel} model  something to paste into this model
  * @return a

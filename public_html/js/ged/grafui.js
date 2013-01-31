@@ -83,7 +83,8 @@ GrafUi.Mode = {
   DRAG_JACK: 'drag_jack',
   DRAG_SELECTION: 'drag_sel',
   PASTE: 'paste',
-  SELECT: 'select'
+  SELECT: 'select',
+  EDIT_DATA: 'edit_data'
 };
 
 /**
@@ -206,9 +207,8 @@ GrafUi.prototype.getMouseDownListener = function() {
     if (id == null && editId == null) {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
-    } else if (editId) {
-      // TODO(awhyte): open edit dialog
-      alert('TODO! edit part ID ' + editId + '\n' + JSON.stringify(self.grafEd.getPart(editId).data, null, '  '));
+    } else if (inDefaultMode && editId) {
+      self.startEditingData(editId);
     } else if (inDefaultMode && self.grafEd.getJack(id)) {
       self.startDraggingJack(id);
     } else if (inDefaultMode && self.grafEd.isSelected(id)) {
@@ -357,6 +357,47 @@ GrafUi.prototype.getKeyUpListener = function() {
   };
 };
 
+
+GrafUi.prototype.startEditingData = function(objId) {
+  this.editingId = objId;
+  this.mode = GrafUi.Mode.EDIT_DATA;
+  var obj = this.grafEd.getModel().getObj(objId);
+
+  // create a little form I guess?
+  var form = plex.dom.ce('div', document.body);
+  form.className = 'gedEditForm';
+  var first = true;
+  for (var key in obj.data) {
+    var field = plex.dom.ce('div', form);
+    field.className = 'gedEditField';
+
+    var labelElem = plex.dom.ce('label', field);
+    labelElem.className = 'gedEditLabel';
+    plex.dom.ct(key + ':', labelElem);
+
+    var val = obj.data[key];
+    var inputElem = plex.dom.ce('input', field);
+    inputElem.className = 'gedEditInput';
+    inputElem.value = val;
+    inputElem.id = 'editdata_' + key;
+    if (first) inputElem.focus();
+    first = false;
+  }
+  var button = plex.dom.ce('button', form);
+  button.className = 'gedEditButton';
+  plex.dom.ct('Save & Close', button);
+  button.onclick = this.getEditingOkFn();
+};
+
+GrafUi.prototype.getEditingOkFn = function() {
+  // TODO more
+  this.stopEditingData();
+};
+
+GrafUi.prototype.stopEditingData = function() {
+  this.editingId = null;
+  this.mode = GrafUi.Mode.DEFAULT;
+};
 
 GrafUi.prototype.startSelection = function() {
   this.viewDirty = true;
