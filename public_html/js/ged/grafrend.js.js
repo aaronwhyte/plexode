@@ -19,12 +19,12 @@ GrafRend.MODEL_LINE_WIDTH = 3;
 GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
 GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.15)';
 
-GrafRend.LABEL_LINE_WIDTH = 0.5;
+GrafRend.LABEL_LINE_WIDTH = 12/6;
 GrafRend.LABEL_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
 GrafRend.LABEL_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
 GrafRend.LABEL_FONT = '12pt Lucida Grande, Courier New, sans serif';
 
-GrafRend.DATA_LINE_WIDTH = 0.1;
+GrafRend.DATA_LINE_WIDTH = 7/6;
 GrafRend.DATA_STROKE_STYLE = 'rgba(0, 0, 0, 0.5)';
 GrafRend.DATA_FILL_STYLE = 'rgba(255, 255, 255, 0.5)';
 GrafRend.DATA_FONT = '7pt Lucida Grande, Courier New, sans serif';
@@ -88,7 +88,7 @@ GrafRend.prototype.draw = function() {
   }
 
   // labels
-  this.renderer.context.lineWidth = GrafRend.LABEL_LINE_WIDTH;
+  this.renderer.context.lineWidth = GrafRend.LABEL_LINE_WIDTH / this.renderer.getZoom();
   this.renderer.context.font = GrafRend.LABEL_FONT;
   this.renderer.context.textAlign = 'center';
   this.renderer.context.textBaseline = 'middle';
@@ -99,7 +99,7 @@ GrafRend.prototype.draw = function() {
   }
 
   // data
-  this.renderer.context.lineWidth = GrafRend.DATA_LINE_WIDTH;
+  this.renderer.context.lineWidth = GrafRend.DATA_LINE_WIDTH / this.renderer.getZoom();
   this.renderer.context.font = GrafRend.DATA_FONT;
   this.renderer.context.textAlign = 'left';
   this.renderer.context.textBaseline = 'top';
