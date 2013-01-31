@@ -192,11 +192,13 @@ GrafGeom.prototype.getNearestEditButtonPartId = function(pos) {
   var retId = null;
 
   for (var partId in this.model.parts) {
-    this.getEditButtonPos(partId, editPos);
-    var distSq = pos.distanceSquared(editPos);
-    if (distSq < leastDistSq) {
-      retId = partId;
-      leastDistSq = distSq;
+    if (this.model.getPart(partId).hasData()) {
+      this.getEditButtonPos(partId, editPos);
+      var distSq = pos.distanceSquared(editPos);
+      if (distSq < leastDistSq) {
+        retId = partId;
+        leastDistSq = distSq;
+      }
     }
   }
   Vec2d.free(editPos);
