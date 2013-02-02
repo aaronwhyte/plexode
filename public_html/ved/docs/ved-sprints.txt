@@ -35,15 +35,15 @@ v BONUS toggle menu key 'm' with help doc
 2013.01.27
 v JSON export mode
 
-2013.01.28 -
+2013.01.28 - 2013.02.01
 Field editing
 v Render data
 v Edit button
-- Edit form
-- Save and stuff
+v Edit form
+v Save and stuff
 
 Milestone: Ship fun levels created entirely in Ved
-- Ved usable by me for editing.
+v Ved usable by me for editing.
 v Some way to publish levels
   v JSON view + cut-n-paste?
 v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
