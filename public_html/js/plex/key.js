@@ -24,5 +24,6 @@ plex.Key.Name = {
   DELETE: 'delete',
   SPACE: 'space',
   SEMICOLON: ';',
-  BACKSLASH: '\\'
+  BACKSLASH: '\\',
+  ESC: 'esc'
 };

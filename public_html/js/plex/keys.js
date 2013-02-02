@@ -61,5 +61,7 @@ plex.Keys.prototype.initKeys = function() {
   addKey(plex.Key.Name.SEMICOLON, 186);
   addKey(plex.Key.Name.BACKSLASH, 220);
 
+  addKey(plex.Key.Name.ESC, 27);
+
   this.initialized = true;
 };
