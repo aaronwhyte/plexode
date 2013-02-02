@@ -109,6 +109,26 @@ GrafEd.prototype.paste = function(clipModel) {
 };
 
 /**
+ * Instantly commits reversible chunk of data edits.
+ * @param objId id of obj whose data we'll edit
+ * @param changes An object of key/value pairs representing "set" commands
+ */
+GrafEd.prototype.editObjData = function(objId, changes) {
+  var ops = [];
+  var obj = this.model.objs[objId];
+  for (var key in changes) {
+    ops.push({
+      type: GrafOp.Type.SET_DATA,
+      id: objId,
+      key: key,
+      oldValue: obj.data[key],
+      value: changes[key]
+    });
+  }
+  this.commitOps(ops);
+};
+
+/**
  * Gets the offset of a jack in the world, based on its type.
  * @param {boolean} isInput
  * @param {Vec2d=} opt_outVec

@@ -19,6 +19,13 @@ plex.object.expose = function(obj) {
   return text.join('\n');
 };
 
+plex.object.isEmpty = function(obj) {
+  for (var k in obj) {
+    return false;
+  }
+  return true;
+};
+
 plex.object.set = function(obj, attrs) {
   for (var a in attrs) {
     obj[a] = attrs[a];

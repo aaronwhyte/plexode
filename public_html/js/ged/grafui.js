@@ -149,6 +149,7 @@ GrafUi.prototype.startLoop = function() {
 
 GrafUi.prototype.stopLoop = function() {
   this.clipboard.stop();
+  this.stopEditingData();
   if (this.listeners) {
     this.listeners.removeAllListeners();
     this.listeners = null;
@@ -262,6 +263,9 @@ GrafUi.prototype.getMouseWheelListener = function() {
 GrafUi.prototype.getKeyDownListener = function() {
   var self = this;
   return function(event) {
+    // Don't act on keypresses if we're using the keyboard for data editing.
+    if (self.mode == GrafUi.Mode.EDIT_DATA) return;
+
     event = event || window.event;
 
     if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.ADD_SELECTIONS)) {
@@ -342,6 +346,9 @@ GrafUi.prototype.getKeyDownListener = function() {
 GrafUi.prototype.getKeyUpListener = function() {
   var self = this;
   return function(event) {
+    // Don't act on keypresses if we're using the keyboard for data editing.
+    if (self.mode == GrafUi.Mode.EDIT_DATA) return;
+
     event = event || window.event;
     if (self.mode == GrafUi.Mode.PASTE &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
@@ -364,37 +371,71 @@ GrafUi.prototype.startEditingData = function(objId) {
   var obj = this.grafEd.getModel().getObj(objId);
 
   // create a little form I guess?
-  var form = plex.dom.ce('div', document.body);
-  form.className = 'gedEditForm';
+  this.editDiv = plex.dom.ce('div', document.body);
+  this.editDiv.className = 'gedEditForm';
+
   var first = true;
   for (var key in obj.data) {
-    var field = plex.dom.ce('div', form);
-    field.className = 'gedEditField';
+    var field = plex.dom.ce('div', this.editDiv);
+    field.classList.add('gedEditField');
 
     var labelElem = plex.dom.ce('label', field);
-    labelElem.className = 'gedEditLabel';
+    labelElem.classList.add('gedEditLabel');
     plex.dom.ct(key + ':', labelElem);
 
     var val = obj.data[key];
     var inputElem = plex.dom.ce('input', field);
-    inputElem.className = 'gedEditInput';
+    inputElem.classList.add('gedEditInput');
     inputElem.value = val;
     inputElem.id = 'editdata_' + key;
-    if (first) inputElem.focus();
+    if (first) {
+      window.setTimeout(function(){inputElem.focus()}, 0);
+    }
     first = false;
   }
-  var button = plex.dom.ce('button', form);
-  button.className = 'gedEditButton';
+  var button = plex.dom.ce('button', this.editDiv);
+  button.classList.add('gedEditButton');
   plex.dom.ct('Save & Close', button);
   button.onclick = this.getEditingOkFn();
 };
 
 GrafUi.prototype.getEditingOkFn = function() {
-  // TODO more
-  this.stopEditingData();
+  var self = this;
+  return function() {
+    self.saveEditingData();
+    self.stopEditingData();
+  };
+};
+
+/**
+ * Saves the data in the little object data form, if any
+ */
+GrafUi.prototype.saveEditingData = function() {
+  if (!this.editDiv) return;
+  var obj = this.grafEd.getModel().objs[this.editingId];
+  var inputs = document.querySelectorAll('.gedEditInput');
+  if (obj && inputs.length) {
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      var key = input.id.split('_')[1];
+      var val = input.value;
+      var changes = {};
+      if (key && key in obj.data && obj.data[key] != val) {
+        changes[key] = input.value;
+      }
+    }
+    if (!plex.object.isEmpty(changes)) {
+      this.grafEd.editObjData(this.editingId, changes);
+    }
+  }
 };
 
 GrafUi.prototype.stopEditingData = function() {
+  if (this.editDiv) {
+    this.editDiv.innerHTML = '';
+    document.body.removeChild(this.editDiv);
+    this.editDiv = null;
+  }
   this.editingId = null;
   this.mode = GrafUi.Mode.DEFAULT;
 };
