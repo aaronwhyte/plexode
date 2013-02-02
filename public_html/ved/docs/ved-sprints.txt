@@ -55,25 +55,48 @@ v Convert some existing levels from LevelProg code to JSON, to test-publish Ved 
 
 Add real Loopwood front page.
 Add loopwood.com/vorp
-Unify modes: edit & play
 
 Draw portal link or cluster hilite or something.
 
-Level management?
-Add level
-Delete level
-Rename level
-
 Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
+
+===================================================================================
+
+- Esc to close dialogs
+- Redo help.
+  - "h" or "?" to toggle.
+  - Show keyboard shortcuts organized by
+  -
+- Improve highlighting. Those circles look kinda lame.
+- Data Editing Polish
+  - One button per field
+  - Line up editor with button
+  - Real-time editing w transformation and stuff as you type
+  - Commit and end by
+    - clicking off of the field
+    - hitting "esc"
+    - hitting "enter" (no multiline values?)
+    - pushing "close" button?
+  - Alert to invalid values as they are typed?
+    - detect them in the transformation process?
+    - turn field pink or something (don't do text, since "empty" might be invalid)
+
+Level Creation Process, merging Vorp and Ved
+- Official levels are uneditable but have a "copy and edit" button (?)
+- Custom levels are just below official ones. They have ordered number names? Or namegenerator?
+- "New Level" button adds a generic new level
+
+Sharing
+- Encoding
+  - Encode any level into a linkifier-friendly URL starting with 
+  - figure out best dictionary
+  - round floating-pt precision during edits to shrink URL
+- Decoding
+  -
 
 Milestone: Ship Ved itself
 
-
-
-InstaVorp
-- super basic url
-- figure out best dictionary
-- maybe round floating-pt precision
+===================================================================================
 
 Touch UI
 - zoom pinch
