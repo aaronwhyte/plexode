@@ -262,7 +262,7 @@ Transformer.prototype.transformCluster = function(cluster) {
       var y1 = parts[1].y;
       template = this.createBaseTemplate()
           .makeImmovable()
-          .setPainter(new RectPainter("rgb(80,48,176)"))
+          .setPainter(new RectPainter("rgb(70, 70, 210)"))
           .setPosXY(this.mid(x0, x1), this.mid(y0, y1))
           .setRadXY(
               this.rad(x0, x1, Transformer.WALL_RADIUS),
