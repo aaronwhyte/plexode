@@ -50,6 +50,9 @@ function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, clipMen
   this.panning = false;
 
   this.contentsFramed = false;
+
+  // TODO pass in
+  this.snap = 10;
 }
 
 GrafUi.FPS = 30;
@@ -352,7 +355,7 @@ GrafUi.prototype.getKeyUpListener = function() {
     event = event || window.event;
     if (self.mode == GrafUi.Mode.PASTE &&
         self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
-      self.grafEd.continuePasteVec(self.worldPos);
+      self.grafEd.continuePasteVec(self.worldPos, self.snap);
       self.grafEd.endPaste(false);
       self.viewDirty = true;
       self.mode = GrafUi.Mode.DEFAULT;
@@ -460,7 +463,7 @@ GrafUi.prototype.startDraggingSelection = function() {
 };
 
 GrafUi.prototype.endDraggingSelection = function() {
-  this.grafEd.continueDraggingSelectionVec(this.worldPos);
+  this.grafEd.continueDraggingSelectionVec(this.worldPos, this.snap);
   this.grafEd.endDraggingSelection();
   this.viewDirty = true;
   this.mode = GrafUi.Mode.DEFAULT;
@@ -479,7 +482,7 @@ GrafUi.prototype.startDraggingPart = function(partId) {
 };
 
 GrafUi.prototype.endDraggingPart = function() {
-  this.grafEd.continueDraggingPartVec(this.worldPos);
+  this.grafEd.continueDraggingPartVec(this.worldPos, this.snap);
   this.grafEd.endDraggingPart();
   //this.grafEd.popSelection();
   this.viewDirty = true;
@@ -553,16 +556,16 @@ GrafUi.prototype.clock = function() {
   if (this.mode == GrafUi.Mode.SELECT) {
     this.grafEd.continueSelectionVec(this.worldPos);
   } else if (this.mode == GrafUi.Mode.DRAG_SELECTION) {
-    this.grafEd.continueDraggingSelectionVec(this.worldPos);
+    this.grafEd.continueDraggingSelectionVec(this.worldPos, this.snap);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.DRAG_PART) {
-    this.grafEd.continueDraggingPartVec(this.worldPos);
+    this.grafEd.continueDraggingPartVec(this.worldPos, this.snap);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.DRAG_JACK) {
     this.grafEd.continueDraggingJackVec(this.worldPos);
     this.plugin.invalidate();
   } else if (this.mode == GrafUi.Mode.PASTE) {
-    this.grafEd.continuePasteVec(this.worldPos);
+    this.grafEd.continuePasteVec(this.worldPos, this.snap);
     this.plugin.invalidate();
   }
 

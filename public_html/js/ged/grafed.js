@@ -169,37 +169,42 @@ GrafEd.prototype.clearSelection = function() {
   while(this.selStack.pop());
 };
 
-GrafEd.prototype.getMoveSelectedPartsOps = function(offset) {
+GrafEd.prototype.getMoveSelectedPartsOps = function(offset, opt_snap) {
   var ops = [];
   var ids = this.getSelectedIds();
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
     var part = this.model.getPart(id);
     if (!part) continue; // may be a jack
-    ops.push(this.getMovePartOp(id, offset));
+    ops.push(this.getMovePartOp(id, offset, opt_snap));
   }
   return ops;
 };
 
-GrafEd.prototype.getMovePartOp = function(partId, offset) {
+GrafEd.prototype.snap = function(num, opt_snap) {
+  if (!opt_snap) return num;
+  return Math.round(num / opt_snap) * opt_snap;
+};
+
+GrafEd.prototype.getMovePartOp = function(partId, offset, opt_snap) {
   var part = this.model.getPart(partId);
   return {
-    type:GrafOp.Type.MOVE_PART,
-    id:partId,
-    x:part.x + offset.x,
-    y:part.y + offset.y,
-    oldX:part.x,
-    oldY:part.y
+    type: GrafOp.Type.MOVE_PART,
+    id: partId,
+    x: this.snap(part.x + offset.x, opt_snap),
+    y: this.snap(part.y + offset.y, opt_snap),
+    oldX: part.x,
+    oldY: part.y
   };
 };
 
-GrafEd.prototype.getPasteModelOps = function(offset) {
+GrafEd.prototype.getPasteModelOps = function(offset, opt_snap) {
   var tempModel = new GrafModel();
   tempModel.addModel(this.pasteModel);
   for (var partId in tempModel.parts) {
     var part = tempModel.parts[partId];
-    part.x += offset.x;
-    part.y += offset.y;
+    part.x = this.snap(part.x + offset.x, opt_snap);
+    part.y = this.snap(part.y + offset.y, opt_snap);
   }
   var ops = tempModel.createOps();
   this.pasteIdMap = this.model.rewriteOpIds(ops);
@@ -355,15 +360,15 @@ GrafEd.prototype.startDraggingSelectionXY = function(x, y) {
   this.dragSelectionEnd = new Vec2d(x, y);
 };
 
-GrafEd.prototype.continueDraggingSelectionVec = function(v) {
-  this.continueDraggingSelectionXY(v.x, v.y);
+GrafEd.prototype.continueDraggingSelectionVec = function(v, opt_snap) {
+  this.continueDraggingSelectionXY(v.x, v.y, opt_snap);
 };
 
-GrafEd.prototype.continueDraggingSelectionXY = function(x, y) {
+GrafEd.prototype.continueDraggingSelectionXY = function(x, y, opt_snap) {
   this.dragSelectionEnd.setXY(x, y);
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   var offset = new Vec2d().set(this.dragSelectionEnd).subtract(this.dragSelectionStart);
-  this.stagedOps = this.getMoveSelectedPartsOps(offset);
+  this.stagedOps = this.getMoveSelectedPartsOps(offset, opt_snap);
   this.model.applyOps(this.stagedOps);
 };
 
@@ -382,11 +387,11 @@ GrafEd.prototype.startDraggingPartVec = function(partId, v) {
   this.dragPartEnd = new Vec2d().set(v);
 };
 
-GrafEd.prototype.continueDraggingPartVec = function(v) {
+GrafEd.prototype.continueDraggingPartVec = function(v, opt_snap) {
   this.dragPartEnd.set(v);
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   var offset = new Vec2d().set(this.dragPartEnd).subtract(this.dragPartStart);
-  this.stagedOps = [this.getMovePartOp(this.dragPartId, offset)];
+  this.stagedOps = [this.getMovePartOp(this.dragPartId, offset, opt_snap)];
   this.model.applyOps(this.stagedOps);
 };
 
@@ -458,15 +463,15 @@ GrafEd.prototype.startPasteXY = function(model, x, y) {
   this.pasteEnd = new Vec2d(x, y);
 };
 
-GrafEd.prototype.continuePasteVec = function(v) {
-  this.continuePasteXY(v.x, v.y);
+GrafEd.prototype.continuePasteVec = function(v, opt_snap) {
+  this.continuePasteXY(v.x, v.y, opt_snap);
 };
 
-GrafEd.prototype.continuePasteXY = function(x, y) {
+GrafEd.prototype.continuePasteXY = function(x, y, opt_snap) {
   this.pasteEnd.setXY(x, y);
   this.model.applyOps(GrafOp.createReverses(this.stagedOps));
   var offset = new Vec2d().set(this.pasteEnd).subtract(this.pasteStart);
-  this.stagedOps = this.getPasteModelOps(offset);
+  this.stagedOps = this.getPasteModelOps(offset, opt_snap);
   this.model.applyOps(this.stagedOps);
 };
 
