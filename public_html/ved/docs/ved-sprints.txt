@@ -48,8 +48,89 @@ v Some way to publish levels
   v JSON view + cut-n-paste?
 v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
 - Actually make new levels.
+  - instructional
+    - movement and exits
+    - shoving
+    - pushing buttons
+    - grab and drop
+    - throw
+    - teleporters
+    - death is OK
+  - Challenging
 - Push
 - Publicize
+
+===================================================================================
+
+Sound
+- Put a noise in it! Use the new HTML5 sound synth goodies. 8-bit quality OK.
+  - Birth
+  - Deaths
+  - reaching to grab stuff
+  - grab
+  - stiff grip
+  - release
+  - beam break
+  - throw
+  - Things bumping into things
+  - button press
+  - gripper grab/release
+  - door open/close
+  - zapper on/off
+
+Portal tweaks
+- They push away from teleport-blocking objects so they're unobstructed.
+- While they ARE obstructed they kind of show it
+- They do something cool when something teleports
+- They're clearly teleporters and not blocks or something. Hypersquare thing?
+
+Player tweaks
+- Put a little meh-face on it with eyes that move!
+- Better death animations, depending on the manner of doom.
+- Better assembly animation.
+  - How about a little tree grows
+  - and bears player as fruit
+  - before disintegrating?
+
+Exit tweaks
+- look good before touch
+- exit warp animation
+
+Rendering performance improvements
+- Prerender all immovable chunks like walls, and copy that out?
+
+Background
+- Starfield? Texture? Buildings?
+
+Milestone: Production values go from "craptacular" to "weird retro vibe".
+
+===================================================================================
+
+OneTimeSwith (pulsebutton + infinite timer)
+OnOffSwitch (pulsebutton + toggle)
+PulseButton (what we have today)
+
+Telltale
+Not
+And
+Or
+Edge
+Random
+
+Zombie
+Zombie Assembler
+
+Plasma Beamer
+Plasma Baller
+Plasma Switch
+
+HandHold
+Repulsor
+
+Turret
+Drone
+
+Milestone: More Levels!
 
 ===================================================================================
 
@@ -63,10 +144,9 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
 ===================================================================================
 
 - Esc to close dialogs
-- Redo help.
+- Redo editor help.
   - "h" or "?" to toggle.
-  - Show keyboard shortcuts organized by
-  -
+  - Show keyboard shortcuts organized by effect, not key.
 - Improve highlighting. Those circles look kinda lame.
 - Data Editing Polish
   - One button per field
@@ -80,6 +160,8 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
   - Alert to invalid values as they are typed?
     - detect them in the transformation process?
     - turn field pink or something (don't do text, since "empty" might be invalid)
+- curved wires
+- arrows on jacks
 
 Level Creation Process, merging Vorp and Ved
 - Official levels are uneditable but have a "copy and edit" button (?)
@@ -92,9 +174,8 @@ Sharing
   - figure out best dictionary
   v round floating-pt precision during edits to shrink URL
 - Decoding
-  -
 
-Milestone: Ship Ved itself
+Milestone: Ship Ved with easy level sharing
 
 ===================================================================================
 
