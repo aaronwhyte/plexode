@@ -47,6 +47,10 @@ v Ved usable by me for editing.
 v Some way to publish levels
   v JSON view + cut-n-paste?
 v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
+- Change level creation flow
+  - Add "new level" button to vedapp home
+  - Remove list of existing levels from ved.
+  - Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.
   - Instructions
     - 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
@@ -55,9 +59,9 @@ v Convert some existing levels from LevelProg code to JSON, to test-publish Ved 
     - 4: Dying is no big deal. Sometimes you need to do it on purpose to solve a level.
     - 5: You've got a tractor beam! Hold Z while moving around to grab things. Press X to let go.
     - 6: Once you've grabbed something, hold Z for a strong grip, or let go of Z to let it flop around.
-    - 7: You can throw something you've grabbed, by holding Z and then tapping X.
-    - 8: The blue things are teleporters. Touch one to get teleported to the other.
-    - 9: You can grab teleporters and carry them around. And you can teleport things by hitting them with a teleporter.
+    - 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
+    - 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
+    - 9: You can grab a teleporter and carry it around. And you can teleport things by hitting them with a teleporter.
   - Challenges
   - Apology for Vorp production values.
 
