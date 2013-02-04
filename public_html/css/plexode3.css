@@ -22,10 +22,12 @@ div.top {
 }
 
 /* logo */
-span.logo {
+a.logo {
   letter-spacing: -0.15em;
   font-size: 200%;
   font-family: courier new, courier, monospace;
+  text-decoration:none;
+  color:black;
 }
 
 /* navigation */

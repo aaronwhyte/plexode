@@ -1,5 +1,5 @@
 links = [
-  ("main", ""),
+#  ("main", ""),
   ("insta-html", "insta-html/"),
   ("eval", "eval/"),
   ("eval2", "eval2/"),
@@ -70,7 +70,7 @@ def navLink(navTuple, level):
         '</a>\n'])
 
 def plexodeLogo():
-    html = ['<span class="logo">']
+    html = ['<a href="/" class="logo">']
     logo = []
     logo.extend('pleXode')
     for letter in logo:
@@ -80,7 +80,7 @@ def plexodeLogo():
             html.append('<b>p</b>')
         else:
             html.append(letter)
-    html.append('</span>\n')
+    html.append('</a>\n')
     return ''.join(html)
 
 

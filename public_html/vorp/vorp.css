@@ -28,6 +28,11 @@ a {
   color:#96e;
 }
 
+a.logo {
+  color: rgb(170, 170, 170);
+  font-weight: normal;
+}
+
 a.nav {
   border-color: #222;
 }
