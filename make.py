@@ -34,23 +34,6 @@ from py import *
 # etc.
 
 
-def ensureDir(f):
-  d = os.path.dirname('%s/' % f)
-  print 'ensuring %s' % d
-  if not os.path.exists(d):
-    os.makedirs(d)
-
-
-def writePublicHtml(bdir, path, content):
-  print "  writing %s/index.html..." % path
-  d = os.path.join(bdir, 'public_html', path)
-  ensureDir(d)
-  fname = os.path.join(d, 'index.html')
-  f = open(fname, 'w')
-  f.write(content)
-  f.close()
-
-
 def buildPlexode(bdir):
   print "START building plexode"
 
@@ -65,6 +48,17 @@ def buildPlexode(bdir):
   shutil.copytree("cgi-bin", os.path.join(bdir, 'cgi-bin'))
   shutil.copytree("public_html",  os.path.join(bdir, 'public_html'))
 
+  print "generating non-vorp index.html files"
+  build.writePublicHtml(bdir,'', mainpage.formatMain())
+  build.writePublicHtml(bdir, 'insta-html', instahtml.formatInstaHtml())
+  build.writePublicHtml(bdir, 'eval', eval1.formatEval())
+  build.writePublicHtml(bdir, 'eval2', eval2.formatEval2())
+  build.writePublicHtml(bdir, 'eval3', eval3.formatEval3())
+  build.writePublicHtml(bdir, 'eval3quirks', eval3.formatEval3(quirks=True))
+  build.writePublicHtml(bdir, 'fracas', fracas.formatFracas())
+  build.writePublicHtml(bdir, 'chordo', chordo.formatChordo())
+  build.writePublicHtml(bdir, 'u', unsquish.formatUnsquish())
+
   print "compiling vorp JS"
   vorpJsName = 'vorp_%s.js' % str(int(time.time() * 1000))
   vorpJsPublicHtmlPath = os.path.join('vorp', vorpJsName)
@@ -75,24 +69,10 @@ def buildPlexode(bdir):
   vedJsPublicHtmlPath = os.path.join('vorp/edit', vedJsName)
   concatenateJs(bdir, getVedJsFileNames(), vedJsPublicHtmlPath)
 
-  print "generating index.html files"
-  writePublicHtml(bdir,'', mainpage.formatMain())
-  writePublicHtml(bdir, 'insta-html', instahtml.formatInstaHtml())
-  writePublicHtml(bdir, 'eval', eval1.formatEval())
-  writePublicHtml(bdir, 'eval2', eval2.formatEval2())
-  writePublicHtml(bdir, 'eval3', eval3.formatEval3())
-  writePublicHtml(bdir, 'eval3quirks', eval3.formatEval3(quirks=True))
-  writePublicHtml(bdir, 'fracas', fracas.formatFracas())
-  writePublicHtml(bdir, 'vorp', vorp.formatVorp())
-  writePublicHtml(bdir, 'vorp/level1', vorp.formatVorpLevel(vorpJsName, "Level 1", "first level ever"))
-  writePublicHtml(bdir, 'vorp/level2', vorp.formatVorpLevel(vorpJsName, "Level 2", "wall of death test"))
-  writePublicHtml(bdir, 'vorp/level3', vorp.formatVorpLevel(vorpJsName, "Level 3", "first proper level"))
-  writePublicHtml(bdir, 'vorp/level4', vorp.formatVorpLevel(vorpJsName, "Level 4", "sensor and door test"))
-  writePublicHtml(bdir, 'vorp/level5', vorp.formatVorpLevel(vorpJsName, "Level 5", "zero-gravity grip-switch test"))
-  writePublicHtml(bdir, 'vorp/level6', vorp.formatVorpLevel(vorpJsName, "Level 6", "second proper level"))
-  writePublicHtml(bdir, 'vorp/edit', ved.formatVed(vorpJsName, vedJsName))
-  writePublicHtml(bdir, 'chordo', chordo.formatChordo())
-  writePublicHtml(bdir, 'u', unsquish.formatUnsquish())
+  print "generating vorp & ved index.html files"
+  build.writePublicHtml(bdir, 'vorp', vorp.formatVorp())
+  vorp.writePublicHtmlForAllLevels(bdir, "vorp/", vorpJsName);
+  build.writePublicHtml(bdir, 'vorp/edit', ved.formatVed(vorpJsName, vedJsName))
 
   print "DONE building plexode"
 
@@ -209,7 +189,7 @@ def compileJs(pathOfCompilerJar, jsCompFlags):
 
 
 def downloadClosure(pathOfCompilerJar):
-  ensureDir(pathOfCompilerJar)
+  build.ensureDir(pathOfCompilerJar)
   argList = [
       'curl', '-O',
       'http://closure-compiler.googlecode.com/files/compiler-latest.zip']
