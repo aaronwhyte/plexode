@@ -302,10 +302,10 @@ VedApp.prototype.renderJsonMode = function(appDiv, levelName) {
   div.style.fontSize = 'small';
   div.className = 'selectable';
   var ops = model.createOps();
-  var html = plex.string.textToHtml(JSON.stringify(ops));
-//  var html = plex.string.textToHtml(JSON.stringify(ops, null, "  "));
+//  var html = plex.string.textToHtml(JSON.stringify(ops));
+  var html = plex.string.textToHtml(JSON.stringify(ops, null, "  "));
   html = plex.string.replace(html, "  ", "&nbsp; ");
-//  html = plex.string.replace(html, "\n", "<br>");
+  html = plex.string.replace(html, "\n", "<br>");
   div.innerHTML = html;
 };
 
