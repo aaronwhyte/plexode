@@ -32,7 +32,7 @@ plex.string.textToRegExpStr = function(text) {
 /**
  * Converts text to HTML, including double-quotes, but not single-quotes.
  * @param {String} text
- * @param {Boolean} opt_preserveSpaces  if true, nbsp's will replace every
+ * @param {Boolean=} opt_preserveSpaces  if true, nbsp's will replace every
  *     other space in a run of spaces, and br's will replace eolns.
  */
 plex.string.textToHtml = function(text, opt_preserveSpaces) {

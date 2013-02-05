@@ -7,6 +7,7 @@
 function Stor(storage, prefix) {
   this.storage = storage;
   this.prefix = prefix;
+
   this.namePrefix = this.prefix + '/' + Stor.NAME + '/';
   this.dataPrefix = this.prefix + '/' + Stor.DATA + '/';
   this.lastIndex = {}; // cache of dataId to lastIndex
@@ -74,12 +75,11 @@ Stor.prototype.appendValues = function(name, values) {
 };
 
 /**
- * Appends a new value to the stor. Creates a new names object if the name isn't in use.
- * @param name
- * @param value
- * @return the index of the newly appended value
+ * Lazilly creates a data ID for this Stor, and returns it.
+ * @param {String} name
+ * @return {String} data ID
  */
-Stor.prototype.appendValue = function(name, value) {
+Stor.prototype.getDataId = function(name) {
   var nameKey = this.getKeyForName(name);
   // see if the name is there
   var dataId = this.storage.getItem(nameKey);
@@ -97,6 +97,17 @@ Stor.prototype.appendValue = function(name, value) {
   }
   // keep the cache fresh
   this.idToName[dataId] = name;
+  return dataId;
+};
+
+/**
+ * Appends a new value to the stor. Creates a new names object if the name isn't in use.
+ * @param name
+ * @param value
+ * @return the index of the newly appended value
+ */
+Stor.prototype.appendValue = function(name, value) {
+  var dataId = this.getDataId(name);
   // Find the first unused index.
   var nextIndex = (this.lastIndex[dataId] || 0) + 1;
   var dataKey;
@@ -146,7 +157,7 @@ Stor.prototype.getValuesAfterIndex = function(name, afterIndex) {
 };
 
 /**
- * @return the next available index for the named item
+ * @return {number} the next available index for the named item
  */
 Stor.prototype.getNextIndex = function(name) {
   var dataId = this.storage.getItem(this.getKeyForName(name));

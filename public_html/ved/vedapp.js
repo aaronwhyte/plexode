@@ -1,5 +1,8 @@
 /**
  * Top level class for the Vorp EDitor.
+ * @param {Element} rootNode
+ * @param {Stor} stor
+ * @param {Object=} opt_testLevelMap
  * @constructor
  */
 function VedApp(rootNode, stor, opt_testLevelMap) {
@@ -94,6 +97,15 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   // for callbacks
   var self = this;
 
+  // create level button
+  var createButton = plex.dom.ce('button', appDiv);
+  plex.dom.appendClass(createButton, 'vedButton');
+  plex.dom.ct('Create new level', createButton);
+  createButton.onclick = function() {
+    self.createLevel();
+    self.render();
+  };
+
   // nuke button
   var nukeButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(nukeButton, 'vedButton');
@@ -102,6 +114,7 @@ VedApp.prototype.renderDirectory = function(appDiv) {
     self.nuke();
     self.render();
   };
+
   // repopulate button
   var repopulateButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(repopulateButton, 'vedButton');
@@ -309,6 +322,21 @@ VedApp.prototype.renderJsonMode = function(appDiv, levelName) {
   div.innerHTML = html;
 };
 
+
+VedApp.prototype.createLevel = function() {
+  function pad(str, size) {
+    str = String(str);
+    while (str.length < size) {
+      str = '0' + str;
+    }
+    return str;
+  }
+  var d = new Date();
+  var levelName = [d.getFullYear(), pad(d.getMonth() + 1, 2), pad(d.getDay(), 2)].join('.') +
+      ' ' + d.toLocaleTimeString();
+  var opStor = new OpStor(this.stor, levelName);
+  opStor.touch();
+};
 
 VedApp.prototype.nuke = function() {
   // TODO: stor.deleteAll()

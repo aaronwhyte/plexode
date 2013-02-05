@@ -48,7 +48,7 @@ v Some way to publish levels
   v JSON view + cut-n-paste?
 v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
 - Change level creation flow
-  - Add "new level" button to vedapp home
+  v Add "new level" button to vedapp home
   - Remove list of existing levels from ved.
   - Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.

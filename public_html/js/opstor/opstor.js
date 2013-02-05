@@ -33,6 +33,10 @@ OpStor.prototype.appendOp = function(clientOpId, op) {
   return actualIndex;
 };
 
+OpStor.prototype.touch = function() {
+  this.stor.getDataId(this.name);
+};
+
 /**
  * @param {number} afterIndex
  * @return {Array<Array>} an array of rows where each has the fields in OpStor.fields.
