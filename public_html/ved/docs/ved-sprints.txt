@@ -47,10 +47,10 @@ v Ved usable by me for editing.
 v Some way to publish levels
   v JSON view + cut-n-paste?
 v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
-- Change level creation flow
+v Change level creation flow
   v Add "new level" button to vedapp home
-  - Remove list of existing levels from ved.
-  - Change vorpLevels from key/val pair to array, removing name and desc.
+  x Remove list of existing levels from ved.
+  x Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.
   - Instructions
     - 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.

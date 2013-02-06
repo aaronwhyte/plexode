@@ -30,17 +30,26 @@ Stor.prototype.listenToStorage = function() {
   window.addEventListener("storage", this.getStorageListener(), true);
 };
 
+Stor.KEY_RE = /^([^\/]+)\/([^\/]+)\/(.*)$/g;
+Stor.DATA_RE = /^([^\/]+)\/(.*)$/g;
+
 Stor.prototype.getStorageListener = function() {
   var self = this;
   return function storStorageListener(e) {
-    var path = e.key.split('/');
-    if (!path || path.length != 4 || path[0] != self.prefix || path[1] != Stor.DATA) {
-      return;
-    }
-    var id = path[2];
-    var name = self.getNameForId(id);
-    if (name) {
-      self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, JSON.parse(e.newValue));
+    var m = Stor.KEY_RE.exec(e.key);
+    var prefix = m[1];
+    var type = m[2];
+    var tail = m[3];
+    if (prefix != self.prefix) return;
+    if (type == Stor.DATA) {
+      var dataSplit = Stor.DATA_RE.exec(tail);
+      var id = dataSplit[1];
+      var name = self.getNameForId(id);
+      if (name) {
+        self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, JSON.parse(e.newValue));
+      }
+    } else if (type == Stor.NAME) {
+      // TODO rename op?
     }
   };
 };
