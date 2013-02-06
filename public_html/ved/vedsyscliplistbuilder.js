@@ -140,6 +140,11 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
       opsToAddPart(2, 1),
       opsToAddJacks(2, GripSprite)));
 
+  addOpsToMap(VedType.NOT, [].concat(
+      opsToAddCluster(1, VedType.NOT),
+      opsToAddPart(2, 1),
+      opsToAddJacks(2, NotSprite)));
+
   addMonoPartCluster(VedType.PLAYER_ASSEMBLER);
 
   addBiPartCluster(VedType.PORTAL);

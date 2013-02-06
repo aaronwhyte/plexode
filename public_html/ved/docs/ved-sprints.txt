@@ -53,10 +53,14 @@ v Change level creation flow
   x Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.
   - Instructions
-    - 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
-    - 2: You can push things out of your way.
-    - 3: Touch buttons and sensors to make things happen.
-    - 4: Dying is no big deal. Sometimes you need to do it on purpose to solve a level.
+    v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
+    v 2: You can push things out of your way.
+    v 3: Touch buttons and sensors to make things happen.
+    v 4: Dying is no big deal. Sometimes you need to do it on purpose to solve a level.
+      v Add "NOT" logic sprite
+        v sprite itself
+        v transformer
+        v sysclip item
     - 5: You've got a tractor beam! Hold Z while moving around to grab things. Press X to let go.
     - 6: Once you've grabbed something, hold Z for a strong grip, or let go of Z to let it flop around.
     - 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.

@@ -194,6 +194,17 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprites.push(sprite);
       break;
 
+    case VedType.NOT:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeIntangible()
+          .setPos(controlVec);
+      sprite = new NotSprite(template);
+      this.transformJacks(sprite, part.getJackList());
+      sprites.push(sprite);
+      break;
+
     case VedType.PLAYER_ASSEMBLER:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
