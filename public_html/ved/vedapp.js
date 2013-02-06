@@ -331,11 +331,11 @@ VedApp.prototype.createLevel = function() {
     }
     return str;
   }
-  var d = new Date();
-  var levelName = [d.getFullYear(), pad(d.getMonth() + 1, 2), pad(d.getDay(), 2)].join('.') +
-      ' ' + d.toLocaleTimeString();
-  var opStor = new OpStor(this.stor, levelName);
-  opStor.touch();
+  var levelName = prompt("New level name?");
+  if (levelName) {
+    var opStor = new OpStor(this.stor, levelName);
+    opStor.touch();
+  }
 };
 
 VedApp.prototype.nuke = function() {
