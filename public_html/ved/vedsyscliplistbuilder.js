@@ -118,6 +118,8 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
       opsToAddPart(2, 1),
       opsToAddJacks(2, BeamerSprite)));
 
+  addMonoPartCluster(VedType.BIG_BLOCK);
+
   addMonoPartCluster(VedType.BLOCK);
 
   addOpsToMap(VedType.BUTTON, [].concat(

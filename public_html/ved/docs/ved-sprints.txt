@@ -52,7 +52,7 @@ v Change level creation flow
   x Remove list of existing levels from ved.
   x Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.
-  - Instructions
+  - Create lesson level JSON
     v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
     v 2: You can push things out of your way.
     v 3: Touch buttons and sensors to make things happen.
@@ -61,14 +61,16 @@ v Change level creation flow
         v sprite itself
         v transformer
         v sysclip item
-    - 5: You've got a tractor beam! Hold Z while moving around to grab things. Press X to let go.
-    - 6: Once you've grabbed something, hold Z for a strong grip, or let go of Z to let it flop around.
-    - 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
+    v 5: You have a tractor beam! Hold Z while moving around to grab things. Press X to let go.
+      v add big_block object
+      v player must pull a big block out of a hole, or grab a block on the far side of a zapper.
+    v 6  grip-switches
+    v 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
     - 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
-    - 9: You can grab a teleporter and carry it around. And you can teleport things by hitting them with a teleporter.
+    - 9: You can grab a teleporter and carry it around.
+  - Make lesson JSON into real connected levels.
   - Challenges
   - Apology for Vorp production values.
-
 - Push
 - Publicize
 

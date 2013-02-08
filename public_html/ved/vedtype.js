@@ -3,6 +3,7 @@
  */
 VedType = {
   BEAM_SENSOR: 'beam_sensor',
+  BIG_BLOCK: 'big_block',
   BLOCK: 'block',
   BUTTON: 'button',
   DOOR: 'door',

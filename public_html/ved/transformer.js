@@ -111,6 +111,19 @@ Transformer.prototype.transformCluster = function(cluster) {
       beamer.setTargetSprite(sensor);
       break;
 
+    case VedType.BIG_BLOCK:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeMovable()
+          .setPainter(new RectPainter("#dd4"))
+          .setPos(controlVec)
+          .setRadXY(Transformer.BOX_RADIUS * 2, Transformer.BOX_RADIUS * 2)
+          .setMass(4);
+      sprite = new BlockSprite(template);
+      sprites.push(sprite);
+      break;
+
     case VedType.BLOCK:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
