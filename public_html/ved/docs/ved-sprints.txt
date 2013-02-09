@@ -52,7 +52,7 @@ v Change level creation flow
   x Remove list of existing levels from ved.
   x Change vorpLevels from key/val pair to array, removing name and desc.
 - Actually make new levels.
-  - Create lesson level JSON
+  v Create lesson level JSON
     v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
     v 2: You can push things out of your way.
     v 3: Touch buttons and sensors to make things happen.
@@ -66,10 +66,11 @@ v Change level creation flow
       v player must pull a big block out of a hole, or grab a block on the far side of a zapper.
     v 6  grip-switches
     v 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
-    - 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
-    - 9: You can grab a teleporter and carry it around.
-  - Make lesson JSON into real connected levels.
+    v 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
+    v 9: You can grab a teleporter and carry it around.
+  v Make lesson JSON into real connected levels.
   - Challenges
+    -
   - Apology for Vorp production values.
 - Push
 - Publicize
@@ -124,12 +125,11 @@ OneTimeSwith (pulsebutton + infinite timer)
 OnOffSwitch (pulsebutton + toggle)
 PulseButton (what we have today)
 
-Telltale
-Not
-And
-Or
-Edge
-Random
+- Telltale
+v Not
+- And
+- Edge
+- Random
 
 Zombie
 Zombie Assembler

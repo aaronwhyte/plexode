@@ -55,7 +55,29 @@ Or follow all Plexode changes on <a href="https://github.com/aaronwhyte/plexode"
 
 
 VORP_LEVELS = (
-  ("level1", "level one", "first level ever"),
+  ("lesson1", "Lesson 1: Moving Around",
+    "Hi there! You can move with the arrow keys. (There's no touchscreen UI yet.)<br>Bump into the green exit thing to go to the next level."),
+  ("lesson2", "Lesson 2: Pushing Things",
+    "Run into the blocks and push them out of your way to reach the exit."),
+  ("lesson3", "Lesson 3: Buttons and Stuff",
+    "Bump buttons and cross beams to activate doors and things."),
+  ("lesson4", "Lesson 4: Getting Killed Is Completely Normal",
+    "Sometimes you've got to die on purpose to complete a level."),
+  ("lesson5", "Lesson 5: You Have a Tractor Beam!",
+    "Press Z to grab things. Reach farther by using arrow keys. Press X to let go."),
+  ("lesson6", "Lesson 6: Grip Switches",
+    "Put something (yourself, blocks, whatever) near a gripswitch to activate it."),
+  ("lesson7", "Lesson 7: You Can Throw Things",
+    "You can throw something you're holding:<br>" +
+    "Hold down Z, and without letting go, tap X."),
+  ("lesson8", "Lesson 8: Teleport Yourself",
+    "This is a teleporter. Go ahead, touch it."),
+  ("lesson9", "Lesson 9: Move Teleporters Around",
+    "You can grab teleporters and move them around like blocks."),
+  ("lesson10", "Lesson 10: Teleport Other Things",
+    "You can teleport blocks. Sure, why not?"),
+
+  ("level1", "level 1", "first level I ever made"),
   ("level2", "level 2 x_x", "zapper test"),
   ("level3", "level 3 :-0", "1st proper level"),
   ("level4", "level 4 :-/", "sensor and door test"),
@@ -70,7 +92,7 @@ def formatLevelDirectory():
     relPath = level[0]
     title = level[1]
     desc = level[2]
-    h.append('<a href="' + relPath + '">' + title + ': ' + desc + '</a><br>\n')
+    h.append('<a href="' + relPath + '">' + title + '</a><br>\n')
   return ''.join(h)
 
 
@@ -117,7 +139,10 @@ function main() {
 <div id="levelCenter">
 
 <div id="game">
-<div id="levelHeader"><a href="../">plexode:vorp</a> &nbsp; <b>""" + title + "</b>: " + description + """</div>
+<div id="levelHeader">
+<a class="backToVorp" href="../">&laquo; vorp</a><div class="vorpLevelTitle">""" + title + """</div>
+<div class="vorpLevelDesc">""" + description + """</div>
+</div>
 <canvas id="canvas" width=600 height=600></canvas>
 </div>
 
