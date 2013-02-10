@@ -21,7 +21,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "9",
     "clusterId": "7",
-    "x": 910,
+    "x": 750,
     "y": -480
   },
   {
@@ -38,7 +38,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "11",
     "clusterId": "10",
-    "x": 570,
+    "x": 690,
     "y": -430
   },
   {
@@ -134,7 +134,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "63",
     "clusterId": "61",
-    "x": 530,
+    "x": 630,
     "y": -340
   },
   {
@@ -151,14 +151,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "74",
     "clusterId": "73",
-    "x": 530,
+    "x": 630,
     "y": -380
   },
   {
     "type": "addPart",
     "id": "75",
     "clusterId": "73",
-    "x": 530,
+    "x": 630,
     "y": -340
   },
   {
@@ -175,14 +175,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "89",
     "clusterId": "88",
-    "x": 530,
+    "x": 630,
     "y": -380
   },
   {
     "type": "addPart",
     "id": "90",
     "clusterId": "88",
-    "x": 910,
+    "x": 750,
     "y": -380
   },
   {
@@ -199,14 +199,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "104",
     "clusterId": "103",
-    "x": 910,
+    "x": 750,
     "y": -500
   },
   {
     "type": "addPart",
     "id": "105",
     "clusterId": "103",
-    "x": 910,
+    "x": 750,
     "y": -710
   },
   {
@@ -223,14 +223,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "131",
     "clusterId": "130",
-    "x": 930,
+    "x": 770,
     "y": -120
   },
   {
     "type": "addPart",
     "id": "132",
     "clusterId": "130",
-    "x": 1500,
+    "x": 1340,
     "y": -120
   },
   {
@@ -247,14 +247,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "155",
     "clusterId": "154",
-    "x": 1500,
+    "x": 1340,
     "y": -140
   },
   {
     "type": "addPart",
     "id": "156",
     "clusterId": "154",
-    "x": 1500,
+    "x": 1340,
     "y": -690
   },
   {
@@ -271,7 +271,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "266",
     "clusterId": "265",
-    "x": 450,
+    "x": 560,
     "y": -410
   },
   {
@@ -288,14 +288,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "398",
     "clusterId": "397",
-    "x": 910,
+    "x": 750,
     "y": -120
   },
   {
     "type": "addPart",
     "id": "399",
     "clusterId": "397",
-    "x": 910,
+    "x": 750,
     "y": -360
   },
   {
@@ -312,14 +312,14 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1430",
     "clusterId": "1429",
-    "x": 930,
+    "x": 770,
     "y": -710
   },
   {
     "type": "addPart",
     "id": "1431",
     "clusterId": "1429",
-    "x": 1500,
+    "x": 1340,
     "y": -710
   },
   {
@@ -336,7 +336,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1439",
     "clusterId": "1438",
-    "x": 1200,
+    "x": 1040,
     "y": -430
   },
   {
@@ -376,7 +376,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1571",
     "clusterId": "1570",
-    "x": 380,
+    "x": 430,
     "y": -430
   },
   {
@@ -393,7 +393,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1581",
     "clusterId": "1580",
-    "x": 520,
+    "x": 630,
     "y": -430
   },
   {
@@ -410,8 +410,8 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1601",
     "clusterId": "1600",
-    "x": 310,
-    "y": -420
+    "x": 350,
+    "y": -400
   },
   {
     "type": "addCluster",
@@ -427,8 +427,8 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1611",
     "clusterId": "1610",
-    "x": 330,
-    "y": -370
+    "x": 260,
+    "y": -420
   },
   {
     "type": "addCluster",
@@ -444,8 +444,8 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1727",
     "clusterId": "1726",
-    "x": 390,
-    "y": -330
+    "x": 310,
+    "y": -320
   },
   {
     "type": "addCluster",
@@ -461,7 +461,7 @@ vorpLevels['lesson 5'] = [
     "type": "addPart",
     "id": "1735",
     "clusterId": "1734",
-    "x": 380,
-    "y": -380
+    "x": 490,
+    "y": -390
   }
 ];
