@@ -16,6 +16,17 @@ def formatVed(vorpJsName, vedJsName):
 <script src="../""" + vorpJsName + """"></script>
 <script src="./""" + vedJsName + """"></script>
 
+<script src="../lesson1/level.js"></script>
+<script src="../lesson2/level.js"></script>
+<script src="../lesson3/level.js"></script>
+<script src="../lesson4/level.js"></script>
+<script src="../lesson5/level.js"></script>
+<script src="../lesson6/level.js"></script>
+<script src="../lesson7/level.js"></script>
+<script src="../lesson8/level.js"></script>
+<script src="../lesson9/level.js"></script>
+<script src="../lesson10/level.js"></script>
+
 <script src="../level1/level.js"></script>
 <script src="../level2/level.js"></script>
 <script src="../level3/level.js"></script>
