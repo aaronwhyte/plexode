@@ -70,7 +70,8 @@ v Change level creation flow
     v 9: You can grab a teleporter and carry it around.
   v Make lesson JSON into real connected levels.
   - Challenges
-    -
+    v teleporting saves time, and stuff
+    - trading up with grippers?
   - Apology for Vorp production values.
 - Push
 - Publicize

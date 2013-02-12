@@ -77,12 +77,12 @@ VORP_LEVELS = (
   ("lesson10", "Lesson 10: Teleport Other Things",
     "You can teleport blocks. Sure, why not?"),
 
-  ("level1", "level 1", "first level I ever made"),
-  ("level2", "level 2 x_x", "zapper test"),
-  ("level3", "level 3 :-0", "1st proper level"),
-  ("level4", "level 4 :-/", "sensor and door test"),
-  ("level5", "level 5 O_o", "grip-switch test"),
-  ("level6", "level 6 :-D", "2nd proper level")
+  ("level1", "level 1", "go on in."),
+  ("level2", "level 2", "meh"),
+  ("level3", "level 3", "reaction mass and triplasers"),
+  ("level4", "level 4", "ancient sensor and door test level"),
+  ("level5", "level 5", "ancient grip-switch test level"),
+  ("level6", "level 6", "old teleporter puzzle")
 )
 
 
