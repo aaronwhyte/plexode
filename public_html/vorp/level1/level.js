@@ -1,5 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level 1: start outside'] = [
+vorpLevels['level 1'] = [
   {
     "type": "addCluster",
     "id": "30"

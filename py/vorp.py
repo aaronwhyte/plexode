@@ -14,12 +14,12 @@ def formatVorp():
   h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <div class=center>
-<h1>About Vorp</h1>
+<h1>What?</h1>
 Vorp is a free 2D physics-based action/puzzle game that runs in modern web browsers.
 <p>
-It's written in JavaScript, and it uses the
-HTML5 &lt;canvas&gt; element to render all the graphics.
-There are no sound effects yet.
+It's written in JavaScript, using the HTML5 &lt;canvas&gt;
+element to render all the graphics. There are no sound effects yet,
+the graphics are terrible, and you need a keyboard to play.
 <p>
 It works well in <a href="http://www.google.com/chrome/">Chrome</a>, 
 <a href="http://www.mozilla.org/firefox">Firefox</a>,
@@ -27,36 +27,31 @@ It works well in <a href="http://www.google.com/chrome/">Chrome</a>,
 <a href="http://www.opera.com/browser">Opera</a>.
 <br>
 <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up
-might work, but I haven't tested it.
-
-<h1>Controls</h1>
-Use the arrow keys to move.
-<p>
-Push Z to grip things your tractor beam. Arrow keys aim.<br>
-Push X to drop stuff.<br>
-Hold Z down for a stiff grip.<br>
-Push X while holding Z to throw.<br>
-<small>(Dvorak nerds can use semicolon and Q.)</small>
-<p>
+might work.
 
 <h1>Play it!</h1>
-""" + formatLevelDirectory() + """
+<h2>Lessons</h2>
+""" + formatLevelDirectory(VORP_LESSONS) + """
+<h2>Levels</h2>
+""" + formatLevelDirectory(VORP_LEVELS) + """
 <p>
-Each level is a web page, and the exits are links between web pages.<br>
-To restart a level, hit "refresh" on your browser.  You can bookmark levels and send URLs to people,
-just like you can with any other web page.
+
+<h1>More...</h1>
+These levels were built with <a href="./edit/">Ved, the Vorp editor</a>.
+It's still about alpha quality. You can build and play your own levels,
+but sharing is not implemented yet.
 <p>
 Vorp is still under construction, so check back here for updates.<br>
-Or follow all Plexode changes on <a href="https://github.com/aaronwhyte/plexode">GitHub</a>!
+Or follow all <a href="https://github.com/aaronwhyte/plexode">Plexode changes on GitHub</a>.
 </div>
 """))
   h.append(format.footer())
   return ''.join(h)
 
 
-VORP_LEVELS = (
+VORP_LESSONS = (
   ("lesson1", "Lesson 1: Moving Around",
-    "Hi there! You can move with the arrow keys. (There's no touchscreen UI yet.)<br>Bump into the green exit thing to go to the next level."),
+    "Move with the arrow keys. (There's no touchscreen UI yet.)<br>Bump into the green exit thing to go to the next level."),
   ("lesson2", "Lesson 2: Pushing Things",
     "Run into the blocks and push them out of your way to reach the exit."),
   ("lesson3", "Lesson 3: Buttons and Stuff",
@@ -76,19 +71,19 @@ VORP_LEVELS = (
     "You can grab teleporters and move them around like blocks."),
   ("lesson10", "Lesson 10: Teleport Other Things",
     "You can teleport blocks. Sure, why not?"),
+)
 
-  ("level1", "level 1", "go on in."),
-  ("level2", "level 2", "meh"),
-  ("level3", "level 3", "reaction mass and triplasers"),
-  ("level4", "level 4", "ancient sensor and door test level"),
-  ("level5", "level 5", "ancient grip-switch test level"),
-  ("level6", "level 6", "old teleporter puzzle")
+VORP_LEVELS = (
+  ("level1", "Level 1: Come in", "Hi there."),
+  ("level2", "Level 2: A little challenge", "Deadly Zappers and Long Grabs"),
+  ("level3", "Level 3: Reaction Mass", "Plus a Fun Punchline! :-D"),
+  ("level4", "Level 4: A Classic", "Nice Old Teleporter Puzzle"),
 )
 
 
-def formatLevelDirectory():
+def formatLevelDirectory(levels):
   h = []
-  for level in VORP_LEVELS:
+  for level in levels:
     relPath = level[0]
     title = level[1]
     desc = level[2]
@@ -97,6 +92,11 @@ def formatLevelDirectory():
 
 
 def writePublicHtmlForAllLevels(bdir, vorpPath, vorpJsName):
+  for level in VORP_LESSONS:
+    dir = vorpPath + level[0]
+    title = level[1]
+    desc = level[2]
+    build.writePublicHtml(bdir, dir, formatVorpLevel(vorpJsName, title, desc))
   for level in VORP_LEVELS:
     dir = vorpPath + level[0]
     title = level[1]

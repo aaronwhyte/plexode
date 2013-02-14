@@ -42,7 +42,7 @@ v Edit button
 v Edit form
 v Save and stuff
 
-Milestone: Ship fun levels created entirely in Ved
+DONE! Milestone: Ship fun levels created entirely in Ved
 v Ved usable by me for editing.
 v Some way to publish levels
   v JSON view + cut-n-paste?
@@ -51,7 +51,7 @@ v Change level creation flow
   v Add "new level" button to vedapp home
   x Remove list of existing levels from ved.
   x Change vorpLevels from key/val pair to array, removing name and desc.
-- Actually make new levels.
+v Actually make new levels.
   v Create lesson level JSON
     v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
     v 2: You can push things out of your way.
@@ -69,13 +69,13 @@ v Change level creation flow
     v 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
     v 9: You can grab a teleporter and carry it around.
   v Make lesson JSON into real connected levels.
-  - Challenges
+  v Challenges
     v teleporting saves time, and stuff
-    - trading up with grippers?
-  - Apology for Vorp production values.
-- Push
-- Publicize
-
+    v trading up with grippers?
+  v Apology for Vorp production values.
+v Push
+v Publicize
+2013-02-13: Nailed it.
 ===================================================================================
 
 Portal tweaks

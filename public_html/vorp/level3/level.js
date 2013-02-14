@@ -1,5 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level 3: reaction mass and tripwire'] = [
+vorpLevels['level 3'] = [
   {
     "type": "addCluster",
     "id": "10"

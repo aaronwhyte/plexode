@@ -27,6 +27,12 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
+<span class="date">2013-02-13</span>
+I've been working on <a href="./vorp">Vorp</a>!<br>
+Now there are ten lesson levels, and a couple new challenging levels.
+</div>
+
+<div class="news">
 <span class="date">2012-06-19</span>
 URL compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
 now have a URL shortener button in the top right corner, that calculates a compressed URL.
