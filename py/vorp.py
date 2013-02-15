@@ -74,10 +74,9 @@ VORP_LESSONS = (
 )
 
 VORP_LEVELS = (
-  ("level1", "Level 1: Come in", "Hi there."),
-  ("level2", "Level 2: A little challenge", "Deadly Zappers and Long Grabs"),
+  ("level1", "Level 1: Collection", "Nice Old Teleporter Puzzle"),
+  ("level2", "Level 2: A Stretch", "Zaps and Grabs"),
   ("level3", "Level 3: Reaction Mass", "Plus a Fun Punchline! :-D"),
-  ("level4", "Level 4: A Classic", "Nice Old Teleporter Puzzle"),
 )
 
 

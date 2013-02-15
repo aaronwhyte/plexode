@@ -1230,7 +1230,7 @@ vorpLevels['level 3'] = [
     "type": "setData",
     "id": "3080",
     "key": "url",
-    "value": "../level4/"
+    "value": "../"
   },
   {
     "type": "addCluster",
