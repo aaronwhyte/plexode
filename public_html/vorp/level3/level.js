@@ -1,5 +1,6 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level 3'] = [
+vorpLevels['level 3'] =
+[
   {
     "type": "addCluster",
     "id": "10"
@@ -14,14 +15,14 @@ vorpLevels['level 3'] = [
     "type": "addPart",
     "id": "11",
     "clusterId": "10",
-    "x": 920,
+    "x": 1120,
     "y": -470
   },
   {
     "type": "addPart",
     "id": "14",
     "clusterId": "10",
-    "x": 920,
+    "x": 1120,
     "y": 410
   },
   {
@@ -86,7 +87,7 @@ vorpLevels['level 3'] = [
     "type": "addPart",
     "id": "33",
     "clusterId": "31",
-    "x": 920,
+    "x": 1120,
     "y": 410
   },
   {
@@ -110,8 +111,32 @@ vorpLevels['level 3'] = [
     "type": "addPart",
     "id": "58",
     "clusterId": "56",
-    "x": 920,
+    "x": 1120,
     "y": -470
+  },
+  {
+    "type": "addCluster",
+    "id": "183"
+  },
+  {
+    "type": "setData",
+    "id": "183",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "184",
+    "clusterId": "183",
+    "x": 530,
+    "y": -90
+  },
+  {
+    "type": "addPart",
+    "id": "185",
+    "clusterId": "183",
+    "x": 800,
+    "y": -90
   },
   {
     "type": "addCluster",
@@ -1059,7 +1084,7 @@ vorpLevels['level 3'] = [
     "type": "setData",
     "id": "2786",
     "key": "timeout",
-    "value": "30"
+    "value": "50"
   },
   {
     "type": "addJack",
@@ -1116,7 +1141,7 @@ vorpLevels['level 3'] = [
     "type": "setData",
     "id": "2806",
     "key": "timeout",
-    "value": "30"
+    "value": "50"
   },
   {
     "type": "addJack",
@@ -1683,8 +1708,8 @@ vorpLevels['level 3'] = [
     "type": "addPart",
     "id": "5934",
     "clusterId": "5933",
-    "x": 600,
-    "y": 290
+    "x": 690,
+    "y": 0
   },
   {
     "type": "addJack",
@@ -1717,14 +1742,14 @@ vorpLevels['level 3'] = [
     "type": "addPart",
     "id": "5937",
     "clusterId": "5936",
-    "x": 70,
-    "y": -20
+    "x": 50,
+    "y": 10
   },
   {
     "type": "setData",
     "id": "5937",
     "key": "timeout",
-    "value": "20"
+    "value": "40"
   },
   {
     "type": "addJack",
