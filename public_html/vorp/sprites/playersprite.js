@@ -18,6 +18,7 @@ function PlayerSprite(spriteTemplate) {
   this.stiffPose = new Vec2d();
   this.kickPow = 0;
   this.canGrip = true;
+  this.accel = PlayerSprite.MIN_ACCEL;
 }
 PlayerSprite.prototype = new Sprite(null);
 PlayerSprite.prototype.constructor = PlayerSprite;
@@ -39,7 +40,10 @@ PlayerSprite.MAX_KICK_POW = 24;
 PlayerSprite.KICK_FORCE_MAGNIFIER = 1.1;
 PlayerSprite.KICK_DECAY = 0.4;
 
-PlayerSprite.ACCEL = 1.4;
+PlayerSprite.MIN_ACCEL = 0.5;
+PlayerSprite.MULT_ACCEL = 1.1;
+PlayerSprite.MULT_DECEL = 0.8;
+PlayerSprite.MAX_ACCEL = 1.4;
 PlayerSprite.BRAKE = 0.0;
 
 PlayerSprite.prototype.act = function() {
@@ -47,9 +51,13 @@ PlayerSprite.prototype.act = function() {
   this.addFriction(Vorp.FRICTION);
   GU_copyKeysVec(this.keysVec);
   if (!this.keysVec.isZero()) {
-    this.accelerate(this.keysVec.scaleToLength(PlayerSprite.ACCEL));
+    this.accelerate(this.keysVec.scaleToLength(this.accel));
+    this.accel *= PlayerSprite.MULT_ACCEL;
+    this.accel = Math.min(this.accel, PlayerSprite.MAX_ACCEL);
   } else {
-    this.addFriction(PlayerSprite.BRAKE);
+    //this.addFriction(PlayerSprite.BRAKE);
+    this.accel *= PlayerSprite.MULT_DECEL;
+    this.accel = Math.max(this.accel, PlayerSprite.MIN_ACCEL);
   }
   // gripper
   var kickDown = this.kickKeyDown();
