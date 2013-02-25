@@ -16,7 +16,7 @@ ZapperPainter.prototype.setActive = function(active) {
 
 ZapperPainter.prototype.paint = function(renderer, layer) {
   if (!this.active) return;
-  if (layer == Vorp.LAYER_SPARKS) {
+  if (layer == Vorp.LAYER_SUPERSPARKS) {
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.setFillStyle('rgba(' +

@@ -309,16 +309,16 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprites.push(controlSprite);
 
       // ZapperSprite
-      var butt0 = this.getButt(hugPoints[0], controlVec, 0.1);
-      var butt1 = this.getButt(hugPoints[1], controlVec, 0.1);
+      var butt0 = this.getButt(hugPoints[0], controlVec, 0.2);
+      var butt1 = this.getButt(hugPoints[1], controlVec, 0.2);
       template = this.createBaseTemplate()
           .makeImmovable()
           .setGroup(Vorp.ZAPPER_GROUP)
           .setPainter(new ZapperPainter(true))
           .setPos(Vec2d.midpoint(butt0, butt1))
           .setRadXY(
-              this.rad(butt0.x, butt1.x, Transformer.WALL_RADIUS * 0.4),
-              this.rad(butt0.y, butt1.y, Transformer.WALL_RADIUS * 0.4));
+              this.rad(butt0.x, butt1.x, Transformer.WALL_RADIUS * 0.4 * (butt0.x - butt1.x ? -1 : 1)),
+              this.rad(butt0.y, butt1.y, Transformer.WALL_RADIUS * 0.4 * (butt0.y - butt1.y ? -1 : 1)));
       sprite = new ZapperSprite(template);
       controlSprite.setZapperSprite(sprite);
       sprites.push(sprite);
