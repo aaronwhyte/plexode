@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<title>webaudio</title>
+<script src="js.js"></script>
+<script>
+var context;
+if (typeof AudioContext !== "undefined") {
+  context = new AudioContext();
+} else if (typeof webkitAudioContext !== "undefined") {
+  context = new webkitAudioContext();
+} else {
+  throw new Error('AudioContext not supported. :(');
+}
+function noise() {
+  var node = context.createOscillator();
+  node.frequency.value = 220 * (1 + Math.random() * 3);
+  node.connect(this.context.destination);
+  node.start(this.context.currentTime);
+  node.stop(this.context.currentTime + 2);
+}
+
+</script>
+</head>
+<button onclick="noise()">noise</button>
+</body>
+</html>
