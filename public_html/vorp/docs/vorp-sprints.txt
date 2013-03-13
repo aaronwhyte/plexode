@@ -345,32 +345,76 @@ v hardcode a test level with logic links in it, without prefabs.
 2012.02.11 - ? Redo Sprite Construction III
 v Assign sprite ID at construction.
 
-Portal push
-- Portals rayscan for walls and doors constantly
-- They push away from those things
-
-Fullscreen
-- render walls in offscreen canvas once
-- copy from offscreen canvas to onscreen one, instead of clearing
-
 Sound
-- Web Audio or just Audio?
+WebAudio has panners and stuff for positional audio. Use it.
+"singer.js" will be like painter.js.
+"webaudio.js" will be like renderer.js
+- Things bumping into things - tap!
+- Birth
+- Death
+- reaching to grab stuff
+- grab
+- stiff grip
+- release
+- beam break
+- throw
+- thrust
+- button press
+- gripper grab/release
+- door open/close
+- zapper on/off
 
-Plasma sprites:
-- plasma cannon
-- plasma itself
-- plasma switch
-- test level
+Portal tweaks
+- They push away from teleport-blocking objects so they're unobstructed.
+- While they ARE obstructed they kind of show it
+- They do something cool when something teleports
+- They're clearly teleporters and not blocks or something. Hypersquare thing?
 
-Zombie sprites:
-- zombie
-- zombie assemblers
+Player tweaks
+- Put a little meh-face on it with eyes that move!
+- Better death animations, depending on the manner of doom.
+- Better assembly animation.
+  - How about a little tree grows
+  - and bears player as fruit
+  - before disintegrating?
 
-teleport sparks
-- implode
-- explode
-- light up the tube?
+Exit tweaks
+- look good before touch
+- exit warp animation
 
-Design some new levels
-- please enjoy hot plasma
+Rendering performance improvements
+- Prerender all immovable chunks like walls, and copy that out?
 
+Background
+- Starfield? Texture? Buildings?
+
+Milestone: Production values go from "craptacular" to "weird retro vibe".
+
+===================================================================================
+
+OneTimeSwith (pulsebutton + infinite timer)
+OnOffSwitch (pulsebutton + toggle)
+PulseButton (what we have today)
+
+- Telltale
+v Not
+- And
+- Edge
+- Random
+
+Zombie
+Zombie Assembler
+
+Plasma Beamer
+Plasma Baller
+Plasma Switch
+
+HandHold
+Repulsor
+
+Turret
+Drone
+
+Milestone: More Levels!
+
+===================================================================================
