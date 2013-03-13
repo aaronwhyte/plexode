@@ -428,7 +428,6 @@ CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
         this.getWorldXForIndexX(x), this.getWorldYForIndexY(y),
         this.getWorldXForIndexX(x + 1), this.getWorldYForIndexY(y + 1)));
   }
-  var hitSledgeId = null;
   var now = this.clock.getTime();
 
   var cell = this.getCell(x, y);

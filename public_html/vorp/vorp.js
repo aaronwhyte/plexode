@@ -74,7 +74,7 @@ Vorp.CELL_SIZE = 100;
 Vorp.LAYERS = [
   Vorp.LAYER_SPARKS = 'sparks',
   Vorp.LAYER_MASSES = 'masses',
-  Vorp.LAYER_SUPERSPARKS = 'oversparks'
+  Vorp.LAYER_SUPERSPARKS = 'supersparks'
 ];
 // optional layers
 Vorp.LAYER_DEBUG = 'debug';
