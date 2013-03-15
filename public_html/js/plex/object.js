@@ -45,6 +45,14 @@ plex.object.keys = function(obj) {
   return keys;
 };
 
+plex.object.length = function(obj) {
+  var len = 0;
+  for (var k in obj) {
+    len++;
+  }
+  return len;
+};
+
 plex.object.values = function(obj) {
   var values = [];
   try {
