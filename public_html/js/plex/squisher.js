@@ -33,37 +33,27 @@ plex.Squisher.Encoding = {
  * @return {String} the squished string in base 64
  */
 plex.Squisher.prototype.squish = function(original) {
-  console.log('original ', original);
-
   // percent-encode so the alphabet will cover all chars.
   var alphabet = this.getAlphabet();
-  console.log('alphabet', alphabet);
   var squished = encodeURI(original);
-  console.log('percented', squished);
   squished = plex.Squisher.Encoding.ORIGINAL + squished;
-  console.log('squished 1:', squished);
 
   var newSquished = plex.Squisher.Encoding.DICTIONARY + this.compressWithStaticDictionary(squished);
   if (newSquished.length < squished.length) {
     squished = newSquished;
   }
-  console.log('squished 2:', squished);
 
   var lz = new plex.LempelZiv(this.getAlphabet());
   newSquished = plex.Squisher.Encoding.LZ_BITSTREAM + lz.encodeToBytes(squished);
   if (newSquished.length < squished.length) {
     squished = newSquished;
   }
-  console.log('squished 3:', squished);
 
   squished = plex.Squisher.Encoding.BASE64_BYTES + btoa(squished);
-  console.log('squished 4:', squished);
-
   return squished;
 };
 
 plex.Squisher.prototype.unsquish = function(str) {
-  console.log('unsquish:', str);
   var command = str.charAt(0);
   str = str.substr(1);
   var next;
@@ -116,12 +106,10 @@ plex.Squisher.prototype.getAlphabet = function() {
 
 plex.Squisher.prototype.getDictionary = function() {
   if (!this.dictionary) {
-    this.initAlphabetAndDictionary()
+    this.initAlphabetAndDictionary();
   }
   return this.dictionary;
 };
-
-plex.Squisher.ESCAPE_CHAR = "%";
 
 /**
  * All dictionary words get URI encoded, because the whole string gets URI encoded as step 1.

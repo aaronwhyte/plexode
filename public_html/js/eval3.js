@@ -95,9 +95,7 @@ plex.eval3.save = function() {
   }
   var squisher = new plex.Squisher(plex.eval3.getStaticDict());
   var json = JSON.stringify(map);
-  console.log('save json', json);
   var s64 = squisher.squish(json);
-  console.log('save s64', s64);
   plex.url.setFragment("s=" + s64);
 };
 
