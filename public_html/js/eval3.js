@@ -29,21 +29,18 @@ plex.eval3.DEFAULTS = {
                        
 plex.eval3.start = function() {
   // Decode URL and fill whitelisted input fields with initial values.
-  var map = plex.url.decodeQuery(plex.url.getFragment());
-  for (var i = 0; i < plex.eval3.INPUT_IDS.length; i++) {
-    var id = plex.eval3.INPUT_IDS[i];
-    if (id in map) {
-      var input = plex.dom.gebi(id);
-      if (input.type == 'checkbox') {
-        input.checked = map[id] == '1';
-      } else {
-        plex.dom.gebi(id).value = map[id];
-      }
-    } else if (id in plex.eval3.DEFAULTS) {
-      plex.dom.gebi(id).value = plex.eval3.DEFAULTS[id];
-    }
+  var params = plex.url.decodeQuery(plex.url.getFragment());
+  if (params['s']) {
+    var squisher = new plex.Squisher(plex.eval3.getStaticDict());
+    var base64 = params['s'];
+    var unsquished = squisher.unsquish(base64);
+    var json = JSON.parse(unsquished);
+    var map = json;
+  } else {
+    map = params;
   }
-  
+  plex.eval3.populateFieldsFromMap(map);
+
   function taListen(id, handler) {
     var c = new plex.wij.TaChanges();
     c.setElement(plex.dom.gebi(id));
@@ -79,6 +76,63 @@ plex.eval3.start = function() {
   // Maybe start timer.
   plex.eval3.resetTimer();
   
+};
+
+plex.eval3.save = function() {
+  var map = {};
+  var val;
+  for (var i = 0; i < plex.eval3.INPUT_IDS.length; i++) {
+    var id = plex.eval3.INPUT_IDS[i];
+    var input = plex.dom.gebi(id);
+    if (input.type == 'checkbox') {
+      val = input.checked ? '1' : '0';
+    } else {
+      val = plex.dom.gebi(id).value;
+    }
+    if (val != plex.eval3.DEFAULTS[id]) {
+      map[id] = val;
+    }
+  }
+  var squisher = new plex.Squisher(plex.eval3.getStaticDict());
+  var json = JSON.stringify(map);
+  console.log('save json', json);
+  var s64 = squisher.squish(json);
+  console.log('save s64', s64);
+  plex.url.setFragment("s=" + s64);
+};
+
+plex.eval3.getStaticDict = function() {
+  if (!plex.eval3.dict) {
+    plex.eval3.dict = [
+      'function', 'var ', 'new ', 'null', 'Date()', '.getTime()', 'this', 'return', 'innerHTML',
+      'Math.', 'random()',
+      '.join(', '.split(', '.push(', 'getElementById',
+      'window', 'document', 'body',
+      'div', 'span', 'canvas', 'input', 'title',
+      'class', 'style',
+      'display', 'align', 'visibility', 'overflow', 'position',
+      'top', 'left', 'right', 'bottom',
+      'width', 'height',
+      'border', 'padding', 'margin', 'solid', 'color', 'font', 'size', 'background'
+    ];
+  }
+  return plex.eval3.dict;
+};
+
+plex.eval3.populateFieldsFromMap = function(map) {
+  for (var i = 0; i < plex.eval3.INPUT_IDS.length; i++) {
+    var id = plex.eval3.INPUT_IDS[i];
+    if (id in map) {
+      var input = plex.dom.gebi(id);
+      if (input.type == 'checkbox') {
+        input.checked = map[id] == '1';
+      } else {
+        plex.dom.gebi(id).value = map[id];
+      }
+    } else if (id in plex.eval3.DEFAULTS) {
+      plex.dom.gebi(id).value = plex.eval3.DEFAULTS[id];
+    }
+  }
 };
 
 plex.eval3.onTimerControlChange = function() {
@@ -145,25 +199,5 @@ plex_eval3_evalJs = function() {
   } else {
     out.innerHTML = plex.string.textToHtml(String(eval(expr)), true);
   }
-};
-
-plex.eval3.save = function() {
-  var map = {};
-  var val;
-  for (var i = 0; i < plex.eval3.INPUT_IDS.length; i++) {
-    var id = plex.eval3.INPUT_IDS[i];
-    var input = plex.dom.gebi(id);
-    if (input.type == 'checkbox') {
-      val = input.checked ? '1' : '0';
-    } else {
-      val = plex.dom.gebi(id).value;
-    }
-    if (val != plex.eval3.DEFAULTS[id]) {
-      map[id] = val;
-    }
-  }
-  var q = plex.url.encodeQuery(map);
-  plex.url.setFragment(q);
-  if (invalidateSquishedUrl) invalidateSquishedUrl();
 };
 

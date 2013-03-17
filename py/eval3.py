@@ -24,6 +24,11 @@ def formatEval3(quirks=False):
 <script src="../js/plex/urlsquisher.js"></script>
 <script src="../js/plex/wij/tachanges.js"></script>
 
+<script src="../js/plex/bitqueue.js"></script>
+<script src="../js/plex/lempelziv.js"></script>
+<script src="../js/plex/squisher.js"></script>
+
+
 <script src="../js/eval3.js"></script>
 
 <style>
@@ -44,7 +49,7 @@ def formatEval3(quirks=False):
 
 </head><body onload="plex.eval3.start()">
 """)
-  h.append(format.navDiv(name, 1, squishui=True))
+  h.append(format.navDiv(name, 1))
   h.append(format.mainDiv("""
 <table style="width:100%" cellpadding=4>
 <tr>
