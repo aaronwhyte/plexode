@@ -10,7 +10,7 @@ def formatUnsquish():
 <script src="../js/plex/map.js"></script>
 <script src="../js/plex/string.js"></script>
 <script src="../js/plex/url.js"></script>
-<script src="../js/plex/urlsquisher2.js"></script>
+<script src="../js/plex/squisher.js"></script>
 <script src="../js/unsquish2.js"></script>
 </head>
 <body onload="unsquish()">

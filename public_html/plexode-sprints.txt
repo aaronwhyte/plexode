@@ -1,0 +1,22 @@
+Tasks that cut across all of Plexode 'n' Friends
+
+eval3 URL squisher 2
+- static dict lazy creation
+- encoding
+  - saveFieldsToJson
+  - jsonToSquish64
+  - updateUrlWithSquish64(squish64) - /#s=<squished64>
+- decoding
+  - when decoding URL, check for "s" param which trumps all
+  - squish64toJson(squish64)
+  - loadFieldsFromJson(json)
+- Remove old squisher UI from eval3
+
+Delete old squisher code
+- remove squisherUI from eval2, chordo, anywhere else (but not deserializer)
+- remove squisher UI code from formatter, util.js
+- delete old squishing code (but not unsquishing)
+- make sure unsquishing still works
+
+Push new squisher
+- update Main.js, as if anyone cares.

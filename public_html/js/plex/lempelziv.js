@@ -111,6 +111,12 @@ plex.LempelZiv.prototype.decodeFromBitQueue = function(bitQueue) {
  * @return {String} of chars whose charCodes are from 0-255
  */
 plex.LempelZiv.prototype.encodeToBytes = function(str) {
+  // make sure the input only uses the legal alphabet
+  for (var i = 0; i < str.length; i++) {
+    if (this.alphabet.indexOf(str.charAt(i)) == -1) {
+      throw Error('char ' + str.charAt(i) + ' not in alphabet ' + this.alphabet);
+    }
+  }
   var q = this.encodeToBitQueue(str);
   return q.dequeueToBytesAndPadZerosRight();
 };

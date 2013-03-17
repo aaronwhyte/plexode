@@ -31,6 +31,16 @@ VedApp.Mode = {
   JSON: 'json'
 };
 
+VedApp.DICT = [
+  'http%3A%2F%2F', 'http://', 'plexode.com/vorp',
+  '"type"', '"name"', '"id":', '"key":', '"value":',
+  '"clusterId":', '"partId":', '"jackId1":', '"jackId2":',
+  '"addCluster"', '"setData"', '"addPart"', '"addJack"', '"addLink"',
+  '"x"', '"y"',
+  '"input"', '"output"'
+];
+
+
 VedApp.prototype.render = function() {
 
   if (!this.listeningToHashChanges) {

@@ -10,8 +10,8 @@ function unsquish2() {
   } else {
     words = [];
   }
-  var s = new plex.UrlSquisher2(words);
-  var u = s.unsquishFromBase64(base64);
+  var s = new plex.Squisher(words);
+  var u = s.unsquish(base64);
   window.location.replace(u);
 }
 

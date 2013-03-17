@@ -41,12 +41,18 @@ plex.url.encodeQuery = function(map) {
 
 plex.url.decodeQuery = function(queryString) {
   var map = {};
-  var pairs = queryString.split('&');
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i].split('=');
-    var key = decodeURIComponent(pair[0]);
-    var val = decodeURIComponent(pair[1]);
-    map[key] = val;
+  var params = queryString.split('&');
+  for (var i = 0; i < params.length; i++) {
+    var param = params[i];
+    var eqPos = param.indexOf('=');
+    if (eqPos > 0) {
+      var key = param.substring(0, eqPos);
+      var val = param.substring(eqPos + 1);
+    } else {
+      key = param;
+      val = '';
+    }
+    map[decodeURIComponent(key)] = decodeURIComponent(val);
   }
   return map;
 };
@@ -145,10 +151,10 @@ plex.url.percentEscapeCharacter = function(c) {
 };
 
 plex.url.percentEncodeUnwhitelistedChars = function(str, whitelist) {
-  var tokens = plex.url.tokenizeEncodedUrl(str);
+  var tokens = str.split('');
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
-    if (token.length == 1 && whitelist.indexOf(token) == -1) {
+    if (whitelist.indexOf(token) == -1) {
       tokens[i] = plex.url.percentEscapeCharacter(token);
     }
   }

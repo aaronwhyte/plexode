@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>plex.urlsquisher2 test</title>
+<title>plex.squisher test</title>
 <script src="../../../public_html/js/testing.js"></script>
 <script src="../../../public_html/js/util.js"></script>
 <script src="../../../public_html/js/plex/bitqueue.js"></script>
@@ -9,80 +9,61 @@
 <script src="../../../public_html/js/plex/string.js"></script>
 <script src="../../../public_html/js/plex/url.js"></script>
 <script src="../../../public_html/js/plex/lempelziv.js"></script>
-
-<script src="../../../public_html/js/plex/stringset.js"></script>
-<script src="../../../public_html/js/plex/object.js"></script>
-<script src="../../../public_html/js/plex/dupeseeker.js"></script>
-
-<script src="../../../public_html/js/plex/urlsquisher2.js"></script>
+<script src="../../../public_html/js/plex/squisher.js"></script>
 <script>
 
 addTest(function notSquishable() {
   var url = 'http://plexode.com/eval3/#x';
-  var squisher = new plex.UrlSquisher2(getStaticDict());
+  var squisher = new plex.Squisher(getStaticDict());
   var base64 = squisher.squish(url);
   var decoded = squisher.unsquish(base64);
   var s2Url = 'http://plexode.com/v/#' + base64;
-  logFromTo(url, s2Url);
   assertEquals(url, decoded);
 });
 
 addTest(function longBoringUrl() {
-  var url = 'http://plexode.com/eval3/#aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbb';
-  var squisher = new plex.UrlSquisher2(getStaticDict());
+  var url = 'http://plexode.com/eval3/#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+  var squisher = new plex.Squisher(getStaticDict());
   var base64 = squisher.squish(url);
   var decoded = squisher.unsquish(base64);
   var s2Url = 'http://plexode.com/v/#' + base64;
-  logFromTo(url, s2Url);
   assertEquals(url, decoded);
 });
 
 
-var TEST_URLS = [
+var TEST_STRINGS = [
   'http://plexode.com/eval3/#ht=%3Ccanvas%20height%3D300%20width%3D600%20id%3D%22can%22%20style%3D%22xborder%3A1px%20solid%20red%3B%20position%3Aabsolute%3B%20top%3A130px%22%3E%3C%2Fcanvas%3E%0A%3Ch1%3E%20Michael...%20%20%20Michael%2C%20give%20us%20our%20precious%20gems!%20GEMS%20MICHAEL.&jt=document.title%3D%22GEMS%20MICHAEL%22%3B%0A%0Afunction%20body()%20%7B%0Acc.fillStyle%3D%22%23fdd%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1%2C%20-1)%3B%0Acc.lineTo(1%2C%20-1)%3B%0Acc.lineTo(1%2C%200.9)%3B%0Acc.lineTo(-1%2C%200.9)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20beard()%20%7B%0Acc.fillStyle%3D%22%23ddd%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1.1%2C%200.9)%3B%0Acc.lineTo(-1.1%2C%200)%3B%0Acc.lineTo(0%2C%20-0.1)%3B%0Acc.lineTo(1.1%2C%200)%3B%0Acc.lineTo(1.1%2C%200.9)%3B%0Acc.lineTo(0%2C%201.1)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20eyes()%20%7B%0Acc.fillStyle%3D%22%23000%22%3B%0Acc.beginPath()%3B%0Acc.arc(-0.5%2C%20-0.5%2C%200.08%2C%200%2C%20-0.001)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0Acc.beginPath()%3B%0Acc.arc(0.5%2C%20-0.5%2C%200.08%2C%200%2C%20-0.001)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20nose()%20%7B%0Acc.beginPath()%3B%0Acc.fillStyle%3D%22%23fdd%22%3B%0Acc.arc(0%2C%20-0.25%2C%200.27%2C%200-0.4%2C%20Math.PI%2B0.4)%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20mouth()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(-0.4%2C%200.3)%3B%0Acc.lineTo(0.4%2C%200.3)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20hat()%20%7B%0Acc.fillStyle%3D%22%23f00%22%3B%0Acc.beginPath()%3B%0Acc.moveTo(-1.15%2C%20-0.8)%3B%0Acc.lineTo(0%2C%20-2.7)%3B%0Acc.lineTo(1.15%2C%20-0.8)%3B%0Acc.closePath()%3B%0Acc.fill()%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20arm()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(0%2C%200)%3B%0Acc.quadraticCurveTo(0.5%2C%200.1%2C%200.6%2C%200.6)%3B%0Acc.stroke()%3B%0Acc.beginPath()%3B%0Acc.arc(0.6%2C%200.8%2C%200.2%2C%20-Math.PI%2C%201)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20arms(t)%20%7B%0Acc.save()%3B%0Acc.lineWidth%20%3D%200.15%3B%0Acc.translate(1%2C%200.1)%3B%0Acc.rotate(Math.sin(t*0.6)%20%2F%202%20-%200.4)%3B%0Aarm()%3B%0Acc.restore()%3B%0Acc.save()%3B%0Acc.lineWidth%20%3D%200.15%3B%0Acc.scale(-1%2C%201)%3B%0Acc.translate(1%2C%200.1)%3B%0Acc.rotate(Math.sin(t*0.65)%20%2F%202%20-%200.4)%3B%0Aarm()%3B%0Acc.restore()%0A%7D%0A%0Afunction%20leg()%20%7B%0Acc.beginPath()%3B%0Acc.moveTo(0%2C%200)%3B%0Acc.quadraticCurveTo(0.2%2C%200.4%2C%200.1%2C%200.8)%3B%0Acc.lineTo(0.5%2C%200.9)%3B%0Acc.stroke()%3B%0A%7D%0A%0Afunction%20legs(t)%20%7B%0Acc.save()%3B%0Acc.lineWidth%3D%200.15%3B%0Acc.save()%3B%0Acc.translate(0.5%2C%200.9)%3B%0Acc.rotate(Math.sin(t)%20%2F%202)%3B%0Aleg()%3B%0Acc.restore()%3B%0Acc.save()%3B%0Acc.scale(-1%2C%201)%3B%0Acc.translate(0.5%2C%200.9)%3B%0Acc.rotate(Math.sin(t*1.02)%2F2)%3B%0Aleg()%3B%0Acc.restore()%3B%0Acc.restore()%3B%0A%7D%0A%0Aca%20%3D%20gebi(%22can%22)%3B%0Acc%20%3D%20ca.getContext(\'2d\')%3B%0A%0Afunction%20gnome(x%2C%20y%2C%20h%2C%20v%2C%20t)%20%7B%0A%20%20cc.lineWidth%20%3D%200.1%3B%0A%20%20cc.strokeStyle%20%3D%20%22%23000%22%3B%0A%20%20cc.save()%3B%0A%20%20cc.translate(x%2C%20y)%3B%0A%20%20cc.rotate(Math.sin(t*0.8)*%200.1)%3B%0A%20%20cc.scale(50%2C%2050)%3B%0A%20%20body()%3B%0A%20%20arms(t)%3B%0A%20%20legs(t)%3B%0A%20%20beard()%3B%0A%20%20nose()%3B%0A%20%20eyes()%3B%0A%20%20mouth()%3B%0A%20%20hat()%3B%0A%20%20cc.restore()%3B%0A%7D%0A%0A%2F%2Ffor%20(var%20y%20%3D%200%3B%20y%20%3C%20300%3B%20y%20%2B%3D%20Math.random()%20*%2030)%20%7B%0A%2F%2F%20%20gnome(Math.random()%20*%20300%2C%20y)%3B%0A%2F%2F%7D%0Avar%20t%20%3D%20(new%20Date()).getTime()%20%2F%20100%3B%0Agnome(300%2C%20150%2C%200%2C%200%2C%20t%2F4)%3B%0Agnome(150%2C%20180%2C%200%2C%200%2C%20t)%3B%0Agnome(600%20-%20150%2C%20180%2C%200%2C%200%2C%20t%2F2)%3B%0At%3B%0A&ms=10&oth=1&otj=1',
   'http://plexode.com/eval3/#ht=DUDE%20OMG%20%3Cb%20id%3D%22wave%22%20style%3D%22font-size%3A150%25%3B%20color%3Agreen%22%3E%3C%2Fb%3E%20IT%20IS%20A%20SNAKE&jt=var%20a%20%3D%20%5B%5D%3B%0Avar%20n%20%3D%20(new%20Date()).getTime()%3B%0Afor%20(var%20i%20%3D%200%3B%20i%20%3C%2020%3B%20%2B%2Bi)%20%7B%0A%20%20var%20s%20%3D%20Math.sin(n%2F210%20%2B%20i%2F1.1)%20*%2025%20%2B%20Math.sin(n%2F240%20%2B%20i%2F3)%20*%2025%3B%0A%20%20var%20c%20%3D%20-Math.cos(n%2F200%20%2B%20i%2F2)%20*%2025%20-%20Math.cos(n%2F260%20%2B%20i%2F2.9)%20*%2025%3B%0A%20%20a.push(\'%3Cb%20style%3D%22position%3Arelative%3Bleft%3A\'%2C%20s%2C%20\'px%3Btop%3A\'%2C%20c%2C%20\'px%22%3Es%3C%2Fb%3E%20\')%3B%0A%7D%0Agebi(\'wave\').innerHTML%20%3D%20a.join(\'\')%3B%0A%0An%20%25%20100000%3B%0A&ms=30&otj=1',
   'http://plexode.com/eval3/#ht=%3Cstyle%3E%0A.box%20%7B%0Acolor%3A%20white%3B%0Atext-align%3A%20center%3B%0Aborder%3A%20black%201px%20solid%3B%0Aoverflow%3A%20hidden%3B%0Awidth%3A%20200px%3B%0Aheight%3A%2025px%3B%0A%7D%0A%0A.text%20%7B%0Afont-family%3A%20sans-serif%3B%0Afont-size%3A%20120%25%3B%0Afont-weight%3A%20bold%3B%0Afloat%3A%20left%3B%0Amargin-left%3A%2010px%3B%0Aoverflow%3A%20hidden%3B%0Atext-shadow%3A%20black%201px%201px%202px%3B%0Avertical-align%3A%20middle%3B%0Awidth%3A%20150px%3B%0A%7D%0A%3C%2Fstyle%3E%0A%3Cdiv%20class%3D%22list%22%3E%3Cdiv%20class%3D%22first-box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Ewhats%3C%2Fdiv%3E%3C%2Fdiv%3E%3Cdiv%20class%3D%22box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Eggyyppkkii%3C%2Fdiv%3E%3C%2Fdiv%3E%3Cdiv%20class%3D%22box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Ejust%20text%3C%2Fdiv%3E%3C%2Fdiv%3E%3Cdiv%20class%3D%22box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Emorning%3C%2Fdiv%3E%3C%2Fdiv%3E%3Cdiv%20class%3D%22box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Eright%3C%2Fdiv%3E%3C%2Fdiv%3E%3Cdiv%20class%3D%22box%22%20style%3D%22background%3A%20%23f0f0f0%22%3E%3Cdiv%20class%3D%22text%22%3Ehello%3C%2Fdiv%3E%3C%2Fdiv%3E%3C%2Fdiv%3E',
   'http://plexode.com/eval3/#ht=%3Cstyle%3Einput%20%7B%20visibility%3A%20hidden%3B%7D%3C%2Fstyle%3E%0A%3Cvideo%20src%3D%22http%3A%2F%2Ftinyvid.tv%2Ffile%2Fuhn59620xk6j.ogg%22%20preload%3D%22none%22%20width%3D%22320px%22%20height%3D%22240px%22%20poster%3D%22http%3A%2F%2Ftinyvid.tv%2Fposter%2Fuhn59620xk6j.png%22%20controls%3D%22controls%22%3E%20%0A%20%20%20%20%20%20%3Ca%20href%3D%22http%3A%2F%2Ftinyvid.tv%2Fshow%2Fuhn59620xk6j%22%3E%3Cimg%20src%3D%22http%3A%2F%2Ftinyvid.tv%2Fposter%2Fuhn59620xk6j.png%22%3E%3C%2Fimg%3E%3C%2Fa%3E%20%0A%20%20%20%20%3C%2Fvideo%3E%20',
   'http://plexode.com/eval3/#ht=%3Cinput%20id%3Dtext%20type%3D%22%22%3E%3C%2Finput%3E%0A%3Cinput%20id%3Dhidden%20type%3D%22hidden%22%3E%3C%2Finput%3E%0A%3Cinput%20id%3Ddisabled%20disabled%3E%3C%2Finput%3E%0A%3Cinput%20id%3Dreadonly%20readonly%3E%3C%2Finput%3E%0A%3Cinput%20id%3Dvisiblity-hidden%20style%3D%22visibility%3Ahidden%22%3E%3C%2Finput%3E%0A%3Cinput%20id%3Ddisplay-none%20style%3D%22display%3Anone%22%3E%3C%2Finput%3E%0A%3Cdiv%20id%3Ddiv-hidden%20sytle%3D%22visibility%3Ahidden%22%20tabindex%3D1%3E%3C%2Finput%3E%0A%0A%3Cdiv%20id%3Dlogger%3E%3C%2Fdiv%3E&jt=var%20result%20%3D%20\'\'%3B%0A%20%0Afunction%20isFocusable(type)%20%7B%0A%20%20%20%20var%20element%20%3D%20document.getElementById(type)%3B%0A%20%20%20%20result%20%2B%3D%20type%20%2B%20\'%20is\'%3B%0A%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20element.focus()%3B%0A%20%20%20%20%20%20%20%20if%20(element%20!%3D%20document.activeElement)%0A%20%20%20%20%20%20%20%20%20%20%20%20result%20%2B%3D%20\'%20not\'%3B%0A%20%20%20%20%7D%20catch%20(e)%20%7B%0A%20%20%20%20%20%20result%20%2B%3D%20\'%20not%20(error%20thrown)\'%3B%0A%20%20%20%20%7D%0A%20%20%20%20result%20%2B%3D%20\'%20focusable%3Cbr%3E\'%3B%0A%7D%0A%0AisFocusable(\'text\')%3B%0AisFocusable(\'hidden\')%3B%0AisFocusable(\'disabled\')%3B%0AisFocusable(\'readonly\')%3B%0AisFocusable(\'visiblity-hidden\')%3B%0AisFocusable(\'display-none\')%3B%0AisFocusable(\'div-hidden\')%3B%0A%0Adocument.getElementById(\'logger\').innerHTML%20%2B%3D%20result%3B',
   'http://plexode.com/eval3/#ht=%3Cdiv%20contentEditable%3E%3Cb%20style%3D%22font-weight%3A%20normal%3B%20%22%3E%3Cspan%20style%3D%22white-space%3A%20pre-wrap%3B%22%3EA%20htey%20B%3C%2Fspan%3E%3C%2Fb%3E%3C%2Fdiv%3E',
-  'http://plexode.com/eval3/#ht=%3Cdiv%20style%3D%22display%3A-webkit-flex%3B%20background-color%3A%20salmon%3B%20width%3A%20400px%22%3E%0A%20%20%20%20%3Ciframe%20style%3D%22-webkit-flex%3A%201%3B%20background-color%3A%20orange%3B%20border%3A%200%22%3E%3C%2Fiframe%3E%0A%3C%2Fdiv%3E'
+  'http://plexode.com/eval3/#ht=%3Cdiv%20style%3D%22display%3A-webkit-flex%3B%20background-color%3A%20salmon%3B%20width%3A%20400px%22%3E%0A%20%20%20%20%3Ciframe%20style%3D%22-webkit-flex%3A%201%3B%20background-color%3A%20orange%3B%20border%3A%200%22%3E%3C%2Fiframe%3E%0A%3C%2Fdiv%3E',
+  JSON.stringify({a:123, b:"!@#$%^&)';:<>,./?|\\(*&(^%[]{}", c:[true, false], d:"blarg"}),
+  'Ë'
 ];
-addTest(function noSubWords() {
-  for (var i = 0; i < TEST_URLS.length; i++) {
-    var squisher = new plex.UrlSquisher2([]);
-    var url = TEST_URLS[i];
-    var base64 = squisher.squish(url);
+addTest(function noDict() {
+  for (var i = 0; i < TEST_STRINGS.length; i++) {
+    var squisher = new plex.Squisher([]);
+    var str = TEST_STRINGS[i];
+    var base64 = squisher.squish(str);
     var decoded = squisher.unsquish(base64);
-
-    var s2Url = 'http://plexode.com/v/#' + base64;
-    logFromTo(url, s2Url);
-    assertEquals(url, decoded);
+    assertEquals(str, decoded);
   }
 });
 
-addTest(function compressionRatioWithSubwords() {
-  for (var i = 0; i < TEST_URLS.length; i++) {
-    var squisher = new plex.UrlSquisher2(getStaticDict());
-    var url = TEST_URLS[i];
-    var base64 = squisher.squish(url);
+addTest(function withDict() {
+  for (var i = 0; i < TEST_STRINGS.length; i++) {
+    var squisher = new plex.Squisher(getStaticDict());
+    var str = TEST_STRINGS[i];
+    var base64 = squisher.squish(str);
     var decoded = squisher.unsquish(base64);
-
-    var s2Url = 'http://plexode.com/v/#' + base64;
-    logFromTo(url, s2Url);
-    assertEquals(url, decoded);
+    assertEquals(str, decoded);
   }
 });
-
-function logFromTo(url, s2Url) {
-//  console.log('original url: ' + url);
-//  console.log('squished url: ' + s2Url);
-  console.log(url.length + ' to ' + s2Url.length +
-      ' - saved ' + Math.round(((url.length - s2Url.length) / url.length) * 100) + '%');
-}
 
 function getStaticDict() {
   var subWords = [
-    'http%3A%2F%2F', 'http://', 'plexode.com/', 'eval3',
     'function', 'var ', 'new ', 'null', 'Date()', '.getTime()', 'this', 'return', 'innerHTML',
     'Math.', 'random()',
     '.join(', '.split(', '.push(', 'getElementById',
@@ -91,16 +72,8 @@ function getStaticDict() {
     'class', 'style',
     'display', 'align', 'visibility', 'overflow', 'position',
     'top', 'left', 'right', 'bottom',
-    'border', 'padding', 'margin', 'solid', 'color', 'width', 'height', 'font', 'size', 'background',
-    '#ht=', '&jt=', '&ms=', '&cex=0', '&otj=1'
+    'border', 'padding', 'margin', 'solid', 'color', 'width', 'height', 'font', 'size', 'background'
   ];
-  for (var i = 32; i < 127; i++) {
-    var byteChar = String.fromCharCode(i);
-    var uriComponentEncoded = plex.url.percentEncodeUnwhitelistedChars(byteChar, plex.url.URI_COMPONENT_CHARS);
-    if (uriComponentEncoded && uriComponentEncoded != byteChar) {
-      subWords.push(uriComponentEncoded);
-    }
-  }
   return subWords;
 }
 
