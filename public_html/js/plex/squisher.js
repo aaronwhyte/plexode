@@ -24,7 +24,7 @@ plex.Squisher.Encoding = {
   /** The rest is static dictionary encoded bytes. */
   DICTIONARY: 'd',
 
-  /** The rest is the original. */
+  /** The rest is the original (percent-encoded to ASCII). */
   ORIGINAL: 'o'
 };
 
@@ -33,10 +33,7 @@ plex.Squisher.Encoding = {
  * @return {String} the squished string in base 64
  */
 plex.Squisher.prototype.squish = function(original) {
-  // percent-encode so the alphabet will cover all chars.
-  var alphabet = this.getAlphabet();
-  var squished = encodeURI(original);
-  squished = plex.Squisher.Encoding.ORIGINAL + squished;
+  squished = plex.Squisher.Encoding.ORIGINAL + this.encodeToAscii(original);
 
   var newSquished = plex.Squisher.Encoding.DICTIONARY + this.compressWithStaticDictionary(squished);
   if (newSquished.length < squished.length) {
@@ -111,16 +108,33 @@ plex.Squisher.prototype.getDictionary = function() {
   return this.dictionary;
 };
 
+
+/** all the non-control lower-ASCII chars, for starters */
+plex.Squisher.BASE_ALPHABET = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+
+plex.Squisher.prototype.encodeToAscii = function(str) {
+  var out = [];
+  for (var i = 0; i < str.length; i++) {
+    var c = str.charAt(i);
+    var charCode = str.charCodeAt(i);
+    if (c == '%' || charCode < 32 || charCode > 126) {
+      out[i] = plex.url.percentEscapeCharacter(c);
+    } else {
+      out[i] = c;
+    }
+  }
+  return out.join('');
+};
+
 /**
  * All dictionary words get URI encoded, because the whole string gets URI encoded as step 1.
  */
 plex.Squisher.prototype.initAlphabetAndDictionary = function() {
-  // use all the non-control lower-ASCII chars, for starters
   var builder = [];
   for (var i = 32; i <= 126; i++) {
     builder.push(String.fromCharCode(i));
   }
-  this.alphabet = builder.join('');
+  this.alphabet = plex.Squisher.BASE_ALPHABET;
 
   this.dictionary = [];
   var nextNum = 255;
@@ -136,7 +150,7 @@ plex.Squisher.prototype.initAlphabetAndDictionary = function() {
       return;
     }
     var word = this.staticWords[i];
-    this.dictionary.push([byteChar, encodeURI(word)]);
+    this.dictionary.push([byteChar, this.encodeToAscii(word)]);
     this.alphabet += byteChar;
     nextNum--;
   }
