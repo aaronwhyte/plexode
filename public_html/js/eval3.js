@@ -26,14 +26,14 @@ plex.eval3.DEFAULTS = {
   otj: '0',
   cex: '1'
 };
-                       
+
 plex.eval3.start = function() {
+  plex.eval3.squisher = new plex.Squisher(plex.eval3.getStaticDict());
   // Decode URL and fill whitelisted input fields with initial values.
   var params = plex.url.decodeQuery(plex.url.getFragment());
   if (params['s']) {
-    var squisher = new plex.Squisher(plex.eval3.getStaticDict());
     var base64 = params['s'];
-    var unsquished = squisher.unsquish(base64);
+    var unsquished = plex.eval3.squisher.unsquish(base64);
     var json = JSON.parse(unsquished);
     var map = json;
   } else {
@@ -93,9 +93,8 @@ plex.eval3.save = function() {
       map[id] = val;
     }
   }
-  var squisher = new plex.Squisher(plex.eval3.getStaticDict());
   var json = JSON.stringify(map);
-  var s64 = squisher.squish(json);
+  var s64 = plex.eval3.squisher.squish(json);
   plex.url.setFragment("s=" + s64);
 };
 
