@@ -1,16 +1,20 @@
 Tasks that cut across all of Plexode 'n' Friends
 
+
 eval3 URL squisher 2
-- static dict lazy creation
-- encoding
-  - saveFieldsToJson
-  - jsonToSquish64
-  - updateUrlWithSquish64(squish64) - /#s=<squished64>
-- decoding
-  - when decoding URL, check for "s" param which trumps all
-  - squish64toJson(squish64)
-  - loadFieldsFromJson(json)
-- Remove old squisher UI from eval3
+v static dict lazy creation
+v encoding
+  v saveFieldsToJson
+  v jsonToSquish64
+  v updateUrlWithSquish64(squish64) - /#s=<squished64>
+v decoding
+  v when decoding URL, check for "s" param which trumps all
+  v squish64toJson(squish64)
+  v loadFieldsFromJson(json)
+v Remove old squisher UI from eval3
+- speedup
+  - measure squish time
+  - Make more efficient. Cache squisher.
 
 Delete old squisher code
 - remove squisherUI from eval2, chordo, anywhere else (but not deserializer)
