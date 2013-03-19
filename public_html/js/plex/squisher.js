@@ -1,8 +1,12 @@
 this.plex = this.plex || {};
 
 /**
- * Design:
- * https://docs.google.com/document/d/1i8on93dM2tW9qbkksPxlMbkTz2OO03_LPwf-ZDx2WvY/edit#heading=h.jbm9bg4rx28t
+ * String compressor that uses a configurable, optional static word list and Lempel-Ziv to losslessly compress
+ * a string, finally encoding it in URL-friendly base64. Decompressor also included.
+ *
+ * @param staticWords An array of up to about 100 strings that will be compressed down
+ * to single bytes.
+ *
  * @constructor
  */
 plex.Squisher = function(staticWords) {

@@ -27,6 +27,29 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
+<span class="date">2013-03-18</span>
+Now <a href="/eval3">eval3<a> is using a new URL compressor,
+<a href="https://github.com/aaronwhyte/plexode/blob/master/public_html/js/plex/squisher.js">plex.squisher</a>,
+that is always on.
+All old URLs should still work. But the new ones should survive linkification better,
+because they only use URL-friendly base64 characters. So they're more likely to work if you paste them into Gmail,
+or forum markdown.
+<p>
+Here's a sample URL that animates wiggly tree tentacles on a canvas:
+<a href="/eval3/#s=aekVQXANJVQMbAx10AUpFHpaCHhcVEQGDHhUZoHgePQOLG1RKTVdGU6kfHRB0HwMNA0uRk3APdh4IRFVJVk3GCBw9T2FPAR4BCWJkCmXLzU5QU0YjRk9F0AERDxEREgELAWmtTwlPEBIU5hEK2GF/I1NCT0RJcTkdDqBLsJTueAUCwUCQKAIOcYPC0NgcFg4QCYSjMNh7kiUOiASe6AfT8f0AB8CaUVd4QCgZjUfjsTlTtlgTc0MmMRjcge4uEQ5IAlEwxGopcQVCj3Gg1EQzGoqF4oIA0FQ7Ezieb3qIkIAnGAzFjiCQQCr3FAzGA4k4aszMZhhSzRX5uBIIOgIe1wIjiOgPJBGKokKBPKpGLJVuwTIt5bDMMABIr7LA1bhGBKKBoBI7bJhPIxUKmaIbfIuaIpGKLFhpcZgBAJEB5HVxNGZGYgJByKBbkC+a3W8B4UzW7CQPCfE4IXvTPS5HaWo1T/D7Rn9BodFFMNM+O5pK54JzhTz2gKgBDoBnOt5uv2JUISwBPM1/tB5VfZPKhNIWGBIRb8ikXfN9GxFMUBVfxl2kOCA31fc/H6gl/oAgI2H0ZFk2VEZlyKOkAVoWoAWaeJ5GhAEDABVxXlgCxo2licATaNw3jgadqTFAxDIWgQDzcFQVTbZeAxeAERhNFQRgBeuF3ufCQo7g5+IRf1/0OgEE4NbCPYHhKCzhig5JYlCWoPfl+5UhSYmufRkhCZRlmYh6IA4ZqVZeR8+X4SaNnSjmWYFaCQDcfJ3ZMA973xn99pSmdl5VbqFZrfWBoIf2d0cceipllOjpplmbZvhucTqnOdYuOCMEjnoSZ8jiOqSlqPqCk+axeMytj9A8RBNEYQhTbZuJVlVfiCZpfiDcyTaJNhsabo0CbERedbJlulWXGkMQqcyoIaZdTFOVBUlUVYJqmjGQY0OG07Mj2gZBoQzAIMouQDFASxJJIAwRvQThUvlN70gcS75BIAxeAAA=">
+cthulhu</a>.
+<p>
+The new compressor turns the form fields into a JSON string,
+percent-encodes all but the most vanilla characters,
+does static-dictionary substitution to make some common strings shorter (like "document" and "function"),
+then uses Lempel-Ziv to compress repeated strings,
+and finally encodes everything in linkifier-friendly base64.
+<p>
+Aaaand in <a href="/vorp">Vorp</a>, it should be easier to make small movements with the little pink square that is you -
+better for lining up throws, or getting onto a beam sensor. And <a href="/vorp/level2">level 2</a> got a little overhaul.
+</div>
+
+<div class="news">
 <span class="date">2013-02-13</span>
 I've been working on <a href="./vorp">Vorp</a>!<br>
 Now there are ten lesson levels, and a couple new challenging levels.
@@ -34,7 +57,7 @@ Now there are ten lesson levels, and a couple new challenging levels.
 
 <div class="news">
 <span class="date">2012-06-19</span>
-URL compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
+<i>[OBSOLETE]</i> URL compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
 now have a URL shortener button in the top right corner, that calculates a compressed URL.
 A compressed URL contains all the information that was in the original. URLs aren't stored in a database.
 <br>
