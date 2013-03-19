@@ -15,15 +15,14 @@ def formatEval3(quirks=False):
 <script src="../js/plex/dom.js"></script>
 <script src="../js/plex/event.js"></script>
 <script src="../js/plex/func.js"></script>
-<script src="../js/plex/lempelziv.js"></script>
 <script src="../js/plex/map.js"></script>
 <script src="../js/plex/object.js"></script>
 <script src="../js/plex/pubsub.js"></script>
 <script src="../js/plex/string.js"></script>
 <script src="../js/plex/url.js"></script>
-<script src="../js/plex/urlsquisher.js"></script>
 <script src="../js/plex/wij/tachanges.js"></script>
 
+<script src="../js/base64.js"></script>
 <script src="../js/plex/bitqueue.js"></script>
 <script src="../js/plex/lempelziv.js"></script>
 <script src="../js/plex/squisher.js"></script>
