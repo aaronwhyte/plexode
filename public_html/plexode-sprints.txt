@@ -1,6 +1,6 @@
 Tasks that cut across all of Plexode 'n' Friends
 
-
+done 2013-03-18
 eval3 URL squisher 2
 v static dict lazy creation
 v encoding
@@ -12,15 +12,22 @@ v decoding
   v squish64toJson(squish64)
   v loadFieldsFromJson(json)
 v Remove old squisher UI from eval3
-- speedup
-  - measure squish time
-  - Make more efficient. Cache squisher.
+x speedup
+  x measure squish time
+  v Make more efficient. Cache squisher.
+v Push new squisher
+v update Main page too.
+v test on IE
 
+2013-03-19
 Delete old squisher code
-- remove squisherUI from eval2, chordo, anywhere else (but not deserializer)
-- remove squisher UI code from formatter, util.js
-- delete old squishing code (but not unsquishing)
-- make sure unsquishing still works
+v remove squisherUI from eval2, chordo, anywhere else (but not deserializer)
+v remove squisher UI code from formatter, util.js
+V delete old squishing code (but not unsquishing)
+V make sure unsquishing still works
 
-Push new squisher
-- update Main.js, as if anyone cares.
+Create loopwood.com
+
+Move Fracas and Vorp to Loopwood, leaving redirects behind.
+
+Restore Google Analytics

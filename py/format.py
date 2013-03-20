@@ -20,6 +20,7 @@ def headStart(name, depth, quirks=False):
 <script src="''', toTop, '''js/util.js"></script>
 '''])
 
+# only used by eval2
 def plexScripts():
     html = []
     names = [
@@ -42,7 +43,6 @@ def plexScripts():
         "time",
         "type",
         "url",
-        "urlsquisher",
         "wij/acinput",
         "wij/jsac",
         "wij/log",
@@ -84,11 +84,9 @@ def plexodeLogo():
     return ''.join(html)
 
 
-def navDiv(name, level, squishui=False):
+def navDiv(name, level):
     html = ['<div class="top">']
     html.append('<div class="copyright">Copyright 2006 Aaron Whyte</div>')
-    if squishui:
-      html.append(squishUi())
     html.append(plexodeLogo())
     for link in links:
         if link[0] == name:
@@ -97,14 +95,6 @@ def navDiv(name, level, squishui=False):
             html.append(navLink(link, level))
     html.append('</div>')
     return ''.join(html)
-
-
-def squishUi():
-  return """<div id=squishdiv>
-<button id=squishbutton onclick="squishUrl()">shorter URL</button>
-<input id=squishinput type=text>
-<div id=squishstats></div>
-</div>"""
 
 
 def mainDiv(innerHtml):

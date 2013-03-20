@@ -102,7 +102,6 @@ plex.eval2.updateFragment = function(val) {
     '#',
     val ? encodeURIComponent(val) : ''];
   location.replace(href.join(''));
-  if (invalidateSquishedUrl) invalidateSquishedUrl();
 };
 
 plex.eval2.updateTa = function(ta) {
