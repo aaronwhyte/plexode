@@ -1,11 +1,8 @@
 links = [
-#  ("main", ""),
   ("insta-html", "insta-html/"),
   ("eval", "eval/"),
-  ("eval2", "eval2/"),
   ("eval3", "eval3/"),
   ("fracas", "fracas/"),
-#  ("minigames", "minigames/"),
   ("vorp", "vorp/"),
 #  ("chordo", "chordo/"),
 ]
@@ -19,42 +16,6 @@ def headStart(name, depth, quirks=False):
 <link rel="stylesheet" type="text/css" href="''', toTop, '''css/plexode3.css">
 <script src="''', toTop, '''js/util.js"></script>
 '''])
-
-# only used by eval2
-def plexScripts():
-    html = []
-    names = [
-        "array",
-        "dom",
-        "event",
-        "func",
-        "ids",
-        "js/parser",
-        "js/props",
-        "js/token",
-        "map",
-        "object",
-        "pane",
-        "point",
-        "pubsub",
-        "rect",
-        "string",
-        "textarea",
-        "time",
-        "type",
-        "url",
-        "wij/acinput",
-        "wij/jsac",
-        "wij/log",
-        "wij/menu",
-        "wij/tachanges",
-        "window"]
-    for name in names:
-        html.append('<script src="../js/plex/')
-        html.append(name)
-        html.append('.js"></script>\n')
-    return ''.join(html)
-
 
 def navHere(navTuple):
     return ''.join([

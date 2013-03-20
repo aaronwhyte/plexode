@@ -6,8 +6,32 @@ def formatEval2():
   name = 'eval2'
   h = []
   h.append(format.headStart(name, 1))
-  h.append(format.plexScripts())
   h.append("""
+<script src="../js/plex/array.js"></script>
+<script src="../js/plex/dom.js"></script>
+<script src="../js/plex/event.js"></script>
+<script src="../js/plex/func.js"></script>
+<script src="../js/plex/ids.js"></script>
+<script src="../js/plex/js/parser.js"></script>
+<script src="../js/plex/js/props.js"></script>
+<script src="../js/plex/js/token.js"></script>
+<script src="../js/plex/map.js"></script>
+<script src="../js/plex/object.js"></script>
+<script src="../js/plex/pane.js"></script>
+<script src="../js/plex/point.js"></script>
+<script src="../js/plex/pubsub.js"></script>
+<script src="../js/plex/rect.js"></script>
+<script src="../js/plex/string.js"></script>
+<script src="../js/plex/textarea.js"></script>
+<script src="../js/plex/time.js"></script>
+<script src="../js/plex/type.js"></script>
+<script src="../js/plex/url.js"></script>
+<script src="../js/plex/wij/acinput.js"></script>
+<script src="../js/plex/wij/jsac.js"></script>
+<script src="../js/plex/wij/log.js"></script>
+<script src="../js/plex/wij/menu.js"></script>
+<script src="../js/plex/wij/tachanges.js"></script>
+<script src="../js/plex/window.js"></script>
 <script src="../js/eval2.js"></script>
 <style>
 #log {
