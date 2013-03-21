@@ -30,19 +30,19 @@ Stor.prototype.listenToStorage = function() {
   window.addEventListener("storage", this.getStorageListener(), true);
 };
 
-Stor.KEY_RE = /^([^\/]+)\/([^\/]+)\/(.*)$/g;
-Stor.DATA_RE = /^([^\/]+)\/(.*)$/g;
-
 Stor.prototype.getStorageListener = function() {
   var self = this;
   return function storStorageListener(e) {
-    var m = Stor.KEY_RE.exec(e.key);
+    var key = String(e.key);
+    var keyRegex = /^([^\/]+)\/([^\/]+)\/(.*)$/g;
+    var m = keyRegex.exec(key);
     var prefix = m[1];
     var type = m[2];
     var tail = m[3];
     if (prefix != self.prefix) return;
     if (type == Stor.DATA) {
-      var dataSplit = Stor.DATA_RE.exec(tail);
+      var dataRegex = /^([^\/]+)\/(.*)$/g;
+      var dataSplit = dataRegex.exec(tail);
       var id = dataSplit[1];
       var name = self.getNameForId(id);
       if (name) {
