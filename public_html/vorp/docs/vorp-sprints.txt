@@ -347,8 +347,7 @@ v Assign sprite ID at construction.
 
 Sound
 WebAudio has panners and stuff for positional audio. Use it.
-"singer.js" will be like painter.js.
-"webaudio.js" will be like renderer.js
+singer.js is like painter.js. Vorp has all the singers, even if the sprites fire and forget.
 - Things bumping into things - tap!
 - Birth
 - Death
@@ -363,6 +362,9 @@ WebAudio has panners and stuff for positional audio. Use it.
 - gripper grab/release
 - door open/close
 - zapper on/off
+
+Graphics
+Learn some WebGL
 
 Portal tweaks
 - They push away from teleport-blocking objects so they're unobstructed.

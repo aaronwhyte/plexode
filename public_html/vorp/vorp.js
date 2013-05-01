@@ -22,6 +22,8 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
 
   this.links = {};
   this.editable = false;
+
+  this.soundFx = SoundFx.createInstance();
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
@@ -496,7 +498,17 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
   if (!handled && s2 instanceof PortalSprite && !(s1 instanceof PortalSprite)) {
     handled = s2.onSpriteHit(s1, a2, a1, xTime, yTime, overlapping);
   }
-  if (!handled) {
+  if (handled) {
+    this.soundFx.chirp();
+  } else {
+    var vol = 0.005 * (a1.magnitude() * s1.mass);
+    if (vol > 0.01) {
+      this.soundFx.tap(vol);
+    }
+    var vol = 0.005 * (a2.magnitude() * s2.mass);
+    if (vol > 0.01) {
+      this.soundFx.tap(vol);
+    }
     s1.addVel(a1);
     s2.addVel(a2);
     s1.onSpriteHit(s2);
