@@ -169,5 +169,7 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
       opsToAddPart(2, 1),
       opsToAddJacks(2, ZapperControlSprite)));
 
+  addMonoPartCluster(VedType.ZOMBIE);
+
   return map;
 };

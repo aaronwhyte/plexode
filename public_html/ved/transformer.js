@@ -75,7 +75,7 @@ Transformer.prototype.rad = function(a, b, r) {
 /**
  * Transforms graf clusters into sprites.
  * @param {GrafCluster} cluster
- * @return an array of sprites
+ * @return {Array.<Sprite>} an array of sprites
  */
 Transformer.prototype.transformCluster = function(cluster) {
   var sprites = [];
@@ -333,6 +333,19 @@ Transformer.prototype.transformCluster = function(cluster) {
         sprite = new WallSprite(template);
         sprites.push(sprite);
       }
+      break;
+
+    case VedType.ZOMBIE:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeMovable()
+          .setPainter(new RectPainter("#8a8"))
+          .setPos(controlVec)
+          .setRadXY(Transformer.BOX_RADIUS, Transformer.BOX_RADIUS)
+          .setMass(1);
+      sprite = new ZombieSprite(template);
+      sprites.push(sprite);
       break;
 
   }

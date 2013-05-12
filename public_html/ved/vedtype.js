@@ -15,5 +15,6 @@ VedType = {
   TIMER: 'timer',
   TOGGLE: 'toggle',
   WALL: 'wall',
-  ZAPPER: 'zapper'
+  ZAPPER: 'zapper',
+  ZOMBIE: 'zombie'
 };
