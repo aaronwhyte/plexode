@@ -400,6 +400,15 @@ Vorp.prototype.getPlayerSprite = function() {
   return this.playerSprite;
 };
 
+Vorp.prototype.getPlayerPos = function(outVec) {
+  if (!this.playerSprite) return null;
+  return this.playerSprite.getPos(outVec);
+};
+
+Vorp.prototype.isPlayerSpriteId = function(id) {
+  return !!this.playerSprite && this.playerSprite.id == id;
+};
+
 Vorp.prototype.exitToUrl = function(url) {
   window.location = url;
 };
