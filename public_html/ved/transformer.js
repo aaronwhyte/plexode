@@ -337,17 +337,10 @@ Transformer.prototype.transformCluster = function(cluster) {
 
     case VedType.ZOMBIE:
       part = parts[0];
-      controlVec = new Vec2d(part.x, part.y);
-      template = this.createBaseTemplate()
-          .makeMovable()
-          .setPainter(new RectPainter("#8c8"))
-          .setPos(controlVec)
-          .setRadXY(Transformer.BOX_RADIUS, Transformer.BOX_RADIUS)
-          .setMass(1);
-      sprite = new ZombieSprite(template);
+      sprite = new ZombieSpriteFactory(this.createBaseTemplate())
+          .createXY(part.x, part.y);
       sprites.push(sprite);
       break;
-
   }
   return sprites;
 };

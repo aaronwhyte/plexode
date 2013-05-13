@@ -19,9 +19,12 @@ function PlayerSprite(spriteTemplate) {
   this.kickPow = 0;
   this.canGrip = true;
   this.accel = PlayerSprite.MIN_ACCEL;
+  this.zombieness = 0;
 }
 PlayerSprite.prototype = new Sprite(null);
 PlayerSprite.prototype.constructor = PlayerSprite;
+
+PlayerSprite.ZOMBIFICATION_DURATION = 120;
 
 /**
  * @enum {number}
@@ -49,9 +52,20 @@ PlayerSprite.BRAKE = 0.0;
 PlayerSprite.prototype.act = function() {
   this.painter.clearRayScans();
   this.addFriction(Vorp.FRICTION);
+
+  if (this.zombieness) {
+    this.zombieness += 1 / PlayerSprite.ZOMBIFICATION_DURATION;
+    this.painter.setZombieness(this.zombieness);
+    if (this.zombieness >= 1) {
+      this.world.playerFullyZombified();
+      return;
+    }
+  }
+
   GU_copyKeysVec(this.keysVec);
   if (!this.keysVec.isZero()) {
-    this.accelerate(this.keysVec.scaleToLength(this.accel));
+    var speed = this.zombieness ? Math.max(0, (0.7 - this.zombieness) / 3) : 1;
+    this.accelerate(this.keysVec.scaleToLength(this.accel * speed));
     this.accel *= PlayerSprite.MULT_ACCEL;
     this.accel = Math.min(this.accel, PlayerSprite.MAX_ACCEL);
   } else {
@@ -59,6 +73,9 @@ PlayerSprite.prototype.act = function() {
     this.accel *= PlayerSprite.MULT_DECEL;
     this.accel = Math.max(this.accel, PlayerSprite.MIN_ACCEL);
   }
+
+  if (this.zombieness) return;
+
   // gripper
   var kickDown = this.kickKeyDown();
   if (kickDown) {
@@ -285,4 +302,11 @@ PlayerSprite.prototype.breakGrip = function(opt_kick) {
 PlayerSprite.prototype.die = function() {
   this.breakGrip();
   this.painter.die();
+};
+
+PlayerSprite.prototype.touchedByAZombie = function() {
+  if (!this.zombieness) {
+    this.zombieness = 1 / PlayerSprite.ZOMBIFICATION_DURATION;
+    this.breakGrip();
+  }
 };

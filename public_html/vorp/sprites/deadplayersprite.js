@@ -16,6 +16,7 @@ DeadPlayerSprite.prototype.act = function() {
     this.startTime = this.now();
   }
   if (this.startTime + DeadPlayerSprite.REASSEMBLY_TIMEOUT < this.now()) {
+    this.world.removeSprite(this.id);
     this.world.assemblePlayer();
   }
 };

@@ -8,9 +8,13 @@ function PlayerPainter() {
   this.dying = false;
   this.kaput = false;
   this.tractorBeamPainter = new TractorBeamPainter();
+  this.zombieness = 0;
+  this.color = [0, 0, 0];
 }
 PlayerPainter.prototype = new Painter(1);
 PlayerPainter.prototype.constructor = PlayerPainter;
+
+PlayerPainter.RGB = [255, 68, 221];
 
 PlayerPainter.TRAIL_TIMESPAN = 200;
 
@@ -77,7 +81,17 @@ PlayerPainter.prototype.paint = function(renderer, layer) {
       renderer.context.stroke();
     }
   } else if (layer == Vorp.LAYER_MASSES && !this.dying && !this.events.isEmpty()) {
-    renderer.setFillStyle('rgb(255, 68, 221)');
+    var color;
+    if (this.zombieness) {
+      color = this.color;
+      var z = this.zombieness;
+      for (var i = 0; i < 3; i++) {
+        this.color[i] = Math.round((1 - z) * PlayerPainter.RGB[i] + z * ZombiePainter.RGB[i]);
+      }
+    } else {
+      color = PlayerPainter.RGB;
+    }
+    renderer.setFillStyle('rgb(' + color.join(',') + ')');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
@@ -91,4 +105,8 @@ PlayerPainter.prototype.isKaput = function() {
 
 PlayerPainter.prototype.die = function() {
   this.dying = true;
+};
+
+PlayerPainter.prototype.setZombieness = function(zombieness) {
+  this.zombieness = zombieness;
 };

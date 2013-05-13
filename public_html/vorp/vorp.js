@@ -1,7 +1,7 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
+function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
   FLAGS && FLAGS.init('portalScry', true);
   this.renderer = renderer;
   this.phy = phy;
@@ -23,7 +23,7 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator) {
   this.links = {};
   this.editable = false;
 
-  this.soundFx = SoundFx.createInstance();
+  this.soundFx = opt_soundFx || null;
 }
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
@@ -400,13 +400,9 @@ Vorp.prototype.getPlayerSprite = function() {
   return this.playerSprite;
 };
 
-Vorp.prototype.getPlayerPos = function(outVec) {
-  if (!this.playerSprite) return null;
-  return this.playerSprite.getPos(outVec);
-};
-
 Vorp.prototype.isPlayerSpriteId = function(id) {
-  return !!this.playerSprite && this.playerSprite.id == id;
+  return !!this.playerSprite && this.playerSprite.id == id
+      && (this.playerSprite instanceof PlayerSprite);
 };
 
 Vorp.prototype.exitToUrl = function(url) {
@@ -417,17 +413,24 @@ Vorp.prototype.removeSprite = function(id) {
   this.phy.removeSprite(id);
 };
 
-Vorp.prototype.getDeadPlayerSpritefactory = function() {
+Vorp.prototype.getDeadPlayerSpriteFactory = function() {
   if (!this.deadPlayerSpriteFactory) {
     this.deadPlayerSpriteFactory = new DeadPlayerSpriteFactory(this.getBaseSpriteTemplate());
   }
   return this.deadPlayerSpriteFactory;
 };
 
+Vorp.prototype.getZombieSpriteFactory = function() {
+  if (!this.zombieSpriteFactory) {
+    this.zombieSpriteFactory = new ZombieSpriteFactory(this.getBaseSpriteTemplate());
+  }
+  return this.zombieSpriteFactory;
+};
+
 Vorp.prototype.killPlayer = function() {
   // save a dead player for later
   var playerPos = this.playerSprite.getPos(new Vec2d());
-  var deadPlayerSprite = this.getDeadPlayerSpritefactory().createXY(playerPos.x, playerPos.y);
+  var deadPlayerSprite = this.getDeadPlayerSpriteFactory().createXY(playerPos.x, playerPos.y);
   this.addSprite(deadPlayerSprite);
 
   // remove normal player sprite
@@ -437,10 +440,19 @@ Vorp.prototype.killPlayer = function() {
   this.playerSprite = deadPlayerSprite;
 };
 
+Vorp.prototype.playerFullyZombified = function() {
+  var playerPos = this.playerSprite.getPos(new Vec2d());
+  var zombieSprite = this.getZombieSpriteFactory().createXY(playerPos.x, playerPos.y);
+  this.addSprite(zombieSprite);
+  //zombieSprite.act();
+
+  this.playerSprite.die();
+  this.removeSprite(this.playerSprite.id);
+
+  this.assemblePlayer();
+};
+
 Vorp.prototype.assemblePlayer = function() {
-  if (this.playerSprite) {
-    this.removeSprite(this.playerSprite.id);
-  }
   this.playerSprite = this.playerAssembler.createPlayer();
   this.addSprite(this.playerSprite);
 };
@@ -508,15 +520,15 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
     handled = s2.onSpriteHit(s1, a2, a1, xTime, yTime, overlapping);
   }
   if (handled) {
-    this.soundFx.chirp();
+    if (this.soundFx) this.soundFx.chirp();
   } else {
     var vol = 0.005 * (a1.magnitude() * s1.mass);
     if (vol > 0.01) {
-      this.soundFx.tap(vol);
+      if (this.soundFx) this.soundFx.tap(vol);
     }
     var vol = 0.005 * (a2.magnitude() * s2.mass);
     if (vol > 0.01) {
-      this.soundFx.tap(vol);
+      if (this.soundFx) this.soundFx.tap(vol);
     }
     s1.addVel(a1);
     s2.addVel(a2);
