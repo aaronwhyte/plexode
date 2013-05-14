@@ -10,6 +10,7 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
   this.sledgeInvalidator = sledgeInvalidator;
 
   this.playerSprite = null;
+  this.playerAssemblyTime = null;
   this.cameraPos = new Vec2d();
   this.painters = [];
 
@@ -26,6 +27,8 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
   this.soundFx = opt_soundFx || null;
 }
 
+Vorp.EXPLODED_PLAYER_REASSEMBLY_DELAY = 30;
+
 Vorp.PORTAL_SCRY_RADIUS = 160;
 
 Vorp.FRICTION = 0.07;
@@ -36,35 +39,47 @@ Vorp.ZOOM = 0.34;
 Vorp.FPS = 60;
 
 Vorp.PLAYER_GROUP = 1;
-Vorp.WALL_GROUP = 2;
-Vorp.GENERAL_GROUP = 3;
-Vorp.ZAPPER_GROUP = 4;
-Vorp.PORTAL_GROUP = 5;
-Vorp.PORTAL_PROBE_GROUP = 6;
-Vorp.GRIP_BLOCKER_GROUP = 7;
-Vorp.EMPTY_GROUP = 8;
-Vorp.NO_HIT_GROUP = 9;
+Vorp.MONSTER_GROUP = 2;
+Vorp.WALL_GROUP = 3;
+Vorp.GENERAL_GROUP = 4;
+Vorp.ZAPPER_GROUP = 5;
+Vorp.PORTAL_GROUP = 6;
+Vorp.PORTAL_PROBE_GROUP = 7;
+Vorp.GRIP_BLOCKER_GROUP = 8;
+Vorp.PLASMA_PROBE_GROUP = 9
+Vorp.EMPTY_GROUP = 10;
+Vorp.NO_HIT_GROUP = 11;
 
 Vorp.COLLIDER_GROUP_PAIRS = [
+  [Vorp.MONSTER_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.MONSTER_GROUP, Vorp.MONSTER_GROUP],
+
   [Vorp.WALL_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.WALL_GROUP, Vorp.MONSTER_GROUP],
 
   [Vorp.GENERAL_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.GENERAL_GROUP, Vorp.MONSTER_GROUP],
   [Vorp.GENERAL_GROUP, Vorp.WALL_GROUP],
   [Vorp.GENERAL_GROUP, Vorp.GENERAL_GROUP],
 
   [Vorp.ZAPPER_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.ZAPPER_GROUP, Vorp.MONSTER_GROUP],
 
   [Vorp.PORTAL_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.PORTAL_GROUP, Vorp.MONSTER_GROUP],
   [Vorp.PORTAL_GROUP, Vorp.WALL_GROUP],
   [Vorp.PORTAL_GROUP, Vorp.GENERAL_GROUP],
   [Vorp.PORTAL_GROUP, Vorp.PORTAL_GROUP],
 
   [Vorp.PORTAL_PROBE_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.PORTAL_PROBE_GROUP, Vorp.MONSTER_GROUP],
   [Vorp.PORTAL_PROBE_GROUP, Vorp.WALL_GROUP],
   [Vorp.PORTAL_PROBE_GROUP, Vorp.GENERAL_GROUP],
   [Vorp.PORTAL_PROBE_GROUP, Vorp.PORTAL_GROUP],
 
   [Vorp.GRIP_BLOCKER_GROUP, Vorp.WALL_GROUP],
+
+  [Vorp.PLASMA_PROBE_GROUP, Vorp.ZAPPER_GROUP],
 
   [Vorp.EMPTY_GROUP, Vorp.EMPTY_GROUP],
   [Vorp.NO_HIT_GROUP, Vorp.EMPTY_GROUP]
@@ -231,6 +246,10 @@ Vorp.prototype.getSprites = function() {
  * Moves time forward by one and then draws.
  */
 Vorp.prototype.clock = function() {
+  if (this.playerAssemblyTime && this.now() >= this.playerAssemblyTime) {
+    this.assemblePlayer();
+    this.playerAssemblyTime = null;
+  }
   this.phy.clock(1);
   this.clockSprites();
   this.clockLinks();
@@ -413,13 +432,6 @@ Vorp.prototype.removeSprite = function(id) {
   this.phy.removeSprite(id);
 };
 
-Vorp.prototype.getDeadPlayerSpriteFactory = function() {
-  if (!this.deadPlayerSpriteFactory) {
-    this.deadPlayerSpriteFactory = new DeadPlayerSpriteFactory(this.getBaseSpriteTemplate());
-  }
-  return this.deadPlayerSpriteFactory;
-};
-
 Vorp.prototype.getZombieSpriteFactory = function() {
   if (!this.zombieSpriteFactory) {
     this.zombieSpriteFactory = new ZombieSpriteFactory(this.getBaseSpriteTemplate());
@@ -427,24 +439,34 @@ Vorp.prototype.getZombieSpriteFactory = function() {
   return this.zombieSpriteFactory;
 };
 
-Vorp.prototype.killPlayer = function() {
-  // save a dead player for later
-  var playerPos = this.playerSprite.getPos(new Vec2d());
-  var deadPlayerSprite = this.getDeadPlayerSpriteFactory().createXY(playerPos.x, playerPos.y);
-  this.addSprite(deadPlayerSprite);
+Vorp.prototype.explodePlayer = function() {
+  var pos = this.playerSprite.getPos(new Vec2d());
+  var painter = new ExplosionPainter();
+  painter.setPosition(pos.x, pos.y);
+  this.addPainter(painter);
 
-  // remove normal player sprite
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);
+  this.playerAssemblyTime = this.now() + Vorp.EXPLODED_PLAYER_REASSEMBLY_DELAY;
 
-  this.playerSprite = deadPlayerSprite;
+  this.playerSprite = null;
+};
+
+Vorp.prototype.explodeZombie = function(id) {
+  var sprite = this.getSprite(id);
+  var pos = sprite.getPos(new Vec2d());
+  var painter = new ExplosionPainter();
+  painter.setPosition(pos.x, pos.y);
+  this.addPainter(painter);
+
+  sprite.die();
+  this.removeSprite(id);
 };
 
 Vorp.prototype.playerFullyZombified = function() {
   var playerPos = this.playerSprite.getPos(new Vec2d());
   var zombieSprite = this.getZombieSpriteFactory().createXY(playerPos.x, playerPos.y);
   this.addSprite(zombieSprite);
-  //zombieSprite.act();
 
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);

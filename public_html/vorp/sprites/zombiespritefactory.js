@@ -10,6 +10,7 @@ ZombieSpriteFactory.prototype.createXY = function(x, y) {
   return new ZombieSprite(
       this.baseTemplate
           .makeMovable()
+          .setGroup(Vorp.MONSTER_GROUP)
           .setPainter(new ZombiePainter())
           .setPosXY(x, y)
           .setRadXY(r, r)

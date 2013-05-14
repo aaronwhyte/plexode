@@ -12,7 +12,18 @@ you automate the application of discipline a little. Maybe the tools
 you have to do so aren't perfect, but who is.
 Long story short, these plasma turrets indicate the boundaries of
 acceptable zombie behavior. On sight. With deadly plasma.
-- Zombie
+v Zombie
+  v avoids stuff
+    v inert things
+    v zappers!
+  v chases player
+  v kills player
+  v dies in zapper
+    v slice DeadPlayerSprite system into chunks
+      x camera behavior - stay in a place, or follow a sprite
+      v explosion painter (not sprite)
+      v player re-assembly timeout
+    v tractor beams release grip on removed sprites
 - Zombie Assembler
 - Anti-Zombie Turret
 

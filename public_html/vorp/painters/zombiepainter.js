@@ -4,7 +4,7 @@
  */
 function ZombiePainter() {
   Painter.call(this, 1);
-  this.kaput = false;
+  this.dying = false;
 }
 ZombiePainter.prototype = new Painter();
 ZombiePainter.prototype.constructor = ZombiePainter;
@@ -21,13 +21,10 @@ ZombiePainter.prototype.paint = function(renderer, layer) {
   }
 };
 
-/**
- * @param {boolean} kaput
- */
-ZombiePainter.prototype.setKaput = function(kaput) {
-  this.kaput = kaput;
+ZombiePainter.prototype.isKaput = function() {
+  return this.dying;
 };
 
-ZombiePainter.prototype.isKaput = function() {
-  return this.kaput;
+ZombiePainter.prototype.die = function() {
+  this.dying = true;
 };

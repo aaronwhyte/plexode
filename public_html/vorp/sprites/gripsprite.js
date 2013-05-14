@@ -102,6 +102,11 @@ GripSprite.prototype.gripForce = function() {
  * @return {boolean} true iff the grip is broken
  */
 GripSprite.prototype.maybeBreakGrip = function() {
+  // existence check
+  if (!this.world.getSprite(this.heldSprite.id)) {
+    this.heldSprite = null;
+    return true;
+  }
   var p = this.targetPos;
   var h = this.heldSprite.getPos(this.heldPos);
   if (p.distanceSquared(h) > this.distToTarget * this.distToTarget * 1.2) {

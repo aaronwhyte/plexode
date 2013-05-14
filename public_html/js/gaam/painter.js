@@ -8,6 +8,12 @@ function Painter(opt_maxTrailLength) {
   this.lastAdvanceTime = -1;
 }
 
+Painter.prototype.setPosition = function(x, y) {
+  this.addEvent(PaintEvent.alloc(
+      PaintEvent.Type.PATH, this.now, x, y, 0, 0, 0, 0));
+
+};
+
 /**
  * @param {PaintEvent} event
  */

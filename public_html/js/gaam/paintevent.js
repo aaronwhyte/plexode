@@ -19,7 +19,7 @@ function PaintEvent(type, time, px, py, vx, vy, rx, ry) {
 PaintEvent.Type = {
   /**
    * End of the line.  The sprite is gone, so the painter
-   * can die whenit's done with any leftover effects.
+   * can die when it's done with any leftover effects.
    */
   KAPUT: 1,
   

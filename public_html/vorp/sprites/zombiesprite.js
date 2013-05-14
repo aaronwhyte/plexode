@@ -13,30 +13,35 @@ ZombieSprite.prototype = new Sprite(null);
 ZombieSprite.prototype.constructor = ZombieSprite;
 
 ZombieSprite.FWD_ACCEL = 0.1;
-ZombieSprite.RAND_ACCEL = 0.2;
-ZombieSprite.APPROACH_PLAYER_ACCEL = 0.5;
-ZombieSprite.OBSTACLE_SCAN_RANGE = 60;
-ZombieSprite.PLAYER_SCAN_RANGE = 600;
+ZombieSprite.RAND_ACCEL = 0.4;
+ZombieSprite.APPROACH_PLAYER_ACCEL = 0.3;
+ZombieSprite.AVOID_PLASMA_ACCEL = 0.3;
+ZombieSprite.OBSTACLE_SCAN_RANGE = 70;
+ZombieSprite.PLASMA_SCAN_RANGE = 80;
+ZombieSprite.PLAYER_SCAN_RANGE = 500;
 
 ZombieSprite.prototype.act = function() {
   this.addFriction(Vorp.FRICTION);
-  this.approachPlayer();
   this.avoidObstacles();
+  if (!this.avoidPlasma()) {
+    this.approachPlayer();
+  }
 };
 
 ZombieSprite.prototype.avoidObstacles = function() {
   var p = this.getPos(this.pos);
   var v = this.vec;
 
+  var fwdFactor = 1;
+  var randFactor = 1;
+
   var p2 = this.getVel(v).scaleToLength(ZombieSprite.OBSTACLE_SCAN_RANGE).add(p);
   var rayScan = RayScan.alloc(
       p.x, p.y,
       p2.x, p2.y,
-      this.rad.x/2, this.rad.y/2);
-  var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
-  var fwdFactor = 1;
-  var randFactor = 1;
-  if (hitSpriteId) {
+      this.rad.x, this.rad.y);
+  var generalSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
+  if (generalSpriteId) {
     fwdFactor = -0.5;
     randFactor = 0.5;
   }
@@ -47,6 +52,32 @@ ZombieSprite.prototype.avoidObstacles = function() {
 
   v.setXY(0, randFactor * ZombieSprite.RAND_ACCEL).rot(Math.random() * 2 * Math.PI);
   this.accelerate(v);
+};
+
+ZombieSprite.prototype.avoidPlasma = function() {
+  var p = this.getPos(this.pos);
+  var v = this.vec;
+
+  var fwdFactor = 1;
+  var randFactor = 1;
+
+  for (var i = 0; i < 3; i++) {
+    var rot = Math.random() * 2 * Math.PI;
+    var p2 = v.setXY(ZombieSprite.PLASMA_SCAN_RANGE, 0).rot(rot).add(p);
+    var rayScan = RayScan.alloc(
+        p.x, p.y,
+        p2.x, p2.y,
+        this.rad.x, this.rad.y);
+    var plasmaSpriteId = this.world.rayScan(rayScan, Vorp.PLASMA_PROBE_GROUP);
+    if (plasmaSpriteId) {
+      v.setXY(rayScan.x0 - rayScan.x1, rayScan.y0 - rayScan.y1)
+          .scaleToLength(ZombieSprite.AVOID_PLASMA_ACCEL);
+      this.accelerate(v);
+    }
+    RayScan.free(rayScan);
+  }
+
+  return !!plasmaSpriteId;
 };
 
 ZombieSprite.prototype.approachPlayer = function() {
@@ -77,4 +108,8 @@ ZombieSprite.prototype.onSpriteHit = function(hitSprite) {
     this.world.getPlayerSprite().touchedByAZombie();
   }
   return true;
+};
+
+ZombieSprite.prototype.die = function() {
+  this.painter.die();
 };

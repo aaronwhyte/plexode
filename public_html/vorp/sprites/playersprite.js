@@ -264,7 +264,12 @@ PlayerSprite.prototype.stiffForce = function() {
 
 
 PlayerSprite.prototype.maybeBreakGrip = function(dist) {
-   // distance check
+  // existence check
+  if (!this.world.getSprite(this.heldSprite.id)) {
+    this.breakGrip();
+    return true;
+  }
+  // distance check
   if (dist > PlayerSprite.GRIP_SEEK_RANGE * 1.05) {
     this.breakGrip();
     return true;

@@ -10,5 +10,9 @@ ZapperSprite.prototype = new Sprite(null);
 ZapperSprite.prototype.constructor = ZapperSprite;
 
 ZapperSprite.prototype.onSpriteHit = function(hitSprite) {
-  this.world.killPlayer();
+  if (hitSprite instanceof PlayerSprite) {
+    this.world.explodePlayer();
+  } else if (hitSprite instanceof ZombieSprite) {
+    this.world.explodeZombie(hitSprite.id);
+  }
 };
