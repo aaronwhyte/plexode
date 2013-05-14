@@ -1,29 +1,27 @@
 /**
- * Basic painter for colored rectangles.
- * @param {string} color
+ * Death-by-plasma explosion painter.
  * @constructor
  * @extends {Painter}
  */
-function DeadPlayerPainter(color) {
+function ExplosionPainter() {
   Painter.call(this, 1);
-  this.color = color;
   this.kaput = false;
   this.sparks = this.createSparkList();
   
   this.sparked = false;
-  this.sparkTemplate = DeadPlayerPainter.SPARK_ALLOC();
+  this.sparkTemplate = ExplosionPainter.SPARK_ALLOC();
 }
 
-DeadPlayerPainter.prototype = new Painter();
-DeadPlayerPainter.prototype.constructor = DeadPlayerPainter;
+ExplosionPainter.prototype = new Painter();
+ExplosionPainter.prototype.constructor = ExplosionPainter;
 
-DeadPlayerPainter.sparkPos = new Vec2d();
+ExplosionPainter.sparkPos = new Vec2d();
 
 ///////////////////////////////////////
 // sparklist implementation functions
 ///////////////////////////////////////
 
-DeadPlayerPainter.SPARK_ALLOC = function() {
+ExplosionPainter.SPARK_ALLOC = function() {
   return {
     startTime: 0,
     endTime: 0,
@@ -32,23 +30,23 @@ DeadPlayerPainter.SPARK_ALLOC = function() {
   };
 };
 
-DeadPlayerPainter.SPARK_COPY = function(src, dest) {
+ExplosionPainter.SPARK_COPY = function(src, dest) {
   dest.startTime = src.startTime;
   dest.endTime = src.endTime;
   dest.pos.set(src.pos);
   dest.vel.set(src.vel);
 };
 
-DeadPlayerPainter.SPARK_ISKAPUT = function(spark, now) {
+ExplosionPainter.SPARK_ISKAPUT = function(spark, now) {
   return spark.endTime <= now;
 };
 
-DeadPlayerPainter.SPARK_ADVANCESPARK = function(spark, now) {
+ExplosionPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.vel.scale(0.95);
   spark.pos.add(spark.vel);
 };
 
-DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
+ExplosionPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
   var size = Math.max(0.2, timeFrac) * Transformer.BOX_RADIUS;
@@ -61,32 +59,24 @@ DeadPlayerPainter.SPARK_PAINT = function(renderer, spark, now) {
 // methods
 ////////////
 
-DeadPlayerPainter.prototype.advance = function(now) {
+ExplosionPainter.prototype.advance = function(now) {
   Painter.prototype.advance.call(this, now);
   this.sparks.advance(now);
 };
 
-DeadPlayerPainter.prototype.createSparkList = function() {
+ExplosionPainter.prototype.createSparkList = function() {
   var s = new SparkList();
-  s.alloc = DeadPlayerPainter.SPARK_ALLOC;
-  s.copy = DeadPlayerPainter.SPARK_COPY;
-  s.isKaput = DeadPlayerPainter.SPARK_ISKAPUT;
-  s.advanceSpark = DeadPlayerPainter.SPARK_ADVANCESPARK;
-  s.paint = DeadPlayerPainter.SPARK_PAINT;
+  s.alloc = ExplosionPainter.SPARK_ALLOC;
+  s.copy = ExplosionPainter.SPARK_COPY;
+  s.isKaput = ExplosionPainter.SPARK_ISKAPUT;
+  s.advanceSpark = ExplosionPainter.SPARK_ADVANCESPARK;
+  s.paint = ExplosionPainter.SPARK_PAINT;
   return s;
 };
 
-/**
- * @param {string} color
- */
-DeadPlayerPainter.prototype.setColor = function(color) {
-  this.color = color;
-};
 
-DeadPlayerPainter.prototype.paint = function(renderer, layer) {
+ExplosionPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_SUPERSPARKS) {
-    // rectangle
-    renderer.setFillStyle(this.color);
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
 
@@ -99,7 +89,7 @@ DeadPlayerPainter.prototype.paint = function(renderer, layer) {
   }
 };
 
-DeadPlayerPainter.prototype.createSparks = function(px, py, now) {
+ExplosionPainter.prototype.createSparks = function(px, py, now) {
   // fast-moving short-lived sparks
   for (var a = 0; a < 2 * Math.PI; a += Math.random() * 2 * Math.PI / 10) {
     this.sparkTemplate.startTime = now;
@@ -120,6 +110,6 @@ DeadPlayerPainter.prototype.createSparks = function(px, py, now) {
   }
 };
 
-DeadPlayerPainter.prototype.isKaput = function() {
+ExplosionPainter.prototype.isKaput = function() {
   return this.sparked && this.sparks.isEmpty();
 };
