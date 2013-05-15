@@ -14,6 +14,7 @@ VedType = {
   PORTAL: 'portal',
   TIMER: 'timer',
   TOGGLE: 'toggle',
+  ANTI_ZOMBIE_TURRET: 'anti_zombie_turret',
   WALL: 'wall',
   ZAPPER: 'zapper',
   ZOMBIE: 'zombie'

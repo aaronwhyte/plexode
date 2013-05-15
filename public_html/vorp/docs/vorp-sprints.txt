@@ -24,8 +24,21 @@ v Zombie
       v explosion painter (not sprite)
       v player re-assembly timeout
     v tractor beams release grip on removed sprites
-- Zombie Assembler
 - Anti-Zombie Turret
+  v basic sprite
+  v painter
+  v rayscan behavior
+  v color change when zombie detected, before we start throwing plasma around...
+  v wall-sticker-thing for Ved
+  - we're gonna need some plasma!
+    v plasma sprite
+    v plasma painter - finally get to use the events trail!
+    - vorp.firePlasma(px, py, vx, vy);
+    - plasma collision behavior vs player, zombies, and other masses
+    - plasma factory?
+      - plasma sprite pool
+      - plasma painter pool
+- Zombie Assembler
 
 Plasma Bomb
 

@@ -83,6 +83,21 @@ Transformer.prototype.transformCluster = function(cluster) {
   var parts = cluster.getPartList();
   switch (cluster.getType()) {
 
+    case VedType.ANTI_ZOMBIE_TURRET:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeImmovable()
+          .setPainter(new TurretPainter());
+      this.positionMonoHugger(template, controlVec,
+          Transformer.WALL_RADIUS * 1.5, Transformer.WALL_RADIUS * 1.3);
+      sprite = new TurretSprite(template);
+      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+          TurretSprite.SCAN_RANGE));
+//      this.transformJacks(sprite, part.getJackList());
+      sprites.push(sprite);
+      break;
+
     case VedType.BEAM_SENSOR:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
