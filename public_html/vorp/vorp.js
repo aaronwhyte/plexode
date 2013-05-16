@@ -38,19 +38,24 @@ Vorp.ZOOM = 0.34;
 // Target frames per second.
 Vorp.FPS = 60;
 
-Vorp.PLAYER_GROUP = 1;
-Vorp.MONSTER_GROUP = 2;
-Vorp.WALL_GROUP = 3;
-Vorp.GENERAL_GROUP = 4;
-Vorp.ZAPPER_GROUP = 5;
-Vorp.PORTAL_GROUP = 6;
-Vorp.PORTAL_PROBE_GROUP = 7;
-Vorp.GRIP_BLOCKER_GROUP = 8;
-Vorp.PLASMA_PROBE_GROUP = 9;
-Vorp.EMPTY_GROUP = 10;
-Vorp.NO_HIT_GROUP = 11;
+Vorp.EMPTY_GROUP = 1;
+Vorp.NO_HIT_GROUP = 2;
+Vorp.PLAYER_GROUP = 3;
+Vorp.MONSTER_GROUP = 4;
+Vorp.WALL_GROUP = 5;
+Vorp.GENERAL_GROUP = 6;
+Vorp.ZAPPER_GROUP = 7;
+Vorp.PORTAL_GROUP = 8;
+Vorp.PORTAL_PROBE_GROUP = 9;
+Vorp.GRIP_BLOCKER_GROUP = 10;
+Vorp.PLASMA_PROBE_GROUP = 11;
+Vorp.PLASMA_GROUP = 12;
+Vorp.TRACTOR_BEAM_GROUP = 13;
 
 Vorp.COLLIDER_GROUP_PAIRS = [
+  [Vorp.EMPTY_GROUP, Vorp.EMPTY_GROUP],
+  [Vorp.NO_HIT_GROUP, Vorp.EMPTY_GROUP],
+
   [Vorp.MONSTER_GROUP, Vorp.PLAYER_GROUP],
   [Vorp.MONSTER_GROUP, Vorp.MONSTER_GROUP],
 
@@ -81,8 +86,17 @@ Vorp.COLLIDER_GROUP_PAIRS = [
 
   [Vorp.PLASMA_PROBE_GROUP, Vorp.ZAPPER_GROUP],
 
-  [Vorp.EMPTY_GROUP, Vorp.EMPTY_GROUP],
-  [Vorp.NO_HIT_GROUP, Vorp.EMPTY_GROUP]
+  [Vorp.PLASMA_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.PLASMA_GROUP, Vorp.MONSTER_GROUP],
+  [Vorp.PLASMA_GROUP, Vorp.WALL_GROUP],
+  [Vorp.PLASMA_GROUP, Vorp.GENERAL_GROUP],
+  [Vorp.PLASMA_GROUP, Vorp.PORTAL_GROUP],
+
+  [Vorp.TRACTOR_BEAM_GROUP, Vorp.PLAYER_GROUP],
+  [Vorp.TRACTOR_BEAM_GROUP, Vorp.MONSTER_GROUP],
+  [Vorp.TRACTOR_BEAM_GROUP, Vorp.WALL_GROUP],
+  [Vorp.TRACTOR_BEAM_GROUP, Vorp.GENERAL_GROUP],
+  [Vorp.TRACTOR_BEAM_GROUP, Vorp.PORTAL_GROUP]
 ];
 
 Vorp.CELL_SIZE = 100;
@@ -477,6 +491,19 @@ Vorp.prototype.playerFullyZombified = function() {
 Vorp.prototype.assemblePlayer = function() {
   this.playerSprite = this.playerAssembler.createPlayer();
   this.addSprite(this.playerSprite);
+};
+
+Vorp.prototype.firePlasma = function(px, py, vx, vy) {
+  var plasmaSprite = new PlasmaSprite(
+    this.getBaseSpriteTemplate()
+        .makeMovable()
+        .setGroup(Vorp.PLASMA_GROUP)
+        .setPainter(new PlasmaPainter())
+        .setPosXY(px, py)
+        .setVelXY(vx, vy)
+        .setRadXY(1, 1)
+        .setMass(1 / (Transformer.BOX_RADIUS * Transformer.BOX_RADIUS)));
+  this.addSprite(plasmaSprite);
 };
 
 /**

@@ -4,7 +4,7 @@
  */
 function TurretPainter() {
   Painter.call(this, 1);
-  this.lastFireTime = 0;
+  this.lastFireTime = -Infinity;
 }
 
 TurretPainter.prototype = new Painter(1);

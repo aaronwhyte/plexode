@@ -13,6 +13,7 @@ ZombieSpriteFactory.prototype.createXY = function(x, y) {
           .setGroup(Vorp.MONSTER_GROUP)
           .setPainter(new ZombiePainter())
           .setPosXY(x, y)
+          .setVelXY(0, 0)
           .setRadXY(r, r)
           .setMass(1));
 };

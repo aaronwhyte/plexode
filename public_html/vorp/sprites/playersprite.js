@@ -156,7 +156,7 @@ PlayerSprite.prototype.gripScanSweep = function(vec, arc, scans) {
         p.x, p.y,
         p.x + this.scanVec.x, p.y + this.scanVec.y,
         5, 5);
-    var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
+    var hitSpriteId = this.world.rayScan(rayScan, Vorp.TRACTOR_BEAM_GROUP);
     if (hitSpriteId && rayScan.time < minTime) {
       var sprite = this.world.getSprite(hitSpriteId);
       if (sprite.mass < Infinity) {

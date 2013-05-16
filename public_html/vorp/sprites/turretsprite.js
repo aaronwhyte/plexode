@@ -20,8 +20,11 @@ TurretSprite.prototype = new Sprite(null);
 TurretSprite.prototype.constructor = TurretSprite;
 
 TurretSprite.SCAN_RANGE = 1000;
-TurretSprite.PLASMA_SPEED = 20;
-TurretSprite.COOLDOWN = 15;
+TurretSprite.PLASMA_SPEED = 40;
+TurretSprite.COOLDOWN = 7;
+
+// fraction of a circle
+TurretSprite.FIRE_ARC = 0.5;
 
 TurretSprite.prototype.setTargetPos = function(vec) {
   this.targetPos = (new Vec2d()).set(vec);
@@ -31,7 +34,7 @@ TurretSprite.prototype.setTargetPos = function(vec) {
 TurretSprite.prototype.act = function() {
   if (!this.targetPos || this.coolingDown()) return;
   this.scanInitVec.set(this.targetPos).subtract(this.getPos(this.pos));
-  this.scanSweep(this.scanInitVec, 1/10, 1);
+  this.scanSweep(this.scanInitVec, TurretSprite.FIRE_ARC, 4);
 };
 
 TurretSprite.prototype.coolingDown = function() {
@@ -49,8 +52,7 @@ TurretSprite.prototype.scanSweep = function(vec, arc, scans) {
   var minTime = Infinity;
   for (var i = 0; i < scans; i++) {
     this.scanVec.set(vec);
-    this.scanVec.rot(arc * (i / scans) * 2 * Math.PI +
-        (2 * Math.random() - 1) * 2 * Math.PI * arc / scans);
+    this.scanVec.rot(arc * Math.PI * (2 * Math.random() - 1));
     var rayScan = RayScan.alloc(
         p.x, p.y,
         p.x + this.scanVec.x, p.y + this.scanVec.y,
@@ -59,7 +61,8 @@ TurretSprite.prototype.scanSweep = function(vec, arc, scans) {
     if (hitSpriteId && rayScan.time < minTime) {
       var sprite = this.world.getSprite(hitSpriteId);
       if (sprite instanceof ZombieSprite) {
-        this.firePlasma(this.scanVec.scaleToLength(TurretSprite.PLASMA_SPEED));
+        this.firePlasma(this.scanVec);
+        break;
       }
     }
     RayScan.free(rayScan);
@@ -67,8 +70,14 @@ TurretSprite.prototype.scanSweep = function(vec, arc, scans) {
 };
 
 TurretSprite.prototype.firePlasma = function(dirVec) {
-  var p = this.getPos(this.pos)
-  // TODO: this.world.firePlasma(p.x, p.y, dirVec.x, dirVec.y); // x, y, dx, dy
+  var p = this.getPos(this.pos);
+  dirVec.scaleToLength(Transformer.BOX_RADIUS * 1.5);
+  var px = p.x + dirVec.x;
+  var py = p.y + dirVec.y;
+  dirVec.scaleToLength(TurretSprite.PLASMA_SPEED);
+  this.world.firePlasma(
+      px, py,
+      dirVec.x, dirVec.y);
   this.lastFireTime = this.now();
   this.painter.setLastFireTime(this.lastFireTime);
 };

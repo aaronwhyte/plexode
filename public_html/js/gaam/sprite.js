@@ -233,6 +233,16 @@ Sprite.prototype.createSledge = function() {
   return sledge;
 };
 
+Sprite.prototype.addKaputPaintEvent = function() {
+  var p = this.getPos(Vec2d.alloc());
+  this.painter.addEvent(PaintEvent.alloc(
+      PaintEvent.Type.KAPUT, this.now(),
+      p.x, p.y,
+      0, 0,
+      this.rad.x, this.rad.y));
+  Vec2d.free(p);
+};
+
 /**
  * @return {number}
  */

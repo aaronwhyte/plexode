@@ -1,6 +1,8 @@
 /**
  * Populates a Vorp using a VedModel
  * @param {Vorp} vorp
+ * @param {GameClock} gameClock
+ * @param {SledgeInvalidator} sledgeInvalidator
  * @constructor
  */
 function Transformer(vorp, gameClock, sledgeInvalidator) {
