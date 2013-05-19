@@ -264,10 +264,10 @@ Vorp.prototype.clock = function() {
   if (this.playerAssemblyTime && this.now() >= this.playerAssemblyTime) {
     this.assemblePlayer();
     this.playerAssemblyTime = null;
-    this.phy.clock(1);
-    this.clockSprites();
-    this.clockLinks();
   }
+  this.phy.clock(1);
+  this.clockSprites();
+  this.clockLinks();
   this.draw();
 };
 

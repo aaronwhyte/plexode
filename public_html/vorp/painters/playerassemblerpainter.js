@@ -76,7 +76,6 @@ PlayerAssemblerPainter.prototype.createSparkList = function() {
 
 PlayerAssemblerPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_MASSES) {
-    // rectangle
     renderer.setFillStyle('rgb(128,128,200)');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
