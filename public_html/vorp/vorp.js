@@ -28,6 +28,7 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
 }
 
 Vorp.EXPLODED_PLAYER_REASSEMBLY_DELAY = 30;
+Vorp.ZOMBIFIED_PLAYER_REASSEMBLY_DELAY = 40;
 
 Vorp.PORTAL_SCRY_RADIUS = 160;
 
@@ -263,10 +264,10 @@ Vorp.prototype.clock = function() {
   if (this.playerAssemblyTime && this.now() >= this.playerAssemblyTime) {
     this.assemblePlayer();
     this.playerAssemblyTime = null;
+    this.phy.clock(1);
+    this.clockSprites();
+    this.clockLinks();
   }
-  this.phy.clock(1);
-  this.clockSprites();
-  this.clockLinks();
   this.draw();
 };
 
@@ -477,15 +478,20 @@ Vorp.prototype.explodeZombie = function(id) {
   this.removeSprite(id);
 };
 
+Vorp.prototype.createZombieAtXY = function(x, y) {
+  var zombieSprite = this.getZombieSpriteFactory().createXY(x, y);
+  this.addSprite(zombieSprite);
+  zombieSprite.act();
+};
+
 Vorp.prototype.playerFullyZombified = function() {
   var playerPos = this.playerSprite.getPos(new Vec2d());
-  var zombieSprite = this.getZombieSpriteFactory().createXY(playerPos.x, playerPos.y);
-  this.addSprite(zombieSprite);
+  this.createZombieAtXY(playerPos.x, playerPos.y);
 
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);
 
-  this.assemblePlayer();
+  this.playerAssemblyTime = this.now() + Vorp.ZOMBIFIED_PLAYER_REASSEMBLY_DELAY;
 };
 
 Vorp.prototype.assemblePlayer = function() {

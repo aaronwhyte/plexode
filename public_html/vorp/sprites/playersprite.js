@@ -24,7 +24,7 @@ function PlayerSprite(spriteTemplate) {
 PlayerSprite.prototype = new Sprite(null);
 PlayerSprite.prototype.constructor = PlayerSprite;
 
-PlayerSprite.ZOMBIFICATION_DURATION = 120;
+PlayerSprite.ZOMBIFICATION_DURATION = 60;
 
 /**
  * @enum {number}

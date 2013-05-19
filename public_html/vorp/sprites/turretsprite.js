@@ -21,7 +21,7 @@ TurretSprite.prototype.constructor = TurretSprite;
 
 TurretSprite.SCAN_RANGE = 1000;
 TurretSprite.PLASMA_SPEED = 40;
-TurretSprite.COOLDOWN = 7;
+TurretSprite.COOLDOWN = 8;
 
 // fraction of a circle
 TurretSprite.FIRE_ARC = 0.5;

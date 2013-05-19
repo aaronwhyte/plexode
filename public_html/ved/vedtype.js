@@ -17,5 +17,6 @@ VedType = {
   ANTI_ZOMBIE_TURRET: 'anti_zombie_turret',
   WALL: 'wall',
   ZAPPER: 'zapper',
-  ZOMBIE: 'zombie'
+  ZOMBIE: 'zombie',
+  ZOMBIE_ASSEMBLER: 'zombie_assembler'
 };

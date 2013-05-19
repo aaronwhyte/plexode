@@ -65,7 +65,7 @@ PortalSprite.prototype.onSpriteHit = function(
     // Break tractor grips
     // TODO: Generalize so all (significant?) spacial discontinuity breaks all grips.
     var player = this.world.getPlayerSprite();
-    if (player == hitSprite || player.heldSprite == hitSprite) {
+    if (player && (player == hitSprite || player.heldSprite == hitSprite)) {
       player.breakGrip(0);
     }
 

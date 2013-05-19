@@ -358,6 +358,21 @@ Transformer.prototype.transformCluster = function(cluster) {
           .createXY(part.x, part.y);
       sprites.push(sprite);
       break;
+
+    case VedType.ZOMBIE_ASSEMBLER:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeImmovable()
+          .setPainter(new PlayerAssemblerPainter());
+      this.positionMonoHugger(template, controlVec,
+          Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
+      sprite = new ZombieAssemblerSprite(template);
+      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+          Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
+      sprites.push(sprite);
+      break;
+
   }
   return sprites;
 };

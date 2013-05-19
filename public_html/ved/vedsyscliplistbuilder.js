@@ -171,6 +171,8 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
 
   addMonoPartCluster(VedType.ZOMBIE);
 
+  addMonoPartCluster(VedType.ZOMBIE_ASSEMBLER);
+
   addOpsToMap(VedType.ANTI_ZOMBIE_TURRET, [].concat(
       opsToAddCluster(1, VedType.ANTI_ZOMBIE_TURRET),
       opsToAddPart(2, 1)));
