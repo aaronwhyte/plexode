@@ -513,7 +513,7 @@ Vorp.prototype.firePlasma = function(px, py, vx, vy) {
         .setPainter(new PlasmaPainter())
         .setPosXY(px, py)
         .setVelXY(vx, vy)
-        .setRadXY(1, 1)
+        .setRadXY(PlasmaPainter.LINE_WIDTH / 2, PlasmaPainter.LINE_WIDTH / 2)
         .setMass(1 / (Transformer.BOX_RADIUS * Transformer.BOX_RADIUS)));
   this.addSprite(plasmaSprite);
 };

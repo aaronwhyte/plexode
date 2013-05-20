@@ -98,7 +98,7 @@ PlasmaSplashPainter.prototype.createSparks = function(px, py, now) {
     this.sparkTemplate.startTime = now;
     this.sparkTemplate.endTime = now + 7 + 5 * Math.random();
     this.sparkTemplate.pos.setXY(px, py);
-    var speed = 2 + 2 * Math.random();
+    var speed = 2 + 1 * Math.random();
     this.sparkTemplate.vel.setXY(speed, 0).rot(a);
     this.sparks.add(this.sparkTemplate);
   }
