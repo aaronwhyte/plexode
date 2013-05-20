@@ -8,6 +8,8 @@ function PlayerAssemblerPainter() {
   this.sparks = this.createSparkList();
 
   this.sparkTemplate = PlayerAssemblerPainter.SPARK_ALLOC();
+
+  this.glowStartTime = -Infinity;
 }
 
 PlayerAssemblerPainter.prototype = new Painter();
@@ -40,24 +42,31 @@ PlayerAssemblerPainter.SPARK_ISKAPUT = function(spark, now) {
 };
 
 PlayerAssemblerPainter.SPARK_ADVANCESPARK = function(spark, now) {
-  spark.vel.scale(0.99);
+  spark.vel.scale(0.89);
   spark.vel.rot(spark.rot);
   spark.pos.add(spark.vel);
 };
 
 PlayerAssemblerPainter.SPARK_PAINT = function(renderer, spark, now) {
-  var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
-  var alpha = 0.2 + 0.8 * Math.random() * (0.2 + 0.8 * timeFrac);//0.3;
-  var size = Math.max(0.01, timeFrac) * Transformer.BOX_RADIUS;
-  renderer.setFillStyle('rgba(128,128,200,' + alpha + ')');
+  var timeFrac = 1 - (spark.endTime - now) / (spark.endTime - spark.startTime);
+  var alpha = 1 - 0.8 * timeFrac;
+  var size = (1 - (timeFrac * 0.9)) * Transformer.BOX_RADIUS;
+//  var red = Math.floor(128 + 127 * Math.cos(1.3 * timeFrac * 2 * Math.PI));
+//  var green = Math.floor(128 - 127 * Math.cos(timeFrac * 2 * Math.PI));
+//  var blue = Math.floor(255 * timeFrac) % 256;
+  var lite = Math.floor(255 - 128 * timeFrac);
+  renderer.setFillStyle('rgba(' + lite + ',' + lite + ',' + lite + ',' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
-
 };
 
 
 ////////////
 // methods
 ////////////
+
+PlayerAssemblerPainter.prototype.glowFraction = function(now) {
+  return Math.min(1, (now - this.glowStartTime) / 35) ;
+};
 
 PlayerAssemblerPainter.prototype.advance = function(now) {
   Painter.prototype.advance.call(this, now);
@@ -76,7 +85,9 @@ PlayerAssemblerPainter.prototype.createSparkList = function() {
 
 PlayerAssemblerPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_MASSES) {
-    renderer.setFillStyle('rgb(128,128,200)');
+    var lite = Math.floor(255 -  128 * this.glowFraction(this.now));
+    renderer.setFillStyle('rgb(' + lite + ', ' + lite + ', ' + lite + ')');
+//    renderer.setFillStyle('rgb(128,128,200)');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
@@ -87,11 +98,12 @@ PlayerAssemblerPainter.prototype.paint = function(renderer, layer) {
 };
 
 PlayerAssemblerPainter.prototype.createSparks = function(x0, y0, x1, y1, now) {
-  for (var i = -1.51; i <= 1.511; i += 0.2) {
+  this.glowStartTime = now;
+  for (var i = -1.2; i <= 1.21; i += 0.2) {
     this.sparkTemplate.startTime = now;
-    this.sparkTemplate.endTime = now + 25 + Math.random() * 2;
+    this.sparkTemplate.endTime = now + 35 + Math.random() * 2;
     this.sparkTemplate.pos.setXY(x1, y1);
-    var speed = 3;
+    var speed = 6;
     var a = Math.PI * i;
     this.sparkTemplate.vel.setXY(x1 - x0, y1 - y0).scaleToLength(speed).rot(Math.PI / 2 * i);
     this.sparkTemplate.rot = 0;

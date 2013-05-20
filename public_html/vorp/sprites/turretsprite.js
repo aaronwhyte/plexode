@@ -21,7 +21,8 @@ TurretSprite.prototype.constructor = TurretSprite;
 
 TurretSprite.SCAN_RANGE = 1000;
 TurretSprite.PLASMA_SPEED = 40;
-TurretSprite.COOLDOWN = 8;
+TurretSprite.SCANS = 10;
+TurretSprite.COOLDOWN = 7;
 
 // fraction of a circle
 TurretSprite.FIRE_ARC = 0.5;
@@ -34,7 +35,7 @@ TurretSprite.prototype.setTargetPos = function(vec) {
 TurretSprite.prototype.act = function() {
   if (!this.targetPos || this.coolingDown()) return;
   this.scanInitVec.set(this.targetPos).subtract(this.getPos(this.pos));
-  this.scanSweep(this.scanInitVec, TurretSprite.FIRE_ARC, 4);
+  this.scanSweep(this.scanInitVec, TurretSprite.FIRE_ARC, TurretSprite.SCANS);
 };
 
 TurretSprite.prototype.coolingDown = function() {

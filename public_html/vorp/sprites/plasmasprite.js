@@ -18,6 +18,9 @@ PlasmaSprite.prototype.onSpriteHit = function(hitSprite) {
     this.world.explodeZombie(hitSprite.id);
   } else if (this.world.isPlayerSpriteId(hitSprite.id)) {
     this.world.explodePlayer();
+  } else {
+    var p = this.getPos(new Vec2d());
+    this.world.splashPlasma(p.x, p.y);
   }
   if (!(hitSprite instanceof TurretSprite)) {
     // TODO: change turret so that plasma doesn't collide on exit.
