@@ -54,6 +54,7 @@ PlayerAssemblerPainter.SPARK_PAINT = function(renderer, spark, now) {
 //  var red = Math.floor(128 + 127 * Math.cos(1.3 * timeFrac * 2 * Math.PI));
 //  var green = Math.floor(128 - 127 * Math.cos(timeFrac * 2 * Math.PI));
 //  var blue = Math.floor(255 * timeFrac) % 256;
+//  renderer.setFillStyle('rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')');
   var lite = Math.floor(255 - 128 * timeFrac);
   renderer.setFillStyle('rgba(' + lite + ',' + lite + ',' + lite + ',' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
@@ -87,7 +88,6 @@ PlayerAssemblerPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_MASSES) {
     var lite = Math.floor(255 -  128 * this.glowFraction(this.now));
     renderer.setFillStyle('rgb(' + lite + ', ' + lite + ', ' + lite + ')');
-//    renderer.setFillStyle('rgb(128,128,200)');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
     renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);

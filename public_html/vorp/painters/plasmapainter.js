@@ -11,7 +11,6 @@ PlasmaPainter.prototype = new Painter(null);
 PlasmaPainter.prototype.constructor = PlasmaPainter;
 
 PlasmaPainter.TRAIL_TIMESPAN = 3;
-PlasmaPainter.LINE_WIDTH = 5;
 
 PlasmaPainter.prototype.advance = function(now) {
   this.now = now;
@@ -33,10 +32,10 @@ PlasmaPainter.prototype.paint = function(renderer, layer) {
     for (var s = 0; s < 2; s++) {
       if (s) {
         renderer.setStrokeStyle('rgba(255, 0, 255, 0.4)');
-        renderer.context.lineWidth = PlasmaPainter.LINE_WIDTH * 4;
+        renderer.context.lineWidth = PlasmaSprite.RADIUS * 4;
       } else {
         renderer.setStrokeStyle('rgb(255, 0, 255)');
-        renderer.context.lineWidth = PlasmaPainter.LINE_WIDTH;
+        renderer.context.lineWidth = PlasmaSprite.RADIUS;
       }
       for (var i = 0, n = this.events.size(); i < n; i++) {
         var event = this.events.getFromTail(i);

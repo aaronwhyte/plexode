@@ -49,7 +49,7 @@ PlasmaSplashPainter.SPARK_ADVANCESPARK = function(spark, now) {
 PlasmaSplashPainter.SPARK_PAINT = function(renderer, spark, now) {
   var timeFrac = 1 - (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.5;
-  var size = (1 - timeFrac/2) * PlasmaPainter.LINE_WIDTH * 2;
+  var size = (1 - timeFrac/2) * PlasmaSprite.RADIUS * 2;
   renderer.setFillStyle('rgba(255, 0, 255, ' + alpha + ')');
   renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };

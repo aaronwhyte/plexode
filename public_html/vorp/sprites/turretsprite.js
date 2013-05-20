@@ -21,7 +21,7 @@ TurretSprite.prototype.constructor = TurretSprite;
 
 TurretSprite.SCAN_RANGE = 1000;
 TurretSprite.PLASMA_SPEED = 40;
-TurretSprite.SCANS = 10;
+TurretSprite.SCANS = 5;
 TurretSprite.COOLDOWN = 7;
 
 // fraction of a circle
@@ -57,12 +57,12 @@ TurretSprite.prototype.scanSweep = function(vec, arc, scans) {
     var rayScan = RayScan.alloc(
         p.x, p.y,
         p.x + this.scanVec.x, p.y + this.scanVec.y,
-        1, 1);
+        PlasmaSprite.RADIUS, PlasmaSprite.RADIUS);
     var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
     if (hitSpriteId && rayScan.time < minTime) {
       var sprite = this.world.getSprite(hitSpriteId);
       if (sprite instanceof ZombieSprite) {
-        this.firePlasma(this.scanVec);
+        this.firePlasma(this.scanVec.rot(0.1 * (Math.random() - 0.5)));
         break;
       }
     }

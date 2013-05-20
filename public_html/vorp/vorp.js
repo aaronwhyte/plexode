@@ -506,6 +506,8 @@ Vorp.prototype.assemblePlayer = function() {
 };
 
 Vorp.prototype.firePlasma = function(px, py, vx, vy) {
+  this.splashPlasma(px, py);
+  var rad = PlasmaSprite.RADIUS / 2;
   var plasmaSprite = new PlasmaSprite(
     this.getBaseSpriteTemplate()
         .makeMovable()
@@ -513,8 +515,8 @@ Vorp.prototype.firePlasma = function(px, py, vx, vy) {
         .setPainter(new PlasmaPainter())
         .setPosXY(px, py)
         .setVelXY(vx, vy)
-        .setRadXY(PlasmaPainter.LINE_WIDTH / 2, PlasmaPainter.LINE_WIDTH / 2)
-        .setMass(1 / (Transformer.BOX_RADIUS * Transformer.BOX_RADIUS)));
+        .setRadXY(rad, rad)
+        .setMass(0.1 / (rad * rad)));
   this.addSprite(plasmaSprite);
 };
 

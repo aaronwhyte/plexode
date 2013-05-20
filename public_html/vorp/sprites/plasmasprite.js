@@ -12,6 +12,8 @@ PlasmaSprite.prototype.constructor = PlasmaSprite;
 PlasmaSprite.prototype.act = function() {
 };
 
+PlasmaSprite.RADIUS = 5;
+
 PlasmaSprite.prototype.onSpriteHit = function(hitSprite) {
   this.addKaputPaintEvent();
   if (hitSprite instanceof ZombieSprite) {
@@ -22,10 +24,7 @@ PlasmaSprite.prototype.onSpriteHit = function(hitSprite) {
     var p = this.getPos(new Vec2d());
     this.world.splashPlasma(p.x, p.y);
   }
-  if (!(hitSprite instanceof TurretSprite)) {
-    // TODO: change turret so that plasma doesn't collide on exit.
-    this.world.removeSprite(this.id);
-  }
+  this.world.removeSprite(this.id);
   return true;
 };
 

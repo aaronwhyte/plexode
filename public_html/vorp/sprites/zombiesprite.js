@@ -12,8 +12,8 @@ function ZombieSprite(spriteTemplate) {
 ZombieSprite.prototype = new Sprite(null);
 ZombieSprite.prototype.constructor = ZombieSprite;
 
-ZombieSprite.FWD_ACCEL = 0.1;
-ZombieSprite.RAND_ACCEL = 0.4;
+ZombieSprite.FWD_ACCEL = 0.2;
+ZombieSprite.RAND_ACCEL = 0.3;
 ZombieSprite.APPROACH_PLAYER_ACCEL = 0.3;
 ZombieSprite.AVOID_PLASMA_ACCEL = 0.3;
 ZombieSprite.OBSTACLE_SCAN_RANGE = 70;
