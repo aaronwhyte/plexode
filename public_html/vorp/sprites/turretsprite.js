@@ -13,13 +13,13 @@ function TurretSprite(spriteTemplate) {
   this.scanVec = new Vec2d();
   this.scanInitVec = new Vec2d();
 
-  this.lastFireTime = -Infinity;
+  this.lastFireTime = TurretSprite.COOLDOWN;
 }
 
 TurretSprite.prototype = new Sprite(null);
 TurretSprite.prototype.constructor = TurretSprite;
 
-TurretSprite.SCAN_RANGE = 1000;
+TurretSprite.SCAN_RANGE = 1500;
 TurretSprite.PLASMA_SPEED = 40;
 TurretSprite.SCANS = 5;
 TurretSprite.COOLDOWN = 7;

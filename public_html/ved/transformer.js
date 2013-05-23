@@ -85,6 +85,17 @@ Transformer.prototype.transformCluster = function(cluster) {
   var parts = cluster.getPartList();
   switch (cluster.getType()) {
 
+    case VedType.AND:
+      part = parts[0];
+      controlVec = new Vec2d(part.x, part.y);
+      template = this.createBaseTemplate()
+          .makeIntangible()
+          .setPos(controlVec);
+      sprite = new AndSprite(template);
+      this.transformJacks(sprite, part.getJackList());
+      sprites.push(sprite);
+      break;
+
     case VedType.ANTI_ZOMBIE_TURRET:
       part = parts[0];
       controlVec = new Vec2d(part.x, part.y);
@@ -94,7 +105,8 @@ Transformer.prototype.transformCluster = function(cluster) {
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 1.5, Transformer.WALL_RADIUS * 1.3);
       sprite = new TurretSprite(template);
-      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
+      sprite.setTargetPos(Vec2d.alongRayDistance(
+          this.calcMonoHugPoint(controlVec).vec, controlVec,
           TurretSprite.SCAN_RANGE));
 //      this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
@@ -218,8 +230,9 @@ Transformer.prototype.transformCluster = function(cluster) {
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS, Transformer.WALL_RADIUS * 0.5);
       sprite = new GripSprite(template);
-      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-          Transformer.BOX_RADIUS * 4));
+      sprite.setTargetPos(Vec2d.alongRayDistance(
+          this.calcMonoHugPoint(controlVec).vec, controlVec,
+          Transformer.BOX_RADIUS * 4 + Transformer.WALL_RADIUS * 0.5));
       this.transformJacks(sprite, part.getJackList());
       sprites.push(sprite);
       break;
@@ -246,8 +259,9 @@ Transformer.prototype.transformCluster = function(cluster) {
       sprite = new PlayerAssemblerSprite(template,
           new PlayerSpriteFactory(this.createBaseTemplate()));
       // there's enough room to assemble a player sprite
-      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-          Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
+      sprite.setTargetPos(Vec2d.alongRayDistance(
+          this.calcMonoHugPoint(controlVec).vec, controlVec,
+          Transformer.WALL_RADIUS * 1.01 + Transformer.BOX_RADIUS));
       sprites.push(sprite);
       break;
 
@@ -368,8 +382,9 @@ Transformer.prototype.transformCluster = function(cluster) {
       this.positionMonoHugger(template, controlVec,
           Transformer.WALL_RADIUS * 4, Transformer.WALL_RADIUS);
       sprite = new ZombieAssemblerSprite(template);
-      sprite.setTargetPos(Vec2d.alongRayDistance(template.pos, controlVec,
-          Transformer.WALL_RADIUS / 2 * 1.01 + Transformer.BOX_RADIUS));
+      sprite.setTargetPos(Vec2d.alongRayDistance(
+          this.calcMonoHugPoint(controlVec).vec, controlVec,
+          Transformer.WALL_RADIUS * 1.01 + Transformer.BOX_RADIUS));
       sprites.push(sprite);
       break;
 

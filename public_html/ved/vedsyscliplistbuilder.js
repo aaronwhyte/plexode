@@ -113,6 +113,11 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
         opsToAddPart(3, 1, Transformer.WALL_RADIUS * 1.5, 0)));
   }
 
+  addOpsToMap(VedType.AND, [].concat(
+      opsToAddCluster(1, VedType.AND),
+      opsToAddPart(2, 1),
+      opsToAddJacks(2, AndSprite)));
+
   addOpsToMap(VedType.BEAM_SENSOR, [].concat(
       opsToAddCluster(1, VedType.BEAM_SENSOR),
       opsToAddPart(2, 1),

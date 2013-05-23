@@ -2,6 +2,7 @@
  * @enum {string}
  */
 VedType = {
+  AND: 'and',
   BEAM_SENSOR: 'beam_sensor',
   BIG_BLOCK: 'big_block',
   BLOCK: 'block',

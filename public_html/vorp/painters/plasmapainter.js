@@ -27,9 +27,9 @@ PlasmaPainter.prototype.advance = function(now) {
 
 PlasmaPainter.prototype.paint = function(renderer, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
-    var prevEvent = null;
     renderer.context.beginPath();
     for (var s = 0; s < 2; s++) {
+      var prevEvent = null;
       if (s) {
         renderer.setStrokeStyle('rgba(255, 0, 255, 0.4)');
         renderer.context.lineWidth = PlasmaSprite.RADIUS * 4;

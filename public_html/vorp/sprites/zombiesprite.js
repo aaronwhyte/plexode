@@ -12,9 +12,11 @@ function ZombieSprite(spriteTemplate) {
 ZombieSprite.prototype = new Sprite(null);
 ZombieSprite.prototype.constructor = ZombieSprite;
 
-ZombieSprite.FWD_ACCEL = 0.2;
-ZombieSprite.RAND_ACCEL = 0.3;
-ZombieSprite.APPROACH_PLAYER_ACCEL = 0.3;
+ZombieSprite.FWD_ACCEL = 0.25;
+ZombieSprite.RAND_ACCEL = 0.2;
+ZombieSprite.APPROACH_PLAYER_ACCEL = 0.5;
+ZombieSprite.RUSH_PLAYER_RANGE = 200;
+ZombieSprite.RUSH_PLAYER_ACCEL = 0.8;
 ZombieSprite.AVOID_PLASMA_ACCEL = 0.3;
 ZombieSprite.OBSTACLE_SCAN_RANGE = 70;
 ZombieSprite.PLASMA_SCAN_RANGE = 80;
@@ -22,10 +24,7 @@ ZombieSprite.PLAYER_SCAN_RANGE = 500;
 
 ZombieSprite.prototype.act = function() {
   this.addFriction(Vorp.FRICTION);
-  this.avoidObstacles();
-  if (!this.avoidPlasma()) {
-    this.approachPlayer();
-  }
+  this.avoidPlasma() || this.approachPlayer() || this.avoidObstacles();
 };
 
 ZombieSprite.prototype.avoidObstacles = function() {
@@ -95,7 +94,10 @@ ZombieSprite.prototype.approachPlayer = function() {
       1, 1);
   var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
   if (this.world.isPlayerSpriteId(hitSpriteId)) {
-    v.subtract(p).scaleToLength(Math.random() * ZombieSprite.APPROACH_PLAYER_ACCEL).rot(Math.random() - 0.5);
+    var accel = p.distance(v) <= ZombieSprite.RUSH_PLAYER_RANGE ?
+        ZombieSprite.RUSH_PLAYER_ACCEL :
+        ZombieSprite.APPROACH_PLAYER_ACCEL;
+    v.subtract(p).scaleToLength(Math.random() * accel).rot(Math.random() - 0.5);
     this.accelerate(v);
     foundPlayer = true;
   }

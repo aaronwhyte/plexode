@@ -42,8 +42,8 @@ ZombieAssemblerSprite.prototype.act = function() {
     var hitSpriteId = this.world.rayScan(rayScan, Vorp.GENERAL_GROUP);
     if (!hitSpriteId) {
       this.createZombie();
+      this.calcNextAssemblyTime();
     }
-    this.calcNextAssemblyTime();
     RayScan.free(rayScan);
   }
 };
