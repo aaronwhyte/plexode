@@ -51,14 +51,16 @@ function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, clipMen
 
   this.contentsFramed = false;
 
-  // TODO pass in
-  this.snap = 10;
+  this.snap = GrafUi.MIN_SNAP;
 }
 
 GrafUi.FPS = 30;
 
 GrafUi.MAX_ZOOM = 50;
 GrafUi.MIN_ZOOM = 0.01;
+
+GrafUi.MIN_SNAP = 8;
+GrafUi.MAX_SNAP = 256;
 
 GrafUi.HOVER_COLOR = 'rgba(255, 255, 255, 0.5)';
 GrafUi.HILITE_COLOR = 'rgba(255, 255, 255, 0.9)';
@@ -95,6 +97,8 @@ GrafUi.Mode = {
  * @enum {string}
  */
 GrafUi.Action = {
+  GRID_SNAP: 'grid_snap',
+
   SELECT: 'select',
   UNSELECT: 'unselect',
   ADD_SELECTIONS: 'add_selections',
@@ -161,6 +165,10 @@ GrafUi.prototype.stopLoop = function() {
     this.loop.stop();
   }
   this.grafEd.unsubscribe();
+};
+
+GrafUi.prototype.setSnap = function(snap) {
+  this.snap = snap;
 };
 
 GrafUi.prototype.getSelectClipMenuItemFn = function() {
@@ -270,6 +278,13 @@ GrafUi.prototype.getKeyDownListener = function() {
     if (self.mode == GrafUi.Mode.EDIT_DATA) return;
 
     event = event || window.event;
+
+    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.GRID_SNAP)) {
+      self.snap *= 2;
+      if (self.snap > GrafUi.MAX_SNAP) {
+        self.snap = GrafUi.MIN_SNAP;
+      }
+    }
 
     if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.ADD_SELECTIONS)) {
       self.viewDirty = true;

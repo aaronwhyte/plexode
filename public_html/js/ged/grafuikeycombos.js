@@ -27,6 +27,8 @@ GrafUiKeyCombos.prototype.getAll = function() {
 
     var SHIFT = [plex.KeyModifier.SHIFT];
 
+    ked(GrafUi.Action.GRID_SNAP, 'g');
+
     ked(GrafUi.Action.SELECT, 's');
     ked(GrafUi.Action.UNSELECT, 's', SHIFT);
     ked(GrafUi.Action.ADD_SELECTIONS, 'a');

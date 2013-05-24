@@ -77,7 +77,8 @@ VORP_LEVELS = (
   ("level1", "Level 1: Collection", "Nice Old Teleporter Puzzle"),
   ("level2", "Level 2: A Stretch", "Zaps and Grabs"),
   ("level3", "Level 3: Reaction Mass", "Plus a Fun Punchline! :-D"),
-  ("level5", "Level 5: Zombie Chamber", "With Plasma Autowash"),
+  ("level4", "Level 4: Battle Grid", "Oh No, Zombies"),
+  ("level5", "Level 5: Zombie Collector", "With Plasma Autowash"),
 )
 
 
