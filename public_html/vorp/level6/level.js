@@ -3,71 +3,112 @@ vorpLevels['level 6'] =
 [
   {
     "type": "addCluster",
+    "id": "5"
+  },
+  {
+    "type": "setData",
+    "id": "5",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "6",
+    "clusterId": "5",
+    "x": -448,
+    "y": -320
+  },
+  {
+    "type": "addCluster",
     "id": "7"
   },
   {
     "type": "setData",
     "id": "7",
     "key": "type",
-    "value": "zombie"
+    "value": "big_block"
   },
   {
     "type": "addPart",
     "id": "8",
     "clusterId": "7",
-    "x": 1464,
-    "y": 448
+    "x": -960,
+    "y": -576
   },
   {
     "type": "addCluster",
-    "id": "9"
-  },
-  {
-    "type": "setData",
-    "id": "9",
-    "key": "type",
-    "value": "gripper"
-  },
-  {
-    "type": "addPart",
-    "id": "10",
-    "clusterId": "9",
-    "x": 960,
-    "y": 1048
-  },
-  {
-    "type": "addJack",
-    "id": "11",
-    "partId": "10"
+    "id": "11"
   },
   {
     "type": "setData",
     "id": "11",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "11",
-    "key": "name",
-    "value": "GRIPPING"
-  },
-  {
-    "type": "addCluster",
-    "id": "13"
-  },
-  {
-    "type": "setData",
-    "id": "13",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "14",
-    "clusterId": "13",
-    "x": 1464,
-    "y": 664
+    "id": "12",
+    "clusterId": "11",
+    "x": -608,
+    "y": -192
+  },
+  {
+    "type": "addCluster",
+    "id": "16"
+  },
+  {
+    "type": "setData",
+    "id": "16",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "17",
+    "clusterId": "16",
+    "x": -544,
+    "y": -64
+  },
+  {
+    "type": "addCluster",
+    "id": "20"
+  },
+  {
+    "type": "setData",
+    "id": "20",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "21",
+    "clusterId": "20",
+    "x": -448,
+    "y": -64
+  },
+  {
+    "type": "addCluster",
+    "id": "22"
+  },
+  {
+    "type": "setData",
+    "id": "22",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "31",
+    "clusterId": "22",
+    "x": -1152,
+    "y": 192
+  },
+  {
+    "type": "addPart",
+    "id": "32",
+    "clusterId": "22",
+    "x": -1152,
+    "y": 416
   },
   {
     "type": "addCluster",
@@ -77,133 +118,385 @@ vorpLevels['level 6'] =
     "type": "setData",
     "id": "24",
     "key": "type",
-    "value": "zombie"
+    "value": "timer"
   },
   {
     "type": "addPart",
     "id": "25",
     "clusterId": "24",
-    "x": 1216,
-    "y": 720
-  },
-  {
-    "type": "addCluster",
-    "id": "34"
+    "x": -808,
+    "y": -384
   },
   {
     "type": "setData",
-    "id": "34",
+    "id": "25",
+    "key": "timeout",
+    "value": "10"
+  },
+  {
+    "type": "addJack",
+    "id": "26",
+    "partId": "25"
+  },
+  {
+    "type": "setData",
+    "id": "26",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "26",
+    "key": "name",
+    "value": "RESTART"
+  },
+  {
+    "type": "addJack",
+    "id": "27",
+    "partId": "25"
+  },
+  {
+    "type": "setData",
+    "id": "27",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "27",
+    "key": "name",
+    "value": "RUNNING"
+  },
+  {
+    "type": "addCluster",
+    "id": "28"
+  },
+  {
+    "type": "setData",
+    "id": "28",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "36",
-    "clusterId": "34",
-    "x": 1392,
-    "y": 112
+    "id": "30",
+    "clusterId": "28",
+    "x": -448,
+    "y": -192
   },
   {
     "type": "addCluster",
-    "id": "39"
+    "id": "37"
   },
   {
     "type": "setData",
-    "id": "39",
+    "id": "37",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "40",
-    "clusterId": "39",
-    "x": 1656,
-    "y": 192
+    "id": "38",
+    "clusterId": "37",
+    "x": -352,
+    "y": -512
   },
   {
     "type": "addCluster",
-    "id": "45"
+    "id": "43"
   },
   {
     "type": "setData",
+    "id": "43",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "44",
+    "clusterId": "43",
+    "x": -1152,
+    "y": -800
+  },
+  {
+    "type": "addPart",
     "id": "45",
-    "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "46",
-    "clusterId": "45",
-    "x": 1216,
-    "y": 104
+    "clusterId": "43",
+    "x": 768,
+    "y": -800
   },
   {
     "type": "addCluster",
-    "id": "53"
+    "id": "48"
   },
   {
     "type": "setData",
-    "id": "53",
+    "id": "48",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
+    "id": "49",
+    "clusterId": "48",
+    "x": -128,
+    "y": -576
+  },
+  {
+    "type": "addCluster",
+    "id": "54"
+  },
+  {
+    "type": "setData",
     "id": "54",
-    "clusterId": "53",
-    "x": 1472,
-    "y": -96
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "55",
+    "clusterId": "54",
+    "x": -32,
+    "y": -576
   },
   {
     "type": "addCluster",
-    "id": "64"
+    "id": "56"
   },
   {
     "type": "setData",
-    "id": "64",
+    "id": "56",
     "key": "type",
-    "value": "zombie"
+    "value": "gripper"
+  },
+  {
+    "type": "addPart",
+    "id": "66",
+    "clusterId": "56",
+    "x": 976,
+    "y": -192
+  },
+  {
+    "type": "addJack",
+    "id": "67",
+    "partId": "66"
+  },
+  {
+    "type": "setData",
+    "id": "67",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "67",
+    "key": "name",
+    "value": "GRIPPING"
+  },
+  {
+    "type": "addCluster",
+    "id": "57"
+  },
+  {
+    "type": "setData",
+    "id": "57",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "61",
+    "clusterId": "57",
+    "x": -120,
+    "y": -400
+  },
+  {
+    "type": "addPart",
+    "id": "62",
+    "clusterId": "57",
+    "x": -96,
+    "y": -400
+  },
+  {
+    "type": "addCluster",
+    "id": "58"
+  },
+  {
+    "type": "setData",
+    "id": "58",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "59",
+    "clusterId": "58",
+    "x": -1152,
+    "y": 416
+  },
+  {
+    "type": "addPart",
+    "id": "60",
+    "clusterId": "58",
+    "x": 768,
+    "y": 416
+  },
+  {
+    "type": "addCluster",
+    "id": "63"
+  },
+  {
+    "type": "setData",
+    "id": "63",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "64",
+    "clusterId": "63",
+    "x": -288,
+    "y": -400
   },
   {
     "type": "addPart",
     "id": "65",
-    "clusterId": "64",
-    "x": 1504,
-    "y": -368
+    "clusterId": "63",
+    "x": -288,
+    "y": 16
   },
   {
     "type": "addCluster",
-    "id": "72"
+    "id": "68"
   },
   {
     "type": "setData",
+    "id": "68",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "69",
+    "clusterId": "68",
+    "x": -192,
+    "y": -512
+  },
+  {
+    "type": "addCluster",
+    "id": "70"
+  },
+  {
+    "type": "setData",
+    "id": "70",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "71",
+    "clusterId": "70",
+    "x": 768,
+    "y": -800
+  },
+  {
+    "type": "addPart",
     "id": "72",
-    "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "73",
-    "clusterId": "72",
-    "x": 1464,
-    "y": -408
+    "clusterId": "70",
+    "x": 768,
+    "y": 416
   },
   {
     "type": "addCluster",
-    "id": "86"
+    "id": "77"
   },
   {
     "type": "setData",
-    "id": "86",
+    "id": "77",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "87",
-    "clusterId": "86",
-    "x": 1440,
-    "y": -360
+    "id": "78",
+    "clusterId": "77",
+    "x": 160,
+    "y": -416
+  },
+  {
+    "type": "addCluster",
+    "id": "88"
+  },
+  {
+    "type": "setData",
+    "id": "88",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "89",
+    "clusterId": "88",
+    "x": 64,
+    "y": -256
+  },
+  {
+    "type": "addCluster",
+    "id": "90"
+  },
+  {
+    "type": "setData",
+    "id": "90",
+    "key": "type",
+    "value": "gripper"
+  },
+  {
+    "type": "addPart",
+    "id": "91",
+    "clusterId": "90",
+    "x": 976,
+    "y": -416
+  },
+  {
+    "type": "addJack",
+    "id": "92",
+    "partId": "91"
+  },
+  {
+    "type": "setData",
+    "id": "92",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "92",
+    "key": "name",
+    "value": "GRIPPING"
+  },
+  {
+    "type": "addCluster",
+    "id": "94"
+  },
+  {
+    "type": "setData",
+    "id": "94",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "95",
+    "clusterId": "94",
+    "x": -848,
+    "y": -512
+  },
+  {
+    "type": "addPart",
+    "id": "96",
+    "clusterId": "94",
+    "x": -768,
+    "y": -512
   },
   {
     "type": "addCluster",
@@ -219,8 +512,66 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "100",
     "clusterId": "99",
-    "x": 984,
-    "y": -336
+    "x": 64,
+    "y": -96
+  },
+  {
+    "type": "addCluster",
+    "id": "102"
+  },
+  {
+    "type": "setData",
+    "id": "102",
+    "key": "type",
+    "value": "zombie_assembler"
+  },
+  {
+    "type": "addPart",
+    "id": "103",
+    "clusterId": "102",
+    "x": -384,
+    "y": -80
+  },
+  {
+    "type": "addCluster",
+    "id": "106"
+  },
+  {
+    "type": "setData",
+    "id": "106",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "107",
+    "clusterId": "106",
+    "x": -848,
+    "y": 128
+  },
+  {
+    "type": "addPart",
+    "id": "108",
+    "clusterId": "106",
+    "x": -768,
+    "y": 128
+  },
+  {
+    "type": "addCluster",
+    "id": "109"
+  },
+  {
+    "type": "setData",
+    "id": "109",
+    "key": "type",
+    "value": "block"
+  },
+  {
+    "type": "addPart",
+    "id": "116",
+    "clusterId": "109",
+    "x": 672,
+    "y": -384
   },
   {
     "type": "addCluster",
@@ -230,137 +581,439 @@ vorpLevels['level 6'] =
     "type": "setData",
     "id": "110",
     "key": "type",
-    "value": "zombie"
+    "value": "timer"
   },
   {
     "type": "addPart",
     "id": "111",
     "clusterId": "110",
-    "x": 968,
-    "y": -408
-  },
-  {
-    "type": "addCluster",
-    "id": "123"
+    "x": 432,
+    "y": -376
   },
   {
     "type": "setData",
-    "id": "123",
+    "id": "111",
+    "key": "timeout",
+    "value": "10"
+  },
+  {
+    "type": "addJack",
+    "id": "114",
+    "partId": "111"
+  },
+  {
+    "type": "setData",
+    "id": "114",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "114",
+    "key": "name",
+    "value": "RESTART"
+  },
+  {
+    "type": "addJack",
+    "id": "115",
+    "partId": "111"
+  },
+  {
+    "type": "setData",
+    "id": "115",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "115",
+    "key": "name",
+    "value": "RUNNING"
+  },
+  {
+    "type": "addCluster",
+    "id": "112"
+  },
+  {
+    "type": "setData",
+    "id": "112",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "124",
-    "clusterId": "123",
-    "x": 928,
-    "y": -360
+    "id": "113",
+    "clusterId": "112",
+    "x": -32,
+    "y": 160
   },
   {
     "type": "addCluster",
-    "id": "131"
+    "id": "120"
   },
   {
     "type": "setData",
+    "id": "120",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
+    "id": "121",
+    "clusterId": "120",
+    "x": -192,
+    "y": 128
+  },
+  {
+    "type": "addCluster",
+    "id": "125"
+  },
+  {
+    "type": "setData",
+    "id": "125",
+    "key": "type",
+    "value": "zombie_assembler"
+  },
+  {
+    "type": "addPart",
+    "id": "126",
+    "clusterId": "125",
+    "x": 0,
+    "y": -80
+  },
+  {
+    "type": "addCluster",
+    "id": "128"
+  },
+  {
+    "type": "setData",
+    "id": "128",
+    "key": "type",
+    "value": "zombie_assembler"
+  },
+  {
+    "type": "addPart",
+    "id": "129",
+    "clusterId": "128",
+    "x": -384,
+    "y": -304
+  },
+  {
+    "type": "addCluster",
+    "id": "130"
+  },
+  {
+    "type": "setData",
+    "id": "130",
+    "key": "type",
+    "value": "zombie"
+  },
+  {
+    "type": "addPart",
     "id": "131",
+    "clusterId": "130",
+    "x": -256,
+    "y": 192
+  },
+  {
+    "type": "addCluster",
+    "id": "133"
+  },
+  {
+    "type": "setData",
+    "id": "133",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "134",
+    "clusterId": "133",
+    "x": 384,
+    "y": -512
+  },
+  {
+    "type": "addPart",
+    "id": "135",
+    "clusterId": "133",
+    "x": 464,
+    "y": -512
+  },
+  {
+    "type": "addCluster",
+    "id": "139"
+  },
+  {
+    "type": "setData",
+    "id": "139",
     "key": "type",
     "value": "zombie"
   },
   {
     "type": "addPart",
-    "id": "132",
-    "clusterId": "131",
-    "x": 976,
-    "y": 208
+    "id": "140",
+    "clusterId": "139",
+    "x": 160,
+    "y": -32
   },
   {
     "type": "addCluster",
-    "id": "157"
+    "id": "154"
   },
   {
     "type": "setData",
-    "id": "157",
+    "id": "154",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "158",
-    "clusterId": "157",
-    "x": 576,
-    "y": 768
+    "id": "155",
+    "clusterId": "154",
+    "x": 384,
+    "y": 128
   },
   {
     "type": "addPart",
-    "id": "159",
-    "clusterId": "157",
-    "x": 448,
-    "y": 768
+    "id": "156",
+    "clusterId": "154",
+    "x": 472,
+    "y": 128
   },
   {
     "type": "addCluster",
-    "id": "184"
+    "id": "161"
   },
   {
     "type": "setData",
-    "id": "184",
+    "id": "161",
+    "key": "type",
+    "value": "player_assembler"
+  },
+  {
+    "type": "addPart",
+    "id": "162",
+    "clusterId": "161",
+    "x": -2112,
+    "y": -192
+  },
+  {
+    "type": "addCluster",
+    "id": "173"
+  },
+  {
+    "type": "setData",
+    "id": "173",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "185",
-    "clusterId": "184",
-    "x": 1088,
-    "y": 1048
+    "id": "174",
+    "clusterId": "173",
+    "x": -1152,
+    "y": -800
   },
   {
     "type": "addPart",
-    "id": "186",
-    "clusterId": "184",
-    "x": 1344,
-    "y": 1048
+    "id": "175",
+    "clusterId": "173",
+    "x": -1152,
+    "y": -576
   },
   {
     "type": "addCluster",
-    "id": "207"
+    "id": "176"
   },
   {
     "type": "setData",
-    "id": "207",
+    "id": "176",
+    "key": "type",
+    "value": "zombie_assembler"
+  },
+  {
+    "type": "addPart",
+    "id": "177",
+    "clusterId": "176",
+    "x": 0,
+    "y": -304
+  },
+  {
+    "type": "addCluster",
+    "id": "181"
+  },
+  {
+    "type": "setData",
+    "id": "181",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "182",
+    "clusterId": "181",
+    "x": -1408,
+    "y": -576
+  },
+  {
+    "type": "addPart",
+    "id": "183",
+    "clusterId": "181",
+    "x": -1408,
+    "y": -304
+  },
+  {
+    "type": "addCluster",
+    "id": "202"
+  },
+  {
+    "type": "setData",
+    "id": "202",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "203",
+    "clusterId": "202",
+    "x": -848,
+    "y": -448
+  },
+  {
+    "type": "addJack",
+    "id": "204",
+    "partId": "203"
+  },
+  {
+    "type": "setData",
+    "id": "204",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "204",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "226"
+  },
+  {
+    "type": "setData",
+    "id": "226",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "227",
+    "clusterId": "226",
+    "x": 464,
+    "y": -448
+  },
+  {
+    "type": "addJack",
+    "id": "228",
+    "partId": "227"
+  },
+  {
+    "type": "setData",
+    "id": "228",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "228",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "247"
+  },
+  {
+    "type": "setData",
+    "id": "247",
+    "key": "type",
+    "value": "beam_sensor"
+  },
+  {
+    "type": "addPart",
+    "id": "248",
+    "clusterId": "247",
+    "x": -768,
+    "y": -448
+  },
+  {
+    "type": "addJack",
+    "id": "249",
+    "partId": "248"
+  },
+  {
+    "type": "setData",
+    "id": "249",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "249",
+    "key": "name",
+    "value": "BEAM_BROKEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "259"
+  },
+  {
+    "type": "setData",
+    "id": "259",
+    "key": "type",
+    "value": "beam_sensor"
+  },
+  {
+    "type": "addPart",
+    "id": "260",
+    "clusterId": "259",
+    "x": 384,
+    "y": -448
+  },
+  {
+    "type": "addJack",
+    "id": "261",
+    "partId": "260"
+  },
+  {
+    "type": "setData",
+    "id": "261",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "261",
+    "key": "name",
+    "value": "BEAM_BROKEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "284"
+  },
+  {
+    "type": "setData",
+    "id": "284",
     "key": "type",
     "value": "anti_zombie_turret"
   },
   {
     "type": "addPart",
-    "id": "208",
-    "clusterId": "207",
-    "x": 2304,
-    "y": 128
-  },
-  {
-    "type": "addCluster",
-    "id": "213"
-  },
-  {
-    "type": "setData",
-    "id": "213",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "214",
-    "clusterId": "213",
-    "x": 1344,
-    "y": 1576
-  },
-  {
-    "type": "addPart",
-    "id": "215",
-    "clusterId": "213",
-    "x": 576,
-    "y": 1576
+    "id": "285",
+    "clusterId": "284",
+    "x": -1088,
+    "y": -288
   },
   {
     "type": "addCluster",
@@ -376,356 +1029,272 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "293",
     "clusterId": "292",
-    "x": 1280,
-    "y": 1288
+    "x": -1088,
+    "y": -96
   },
   {
     "type": "addCluster",
-    "id": "314"
+    "id": "319"
   },
   {
     "type": "setData",
-    "id": "314",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "315",
-    "clusterId": "314",
-    "x": 1968,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "316",
-    "partId": "315"
-  },
-  {
-    "type": "setData",
-    "id": "316",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "316",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "317",
-    "partId": "315"
-  },
-  {
-    "type": "setData",
-    "id": "317",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "317",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "424"
-  },
-  {
-    "type": "setData",
-    "id": "424",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "425",
-    "clusterId": "424",
-    "x": 2000,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "426",
-    "partId": "425"
-  },
-  {
-    "type": "setData",
-    "id": "426",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "426",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "427",
-    "partId": "425"
-  },
-  {
-    "type": "setData",
-    "id": "427",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "427",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "532"
-  },
-  {
-    "type": "setData",
-    "id": "532",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "533",
-    "clusterId": "532",
-    "x": 2032,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "534",
-    "partId": "533"
-  },
-  {
-    "type": "setData",
-    "id": "534",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "534",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "535",
-    "partId": "533"
-  },
-  {
-    "type": "setData",
-    "id": "535",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "535",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "585"
-  },
-  {
-    "type": "setData",
-    "id": "585",
+    "id": "319",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "586",
-    "clusterId": "585",
-    "x": 1344,
-    "y": -256
+    "id": "320",
+    "clusterId": "319",
+    "x": -288,
+    "y": -400
   },
   {
     "type": "addPart",
-    "id": "587",
-    "clusterId": "585",
-    "x": 1088,
-    "y": -256
+    "id": "321",
+    "clusterId": "319",
+    "x": -264,
+    "y": -400
   },
   {
     "type": "addCluster",
-    "id": "620"
+    "id": "364"
   },
   {
     "type": "setData",
-    "id": "620",
+    "id": "364",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "621",
-    "clusterId": "620",
-    "x": 576,
-    "y": 0
+    "id": "365",
+    "clusterId": "364",
+    "x": 1328,
+    "y": -576
   },
   {
     "type": "addPart",
-    "id": "622",
-    "clusterId": "620",
-    "x": 448,
-    "y": 0
+    "id": "366",
+    "clusterId": "364",
+    "x": 1328,
+    "y": -1152
   },
   {
     "type": "addCluster",
-    "id": "638"
+    "id": "406"
   },
   {
     "type": "setData",
-    "id": "638",
+    "id": "406",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "639",
-    "clusterId": "638",
-    "x": 576,
-    "y": -256
+    "id": "407",
+    "clusterId": "406",
+    "x": -1600,
+    "y": -512
   },
   {
     "type": "addPart",
-    "id": "640",
-    "clusterId": "638",
-    "x": 576,
-    "y": 0
+    "id": "408",
+    "clusterId": "406",
+    "x": -1600,
+    "y": -304
   },
   {
     "type": "addCluster",
-    "id": "648"
+    "id": "625"
   },
   {
     "type": "setData",
-    "id": "648",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "649",
-    "clusterId": "648",
-    "x": 2064,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "650",
-    "partId": "649"
-  },
-  {
-    "type": "setData",
-    "id": "650",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "650",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "651",
-    "partId": "649"
-  },
-  {
-    "type": "setData",
-    "id": "651",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "651",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "654"
-  },
-  {
-    "type": "setData",
-    "id": "654",
+    "id": "625",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "655",
-    "clusterId": "654",
-    "x": 448,
-    "y": 0
+    "id": "626",
+    "clusterId": "625",
+    "x": -1600,
+    "y": -80
   },
   {
     "type": "addPart",
-    "id": "656",
-    "clusterId": "654",
-    "x": 448,
-    "y": 768
-  },
-  {
-    "type": "addCluster",
-    "id": "666"
-  },
-  {
-    "type": "setData",
-    "id": "666",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "667",
-    "clusterId": "666",
-    "x": 576,
-    "y": 640
-  },
-  {
-    "type": "addPart",
-    "id": "668",
-    "clusterId": "666",
-    "x": 576,
+    "id": "627",
+    "clusterId": "625",
+    "x": -1600,
     "y": 128
   },
   {
     "type": "addCluster",
-    "id": "704"
+    "id": "628"
   },
   {
     "type": "setData",
-    "id": "704",
+    "id": "628",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "705",
-    "clusterId": "704",
-    "x": 1856,
-    "y": 256
+    "id": "629",
+    "clusterId": "628",
+    "x": -96,
+    "y": -400
   },
   {
     "type": "addPart",
-    "id": "706",
-    "clusterId": "704",
-    "x": 1856,
-    "y": -256
+    "id": "630",
+    "clusterId": "628",
+    "x": -96,
+    "y": 16
+  },
+  {
+    "type": "addCluster",
+    "id": "640"
+  },
+  {
+    "type": "setData",
+    "id": "640",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "641",
+    "clusterId": "640",
+    "x": -1408,
+    "y": -304
+  },
+  {
+    "type": "addPart",
+    "id": "642",
+    "clusterId": "640",
+    "x": -1600,
+    "y": -304
+  },
+  {
+    "type": "addCluster",
+    "id": "727"
+  },
+  {
+    "type": "setData",
+    "id": "727",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "728",
+    "clusterId": "727",
+    "x": -1408,
+    "y": -80
+  },
+  {
+    "type": "addPart",
+    "id": "729",
+    "clusterId": "727",
+    "x": -1600,
+    "y": -80
+  },
+  {
+    "type": "addCluster",
+    "id": "739"
+  },
+  {
+    "type": "setData",
+    "id": "739",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "740",
+    "clusterId": "739",
+    "x": -2240,
+    "y": -512
+  },
+  {
+    "type": "addPart",
+    "id": "741",
+    "clusterId": "739",
+    "x": -2240,
+    "y": 128
+  },
+  {
+    "type": "addCluster",
+    "id": "742"
+  },
+  {
+    "type": "setData",
+    "id": "742",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "743",
+    "clusterId": "742",
+    "x": -1152,
+    "y": -304
+  },
+  {
+    "type": "addPart",
+    "id": "744",
+    "clusterId": "742",
+    "x": -1152,
+    "y": -80
+  },
+  {
+    "type": "addCluster",
+    "id": "745"
+  },
+  {
+    "type": "setData",
+    "id": "745",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "746",
+    "clusterId": "745",
+    "x": 1680,
+    "y": 192
+  },
+  {
+    "type": "addPart",
+    "id": "747",
+    "clusterId": "745",
+    "x": 1680,
+    "y": -1152
+  },
+  {
+    "type": "addCluster",
+    "id": "754"
+  },
+  {
+    "type": "setData",
+    "id": "754",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "755",
+    "clusterId": "754",
+    "x": -2240,
+    "y": -512
+  },
+  {
+    "type": "addPart",
+    "id": "756",
+    "clusterId": "754",
+    "x": -1600,
+    "y": -512
   },
   {
     "type": "addCluster",
@@ -735,2680 +1304,1131 @@ vorpLevels['level 6'] =
     "type": "setData",
     "id": "766",
     "key": "type",
-    "value": "player_assembler"
+    "value": "wall"
   },
   {
     "type": "addPart",
     "id": "767",
     "clusterId": "766",
-    "x": 960,
-    "y": 1384
+    "x": -2240,
+    "y": 128
+  },
+  {
+    "type": "addPart",
+    "id": "768",
+    "clusterId": "766",
+    "x": -1600,
+    "y": 128
   },
   {
     "type": "addCluster",
-    "id": "820"
+    "id": "777"
   },
   {
     "type": "setData",
-    "id": "820",
+    "id": "777",
+    "key": "type",
+    "value": "anti_zombie_turret"
+  },
+  {
+    "type": "addPart",
+    "id": "778",
+    "clusterId": "777",
+    "x": -1664,
+    "y": -384
+  },
+  {
+    "type": "addCluster",
+    "id": "933"
+  },
+  {
+    "type": "setData",
+    "id": "933",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "821",
-    "clusterId": "820",
-    "x": 1856,
-    "y": 1048
+    "id": "934",
+    "clusterId": "933",
+    "x": 1680,
+    "y": -1152
   },
   {
     "type": "addPart",
-    "id": "822",
-    "clusterId": "820",
-    "x": 1856,
-    "y": 512
+    "id": "935",
+    "clusterId": "933",
+    "x": 1328,
+    "y": -1152
   },
   {
     "type": "addCluster",
-    "id": "832"
+    "id": "944"
   },
   {
     "type": "setData",
-    "id": "832",
+    "id": "944",
     "key": "type",
-    "value": "not"
+    "value": "anti_zombie_turret"
   },
   {
     "type": "addPart",
-    "id": "833",
-    "clusterId": "832",
-    "x": 2096,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "834",
-    "partId": "833"
-  },
-  {
-    "type": "setData",
-    "id": "834",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "834",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "835",
-    "partId": "833"
-  },
-  {
-    "type": "setData",
-    "id": "835",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "835",
-    "key": "name",
-    "value": "NOT_X"
+    "id": "945",
+    "clusterId": "944",
+    "x": 1440,
+    "y": -688
   },
   {
     "type": "addCluster",
-    "id": "875"
+    "id": "970"
   },
   {
     "type": "setData",
-    "id": "875",
+    "id": "970",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "876",
-    "clusterId": "875",
-    "x": 1856,
-    "y": 1048
+    "id": "971",
+    "clusterId": "970",
+    "x": -1408,
+    "y": -80
   },
   {
     "type": "addPart",
-    "id": "877",
-    "clusterId": "875",
-    "x": 1856,
-    "y": 1048
+    "id": "972",
+    "clusterId": "970",
+    "x": -1408,
+    "y": 192
   },
   {
     "type": "addCluster",
-    "id": "884"
+    "id": "985"
   },
   {
     "type": "setData",
-    "id": "884",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "885",
-    "clusterId": "884",
-    "x": 2128,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "886",
-    "partId": "885"
-  },
-  {
-    "type": "setData",
-    "id": "886",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "886",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "887",
-    "partId": "885"
-  },
-  {
-    "type": "setData",
-    "id": "887",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "887",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "920"
-  },
-  {
-    "type": "setData",
-    "id": "920",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "921",
-    "clusterId": "920",
-    "x": 2160,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "922",
-    "partId": "921"
-  },
-  {
-    "type": "setData",
-    "id": "922",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "922",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "923",
-    "partId": "921"
-  },
-  {
-    "type": "setData",
-    "id": "923",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "923",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "947"
-  },
-  {
-    "type": "setData",
-    "id": "947",
-    "key": "type",
-    "value": "not"
-  },
-  {
-    "type": "addPart",
-    "id": "948",
-    "clusterId": "947",
-    "x": 2192,
-    "y": -160
-  },
-  {
-    "type": "addJack",
-    "id": "949",
-    "partId": "948"
-  },
-  {
-    "type": "setData",
-    "id": "949",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "949",
-    "key": "name",
-    "value": "X"
-  },
-  {
-    "type": "addJack",
-    "id": "950",
-    "partId": "948"
-  },
-  {
-    "type": "setData",
-    "id": "950",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "950",
-    "key": "name",
-    "value": "NOT_X"
-  },
-  {
-    "type": "addCluster",
-    "id": "952"
-  },
-  {
-    "type": "setData",
-    "id": "952",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "953",
-    "clusterId": "952",
-    "x": 1280,
-    "y": 256
-  },
-  {
-    "type": "addJack",
-    "id": "954",
-    "partId": "953"
-  },
-  {
-    "type": "setData",
-    "id": "954",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "954",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1012"
-  },
-  {
-    "type": "setData",
-    "id": "1012",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1013",
-    "clusterId": "1012",
-    "x": 1152,
-    "y": 256
-  },
-  {
-    "type": "addJack",
-    "id": "1014",
-    "partId": "1013"
-  },
-  {
-    "type": "setData",
-    "id": "1014",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1014",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1026"
-  },
-  {
-    "type": "setData",
-    "id": "1026",
+    "id": "985",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "1027",
-    "clusterId": "1026",
-    "x": 1344,
-    "y": -512
+    "id": "986",
+    "clusterId": "985",
+    "x": -1408,
+    "y": -576
   },
   {
     "type": "addPart",
-    "id": "1028",
-    "clusterId": "1026",
-    "x": 1600,
-    "y": -512
+    "id": "987",
+    "clusterId": "985",
+    "x": -1152,
+    "y": -576
   },
   {
     "type": "addCluster",
-    "id": "1030"
+    "id": "1040"
   },
   {
     "type": "setData",
-    "id": "1030",
+    "id": "1040",
     "key": "type",
-    "value": "wall"
+    "value": "zapper"
   },
   {
     "type": "addPart",
-    "id": "1031",
-    "clusterId": "1030",
-    "x": 1344,
-    "y": -256
+    "id": "1041",
+    "clusterId": "1040",
+    "x": -192,
+    "y": -400
   },
   {
-    "type": "addPart",
-    "id": "1032",
-    "clusterId": "1030",
-    "x": 1344,
-    "y": -512
-  },
-  {
-    "type": "addCluster",
-    "id": "1042"
+    "type": "addJack",
+    "id": "1042",
+    "partId": "1041"
   },
   {
     "type": "setData",
     "id": "1042",
     "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1043",
-    "clusterId": "1042",
-    "x": 1344,
-    "y": 976
-  },
-  {
-    "type": "addPart",
-    "id": "1045",
-    "clusterId": "1042",
-    "x": 1344,
-    "y": 1576
-  },
-  {
-    "type": "addCluster",
-    "id": "1063"
-  },
-  {
-    "type": "setData",
-    "id": "1063",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1064",
-    "clusterId": "1063",
-    "x": 1120,
-    "y": 512
-  },
-  {
-    "type": "addJack",
-    "id": "1065",
-    "partId": "1064"
-  },
-  {
-    "type": "setData",
-    "id": "1065",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1065",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1359"
-  },
-  {
-    "type": "setData",
-    "id": "1359",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1360",
-    "clusterId": "1359",
-    "x": 1728,
-    "y": 768
-  },
-  {
-    "type": "addJack",
-    "id": "1361",
-    "partId": "1360"
-  },
-  {
-    "type": "setData",
-    "id": "1361",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1361",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1362"
-  },
-  {
-    "type": "setData",
-    "id": "1362",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1363",
-    "clusterId": "1362",
-    "x": 1600,
-    "y": -512
-  },
-  {
-    "type": "addPart",
-    "id": "1364",
-    "clusterId": "1362",
-    "x": 1600,
-    "y": -256
-  },
-  {
-    "type": "addCluster",
-    "id": "1371"
-  },
-  {
-    "type": "setData",
-    "id": "1371",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1372",
-    "clusterId": "1371",
-    "x": 1344,
-    "y": 912
-  },
-  {
-    "type": "addJack",
-    "id": "1373",
-    "partId": "1372"
-  },
-  {
-    "type": "setData",
-    "id": "1373",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1373",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1390"
-  },
-  {
-    "type": "setData",
-    "id": "1390",
-    "key": "type",
-    "value": "anti_zombie_turret"
-  },
-  {
-    "type": "addPart",
-    "id": "1391",
-    "clusterId": "1390",
-    "x": 1168,
-    "y": 1016
-  },
-  {
-    "type": "addCluster",
-    "id": "1392"
-  },
-  {
-    "type": "setData",
-    "id": "1392",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1393",
-    "clusterId": "1392",
-    "x": 1856,
-    "y": -256
-  },
-  {
-    "type": "addPart",
-    "id": "1394",
-    "clusterId": "1392",
-    "x": 1600,
-    "y": -256
-  },
-  {
-    "type": "addCluster",
-    "id": "1395"
-  },
-  {
-    "type": "setData",
-    "id": "1395",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1396",
-    "clusterId": "1395",
-    "x": 1088,
-    "y": 976
-  },
-  {
-    "type": "addPart",
-    "id": "1397",
-    "clusterId": "1395",
-    "x": 1088,
-    "y": 1048
-  },
-  {
-    "type": "addCluster",
-    "id": "1400"
-  },
-  {
-    "type": "setData",
-    "id": "1400",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1401",
-    "clusterId": "1400",
-    "x": 832,
-    "y": 912
-  },
-  {
-    "type": "addJack",
-    "id": "1402",
-    "partId": "1401"
-  },
-  {
-    "type": "setData",
-    "id": "1402",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1402",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1404"
-  },
-  {
-    "type": "setData",
-    "id": "1404",
-    "key": "type",
-    "value": "door"
-  },
-  {
-    "type": "addPart",
-    "id": "1405",
-    "clusterId": "1404",
-    "x": 1152,
-    "y": 968
-  },
-  {
-    "type": "addJack",
-    "id": "1406",
-    "partId": "1405"
-  },
-  {
-    "type": "setData",
-    "id": "1406",
-    "key": "type",
     "value": "input"
   },
   {
     "type": "setData",
-    "id": "1406",
+    "id": "1042",
     "key": "name",
     "value": "OPEN"
   },
   {
     "type": "addCluster",
-    "id": "1409"
+    "id": "1048"
   },
   {
     "type": "setData",
-    "id": "1409",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1410",
-    "clusterId": "1409",
-    "x": 704,
-    "y": 0
-  },
-  {
-    "type": "addJack",
-    "id": "1411",
-    "partId": "1410"
-  },
-  {
-    "type": "setData",
-    "id": "1411",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1411",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1418"
-  },
-  {
-    "type": "setData",
-    "id": "1418",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1419",
-    "clusterId": "1418",
-    "x": 1280,
-    "y": 512
-  },
-  {
-    "type": "addJack",
-    "id": "1420",
-    "partId": "1419"
-  },
-  {
-    "type": "setData",
-    "id": "1420",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1420",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1430"
-  },
-  {
-    "type": "setData",
-    "id": "1430",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1431",
-    "clusterId": "1430",
-    "x": 1600,
-    "y": 912
-  },
-  {
-    "type": "addJack",
-    "id": "1432",
-    "partId": "1431"
-  },
-  {
-    "type": "setData",
-    "id": "1432",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1432",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1442"
-  },
-  {
-    "type": "setData",
-    "id": "1442",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "1443",
-    "clusterId": "1442",
-    "x": 1088,
-    "y": 32
-  },
-  {
-    "type": "addJack",
-    "id": "1444",
-    "partId": "1443"
-  },
-  {
-    "type": "setData",
-    "id": "1444",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "1444",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1512"
-  },
-  {
-    "type": "setData",
-    "id": "1512",
+    "id": "1048",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "1513",
-    "clusterId": "1512",
-    "x": 832,
-    "y": -256
+    "id": "1049",
+    "clusterId": "1048",
+    "x": -1408,
+    "y": 192
   },
   {
     "type": "addPart",
-    "id": "1514",
-    "clusterId": "1512",
-    "x": 576,
-    "y": -256
+    "id": "1050",
+    "clusterId": "1048",
+    "x": -1152,
+    "y": 192
   },
   {
     "type": "addCluster",
-    "id": "1547"
+    "id": "1066"
   },
   {
     "type": "setData",
-    "id": "1547",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1548",
-    "clusterId": "1547",
-    "x": 2176,
-    "y": 256
-  },
-  {
-    "type": "addPart",
-    "id": "1549",
-    "clusterId": "1547",
-    "x": 1856,
-    "y": 256
-  },
-  {
-    "type": "addCluster",
-    "id": "1554"
-  },
-  {
-    "type": "setData",
-    "id": "1554",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1555",
-    "clusterId": "1554",
-    "x": 1856,
-    "y": 1048
-  },
-  {
-    "type": "addPart",
-    "id": "1556",
-    "clusterId": "1554",
-    "x": 1344,
-    "y": 1048
-  },
-  {
-    "type": "addCluster",
-    "id": "1622"
-  },
-  {
-    "type": "setData",
-    "id": "1622",
+    "id": "1066",
     "key": "type",
     "value": "exit"
   },
   {
     "type": "addPart",
-    "id": "1623",
-    "clusterId": "1622",
-    "x": 2560,
-    "y": 384
+    "id": "1067",
+    "clusterId": "1066",
+    "x": 1504,
+    "y": -992
   },
   {
     "type": "setData",
-    "id": "1623",
+    "id": "1067",
     "key": "url",
     "value": "../"
   },
   {
     "type": "addCluster",
-    "id": "1624"
+    "id": "1169"
   },
   {
     "type": "setData",
-    "id": "1624",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1625",
-    "clusterId": "1624",
-    "x": 2944,
-    "y": 0
-  },
-  {
-    "type": "addPart",
-    "id": "1626",
-    "clusterId": "1624",
-    "x": 2176,
-    "y": 0
-  },
-  {
-    "type": "addCluster",
-    "id": "1629"
-  },
-  {
-    "type": "setData",
-    "id": "1629",
-    "key": "type",
-    "value": "anti_zombie_turret"
-  },
-  {
-    "type": "addPart",
-    "id": "1639",
-    "clusterId": "1629",
-    "x": 1264,
-    "y": 1016
-  },
-  {
-    "type": "addCluster",
-    "id": "1630"
-  },
-  {
-    "type": "setData",
-    "id": "1630",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1631",
-    "clusterId": "1630",
-    "x": 2176,
-    "y": 0
-  },
-  {
-    "type": "addPart",
-    "id": "1632",
-    "clusterId": "1630",
-    "x": 2176,
-    "y": 256
-  },
-  {
-    "type": "addCluster",
-    "id": "1633"
-  },
-  {
-    "type": "setData",
-    "id": "1633",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1634",
-    "clusterId": "1633",
-    "x": 2176,
-    "y": 512
-  },
-  {
-    "type": "addPart",
-    "id": "1635",
-    "clusterId": "1633",
-    "x": 2176,
-    "y": 768
-  },
-  {
-    "type": "addCluster",
-    "id": "1636"
-  },
-  {
-    "type": "setData",
-    "id": "1636",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1637",
-    "clusterId": "1636",
-    "x": 2176,
-    "y": 768
-  },
-  {
-    "type": "addPart",
-    "id": "1638",
-    "clusterId": "1636",
-    "x": 2944,
-    "y": 768
-  },
-  {
-    "type": "addCluster",
-    "id": "1655"
-  },
-  {
-    "type": "setData",
-    "id": "1655",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1656",
-    "clusterId": "1655",
-    "x": 2176,
-    "y": 512
-  },
-  {
-    "type": "addPart",
-    "id": "1657",
-    "clusterId": "1655",
-    "x": 1856,
-    "y": 512
-  },
-  {
-    "type": "addCluster",
-    "id": "1664"
-  },
-  {
-    "type": "setData",
-    "id": "1664",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1665",
-    "clusterId": "1664",
-    "x": 864,
-    "y": 976
-  },
-  {
-    "type": "addPart",
-    "id": "1666",
-    "clusterId": "1664",
-    "x": 1064,
-    "y": 976
-  },
-  {
-    "type": "addCluster",
-    "id": "1668"
-  },
-  {
-    "type": "setData",
-    "id": "1668",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1669",
-    "clusterId": "1668",
-    "x": 576,
-    "y": 768
-  },
-  {
-    "type": "addPart",
-    "id": "1670",
-    "clusterId": "1668",
-    "x": 576,
-    "y": 1576
-  },
-  {
-    "type": "addCluster",
-    "id": "1673"
-  },
-  {
-    "type": "setData",
-    "id": "1673",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "1674",
-    "clusterId": "1673",
-    "x": 1904,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "1675",
-    "partId": "1674"
-  },
-  {
-    "type": "setData",
-    "id": "1675",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "1675",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1709"
-  },
-  {
-    "type": "setData",
-    "id": "1709",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "1710",
-    "clusterId": "1709",
-    "x": 1936,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "1711",
-    "partId": "1710"
-  },
-  {
-    "type": "setData",
-    "id": "1711",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "1711",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1817"
-  },
-  {
-    "type": "setData",
-    "id": "1817",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "1818",
-    "clusterId": "1817",
-    "x": 1968,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "1819",
-    "partId": "1818"
-  },
-  {
-    "type": "setData",
-    "id": "1819",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "1819",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1943"
-  },
-  {
-    "type": "setData",
-    "id": "1943",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "1944",
-    "clusterId": "1943",
-    "x": 2032,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "1945",
-    "partId": "1944"
-  },
-  {
-    "type": "setData",
-    "id": "1945",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "1945",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2048"
-  },
-  {
-    "type": "setData",
-    "id": "2048",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "2049",
-    "clusterId": "2048",
-    "x": 2064,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "2050",
-    "partId": "2049"
-  },
-  {
-    "type": "setData",
-    "id": "2050",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2050",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2183"
-  },
-  {
-    "type": "setData",
-    "id": "2183",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "2184",
-    "clusterId": "2183",
-    "x": 2000,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "2185",
-    "partId": "2184"
-  },
-  {
-    "type": "setData",
-    "id": "2185",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2185",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2297"
-  },
-  {
-    "type": "setData",
-    "id": "2297",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "2298",
-    "clusterId": "2297",
-    "x": 2096,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "2299",
-    "partId": "2298"
-  },
-  {
-    "type": "setData",
-    "id": "2299",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2299",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2342"
-  },
-  {
-    "type": "setData",
-    "id": "2342",
-    "key": "type",
-    "value": "zapper"
-  },
-  {
-    "type": "addPart",
-    "id": "2343",
-    "clusterId": "2342",
-    "x": 2128,
-    "y": 384
-  },
-  {
-    "type": "addJack",
-    "id": "2344",
-    "partId": "2343"
-  },
-  {
-    "type": "setData",
-    "id": "2344",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2344",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2401"
-  },
-  {
-    "type": "setData",
-    "id": "2401",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2402",
-    "clusterId": "2401",
-    "x": 832,
-    "y": -512
-  },
-  {
-    "type": "addPart",
-    "id": "2403",
-    "clusterId": "2401",
-    "x": 1088,
-    "y": -512
-  },
-  {
-    "type": "addCluster",
-    "id": "2404"
-  },
-  {
-    "type": "setData",
-    "id": "2404",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2405",
-    "clusterId": "2404",
-    "x": 832,
-    "y": -256
-  },
-  {
-    "type": "addPart",
-    "id": "2406",
-    "clusterId": "2404",
-    "x": 832,
-    "y": -512
-  },
-  {
-    "type": "addCluster",
-    "id": "2407"
-  },
-  {
-    "type": "setData",
-    "id": "2407",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2408",
-    "clusterId": "2407",
-    "x": 1088,
-    "y": -512
-  },
-  {
-    "type": "addPart",
-    "id": "2409",
-    "clusterId": "2407",
-    "x": 1088,
-    "y": -256
-  },
-  {
-    "type": "addCluster",
-    "id": "2437"
-  },
-  {
-    "type": "setData",
-    "id": "2437",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2438",
-    "clusterId": "2437",
-    "x": 1968,
-    "y": -288
-  },
-  {
-    "type": "setData",
-    "id": "2438",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2439",
-    "partId": "2438"
-  },
-  {
-    "type": "setData",
-    "id": "2439",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2439",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2440",
-    "partId": "2438"
-  },
-  {
-    "type": "setData",
-    "id": "2440",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2440",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2468"
-  },
-  {
-    "type": "setData",
-    "id": "2468",
+    "id": "1169",
     "key": "type",
     "value": "door"
   },
   {
     "type": "addPart",
-    "id": "2469",
-    "clusterId": "2468",
-    "x": 960,
-    "y": -256
+    "id": "1170",
+    "clusterId": "1169",
+    "x": -192,
+    "y": -32
   },
   {
     "type": "addJack",
-    "id": "2470",
-    "partId": "2469"
+    "id": "1171",
+    "partId": "1170"
   },
   {
     "type": "setData",
-    "id": "2470",
+    "id": "1171",
     "key": "type",
     "value": "input"
   },
   {
     "type": "setData",
-    "id": "2470",
+    "id": "1171",
     "key": "name",
     "value": "OPEN"
   },
   {
     "type": "addCluster",
-    "id": "2534"
+    "id": "1201"
   },
   {
     "type": "setData",
-    "id": "2534",
-    "key": "type",
-    "value": "door"
-  },
-  {
-    "type": "addPart",
-    "id": "2535",
-    "clusterId": "2534",
-    "x": 1472,
-    "y": -256
-  },
-  {
-    "type": "addJack",
-    "id": "2536",
-    "partId": "2535"
-  },
-  {
-    "type": "setData",
-    "id": "2536",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2536",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2571"
-  },
-  {
-    "type": "setData",
-    "id": "2571",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2572",
-    "clusterId": "2571",
-    "x": 2000,
-    "y": -304
-  },
-  {
-    "type": "setData",
-    "id": "2572",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2573",
-    "partId": "2572"
-  },
-  {
-    "type": "setData",
-    "id": "2573",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2573",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2574",
-    "partId": "2572"
-  },
-  {
-    "type": "setData",
-    "id": "2574",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2574",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2627"
-  },
-  {
-    "type": "setData",
-    "id": "2627",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2628",
-    "clusterId": "2627",
-    "x": 2032,
-    "y": -320
-  },
-  {
-    "type": "setData",
-    "id": "2628",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2629",
-    "partId": "2628"
-  },
-  {
-    "type": "setData",
-    "id": "2629",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2629",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2630",
-    "partId": "2628"
-  },
-  {
-    "type": "setData",
-    "id": "2630",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2630",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2687"
-  },
-  {
-    "type": "setData",
-    "id": "2687",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2688",
-    "clusterId": "2687",
-    "x": 2064,
-    "y": -336
-  },
-  {
-    "type": "setData",
-    "id": "2688",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2689",
-    "partId": "2688"
-  },
-  {
-    "type": "setData",
-    "id": "2689",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2689",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2690",
-    "partId": "2688"
-  },
-  {
-    "type": "setData",
-    "id": "2690",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2690",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2700"
-  },
-  {
-    "type": "setData",
-    "id": "2700",
+    "id": "1201",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "2701",
-    "clusterId": "2700",
-    "x": 2944,
-    "y": 768
+    "id": "1202",
+    "clusterId": "1201",
+    "x": 384,
+    "y": -192
   },
   {
     "type": "addPart",
-    "id": "2702",
-    "clusterId": "2700",
-    "x": 2944,
-    "y": 0
+    "id": "1203",
+    "clusterId": "1201",
+    "x": 464,
+    "y": -192
   },
   {
     "type": "addCluster",
-    "id": "2753"
+    "id": "1233"
   },
   {
     "type": "setData",
-    "id": "2753",
+    "id": "1233",
     "key": "type",
-    "value": "timer"
+    "value": "zapper"
   },
   {
     "type": "addPart",
-    "id": "2754",
-    "clusterId": "2753",
-    "x": 2096,
+    "id": "1234",
+    "clusterId": "1233",
+    "x": 1424,
+    "y": -848
+  },
+  {
+    "type": "addJack",
+    "id": "1235",
+    "partId": "1234"
+  },
+  {
+    "type": "setData",
+    "id": "1235",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "1235",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "1236"
+  },
+  {
+    "type": "setData",
+    "id": "1236",
+    "key": "type",
+    "value": "gripper"
+  },
+  {
+    "type": "addPart",
+    "id": "1237",
+    "clusterId": "1236",
+    "x": 976,
+    "y": 32
+  },
+  {
+    "type": "addJack",
+    "id": "1238",
+    "partId": "1237"
+  },
+  {
+    "type": "setData",
+    "id": "1238",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "1238",
+    "key": "name",
+    "value": "GRIPPING"
+  },
+  {
+    "type": "addCluster",
+    "id": "1275"
+  },
+  {
+    "type": "setData",
+    "id": "1275",
+    "key": "type",
+    "value": "zapper"
+  },
+  {
+    "type": "addPart",
+    "id": "1276",
+    "clusterId": "1275",
+    "x": 1424,
+    "y": -800
+  },
+  {
+    "type": "addJack",
+    "id": "1277",
+    "partId": "1276"
+  },
+  {
+    "type": "setData",
+    "id": "1277",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "1277",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "1305"
+  },
+  {
+    "type": "setData",
+    "id": "1305",
+    "key": "type",
+    "value": "zapper"
+  },
+  {
+    "type": "addPart",
+    "id": "1306",
+    "clusterId": "1305",
+    "x": 1520,
+    "y": -752
+  },
+  {
+    "type": "addJack",
+    "id": "1307",
+    "partId": "1306"
+  },
+  {
+    "type": "setData",
+    "id": "1307",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "1307",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "1374"
+  },
+  {
+    "type": "setData",
+    "id": "1374",
+    "key": "type",
+    "value": "big_block"
+  },
+  {
+    "type": "addPart",
+    "id": "1375",
+    "clusterId": "1374",
+    "x": 544,
+    "y": 56
+  },
+  {
+    "type": "addCluster",
+    "id": "1412"
+  },
+  {
+    "type": "setData",
+    "id": "1412",
+    "key": "type",
+    "value": "gripper"
+  },
+  {
+    "type": "addPart",
+    "id": "1413",
+    "clusterId": "1412",
+    "x": -192,
+    "y": -256
+  },
+  {
+    "type": "addJack",
+    "id": "1414",
+    "partId": "1413"
+  },
+  {
+    "type": "setData",
+    "id": "1414",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "1414",
+    "key": "name",
+    "value": "GRIPPING"
+  },
+  {
+    "type": "addCluster",
+    "id": "1595"
+  },
+  {
+    "type": "setData",
+    "id": "1595",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "1596",
+    "clusterId": "1595",
+    "x": 912,
+    "y": -576
+  },
+  {
+    "type": "addPart",
+    "id": "1597",
+    "clusterId": "1595",
+    "x": 912,
+    "y": 192
+  },
+  {
+    "type": "addCluster",
+    "id": "1607"
+  },
+  {
+    "type": "setData",
+    "id": "1607",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "1608",
+    "clusterId": "1607",
+    "x": 1328,
+    "y": -576
+  },
+  {
+    "type": "addPart",
+    "id": "1609",
+    "clusterId": "1607",
+    "x": 912,
+    "y": -576
+  },
+  {
+    "type": "addCluster",
+    "id": "1610"
+  },
+  {
+    "type": "setData",
+    "id": "1610",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "1611",
+    "clusterId": "1610",
+    "x": 1680,
+    "y": 192
+  },
+  {
+    "type": "addPart",
+    "id": "1612",
+    "clusterId": "1610",
+    "x": 912,
+    "y": 192
+  },
+  {
+    "type": "addCluster",
+    "id": "1700"
+  },
+  {
+    "type": "setData",
+    "id": "1700",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "1701",
+    "clusterId": "1700",
+    "x": -288,
+    "y": -192
+  },
+  {
+    "type": "addPart",
+    "id": "1702",
+    "clusterId": "1700",
+    "x": -96,
+    "y": -192
+  },
+  {
+    "type": "addCluster",
+    "id": "2089"
+  },
+  {
+    "type": "setData",
+    "id": "2089",
+    "key": "type",
+    "value": "portal"
+  },
+  {
+    "type": "addPart",
+    "id": "2090",
+    "clusterId": "2089",
+    "x": -192,
+    "y": -104
+  },
+  {
+    "type": "addPart",
+    "id": "2091",
+    "clusterId": "2089",
+    "x": 1296,
+    "y": -176
+  },
+  {
+    "type": "addCluster",
+    "id": "2157"
+  },
+  {
+    "type": "setData",
+    "id": "2157",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "2158",
+    "clusterId": "2157",
+    "x": -192,
     "y": -352
   },
   {
-    "type": "setData",
-    "id": "2754",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
     "type": "addJack",
-    "id": "2755",
-    "partId": "2754"
+    "id": "2159",
+    "partId": "2158"
   },
   {
     "type": "setData",
-    "id": "2755",
+    "id": "2159",
     "key": "type",
     "value": "input"
   },
   {
     "type": "setData",
-    "id": "2755",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2756",
-    "partId": "2754"
-  },
-  {
-    "type": "setData",
-    "id": "2756",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2756",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2833"
-  },
-  {
-    "type": "setData",
-    "id": "2833",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2834",
-    "clusterId": "2833",
-    "x": 2128,
-    "y": -368
-  },
-  {
-    "type": "setData",
-    "id": "2834",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2835",
-    "partId": "2834"
-  },
-  {
-    "type": "setData",
-    "id": "2835",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2835",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2836",
-    "partId": "2834"
-  },
-  {
-    "type": "setData",
-    "id": "2836",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2836",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2899"
-  },
-  {
-    "type": "setData",
-    "id": "2899",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2900",
-    "clusterId": "2899",
-    "x": 2160,
-    "y": -384
-  },
-  {
-    "type": "setData",
-    "id": "2900",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2901",
-    "partId": "2900"
-  },
-  {
-    "type": "setData",
-    "id": "2901",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2901",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2902",
-    "partId": "2900"
-  },
-  {
-    "type": "setData",
-    "id": "2902",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2902",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2927"
-  },
-  {
-    "type": "setData",
-    "id": "2927",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2928",
-    "clusterId": "2927",
-    "x": 2192,
-    "y": -400
-  },
-  {
-    "type": "setData",
-    "id": "2928",
-    "key": "timeout",
-    "value": "30"
-  },
-  {
-    "type": "addJack",
-    "id": "2929",
-    "partId": "2928"
-  },
-  {
-    "type": "setData",
-    "id": "2929",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2929",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2930",
-    "partId": "2928"
-  },
-  {
-    "type": "setData",
-    "id": "2930",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2930",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2961"
-  },
-  {
-    "type": "setData",
-    "id": "2961",
-    "key": "type",
-    "value": "door"
-  },
-  {
-    "type": "addPart",
-    "id": "2962",
-    "clusterId": "2961",
-    "x": 696,
-    "y": 968
-  },
-  {
-    "type": "addJack",
-    "id": "2963",
-    "partId": "2962"
-  },
-  {
-    "type": "setData",
-    "id": "2963",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2963",
+    "id": "2159",
     "key": "name",
     "value": "OPEN"
   },
   {
     "type": "addCluster",
-    "id": "3070"
+    "id": "2191"
   },
   {
     "type": "setData",
-    "id": "3070",
+    "id": "2191",
     "key": "type",
-    "value": "zombie"
+    "value": "timer"
   },
   {
     "type": "addPart",
-    "id": "3071",
-    "clusterId": "3070",
-    "x": 1728,
-    "y": 384
-  },
-  {
-    "type": "addCluster",
-    "id": "3090"
+    "id": "2192",
+    "clusterId": "2191",
+    "x": 432,
+    "y": 0
   },
   {
     "type": "setData",
-    "id": "3090",
+    "id": "2192",
+    "key": "timeout",
+    "value": "10"
+  },
+  {
+    "type": "addJack",
+    "id": "2193",
+    "partId": "2192"
+  },
+  {
+    "type": "setData",
+    "id": "2193",
     "key": "type",
-    "value": "zombie"
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "2193",
+    "key": "name",
+    "value": "RESTART"
+  },
+  {
+    "type": "addJack",
+    "id": "2194",
+    "partId": "2192"
+  },
+  {
+    "type": "setData",
+    "id": "2194",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "2194",
+    "key": "name",
+    "value": "RUNNING"
+  },
+  {
+    "type": "addCluster",
+    "id": "2195"
+  },
+  {
+    "type": "setData",
+    "id": "2195",
+    "key": "type",
+    "value": "door"
   },
   {
     "type": "addPart",
-    "id": "3091",
-    "clusterId": "3090",
-    "x": 1664,
-    "y": 320
+    "id": "2196",
+    "clusterId": "2195",
+    "x": 464,
+    "y": -64
   },
   {
-    "type": "addCluster",
-    "id": "3100"
+    "type": "addJack",
+    "id": "2197",
+    "partId": "2196"
   },
   {
     "type": "setData",
-    "id": "3100",
+    "id": "2197",
     "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "3101",
-    "clusterId": "3100",
-    "x": 1728,
-    "y": 288
-  },
-  {
-    "type": "addCluster",
-    "id": "3108"
+    "value": "input"
   },
   {
     "type": "setData",
-    "id": "3108",
-    "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "3109",
-    "clusterId": "3108",
-    "x": 1496,
-    "y": 344
+    "id": "2197",
+    "key": "name",
+    "value": "OPEN"
   },
   {
     "type": "addCluster",
-    "id": "3114"
+    "id": "2198"
   },
   {
     "type": "setData",
-    "id": "3114",
-    "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "3115",
-    "clusterId": "3114",
-    "x": 1632,
-    "y": 448
-  },
-  {
-    "type": "addCluster",
-    "id": "3122"
-  },
-  {
-    "type": "setData",
-    "id": "3122",
-    "key": "type",
-    "value": "zombie"
-  },
-  {
-    "type": "addPart",
-    "id": "3123",
-    "clusterId": "3122",
-    "x": 1760,
-    "y": 448
-  },
-  {
-    "type": "addCluster",
-    "id": "3183"
-  },
-  {
-    "type": "setData",
-    "id": "3183",
+    "id": "2198",
     "key": "type",
     "value": "beam_sensor"
   },
   {
     "type": "addPart",
-    "id": "3184",
-    "clusterId": "3183",
-    "x": 752,
-    "y": 1056
+    "id": "2199",
+    "clusterId": "2198",
+    "x": 384,
+    "y": -64
   },
   {
     "type": "addJack",
-    "id": "3185",
-    "partId": "3184"
+    "id": "2200",
+    "partId": "2199"
   },
   {
     "type": "setData",
-    "id": "3185",
+    "id": "2200",
     "key": "type",
     "value": "output"
   },
   {
     "type": "setData",
-    "id": "3185",
+    "id": "2200",
     "key": "name",
     "value": "BEAM_BROKEN"
   },
   {
     "type": "addCluster",
-    "id": "3270"
+    "id": "2214"
   },
   {
     "type": "setData",
-    "id": "3270",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "3271",
-    "clusterId": "3270",
-    "x": 672,
-    "y": 1152
-  },
-  {
-    "type": "setData",
-    "id": "3271",
-    "key": "timeout",
-    "value": "20"
-  },
-  {
-    "type": "addJack",
-    "id": "3272",
-    "partId": "3271"
-  },
-  {
-    "type": "setData",
-    "id": "3272",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "3272",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "3273",
-    "partId": "3271"
-  },
-  {
-    "type": "setData",
-    "id": "3273",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "3273",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "3509"
-  },
-  {
-    "type": "setData",
-    "id": "3509",
-    "key": "type",
-    "value": "zombie_assembler"
-  },
-  {
-    "type": "addPart",
-    "id": "3510",
-    "clusterId": "3509",
-    "x": 960,
-    "y": -448
-  },
-  {
-    "type": "addCluster",
-    "id": "3543"
-  },
-  {
-    "type": "setData",
-    "id": "3543",
-    "key": "type",
-    "value": "zombie_assembler"
-  },
-  {
-    "type": "addPart",
-    "id": "3547",
-    "clusterId": "3543",
-    "x": 896,
-    "y": -384
-  },
-  {
-    "type": "addCluster",
-    "id": "3544"
-  },
-  {
-    "type": "setData",
-    "id": "3544",
+    "id": "2214",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "3545",
-    "clusterId": "3544",
-    "x": 1216,
-    "y": 256
+    "id": "2215",
+    "clusterId": "2214",
+    "x": -120,
+    "y": 16
   },
   {
     "type": "addPart",
-    "id": "3546",
-    "clusterId": "3544",
-    "x": 1216,
-    "y": 256
+    "id": "2216",
+    "clusterId": "2214",
+    "x": -96,
+    "y": 16
   },
   {
     "type": "addCluster",
-    "id": "3584"
+    "id": "2220"
   },
   {
     "type": "setData",
-    "id": "3584",
-    "key": "type",
-    "value": "zombie_assembler"
-  },
-  {
-    "type": "addPart",
-    "id": "3585",
-    "clusterId": "3584",
-    "x": 1024,
-    "y": -384
-  },
-  {
-    "type": "addCluster",
-    "id": "3642"
-  },
-  {
-    "type": "setData",
-    "id": "3642",
-    "key": "type",
-    "value": "zombie_assembler"
-  },
-  {
-    "type": "addPart",
-    "id": "3643",
-    "clusterId": "3642",
-    "x": 1472,
-    "y": -448
-  },
-  {
-    "type": "addCluster",
-    "id": "3670"
-  },
-  {
-    "type": "setData",
-    "id": "3670",
+    "id": "2220",
     "key": "type",
     "value": "wall"
   },
   {
     "type": "addPart",
-    "id": "3671",
-    "clusterId": "3670",
-    "x": 1216,
-    "y": 512
+    "id": "2221",
+    "clusterId": "2220",
+    "x": -288,
+    "y": 16
   },
   {
     "type": "addPart",
-    "id": "3672",
-    "clusterId": "3670",
-    "x": 1216,
-    "y": 512
+    "id": "2222",
+    "clusterId": "2220",
+    "x": -264,
+    "y": 16
   },
   {
     "type": "addCluster",
-    "id": "3689"
+    "id": "2226"
   },
   {
     "type": "setData",
-    "id": "3689",
-    "key": "type",
-    "value": "zombie_assembler"
-  },
-  {
-    "type": "addPart",
-    "id": "3690",
-    "clusterId": "3689",
-    "x": 1408,
-    "y": -384
-  },
-  {
-    "type": "addCluster",
-    "id": "3715"
-  },
-  {
-    "type": "setData",
-    "id": "3715",
+    "id": "2226",
     "key": "type",
     "value": "zapper"
   },
   {
     "type": "addPart",
-    "id": "3716",
-    "clusterId": "3715",
-    "x": 1216,
-    "y": 384
+    "id": "2227",
+    "clusterId": "2226",
+    "x": -192,
+    "y": 16
   },
   {
     "type": "addJack",
-    "id": "3717",
-    "partId": "3716"
+    "id": "2228",
+    "partId": "2227"
   },
   {
     "type": "setData",
-    "id": "3717",
+    "id": "2228",
     "key": "type",
     "value": "input"
   },
   {
     "type": "setData",
-    "id": "3717",
+    "id": "2228",
     "key": "name",
     "value": "OPEN"
   },
   {
     "type": "addCluster",
-    "id": "4176"
+    "id": "2244"
   },
   {
     "type": "setData",
-    "id": "4176",
+    "id": "2244",
     "key": "type",
-    "value": "zombie_assembler"
+    "value": "not"
   },
   {
     "type": "addPart",
-    "id": "4177",
-    "clusterId": "4176",
-    "x": 1536,
-    "y": -384
-  },
-  {
-    "type": "addCluster",
-    "id": "4424"
-  },
-  {
-    "type": "setData",
-    "id": "4424",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "4425",
-    "clusterId": "4424",
-    "x": 832,
-    "y": 1048
-  },
-  {
-    "type": "addPart",
-    "id": "4426",
-    "clusterId": "4424",
-    "x": 832,
-    "y": 976
-  },
-  {
-    "type": "addCluster",
-    "id": "5735"
-  },
-  {
-    "type": "setData",
-    "id": "5735",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "5736",
-    "clusterId": "5735",
-    "x": 1216,
-    "y": -416
-  },
-  {
-    "type": "setData",
-    "id": "5736",
-    "key": "timeout",
-    "value": "170"
+    "id": "2245",
+    "clusterId": "2244",
+    "x": -248,
+    "y": -280
   },
   {
     "type": "addJack",
-    "id": "5737",
-    "partId": "5736"
+    "id": "2246",
+    "partId": "2245"
   },
   {
     "type": "setData",
-    "id": "5737",
+    "id": "2246",
     "key": "type",
     "value": "input"
   },
   {
     "type": "setData",
-    "id": "5737",
+    "id": "2246",
     "key": "name",
-    "value": "RESTART"
+    "value": "X"
   },
   {
     "type": "addJack",
-    "id": "5738",
-    "partId": "5736"
+    "id": "2247",
+    "partId": "2245"
   },
   {
     "type": "setData",
-    "id": "5738",
+    "id": "2247",
     "key": "type",
     "value": "output"
   },
   {
     "type": "setData",
-    "id": "5738",
+    "id": "2247",
+    "key": "name",
+    "value": "NOT_X"
+  },
+  {
+    "type": "addCluster",
+    "id": "2563"
+  },
+  {
+    "type": "setData",
+    "id": "2563",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "2564",
+    "clusterId": "2563",
+    "x": -848,
+    "y": -192
+  },
+  {
+    "type": "addPart",
+    "id": "2565",
+    "clusterId": "2563",
+    "x": -768,
+    "y": -192
+  },
+  {
+    "type": "addCluster",
+    "id": "2872"
+  },
+  {
+    "type": "setData",
+    "id": "2872",
+    "key": "type",
+    "value": "anti_zombie_turret"
+  },
+  {
+    "type": "addPart",
+    "id": "2873",
+    "clusterId": "2872",
+    "x": 640,
+    "y": -288
+  },
+  {
+    "type": "addCluster",
+    "id": "2874"
+  },
+  {
+    "type": "setData",
+    "id": "2874",
+    "key": "type",
+    "value": "anti_zombie_turret"
+  },
+  {
+    "type": "addPart",
+    "id": "2875",
+    "clusterId": "2874",
+    "x": 640,
+    "y": -96
+  },
+  {
+    "type": "addCluster",
+    "id": "2879"
+  },
+  {
+    "type": "setData",
+    "id": "2879",
+    "key": "type",
+    "value": "timer"
+  },
+  {
+    "type": "addPart",
+    "id": "2880",
+    "clusterId": "2879",
+    "x": -816,
+    "y": -64
+  },
+  {
+    "type": "setData",
+    "id": "2880",
+    "key": "timeout",
+    "value": "10"
+  },
+  {
+    "type": "addJack",
+    "id": "2881",
+    "partId": "2880"
+  },
+  {
+    "type": "setData",
+    "id": "2881",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "2881",
+    "key": "name",
+    "value": "RESTART"
+  },
+  {
+    "type": "addJack",
+    "id": "2882",
+    "partId": "2880"
+  },
+  {
+    "type": "setData",
+    "id": "2882",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "2882",
     "key": "name",
     "value": "RUNNING"
   },
   {
-    "type": "addLink",
-    "id": "18",
-    "jackId1": "954",
-    "jackId2": 2439
+    "type": "addCluster",
+    "id": "2883"
+  },
+  {
+    "type": "setData",
+    "id": "2883",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "2884",
+    "clusterId": "2883",
+    "x": -848,
+    "y": -128
+  },
+  {
+    "type": "addJack",
+    "id": "2885",
+    "partId": "2884"
+  },
+  {
+    "type": "setData",
+    "id": "2885",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "2885",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "2886"
+  },
+  {
+    "type": "setData",
+    "id": "2886",
+    "key": "type",
+    "value": "beam_sensor"
+  },
+  {
+    "type": "addPart",
+    "id": "2887",
+    "clusterId": "2886",
+    "x": -768,
+    "y": -128
+  },
+  {
+    "type": "addJack",
+    "id": "2888",
+    "partId": "2887"
+  },
+  {
+    "type": "setData",
+    "id": "2888",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "2888",
+    "key": "name",
+    "value": "BEAM_BROKEN"
   },
   {
     "type": "addLink",
-    "id": "32",
-    "jackId1": "11",
-    "jackId2": 1406
+    "id": "47",
+    "jackId1": "249",
+    "jackId2": 26
   },
   {
     "type": "addLink",
-    "id": "35",
-    "jackId1": "1065",
-    "jackId2": 2573
+    "id": "74",
+    "jackId1": "27",
+    "jackId2": 204
   },
   {
     "type": "addLink",
-    "id": "56",
-    "jackId1": "1402",
-    "jackId2": 2439
+    "id": "136",
+    "jackId1": "261",
+    "jackId2": 114
   },
   {
     "type": "addLink",
-    "id": "81",
-    "jackId1": "1444",
-    "jackId2": 2929
+    "id": "160",
+    "jackId1": "115",
+    "jackId2": 228
   },
   {
     "type": "addLink",
-    "id": "967",
-    "jackId1": "950",
-    "jackId2": 2344
+    "id": "1343",
+    "jackId1": "1307",
+    "jackId2": 1238
   },
   {
     "type": "addLink",
-    "id": "978",
-    "jackId1": "923",
-    "jackId2": 2299
+    "id": "1370",
+    "jackId1": "67",
+    "jackId2": 1277
   },
   {
     "type": "addLink",
-    "id": "994",
-    "jackId1": "887",
-    "jackId2": 2050
+    "id": "1421",
+    "jackId1": "1235",
+    "jackId2": 92
   },
   {
     "type": "addLink",
-    "id": "1005",
-    "jackId1": "835",
-    "jackId2": 1945
+    "id": "1804",
+    "jackId1": "1414",
+    "jackId2": 1171
   },
   {
     "type": "addLink",
-    "id": "1018",
-    "jackId1": "2185",
-    "jackId2": 651
+    "id": "2201",
+    "jackId1": 2200,
+    "jackId2": 2193
   },
   {
     "type": "addLink",
-    "id": "1029",
-    "jackId1": "535",
-    "jackId2": 1819
+    "id": "2202",
+    "jackId1": 2194,
+    "jackId2": 2197
   },
   {
     "type": "addLink",
-    "id": "1044",
-    "jackId1": "1711",
-    "jackId2": 427
+    "id": "2261",
+    "jackId1": "2159",
+    "jackId2": 2247
   },
   {
     "type": "addLink",
-    "id": "1074",
-    "jackId1": "317",
-    "jackId2": 1675
+    "id": "2276",
+    "jackId1": "2246",
+    "jackId2": 1414
   },
   {
     "type": "addLink",
-    "id": "1086",
-    "jackId1": "316",
-    "jackId2": 2440
+    "id": "2889",
+    "jackId1": 2888,
+    "jackId2": 2881
   },
   {
     "type": "addLink",
-    "id": "1097",
-    "jackId1": "2574",
-    "jackId2": 426
-  },
-  {
-    "type": "addLink",
-    "id": "1108",
-    "jackId1": "534",
-    "jackId2": 2630
-  },
-  {
-    "type": "addLink",
-    "id": "1119",
-    "jackId1": "2690",
-    "jackId2": 650
-  },
-  {
-    "type": "addLink",
-    "id": "1130",
-    "jackId1": "834",
-    "jackId2": 2756
-  },
-  {
-    "type": "addLink",
-    "id": "1141",
-    "jackId1": "2836",
-    "jackId2": 886
-  },
-  {
-    "type": "addLink",
-    "id": "1152",
-    "jackId1": "922",
-    "jackId2": 2902
-  },
-  {
-    "type": "addLink",
-    "id": "1227",
-    "jackId1": "2930",
-    "jackId2": 949
-  },
-  {
-    "type": "addLink",
-    "id": "1261",
-    "jackId1": "1432",
-    "jackId2": 2629
-  },
-  {
-    "type": "addLink",
-    "id": "1284",
-    "jackId1": "1361",
-    "jackId2": 2689
-  },
-  {
-    "type": "addLink",
-    "id": "1308",
-    "jackId1": "1373",
-    "jackId2": 2755
-  },
-  {
-    "type": "addLink",
-    "id": "1323",
-    "jackId1": "954",
-    "jackId2": 2835
-  },
-  {
-    "type": "addLink",
-    "id": "1350",
-    "jackId1": "1065",
-    "jackId2": 2901
-  },
-  {
-    "type": "addLink",
-    "id": "1494",
-    "jackId1": "1014",
-    "jackId2": 2629
-  },
-  {
-    "type": "addLink",
-    "id": "1519",
-    "jackId1": "1420",
-    "jackId2": 2689
-  },
-  {
-    "type": "addLink",
-    "id": "1536",
-    "jackId1": "1444",
-    "jackId2": 2755
-  },
-  {
-    "type": "addLink",
-    "id": "1585",
-    "jackId1": "1411",
-    "jackId2": 2901
-  },
-  {
-    "type": "addLink",
-    "id": "1612",
-    "jackId1": "1402",
-    "jackId2": 2929
-  },
-  {
-    "type": "addLink",
-    "id": "3283",
-    "jackId1": "3272",
-    "jackId2": 3185
-  },
-  {
-    "type": "addLink",
-    "id": "3303",
-    "jackId1": "3273",
-    "jackId2": 2963
-  },
-  {
-    "type": "addLink",
-    "id": "5749",
-    "jackId1": "3185",
-    "jackId2": 5737
-  },
-  {
-    "type": "addLink",
-    "id": "5763",
-    "jackId1": "5738",
-    "jackId2": 2470
-  },
-  {
-    "type": "addLink",
-    "id": "5789",
-    "jackId1": "5738",
-    "jackId2": 2536
+    "id": "2890",
+    "jackId1": 2882,
+    "jackId2": 2885
   }
 ];

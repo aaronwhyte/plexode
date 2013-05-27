@@ -78,7 +78,8 @@ VORP_LEVELS = (
   ("level2", "Level 2: A Stretch", "Zaps and Grabs"),
   ("level3", "Level 3: Reaction Mass", "Plus a Fun Punchline! :-D"),
   ("level4", "Level 4: Introducing Zombies", "Seize Them"),
-  ("level5", "Level 5: Zombie Collector", "With Plasma Autowash"),
+  ("level5", "Level 5: Zombie Extractor", "With Plasma Autowash"),
+  ("level6", "Level 6: Containment", "Go on the Offensive"),
 )
 
 
