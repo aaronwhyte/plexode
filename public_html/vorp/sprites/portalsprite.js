@@ -6,6 +6,8 @@ function PortalSprite(spriteTemplate) {
   Sprite.call(this, spriteTemplate);
   this.targetSprite = this;
   this.pos = new Vec2d();
+  this.vec = new Vec2d();
+  this.thrust = new Vec2d();
   this.hitPos = new Vec2d();
   this.targetPos = new Vec2d();
 }
@@ -13,12 +15,19 @@ function PortalSprite(spriteTemplate) {
 PortalSprite.prototype = new Sprite(null);
 PortalSprite.prototype.constructor = PortalSprite;
 
+
+PortalSprite.THRUST = 0.1;
+
 PortalSprite.prototype.setTargetSprite = function(targetSprite) {
   this.targetSprite = targetSprite;
 };
 
 PortalSprite.prototype.act = function() {
+  this.targetSprite.getPos(this.pos);
+  this.painter.setTwinPos(this.pos);
+
   this.addFriction(Vorp.FRICTION);
+  this.avoidObstacles();
 };
 
 PortalSprite.prototype.onSpriteHit = function(
@@ -84,4 +93,24 @@ PortalSprite.prototype.onSpriteHit = function(
   }
   Vec2d.free(dest);
   return true;
+};
+
+PortalSprite.prototype.avoidObstacles = function() {
+  var p = this.getPos(this.pos);
+  var v = this.vec.setXY(0, this.rad.x * 2.1);
+  var t = this.thrust.setXY(0, 0);
+  for (var i = 0; i < 4; i++) {
+    v.rot90Right();
+    var rayScan = RayScan.alloc(
+        p.x, p.y,
+        p.x + v.x, p.y + v.y,
+        this.rad.x, this.rad.y);
+    var spriteId = this.world.rayScan(rayScan, Vorp.PORTAL_REPEL_GROUP);
+    if (spriteId) {
+      t.subtract(v);
+    }
+    RayScan.free(rayScan);
+  }
+  t.scaleToLength(PortalSprite.THRUST);
+  this.accelerate(t);
 };

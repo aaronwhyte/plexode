@@ -271,7 +271,7 @@ Transformer.prototype.transformCluster = function(cluster) {
         controlVec = new Vec2d(parts[i].x, parts[i].y);
         template = this.createBaseTemplate()
             .makeMovable()
-            .setPainter(new RectPainter('#0df'))
+            .setPainter(new PortalPainter())
             .setPos(controlVec)
             .setRadXY(Transformer.BOX_RADIUS * 1.1, Transformer.BOX_RADIUS * 1.1)
             .setMass(1.1);
