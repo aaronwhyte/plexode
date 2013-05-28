@@ -20,23 +20,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addCluster",
-    "id": "7"
-  },
-  {
-    "type": "setData",
-    "id": "7",
-    "key": "type",
-    "value": "big_block"
-  },
-  {
-    "type": "addPart",
-    "id": "8",
-    "clusterId": "7",
-    "x": -960,
-    "y": -576
-  },
-  {
-    "type": "addCluster",
     "id": "11"
   },
   {
@@ -292,30 +275,6 @@ vorpLevels['level 6'] =
     "id": "67",
     "key": "name",
     "value": "GRIPPING"
-  },
-  {
-    "type": "addCluster",
-    "id": "57"
-  },
-  {
-    "type": "setData",
-    "id": "57",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "61",
-    "clusterId": "57",
-    "x": -120,
-    "y": -400
-  },
-  {
-    "type": "addPart",
-    "id": "62",
-    "clusterId": "57",
-    "x": -96,
-    "y": -400
   },
   {
     "type": "addCluster",
@@ -1034,30 +993,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addCluster",
-    "id": "319"
-  },
-  {
-    "type": "setData",
-    "id": "319",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "320",
-    "clusterId": "319",
-    "x": -288,
-    "y": -400
-  },
-  {
-    "type": "addPart",
-    "id": "321",
-    "clusterId": "319",
-    "x": -264,
-    "y": -400
-  },
-  {
-    "type": "addCluster",
     "id": "364"
   },
   {
@@ -1543,30 +1478,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addCluster",
-    "id": "1201"
-  },
-  {
-    "type": "setData",
-    "id": "1201",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "1202",
-    "clusterId": "1201",
-    "x": 384,
-    "y": -192
-  },
-  {
-    "type": "addPart",
-    "id": "1203",
-    "clusterId": "1201",
-    "x": 464,
-    "y": -192
-  },
-  {
-    "type": "addCluster",
     "id": "1233"
   },
   {
@@ -1700,23 +1611,6 @@ vorpLevels['level 6'] =
     "id": "1307",
     "key": "name",
     "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "1374"
-  },
-  {
-    "type": "setData",
-    "id": "1374",
-    "key": "type",
-    "value": "big_block"
-  },
-  {
-    "type": "addPart",
-    "id": "1375",
-    "clusterId": "1374",
-    "x": 544,
-    "y": 56
   },
   {
     "type": "addCluster",
@@ -1908,179 +1802,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addCluster",
-    "id": "2191"
-  },
-  {
-    "type": "setData",
-    "id": "2191",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2192",
-    "clusterId": "2191",
-    "x": 432,
-    "y": 0
-  },
-  {
-    "type": "setData",
-    "id": "2192",
-    "key": "timeout",
-    "value": "10"
-  },
-  {
-    "type": "addJack",
-    "id": "2193",
-    "partId": "2192"
-  },
-  {
-    "type": "setData",
-    "id": "2193",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2193",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2194",
-    "partId": "2192"
-  },
-  {
-    "type": "setData",
-    "id": "2194",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2194",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2195"
-  },
-  {
-    "type": "setData",
-    "id": "2195",
-    "key": "type",
-    "value": "door"
-  },
-  {
-    "type": "addPart",
-    "id": "2196",
-    "clusterId": "2195",
-    "x": 464,
-    "y": -64
-  },
-  {
-    "type": "addJack",
-    "id": "2197",
-    "partId": "2196"
-  },
-  {
-    "type": "setData",
-    "id": "2197",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2197",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2198"
-  },
-  {
-    "type": "setData",
-    "id": "2198",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "2199",
-    "clusterId": "2198",
-    "x": 384,
-    "y": -64
-  },
-  {
-    "type": "addJack",
-    "id": "2200",
-    "partId": "2199"
-  },
-  {
-    "type": "setData",
-    "id": "2200",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2200",
-    "key": "name",
-    "value": "BEAM_BROKEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2214"
-  },
-  {
-    "type": "setData",
-    "id": "2214",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2215",
-    "clusterId": "2214",
-    "x": -120,
-    "y": 16
-  },
-  {
-    "type": "addPart",
-    "id": "2216",
-    "clusterId": "2214",
-    "x": -96,
-    "y": 16
-  },
-  {
-    "type": "addCluster",
-    "id": "2220"
-  },
-  {
-    "type": "setData",
-    "id": "2220",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2221",
-    "clusterId": "2220",
-    "x": -288,
-    "y": 16
-  },
-  {
-    "type": "addPart",
-    "id": "2222",
-    "clusterId": "2220",
-    "x": -264,
-    "y": 16
-  },
-  {
-    "type": "addCluster",
     "id": "2226"
   },
   {
@@ -2166,30 +1887,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addCluster",
-    "id": "2563"
-  },
-  {
-    "type": "setData",
-    "id": "2563",
-    "key": "type",
-    "value": "wall"
-  },
-  {
-    "type": "addPart",
-    "id": "2564",
-    "clusterId": "2563",
-    "x": -848,
-    "y": -192
-  },
-  {
-    "type": "addPart",
-    "id": "2565",
-    "clusterId": "2563",
-    "x": -768,
-    "y": -192
-  },
-  {
-    "type": "addCluster",
     "id": "2872"
   },
   {
@@ -2221,131 +1918,6 @@ vorpLevels['level 6'] =
     "clusterId": "2874",
     "x": 640,
     "y": -96
-  },
-  {
-    "type": "addCluster",
-    "id": "2879"
-  },
-  {
-    "type": "setData",
-    "id": "2879",
-    "key": "type",
-    "value": "timer"
-  },
-  {
-    "type": "addPart",
-    "id": "2880",
-    "clusterId": "2879",
-    "x": -816,
-    "y": -64
-  },
-  {
-    "type": "setData",
-    "id": "2880",
-    "key": "timeout",
-    "value": "10"
-  },
-  {
-    "type": "addJack",
-    "id": "2881",
-    "partId": "2880"
-  },
-  {
-    "type": "setData",
-    "id": "2881",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2881",
-    "key": "name",
-    "value": "RESTART"
-  },
-  {
-    "type": "addJack",
-    "id": "2882",
-    "partId": "2880"
-  },
-  {
-    "type": "setData",
-    "id": "2882",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2882",
-    "key": "name",
-    "value": "RUNNING"
-  },
-  {
-    "type": "addCluster",
-    "id": "2883"
-  },
-  {
-    "type": "setData",
-    "id": "2883",
-    "key": "type",
-    "value": "door"
-  },
-  {
-    "type": "addPart",
-    "id": "2884",
-    "clusterId": "2883",
-    "x": -848,
-    "y": -128
-  },
-  {
-    "type": "addJack",
-    "id": "2885",
-    "partId": "2884"
-  },
-  {
-    "type": "setData",
-    "id": "2885",
-    "key": "type",
-    "value": "input"
-  },
-  {
-    "type": "setData",
-    "id": "2885",
-    "key": "name",
-    "value": "OPEN"
-  },
-  {
-    "type": "addCluster",
-    "id": "2886"
-  },
-  {
-    "type": "setData",
-    "id": "2886",
-    "key": "type",
-    "value": "beam_sensor"
-  },
-  {
-    "type": "addPart",
-    "id": "2887",
-    "clusterId": "2886",
-    "x": -768,
-    "y": -128
-  },
-  {
-    "type": "addJack",
-    "id": "2888",
-    "partId": "2887"
-  },
-  {
-    "type": "setData",
-    "id": "2888",
-    "key": "type",
-    "value": "output"
-  },
-  {
-    "type": "setData",
-    "id": "2888",
-    "key": "name",
-    "value": "BEAM_BROKEN"
   },
   {
     "type": "addLink",
@@ -2397,18 +1969,6 @@ vorpLevels['level 6'] =
   },
   {
     "type": "addLink",
-    "id": "2201",
-    "jackId1": 2200,
-    "jackId2": 2193
-  },
-  {
-    "type": "addLink",
-    "id": "2202",
-    "jackId1": 2194,
-    "jackId2": 2197
-  },
-  {
-    "type": "addLink",
     "id": "2261",
     "jackId1": "2159",
     "jackId2": 2247
@@ -2418,17 +1978,5 @@ vorpLevels['level 6'] =
     "id": "2276",
     "jackId1": "2246",
     "jackId2": 1414
-  },
-  {
-    "type": "addLink",
-    "id": "2889",
-    "jackId1": 2888,
-    "jackId2": 2881
-  },
-  {
-    "type": "addLink",
-    "id": "2890",
-    "jackId1": 2882,
-    "jackId2": 2885
   }
 ];
