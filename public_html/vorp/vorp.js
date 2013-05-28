@@ -457,6 +457,12 @@ Vorp.prototype.getZombieSpriteFactory = function() {
   return this.zombieSpriteFactory;
 };
 
+Vorp.prototype.splashPortal = function(x, y, exiting) {
+  var painter = new PortalSplashPainter(exiting);
+  painter.setPosition(x, y);
+  this.addPainter(painter);
+};
+
 Vorp.prototype.splashPlasma = function(x, y) {
   var painter = new PlasmaSplashPainter();
   painter.setPosition(x, y);

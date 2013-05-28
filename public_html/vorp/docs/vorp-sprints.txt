@@ -38,7 +38,7 @@ v Anti-Zombie Turret
     x plasma factory?
       x plasma sprite pool
       x plasma painter pool
-- Zombie Assembler
+v Zombie Assembler
 
 Plasma Bomb
 
@@ -59,7 +59,7 @@ PulseButton (what we have today)
 
 - Telltale
 v Not
-- And
+v And
 - Edge
 - Random
 
@@ -91,10 +91,10 @@ Graphics
 Learn some WebGL
 
 Portal tweaks
-- They push away from teleport-blocking objects so they're unobstructed.
-- While they ARE obstructed they kind of show it
-- They do something cool when something teleports
-- They're clearly teleporters and not blocks or something. Hypersquare thing?
+v They push away from teleport-blocking objects so they're unobstructed.
+x While they ARE obstructed they kind of show it
+v They do something cool when something teleports
+v They're clearly teleporters and not blocks or something. Hypersquare thing?
 
 Player tweaks
 - Put a little meh-face on it with eyes that move!
