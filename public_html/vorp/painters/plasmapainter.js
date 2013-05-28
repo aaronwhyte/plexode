@@ -34,7 +34,7 @@ PlasmaPainter.prototype.paint = function(renderer, layer) {
         renderer.setStrokeStyle('rgba(255, 0, 255, 0.4)');
         renderer.context.lineWidth = PlasmaSprite.RADIUS * 4;
       } else {
-        renderer.setStrokeStyle('rgb(255, 0, 255)');
+        renderer.setStrokeStyle('rgba(255, 0, 255, 0.8)');
         renderer.context.lineWidth = PlasmaSprite.RADIUS;
       }
       for (var i = 0, n = this.events.size(); i < n; i++) {

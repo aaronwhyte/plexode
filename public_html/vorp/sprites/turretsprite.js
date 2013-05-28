@@ -20,7 +20,7 @@ TurretSprite.prototype = new Sprite(null);
 TurretSprite.prototype.constructor = TurretSprite;
 
 TurretSprite.SCAN_RANGE = 1500;
-TurretSprite.PLASMA_SPEED = 40;
+TurretSprite.PLASMA_SPEED = 50;
 TurretSprite.SCANS = 5;
 TurretSprite.COOLDOWN = 7;
 

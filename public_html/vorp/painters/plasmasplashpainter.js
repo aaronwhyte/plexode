@@ -15,8 +15,6 @@ function PlasmaSplashPainter() {
 PlasmaSplashPainter.prototype = new Painter();
 PlasmaSplashPainter.prototype.constructor = PlasmaSplashPainter;
 
-PlasmaSplashPainter.sparkPos = new Vec2d();
-
 ///////////////////////////////////////
 // sparklist implementation functions
 ///////////////////////////////////////
