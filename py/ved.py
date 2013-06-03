@@ -33,6 +33,7 @@ def formatVed(vorpJsName, vedJsName):
 <script src="../level4/level.js"></script>
 <script src="../level5/level.js"></script>
 <script src="../level6/level.js"></script>
+<script src="../level8/level.js"></script>
 
 <script>
 var vedApp;

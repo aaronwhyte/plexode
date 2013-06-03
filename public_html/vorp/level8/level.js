@@ -1,5 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level barrle grid'] =
+vorpLevels['level 8'] =
 [
   {
     "type": "addCluster",

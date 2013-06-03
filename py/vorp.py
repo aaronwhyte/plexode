@@ -80,6 +80,7 @@ VORP_LEVELS = (
   ("level4", "Level 4: Introducing Zombies", "Seize Them"),
   ("level5", "Level 5: Zombie Extractor", "With Plasma Autowash"),
   ("level6", "Level 6: Teleport Zombies", "Go on the Offensive"),
+  #("level8", "Level 8: Battle Grid", "Destroy Them All"),
 )
 
 
