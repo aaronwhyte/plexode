@@ -40,6 +40,16 @@ v Anti-Zombie Turret
       x plasma painter pool
 v Zombie Assembler
 
+Switch overhaul.
+* Grip-switches are awesome. Keep those.
+* There are no toggles, but if there were, they would need their own switch types.
+- Timer buttons that pop down and then back up when the timer expires.
+- Integrate timers into scanners, too.
+- One-time touch targets and one-time doors to match.
+- Remove infinite timers.
+- Remove redundant timers.
+
+
 Plasma Bomb
 
 Plasma Beamer
