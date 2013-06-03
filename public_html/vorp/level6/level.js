@@ -1,6 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level 6'] =
-[
+vorpLevels['level 6'] = [
   {
     "type": "addCluster",
     "id": "5"
@@ -34,6 +33,57 @@ vorpLevels['level 6'] =
     "clusterId": "11",
     "x": -608,
     "y": -192
+  },
+  {
+    "type": "addCluster",
+    "id": "13"
+  },
+  {
+    "type": "setData",
+    "id": "13",
+    "key": "type",
+    "value": "and"
+  },
+  {
+    "type": "addPart",
+    "id": "14",
+    "clusterId": "13",
+    "x": 1232,
+    "y": -976
+  },
+  {
+    "type": "addJack",
+    "id": "15",
+    "partId": "14"
+  },
+  {
+    "type": "setData",
+    "id": "15",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "15",
+    "key": "name",
+    "value": "X"
+  },
+  {
+    "type": "addJack",
+    "id": "18",
+    "partId": "14"
+  },
+  {
+    "type": "setData",
+    "id": "18",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "18",
+    "key": "name",
+    "value": "AND_X"
   },
   {
     "type": "addCluster",
@@ -1005,15 +1055,15 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "365",
     "clusterId": "364",
-    "x": 1328,
-    "y": -576
+    "x": 1416,
+    "y": -568
   },
   {
     "type": "addPart",
     "id": "366",
     "clusterId": "364",
-    "x": 1328,
-    "y": -1152
+    "x": 1416,
+    "y": -904
   },
   {
     "type": "addCluster",
@@ -1038,6 +1088,74 @@ vorpLevels['level 6'] =
     "clusterId": "406",
     "x": -1600,
     "y": -304
+  },
+  {
+    "type": "addCluster",
+    "id": "433"
+  },
+  {
+    "type": "setData",
+    "id": "433",
+    "key": "type",
+    "value": "button"
+  },
+  {
+    "type": "addPart",
+    "id": "434",
+    "clusterId": "433",
+    "x": 1544,
+    "y": -864
+  },
+  {
+    "type": "addJack",
+    "id": "435",
+    "partId": "434"
+  },
+  {
+    "type": "setData",
+    "id": "435",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "435",
+    "key": "name",
+    "value": "CLICKED"
+  },
+  {
+    "type": "addCluster",
+    "id": "559"
+  },
+  {
+    "type": "setData",
+    "id": "559",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "560",
+    "clusterId": "559",
+    "x": 1640,
+    "y": -848
+  },
+  {
+    "type": "addJack",
+    "id": "561",
+    "partId": "560"
+  },
+  {
+    "type": "setData",
+    "id": "561",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "561",
+    "key": "name",
+    "value": "OPEN"
   },
   {
     "type": "addCluster",
@@ -1197,15 +1315,15 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "746",
     "clusterId": "745",
-    "x": 1680,
-    "y": 192
+    "x": 1672,
+    "y": -568
   },
   {
     "type": "addPart",
     "id": "747",
     "clusterId": "745",
-    "x": 1680,
-    "y": -1152
+    "x": 1672,
+    "y": -904
   },
   {
     "type": "addCluster",
@@ -1286,15 +1404,39 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "934",
     "clusterId": "933",
-    "x": 1680,
-    "y": -1152
+    "x": 1672,
+    "y": -904
   },
   {
     "type": "addPart",
     "id": "935",
     "clusterId": "933",
-    "x": 1328,
-    "y": -1152
+    "x": 1416,
+    "y": -904
+  },
+  {
+    "type": "addCluster",
+    "id": "942"
+  },
+  {
+    "type": "setData",
+    "id": "942",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "943",
+    "clusterId": "942",
+    "x": 1672,
+    "y": 192
+  },
+  {
+    "type": "addPart",
+    "id": "946",
+    "clusterId": "942",
+    "x": 1672,
+    "y": -328
   },
   {
     "type": "addCluster",
@@ -1310,8 +1452,8 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "945",
     "clusterId": "944",
-    "x": 1440,
-    "y": -688
+    "x": 1528,
+    "y": -624
   },
   {
     "type": "addCluster",
@@ -1433,8 +1575,8 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1067",
     "clusterId": "1066",
-    "x": 1504,
-    "y": -992
+    "x": 2248,
+    "y": -448
   },
   {
     "type": "setData",
@@ -1490,8 +1632,8 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1234",
     "clusterId": "1233",
-    "x": 1424,
-    "y": -848
+    "x": 1480,
+    "y": -816
   },
   {
     "type": "addJack",
@@ -1558,8 +1700,8 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1276",
     "clusterId": "1275",
-    "x": 1424,
-    "y": -800
+    "x": 1616,
+    "y": -784
   },
   {
     "type": "addJack",
@@ -1592,7 +1734,7 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1306",
     "clusterId": "1305",
-    "x": 1520,
+    "x": 1480,
     "y": -752
   },
   {
@@ -1661,7 +1803,7 @@ vorpLevels['level 6'] =
     "id": "1596",
     "clusterId": "1595",
     "x": 912,
-    "y": -576
+    "y": -568
   },
   {
     "type": "addPart",
@@ -1684,15 +1826,15 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1608",
     "clusterId": "1607",
-    "x": 1328,
-    "y": -576
+    "x": 1416,
+    "y": -568
   },
   {
     "type": "addPart",
     "id": "1609",
     "clusterId": "1607",
     "x": 912,
-    "y": -576
+    "y": -568
   },
   {
     "type": "addCluster",
@@ -1708,7 +1850,7 @@ vorpLevels['level 6'] =
     "type": "addPart",
     "id": "1611",
     "clusterId": "1610",
-    "x": 1680,
+    "x": 1672,
     "y": 192
   },
   {
@@ -1764,7 +1906,7 @@ vorpLevels['level 6'] =
     "id": "2091",
     "clusterId": "2089",
     "x": 1296,
-    "y": -176
+    "y": -192
   },
   {
     "type": "addCluster",
@@ -1920,6 +2062,282 @@ vorpLevels['level 6'] =
     "y": -96
   },
   {
+    "type": "addCluster",
+    "id": "5492"
+  },
+  {
+    "type": "setData",
+    "id": "5492",
+    "key": "type",
+    "value": "anti_zombie_turret"
+  },
+  {
+    "type": "addPart",
+    "id": "5493",
+    "clusterId": "5492",
+    "x": 1808,
+    "y": -496
+  },
+  {
+    "type": "addCluster",
+    "id": "5494"
+  },
+  {
+    "type": "setData",
+    "id": "5494",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5495",
+    "clusterId": "5494",
+    "x": 1928,
+    "y": -568
+  },
+  {
+    "type": "addPart",
+    "id": "5496",
+    "clusterId": "5494",
+    "x": 1672,
+    "y": -568
+  },
+  {
+    "type": "addCluster",
+    "id": "5497"
+  },
+  {
+    "type": "setData",
+    "id": "5497",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5498",
+    "clusterId": "5497",
+    "x": 1928,
+    "y": -768
+  },
+  {
+    "type": "addPart",
+    "id": "5499",
+    "clusterId": "5497",
+    "x": 1928,
+    "y": -568
+  },
+  {
+    "type": "addCluster",
+    "id": "5500"
+  },
+  {
+    "type": "setData",
+    "id": "5500",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5501",
+    "clusterId": "5500",
+    "x": 1928,
+    "y": -768
+  },
+  {
+    "type": "addPart",
+    "id": "5502",
+    "clusterId": "5500",
+    "x": 2568,
+    "y": -768
+  },
+  {
+    "type": "addCluster",
+    "id": "5503"
+  },
+  {
+    "type": "setData",
+    "id": "5503",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5504",
+    "clusterId": "5503",
+    "x": 1928,
+    "y": -328
+  },
+  {
+    "type": "addPart",
+    "id": "5505",
+    "clusterId": "5503",
+    "x": 1672,
+    "y": -328
+  },
+  {
+    "type": "addCluster",
+    "id": "5506"
+  },
+  {
+    "type": "setData",
+    "id": "5506",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5507",
+    "clusterId": "5506",
+    "x": 1928,
+    "y": -328
+  },
+  {
+    "type": "addPart",
+    "id": "5508",
+    "clusterId": "5506",
+    "x": 1928,
+    "y": -128
+  },
+  {
+    "type": "addCluster",
+    "id": "5509"
+  },
+  {
+    "type": "setData",
+    "id": "5509",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5510",
+    "clusterId": "5509",
+    "x": 1928,
+    "y": -128
+  },
+  {
+    "type": "addPart",
+    "id": "5511",
+    "clusterId": "5509",
+    "x": 2568,
+    "y": -128
+  },
+  {
+    "type": "addCluster",
+    "id": "5512"
+  },
+  {
+    "type": "setData",
+    "id": "5512",
+    "key": "type",
+    "value": "wall"
+  },
+  {
+    "type": "addPart",
+    "id": "5513",
+    "clusterId": "5512",
+    "x": 2568,
+    "y": -768
+  },
+  {
+    "type": "addPart",
+    "id": "5514",
+    "clusterId": "5512",
+    "x": 2568,
+    "y": -128
+  },
+  {
+    "type": "addCluster",
+    "id": "5733"
+  },
+  {
+    "type": "setData",
+    "id": "5733",
+    "key": "type",
+    "value": "door"
+  },
+  {
+    "type": "addPart",
+    "id": "5734",
+    "clusterId": "5733",
+    "x": 1672,
+    "y": -424
+  },
+  {
+    "type": "addJack",
+    "id": "5735",
+    "partId": "5734"
+  },
+  {
+    "type": "setData",
+    "id": "5735",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "5735",
+    "key": "name",
+    "value": "OPEN"
+  },
+  {
+    "type": "addCluster",
+    "id": "5744"
+  },
+  {
+    "type": "setData",
+    "id": "5744",
+    "key": "type",
+    "value": "timer"
+  },
+  {
+    "type": "addPart",
+    "id": "5745",
+    "clusterId": "5744",
+    "x": 1808,
+    "y": -728
+  },
+  {
+    "type": "setData",
+    "id": "5745",
+    "key": "timeout",
+    "value": "Infinity"
+  },
+  {
+    "type": "addJack",
+    "id": "5746",
+    "partId": "5745"
+  },
+  {
+    "type": "setData",
+    "id": "5746",
+    "key": "type",
+    "value": "input"
+  },
+  {
+    "type": "setData",
+    "id": "5746",
+    "key": "name",
+    "value": "RESTART"
+  },
+  {
+    "type": "addJack",
+    "id": "5747",
+    "partId": "5745"
+  },
+  {
+    "type": "setData",
+    "id": "5747",
+    "key": "type",
+    "value": "output"
+  },
+  {
+    "type": "setData",
+    "id": "5747",
+    "key": "name",
+    "value": "RUNNING"
+  },
+  {
     "type": "addLink",
     "id": "47",
     "jackId1": "249",
@@ -1942,6 +2360,30 @@ vorpLevels['level 6'] =
     "id": "160",
     "jackId1": "115",
     "jackId2": 228
+  },
+  {
+    "type": "addLink",
+    "id": "172",
+    "jackId1": "18",
+    "jackId2": 561
+  },
+  {
+    "type": "addLink",
+    "id": "207",
+    "jackId1": "15",
+    "jackId2": "1238"
+  },
+  {
+    "type": "addLink",
+    "id": "223",
+    "jackId1": "15",
+    "jackId2": "67"
+  },
+  {
+    "type": "addLink",
+    "id": "242",
+    "jackId1": "15",
+    "jackId2": "92"
   },
   {
     "type": "addLink",
@@ -1978,5 +2420,17 @@ vorpLevels['level 6'] =
     "id": "2276",
     "jackId1": "2246",
     "jackId2": 1414
+  },
+  {
+    "type": "addLink",
+    "id": "5762",
+    "jackId1": "435",
+    "jackId2": 5746
+  },
+  {
+    "type": "addLink",
+    "id": "5783",
+    "jackId1": "5747",
+    "jackId2": 5735
   }
 ];
