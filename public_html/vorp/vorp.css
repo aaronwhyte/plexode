@@ -13,6 +13,7 @@ body {
 }
 
 #levelHeader {
+  font-size:12pt;
   color:#888;
   padding:0.5em 5em;
 }
@@ -28,9 +29,10 @@ body {
 
 .vorpLevelDesc {
 }
+
 #miniHelp {
-  color:#555;
-  font-size:90%;
+  font-size:12pt;
+  color:#888;
 }
 
 a {
