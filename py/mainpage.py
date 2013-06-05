@@ -27,6 +27,11 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
+<span class="date">2013-06-02</span>
+<a href="/vorp">Vorp</a> has three new levels, with zombies and turrets!
+</div>
+
+<div class="news">
 <span class="date">2013-03-18</span>
 Now <a href="/eval3">eval3<a> is using a new URL compressor,
 <a href="https://github.com/aaronwhyte/plexode/blob/master/public_html/js/plex/squisher.js">plex.squisher</a>,
