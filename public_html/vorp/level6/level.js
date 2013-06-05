@@ -14,7 +14,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "6",
     "clusterId": "5",
-    "x": -448,
+    "x": -464,
     "y": -320
   },
   {
@@ -31,8 +31,8 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "12",
     "clusterId": "11",
-    "x": -608,
-    "y": -192
+    "x": -440,
+    "y": -440
   },
   {
     "type": "addCluster",
@@ -99,7 +99,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "17",
     "clusterId": "16",
-    "x": -544,
+    "x": -560,
     "y": -64
   },
   {
@@ -116,7 +116,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "21",
     "clusterId": "20",
-    "x": -448,
+    "x": -464,
     "y": -64
   },
   {
@@ -134,14 +134,14 @@ vorpLevels['level 6'] = [
     "id": "31",
     "clusterId": "22",
     "x": -1152,
-    "y": 192
+    "y": 208
   },
   {
     "type": "addPart",
     "id": "32",
     "clusterId": "22",
     "x": -1152,
-    "y": 416
+    "y": 512
   },
   {
     "type": "addCluster",
@@ -164,7 +164,7 @@ vorpLevels['level 6'] = [
     "type": "setData",
     "id": "25",
     "key": "timeout",
-    "value": "10"
+    "value": "30"
   },
   {
     "type": "addJack",
@@ -214,7 +214,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "30",
     "clusterId": "28",
-    "x": -448,
+    "x": -464,
     "y": -192
   },
   {
@@ -249,14 +249,14 @@ vorpLevels['level 6'] = [
     "id": "44",
     "clusterId": "43",
     "x": -1152,
-    "y": -800
+    "y": -896
   },
   {
     "type": "addPart",
     "id": "45",
     "clusterId": "43",
     "x": 768,
-    "y": -800
+    "y": -896
   },
   {
     "type": "addCluster",
@@ -341,14 +341,14 @@ vorpLevels['level 6'] = [
     "id": "59",
     "clusterId": "58",
     "x": -1152,
-    "y": 416
+    "y": 512
   },
   {
     "type": "addPart",
     "id": "60",
     "clusterId": "58",
     "x": 768,
-    "y": 416
+    "y": 512
   },
   {
     "type": "addCluster",
@@ -364,14 +364,14 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "64",
     "clusterId": "63",
-    "x": -288,
+    "x": -304,
     "y": -400
   },
   {
     "type": "addPart",
     "id": "65",
     "clusterId": "63",
-    "x": -288,
+    "x": -304,
     "y": 16
   },
   {
@@ -406,14 +406,14 @@ vorpLevels['level 6'] = [
     "id": "71",
     "clusterId": "70",
     "x": 768,
-    "y": -800
+    "y": -896
   },
   {
     "type": "addPart",
     "id": "72",
     "clusterId": "70",
     "x": 768,
-    "y": 416
+    "y": 512
   },
   {
     "type": "addCluster",
@@ -429,7 +429,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "78",
     "clusterId": "77",
-    "x": 160,
+    "x": 176,
     "y": -416
   },
   {
@@ -446,7 +446,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "89",
     "clusterId": "88",
-    "x": 64,
+    "x": 80,
     "y": -256
   },
   {
@@ -521,7 +521,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "100",
     "clusterId": "99",
-    "x": 64,
+    "x": 80,
     "y": -96
   },
   {
@@ -538,7 +538,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "103",
     "clusterId": "102",
-    "x": -384,
+    "x": -400,
     "y": -80
   },
   {
@@ -603,7 +603,7 @@ vorpLevels['level 6'] = [
     "type": "setData",
     "id": "111",
     "key": "timeout",
-    "value": "10"
+    "value": "30"
   },
   {
     "type": "addJack",
@@ -687,7 +687,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "126",
     "clusterId": "125",
-    "x": 0,
+    "x": 16,
     "y": -80
   },
   {
@@ -704,7 +704,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "129",
     "clusterId": "128",
-    "x": -384,
+    "x": -400,
     "y": -304
   },
   {
@@ -762,7 +762,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "140",
     "clusterId": "139",
-    "x": 160,
+    "x": 176,
     "y": -32
   },
   {
@@ -821,14 +821,14 @@ vorpLevels['level 6'] = [
     "id": "174",
     "clusterId": "173",
     "x": -1152,
-    "y": -800
+    "y": -896
   },
   {
     "type": "addPart",
     "id": "175",
     "clusterId": "173",
     "x": -1152,
-    "y": -576
+    "y": -592
   },
   {
     "type": "addCluster",
@@ -844,7 +844,7 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "177",
     "clusterId": "176",
-    "x": 0,
+    "x": 16,
     "y": -304
   },
   {
@@ -862,7 +862,7 @@ vorpLevels['level 6'] = [
     "id": "182",
     "clusterId": "181",
     "x": -1408,
-    "y": -576
+    "y": -592
   },
   {
     "type": "addPart",
@@ -1195,14 +1195,14 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "629",
     "clusterId": "628",
-    "x": -96,
+    "x": -80,
     "y": -400
   },
   {
     "type": "addPart",
     "id": "630",
     "clusterId": "628",
-    "x": -96,
+    "x": -80,
     "y": 16
   },
   {
@@ -1477,7 +1477,7 @@ vorpLevels['level 6'] = [
     "id": "972",
     "clusterId": "970",
     "x": -1408,
-    "y": 192
+    "y": 208
   },
   {
     "type": "addCluster",
@@ -1494,14 +1494,14 @@ vorpLevels['level 6'] = [
     "id": "986",
     "clusterId": "985",
     "x": -1408,
-    "y": -576
+    "y": -592
   },
   {
     "type": "addPart",
     "id": "987",
     "clusterId": "985",
     "x": -1152,
-    "y": -576
+    "y": -592
   },
   {
     "type": "addCluster",
@@ -1552,14 +1552,14 @@ vorpLevels['level 6'] = [
     "id": "1049",
     "clusterId": "1048",
     "x": -1408,
-    "y": 192
+    "y": 208
   },
   {
     "type": "addPart",
     "id": "1050",
     "clusterId": "1048",
     "x": -1152,
-    "y": 192
+    "y": 208
   },
   {
     "type": "addCluster",
@@ -1599,7 +1599,7 @@ vorpLevels['level 6'] = [
     "id": "1170",
     "clusterId": "1169",
     "x": -192,
-    "y": -32
+    "y": -8
   },
   {
     "type": "addJack",
@@ -1874,14 +1874,14 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "1701",
     "clusterId": "1700",
-    "x": -288,
+    "x": -304,
     "y": -192
   },
   {
     "type": "addPart",
     "id": "1702",
     "clusterId": "1700",
-    "x": -96,
+    "x": -80,
     "y": -192
   },
   {
@@ -1899,7 +1899,7 @@ vorpLevels['level 6'] = [
     "id": "2090",
     "clusterId": "2089",
     "x": -192,
-    "y": -104
+    "y": -88
   },
   {
     "type": "addPart",
@@ -1923,7 +1923,7 @@ vorpLevels['level 6'] = [
     "id": "2158",
     "clusterId": "2157",
     "x": -192,
-    "y": -352
+    "y": -376
   },
   {
     "type": "addJack",
@@ -2075,8 +2075,8 @@ vorpLevels['level 6'] = [
     "type": "addPart",
     "id": "5493",
     "clusterId": "5492",
-    "x": 1808,
-    "y": -496
+    "x": 2032,
+    "y": -224
   },
   {
     "type": "addCluster",
