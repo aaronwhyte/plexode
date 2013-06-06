@@ -1,5 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['level 2'] =[
+vorpLevels['level 2'] = [
   {
     "type": "addCluster",
     "id": "7"
@@ -707,7 +707,7 @@ vorpLevels['level 2'] =[
     "id": "266",
     "clusterId": "265",
     "x": 376,
-    "y": 3192
+    "y": 3240
   },
   {
     "type": "addJack",
@@ -1593,7 +1593,7 @@ vorpLevels['level 2'] =[
     "id": "1286",
     "clusterId": "1285",
     "x": -104,
-    "y": 3304
+    "y": 3352
   },
   {
     "type": "addPart",
@@ -1617,14 +1617,14 @@ vorpLevels['level 2'] =[
     "id": "1313",
     "clusterId": "1312",
     "x": -104,
-    "y": 3304
+    "y": 3352
   },
   {
     "type": "addPart",
     "id": "1314",
     "clusterId": "1312",
     "x": 792,
-    "y": 3304
+    "y": 3352
   },
   {
     "type": "addCluster",
@@ -1682,7 +1682,7 @@ vorpLevels['level 2'] =[
     "id": "1449",
     "clusterId": "1447",
     "x": 792,
-    "y": 3304
+    "y": 3352
   },
   {
     "type": "addCluster",
@@ -1747,7 +1747,7 @@ vorpLevels['level 2'] =[
     "id": "1493",
     "clusterId": "1492",
     "x": 424,
-    "y": 3160
+    "y": 3208
   },
   {
     "type": "addJack",
@@ -2017,14 +2017,14 @@ vorpLevels['level 2'] =[
     "id": "2915",
     "clusterId": "2914",
     "x": 424,
-    "y": 3192
+    "y": 3240
   },
   {
     "type": "addPart",
     "id": "2916",
     "clusterId": "2914",
     "x": 424,
-    "y": 3272
+    "y": 3320
   },
   {
     "type": "addCluster",

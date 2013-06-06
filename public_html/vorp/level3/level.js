@@ -665,7 +665,7 @@ vorpLevels['level 3'] = [
     "id": "638",
     "clusterId": "637",
     "x": 1408,
-    "y": 1280
+    "y": 1312
   },
   {
     "type": "addJack",
