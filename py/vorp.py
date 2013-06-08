@@ -125,9 +125,10 @@ function main() {
   // create vorp instance
   var canvas = document.getElementById('canvas');
   var renderer = new Renderer(canvas, new Camera());
+  var soundFx = SoundFx.createInstance();
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
+  var vorp = Vorp.createVorp(renderer, soundFx, gameClock, sledgeInvalidator);
 
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);

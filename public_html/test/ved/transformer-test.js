@@ -2,7 +2,7 @@ addTest(function testTransformEmptyModel() {
   var m = new GrafModel();
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(null, gameClock, sledgeInvalidator);
+  var vorp = Vorp.createVorp(null, null, gameClock, sledgeInvalidator);
   var trans = new Transformer(vorp, gameClock, sledgeInvalidator);
   trans.transformModel(m);
 });
@@ -11,7 +11,7 @@ addTest(function testTransformWall() {
   var m = new GrafModel();
   var gameClock = new GameClock(1);
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(null, gameClock, sledgeInvalidator);
+  var vorp = Vorp.createVorp(null, null, gameClock, sledgeInvalidator);
   var trans = new Transformer(vorp, gameClock, sledgeInvalidator);
   m.applyOps([{
       type: GrafOp.Type.ADD_CLUSTER,

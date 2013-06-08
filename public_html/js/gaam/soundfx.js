@@ -18,6 +18,9 @@ SoundFx.createInstance = function() {
 };
 
 
+SoundFx.prototype.setCenter = function(x, y) {
+};
+
 SoundFx.prototype.r = function(x) {
   var f = 0.3;
   return x += x * f * (Math.random() - f/2);
@@ -72,6 +75,6 @@ function makeWebStormHappy() {
     exponentialRampToValueAtTime:1,
     connect:1,
     destination:1,
-    type:1,
+    type:1
   };
 }

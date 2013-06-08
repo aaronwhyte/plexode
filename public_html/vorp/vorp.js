@@ -1,9 +1,9 @@
 /**
  * @constructor
  */
-function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
-  FLAGS && FLAGS.init('portalScry', true);
+function Vorp(renderer, soundFx, phy, wham, gameClock, sledgeInvalidator) {
   this.renderer = renderer;
+  this.soundFx = soundFx;
   this.phy = phy;
   this.wham = wham;
   this.gameClock = gameClock;
@@ -14,17 +14,10 @@ function Vorp(renderer, phy, wham, gameClock, sledgeInvalidator, opt_soundFx) {
   this.cameraPos = new Vec2d();
   this.painters = [];
 
-  // Portals have super-special view-through rendering, so we gonna track em.
-  this.portals = [];
-  this.portalPos1 = new Vec2d();
-  this.portalPos2 = new Vec2d();
-
   this.accelerationsOut = [new Vec2d(), new Vec2d()];
 
   this.links = {};
   this.editable = false;
-
-  this.soundFx = opt_soundFx || null;
 }
 
 Vorp.EXPLODED_PLAYER_REASSEMBLY_DELAY = 30;
@@ -115,12 +108,12 @@ Vorp.LAYERS = [
 Vorp.LAYER_DEBUG = 'debug';
 Vorp.LAYER_EDIT = 'edit';
 
-Vorp.createVorp = function(renderer, gameClock, sledgeInvalidator) {
+Vorp.createVorp = function(renderer, soundFx, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
-  var vorp = new Vorp(renderer, phy, wham, gameClock, sledgeInvalidator);
+  var vorp = new Vorp(renderer, soundFx, phy, wham, gameClock, sledgeInvalidator);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
   return vorp;
 };
@@ -213,9 +206,6 @@ Vorp.prototype.addSprite = function(sprite) {
   var painter = sprite.getPainter();
   if (painter) {
     this.addPainter(painter);
-  }
-  if (sprite instanceof PortalSprite) {
-    this.portals.push(sprite);
   }
   if (sprite instanceof PlayerAssemblerSprite) {
     // Assume there's exactly one PlayerAssembler per level for now.
@@ -320,10 +310,15 @@ Vorp.prototype.draw = function() {
   var now = this.now();
   this.renderer.clear();
   if (!this.editable) {
-    this.renderer.setZoom(Vorp.ZOOM * this.canvasSize / 600);
   }
-  if (this.playerSprite) {
-    this.playerSprite.getPos(this.cameraPos);
+
+  if (!this.editable) {
+    this.renderer.setZoom(Vorp.ZOOM * this.canvasSize / 600);
+    if (this.playerSprite) {
+      this.playerSprite.getPos(this.cameraPos);
+    }
+    this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
+    this.soundFx && this.soundFx.setCenter(this.cameraPos.x, this.cameraPos.y);
   }
 
   // Tell painters to advance. Might as well remove any that are kaput.
@@ -342,70 +337,18 @@ Vorp.prototype.draw = function() {
     }
   }
 
-  var portalScry = false;//!FLAGS || FLAGS.get('portalScry');
-  if (portalScry) {
-    // Each portal draws its target's environment around it.  OMG so freaky.
-    for (var i = 0; i < this.portals.length; i++) {
-      var portal = this.portals[i];
-      if (!portal.targetSprite) continue;
-      portal.getPos(this.portalPos1);
-      portal.targetSprite.getPos(this.portalPos2);
-      if (!this.editable) {
-        this.renderer.setCenter(
-            this.cameraPos.x + (this.portalPos1.x - this.portalPos2.x),
-            this.cameraPos.y + (this.portalPos1.y - this.portalPos2.y));
-      }
-      this.drawWorld(false, this.portalPos1);
-    }
-  }
-
-  // Center the drawing transform on the normal camera pos - the player.
-  if (!this.editable) {
-    this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
-  }
-
-  if (portalScry) {
-    // Cover the portal previews a little, to dim them compared to the "real" world
-    this.renderer.setFillStyle('rgba(25, 50, 50, 0.75)');
-    this.renderer.transformStart();
-    for (var i = 0; i < this.portals.length; i++) {
-      this.renderer.context.beginPath();
-      portal = this.portals[i];
-      portal.getPos(this.portalPos1);
-      this.renderer.context.arc(
-          this.portalPos1.x,
-          this.portalPos1.y,
-          Vorp.PORTAL_SCRY_RADIUS + 2,
-          0, Math.PI * 2,
-          true);
-      this.renderer.context.fill();
-    }
-    this.renderer.transformEnd();
-  }
-
-  // Set up the viewport for player-centered rendering.
   this.drawWorld(true);
 
-  this.renderer.stats();
+  if (!this.editable) {
+    this.renderer.stats();
+  }
 };
 
 /**
  * @param {boolean=} opt_drawColliderDebugging
- * @param {Vec2d=} opt_portalClipPos
  */
-Vorp.prototype.drawWorld = function(opt_drawColliderDebugging, opt_portalClipPos) {
+Vorp.prototype.drawWorld = function(opt_drawColliderDebugging) {
   this.renderer.transformStart();
-
-  if (opt_portalClipPos) {
-    this.renderer.context.beginPath();
-    this.renderer.context.arc(
-        opt_portalClipPos.x,
-        opt_portalClipPos.y,
-        Vorp.PORTAL_SCRY_RADIUS,
-        0, Math.PI * 2,
-        true);
-    this.renderer.context.clip();
-  }
 
   for (var i = 0; i < Vorp.LAYERS.length; i++) {
     this.drawLayer(Vorp.LAYERS[i]);
@@ -592,15 +535,15 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
     handled = s2.onSpriteHit(s1, a2, a1, xTime, yTime, overlapping);
   }
   if (handled) {
-    if (this.soundFx) this.soundFx.chirp();
+    this.soundFx && this.soundFx.chirp();
   } else {
     var vol = 0.005 * (a1.magnitude() * s1.mass);
     if (vol > 0.01) {
-      if (this.soundFx) this.soundFx.tap(vol);
+      this.soundFx && this.soundFx.tap(vol);
     }
     var vol = 0.005 * (a2.magnitude() * s2.mass);
     if (vol > 0.01) {
-      if (this.soundFx) this.soundFx.tap(vol);
+      this.soundFx && this.soundFx.tap(vol);
     }
     s1.addVel(a1);
     s2.addVel(a2);

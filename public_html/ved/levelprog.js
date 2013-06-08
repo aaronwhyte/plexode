@@ -96,7 +96,7 @@ LevelProg.prototype.startVorp = function(canvas) {
   var renderer = new Renderer(canvas, new Camera());
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(renderer, gameClock, sledgeInvalidator);
+  var vorp = Vorp.createVorp(renderer, null, gameClock, sledgeInvalidator);
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
   transformer.transformModel(this.model);
   vorp.startLoop();
