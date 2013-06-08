@@ -9,7 +9,7 @@ must include concequences. And sometimes you can't give each of your
 creatures the individual attention and guidance you would like to. So
 you begin to deal in policy, broad strokes, blanket judgements. Maybe
 you automate the application of discipline a little. Maybe the tools
-you have to do so aren't perfect, but who is.
+you have to do so aren't perfect, but what is.
 Long story short, these plasma turrets indicate the boundaries of
 acceptable zombie behavior. On sight. With deadly plasma.
 v Zombie
@@ -40,15 +40,89 @@ v Anti-Zombie Turret
       x plasma painter pool
 v Zombie Assembler
 
+v make some zombie levels
+
+DONE-ish.
+
+=================================================================================
+
+2013-06-08 -
+Sound! First pass:
+- start level
+- assembler
+  - creating player
+  - getting hit
+- player thrust & motion
+- player vs wall
+  - player hit
+  - wall hit
+- exit
+  - proximity noise
+  - level complete
+- block
+  - vs player
+  - vs wall
+  - vs block
+- button activate
+- door
+  - opening
+  - closing
+  - hit
+- scanner
+  - activated
+  - deactivated
+- gripper
+  - proximity - scanning
+  - grab
+  - proximity - holding(force)
+  - release
+- player tractor beam
+  - activated
+  - scanning
+  - deactivated
+  - grabbed something
+  - holding(strength, force)
+  - kick(force)
+  - break
+- zapper
+  - deactivated
+  - activated
+  - humming active
+  - zapping something
+- player explosion
+
+- Volume knob in the game.
+
+==================================================================================
+
+Sequencing, Sharing, Editing
+
+Level sequence is a list of level sources.
+A level source is squished level JSON, or a URL to level JSON.
+
+==================================================================================
+
+Rendering performance improvements
+
+- Prerender all immovable chunks like walls, and copy part of that each frame, instead of rerendering
+
+- use requestAnimationFrame instead of timeouts when possible
+
+==================================================================================
+
 Switch overhaul.
 * Grip-switches are awesome. Keep those.
 * There are no toggles, but if there were, they would need their own switch types.
-- Timer buttons that pop down and then back up when the timer expires.
+v replace all buttons and scanners with timer-idiom or one-time idiom.
+- Integrate timers into buttons.
 - Integrate timers into scanners, too.
-- One-time touch targets and one-time doors to match.
+- Make one-time touch targets and one-time doors to match.
 - Remove infinite timers.
 - Remove redundant timers.
 
+==================================================================================
+
+More Content!
 
 Plasma Bomb
 
@@ -62,40 +136,13 @@ Plasma Blaster
 HandHold
 Repulsor
 
-
-OneTimeSwith (pulsebutton + infinite timer)
-OnOffSwitch (pulsebutton + toggle)
-PulseButton (what we have today)
-
 - Telltale
 v Not
 v And
 - Edge
 - Random
 
-Milestone: More Levels!
-
 ===================================================================================
-
-Sound
-WebAudio has panners and stuff for positional audio. Use it.
-singer.js is like painter.js. Vorp has all the singers, even if the sprites fire and forget.
-v Things bumping into things
-  - blocks and walls: tap!
-v teleport
-- Birth
-- Death
-- reaching to grab stuff
-- grab
-- stiff grip
-- release
-- beam break
-- throw
-- thrust
-- button press
-- gripper grab/release
-- door open/close
-- zapper on/off
 
 Graphics
 Learn some WebGL
@@ -117,9 +164,6 @@ Player tweaks
 Exit tweaks
 - look good before touch
 - exit warp animation
-
-Rendering performance improvements
-- Prerender all immovable chunks like walls, and copy that out?
 
 Background
 - Starfield? Texture? Buildings?
