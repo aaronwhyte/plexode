@@ -400,10 +400,11 @@ Vorp.prototype.getZombieSpriteFactory = function() {
   return this.zombieSpriteFactory;
 };
 
-Vorp.prototype.splashPortal = function(x, y, exiting) {
+Vorp.prototype.splashPortal = function(pos, exiting) {
   var painter = new PortalSplashPainter(exiting);
-  painter.setPosition(x, y);
+  painter.setPosition(pos.x, pos.y);
   this.addPainter(painter);
+  this.soundFx && this.soundFx.teleport(pos, exiting);
 };
 
 Vorp.prototype.splashPlasma = function(x, y) {
@@ -528,27 +529,27 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
   var a2 = this.accelerationsOut[1];
 
   var handled = false;
+  var pos = Vec2d.alloc();
   if (!handled && s1 instanceof PortalSprite && !(s2 instanceof PortalSprite)) {
     handled = s1.onSpriteHit(s2, a1, a2, xTime, yTime, overlapping);
   }
   if (!handled && s2 instanceof PortalSprite && !(s1 instanceof PortalSprite)) {
     handled = s2.onSpriteHit(s1, a2, a1, xTime, yTime, overlapping);
   }
-  if (handled) {
-    this.soundFx && this.soundFx.chirp();
-  } else {
+  if (!handled) {
     var vol = 0.005 * (a1.magnitude() * s1.mass);
     if (vol > 0.01) {
-      this.soundFx && this.soundFx.tap(vol);
+      this.soundFx && this.soundFx.tap(s1.getPos(pos), vol);
     }
     var vol = 0.005 * (a2.magnitude() * s2.mass);
     if (vol > 0.01) {
-      this.soundFx && this.soundFx.tap(vol);
+      this.soundFx && this.soundFx.tap(s2.getPos(pos), vol);
     }
     s1.addVel(a1);
     s2.addVel(a2);
     s1.onSpriteHit(s2);
     s2.onSpriteHit(s1);
   }
+  Vec2d.free(pos);
 };
 

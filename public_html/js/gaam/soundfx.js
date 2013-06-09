@@ -19,6 +19,8 @@ SoundFx.createInstance = function() {
 
 
 SoundFx.prototype.setCenter = function(x, y) {
+  if (!this.ctx) return;
+  this.ctx.listener.setPosition(x, y, 100);
 };
 
 SoundFx.prototype.r = function(x) {
@@ -26,23 +28,30 @@ SoundFx.prototype.r = function(x) {
   return x += x * f * (Math.random() - f/2);
 };
 
-SoundFx.prototype.tap = function(vol) {
-  // TODO: x, y, for panner
-  this.sound(this.r(vol), 0, 0.005, this.r(1000), this.r(2000), 'sine');
-  this.sound(this.r(vol), 0, 0.005, this.r(2000), this.r(1000), 'sine');
+SoundFx.prototype.tap = function(pos, vol) {
+  this.sound(pos, vol, 0, 0.005, this.r(1000), this.r(2000), 'square');
+  this.sound(pos, vol, 0, 0.01, this.r(2000), this.r(1000), 'sine');
 };
 
-SoundFx.prototype.chirp = function() {
-  var attack = this.r(0.01);
-  var decay = this.r(0.02);
-  var freq1 = this.r(4000);
-  for (var i = 0; i <2; i++) {
-    this.sound(0.1, attack, decay, freq1, this.r(1000), 'sine');
+SoundFx.prototype.teleport = function(pos, exiting) {
+  var attack, decay, freq1, freq2;
+  if (exiting) {
+    attack = 0.2;
+    decay = 0.001;
+    freq1 = this.r(50);
+    freq2 = this.r(2000);
+  } else {
+    attack = 0.001;
+    decay = 0.2;
+    freq1 = this.r(2000);
+    freq2 = this.r(50);
   }
+  this.sound(pos, 0.2, attack, decay, freq1, freq2, 'square');
 };
 
 
-SoundFx.prototype.sound = function(vol, attack, decay, freq1, freq2, type) {
+SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) {
+  vol *= 100;
   var c = this.ctx;
   var t = c.currentTime;
   var gain = c.createGainNode();
@@ -57,8 +66,12 @@ SoundFx.prototype.sound = function(vol, attack, decay, freq1, freq2, type) {
   osc.start(t);
   osc.stop(t + attack + decay + 0.1);
 
+  var panner = c.createPanner();
+  panner.setPosition(pos.x, pos.y, 0);
+
   osc.connect(gain);
-  gain.connect(c.destination);
+  gain.connect(panner);
+  panner.connect(c.destination);
 };
 
 
@@ -67,6 +80,7 @@ function makeWebStormHappy() {
   webkitAudioContext = 1;
   x = {
     createGainNode:1,
+    createPanner:1,
     gain:1,
     setValueAtTime: 1,
     linearRampToValueAtTime: 1,
@@ -75,6 +89,7 @@ function makeWebStormHappy() {
     exponentialRampToValueAtTime:1,
     connect:1,
     destination:1,
+    listener:1,
     type:1
   };
 }

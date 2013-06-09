@@ -69,7 +69,7 @@ PortalSprite.prototype.onSpriteHit = function(
 
   if (teleportOK) {
     hitSprite.getPos(this.hitPos);
-    this.world.splashPortal(this.hitPos.x, this.hitPos.y, false);
+    this.world.splashPortal(this.hitPos, false);
     var dVel = this.targetSprite.getVel(Vec2d.alloc()).subtract(this.vel);
     // A little randomness, too.
     dVel.addXY(0.001 * (Math.random() - 0.5), 0.001 * (Math.random() - 0.5));
@@ -81,7 +81,7 @@ PortalSprite.prototype.onSpriteHit = function(
     }
 
     hitSprite.setPos(dest);
-    this.world.splashPortal(dest.x, dest.y, true);
+    this.world.splashPortal(dest, true);
     hitSprite.addVel(dVel);
 
     Vec2d.free(dVel);
