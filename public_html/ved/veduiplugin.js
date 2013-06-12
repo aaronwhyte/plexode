@@ -26,8 +26,9 @@ VedUiPlugin.prototype.createVorp = function(grafModel) {
   // create vorp instance
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(this.renderer, null, gameClock, sledgeInvalidator);
-  vorp.editable = true;
+  var vorpOut = new VorpOut(this.renderer, null);
+  var vorp = Vorp.createVorp(vorpOut, gameClock, sledgeInvalidator);
+  vorp.setEditable(true);
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
   transformer.transformModel(grafModel);
 

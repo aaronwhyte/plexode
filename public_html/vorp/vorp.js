@@ -1,9 +1,8 @@
 /**
  * @constructor
  */
-function Vorp(renderer, soundFx, phy, wham, gameClock, sledgeInvalidator) {
-  this.renderer = renderer;
-  this.soundFx = soundFx;
+function Vorp(vorpOut, phy, wham, gameClock, sledgeInvalidator) {
+  this.vorpOut = vorpOut;
   this.phy = phy;
   this.wham = wham;
   this.gameClock = gameClock;
@@ -12,7 +11,6 @@ function Vorp(renderer, soundFx, phy, wham, gameClock, sledgeInvalidator) {
   this.playerSprite = null;
   this.playerAssemblyTime = null;
   this.cameraPos = new Vec2d();
-  this.painters = [];
 
   this.accelerationsOut = [new Vec2d(), new Vec2d()];
 
@@ -108,15 +106,20 @@ Vorp.LAYERS = [
 Vorp.LAYER_DEBUG = 'debug';
 Vorp.LAYER_EDIT = 'edit';
 
-Vorp.createVorp = function(renderer, soundFx, gameClock, sledgeInvalidator) {
+Vorp.createVorp = function(vorpOut, gameClock, sledgeInvalidator) {
   var collider = new CellCollider(
       Vorp.CELL_SIZE, Vorp.COLLIDER_GROUP_PAIRS, gameClock);
   var wham = new VorpWham();
   var phy = new Phy(collider, gameClock, sledgeInvalidator);
-  var vorp = new Vorp(renderer, soundFx, phy, wham, gameClock, sledgeInvalidator);
+  var vorp = new Vorp(vorpOut, phy, wham, gameClock, sledgeInvalidator);
   phy.setOnSpriteHit(vorp, vorp.onSpriteHit);
   return vorp;
 };
+
+Vorp.prototype.setEditable = function(editable) {
+  this.editable = editable;
+  this.vorpOut.setEditable(editable);
+}
 
 Vorp.prototype.startLoop = function() {
   if (!this.editable) {
@@ -169,19 +172,13 @@ Vorp.prototype.resize = function() {
   var maxHeight = s.height - (footerHeight + headerHeight);
   var maxWidth = s.width;
   var dim = Math.min(maxWidth, maxHeight);
-  var canvas = this.renderer.canvas;
-  canvas.width = dim;
-  canvas.height = dim;
   var left;
   if (maxWidth < maxHeight) {
     left = '0';
   } else {
-    left = (s.width / 2 - dim / 2) + 'px';
+    left = (s.width / 2 - dim / 2);
   }
-  canvas.style.left = left;
-  canvas.style.top = headerHeight + 'px';
-
-  this.canvasSize = dim;
+  this.vorpOut.setCanvasSizeLeftTop(dim, left, headerHeight);
 };
 
 
@@ -205,7 +202,7 @@ Vorp.prototype.addSprite = function(sprite) {
   this.phy.addSprite(sprite);
   var painter = sprite.getPainter();
   if (painter) {
-    this.addPainter(painter);
+    this.vorpOut.addPainter(painter);
   }
   if (sprite instanceof PlayerAssemblerSprite) {
     // Assume there's exactly one PlayerAssembler per level for now.
@@ -213,13 +210,6 @@ Vorp.prototype.addSprite = function(sprite) {
     this.playerAssembler = sprite;
     this.assemblePlayer();
   }
-};
-
-/**
- * @param {Painter} painter
- */
-Vorp.prototype.addPainter = function(painter) {
-  this.painters.push(painter);
 };
 
 /**
@@ -304,73 +294,16 @@ Vorp.prototype.clockLinks = function() {
 };
 
 /**
- * Draws to the canvas.
+ * Draws and repositions the audio listener.
  */
 Vorp.prototype.draw = function() {
   var now = this.now();
-  this.renderer.clear();
-  if (!this.editable) {
+  if (this.playerSprite) {
+    this.playerSprite.getPos(this.cameraPos);
   }
-
-  if (!this.editable) {
-    this.renderer.setZoom(Vorp.ZOOM * this.canvasSize / 600);
-    if (this.playerSprite) {
-      this.playerSprite.getPos(this.cameraPos);
-    }
-    this.renderer.setCenter(this.cameraPos.x, this.cameraPos.y);
-    this.soundFx && this.soundFx.setCenter(this.cameraPos.x, this.cameraPos.y);
-  }
-
-  // Tell painters to advance. Might as well remove any that are kaput.
-  // (The timing of isKaput() returning true isn't critical;
-  // it doesn't have to be decided during advance().)
-  for (var i = 0; i < this.painters.length; i++) {
-    var painter = this.painters[i];
-    if (painter.isKaput()) {
-      var popped = this.painters.pop();
-      if (i < this.painters.length) {
-        this.painters[i] = popped;
-        i--;
-      } // else we're trying to remove the final one
-    } else {
-      painter.advance(now);
-    }
-  }
-
-  this.drawWorld(true);
-
-  if (!this.editable) {
-    this.renderer.stats();
-  }
+  this.vorpOut.draw(now, this.cameraPos.x, this.cameraPos.y);
 };
 
-/**
- * @param {boolean=} opt_drawColliderDebugging
- */
-Vorp.prototype.drawWorld = function(opt_drawColliderDebugging) {
-  this.renderer.transformStart();
-
-  for (var i = 0; i < Vorp.LAYERS.length; i++) {
-    this.drawLayer(Vorp.LAYERS[i]);
-  }
-  if (this.editable) {
-    this.drawLayer(Vorp.LAYER_EDIT);
-  }
-
-  if (opt_drawColliderDebugging) {
-    // Draw whatever the collider feels like drawing, for debugging purposes.
-    this.phy.collider.draw(this.renderer);
-  }
-
-  this.renderer.transformEnd();
-};
-
-Vorp.prototype.drawLayer = function(layer) {
-  for (var j = 0; j < this.painters.length; j++) {
-    var painter = this.painters[j];
-    painter.paint(this.renderer, layer);
-  }
-};
 
 Vorp.prototype.now = function() {
   return this.gameClock.getTime();
@@ -401,38 +334,28 @@ Vorp.prototype.getZombieSpriteFactory = function() {
 };
 
 Vorp.prototype.splashPortal = function(pos, exiting) {
-  var painter = new PortalSplashPainter(exiting);
-  painter.setPosition(pos.x, pos.y);
-  this.addPainter(painter);
-  this.soundFx && this.soundFx.teleport(pos, exiting);
+  // TODO: remove this middleman
+  this.vorpOut.splashPortal(pos, exiting);
 };
 
 Vorp.prototype.splashPlasma = function(x, y) {
-  var painter = new PlasmaSplashPainter();
-  painter.setPosition(x, y);
-  this.addPainter(painter);
+  // TODO: remove this middleman
+  this.vorpOut.splashPlasma(x, y);
 };
 
 Vorp.prototype.explodePlayer = function() {
   var pos = this.playerSprite.getPos(new Vec2d());
-  var painter = new ExplosionPainter();
-  painter.setPosition(pos.x, pos.y);
-  this.addPainter(painter);
-
+  this.vorpOut.explode(pos.x, pos.y);
   this.playerSprite.die();
   this.removeSprite(this.playerSprite.id);
   this.playerAssemblyTime = this.now() + Vorp.EXPLODED_PLAYER_REASSEMBLY_DELAY;
-
   this.playerSprite = null;
 };
 
 Vorp.prototype.explodeZombie = function(id) {
   var sprite = this.getSprite(id);
   var pos = sprite.getPos(new Vec2d());
-  var painter = new ExplosionPainter();
-  painter.setPosition(pos.x, pos.y);
-  this.addPainter(painter);
-
+  this.vorpOut.explode(pos.x, pos.y);
   sprite.die();
   this.removeSprite(id);
 };
@@ -539,11 +462,11 @@ Vorp.prototype.onSpriteHit = function(spriteId1, spriteId2, xTime, yTime, overla
   if (!handled) {
     var vol = 0.005 * (a1.magnitude() * s1.mass);
     if (vol > 0.01) {
-      this.soundFx && this.soundFx.tap(s1.getPos(pos), vol);
+      this.vorpOut.tap(s1.getPos(pos), vol);
     }
     var vol = 0.005 * (a2.magnitude() * s2.mass);
     if (vol > 0.01) {
-      this.soundFx && this.soundFx.tap(s2.getPos(pos), vol);
+      this.vorpOut.tap(s2.getPos(pos), vol);
     }
     s1.addVel(a1);
     s2.addVel(a2);

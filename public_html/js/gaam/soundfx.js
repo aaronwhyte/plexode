@@ -7,6 +7,8 @@ function SoundFx(audioContext) {
   this.ctx = audioContext;
 }
 
+SoundFx.Z_DISTANCE = 300;
+
 SoundFx.createInstance = function() {
   var ctx = null;
   if (typeof AudioContext !== 'undefined') {
@@ -20,38 +22,11 @@ SoundFx.createInstance = function() {
 
 SoundFx.prototype.setCenter = function(x, y) {
   if (!this.ctx) return;
-  this.ctx.listener.setPosition(x, y, 100);
+  this.ctx.listener.setPosition(x, y, SoundFx.Z_DISTANCE);
 };
-
-SoundFx.prototype.r = function(x) {
-  var f = 0.3;
-  return x += x * f * (Math.random() - f/2);
-};
-
-SoundFx.prototype.tap = function(pos, vol) {
-  this.sound(pos, vol, 0, 0.005, this.r(1000), this.r(2000), 'square');
-  this.sound(pos, vol, 0, 0.01, this.r(2000), this.r(1000), 'sine');
-};
-
-SoundFx.prototype.teleport = function(pos, exiting) {
-  var attack, decay, freq1, freq2;
-  if (exiting) {
-    attack = 0.2;
-    decay = 0.001;
-    freq1 = this.r(50);
-    freq2 = this.r(2000);
-  } else {
-    attack = 0.001;
-    decay = 0.2;
-    freq1 = this.r(2000);
-    freq2 = this.r(50);
-  }
-  this.sound(pos, 0.2, attack, decay, freq1, freq2, 'square');
-};
-
 
 SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) {
-  vol *= 100;
+  vol *= SoundFx.Z_DISTANCE;
   var c = this.ctx;
   var t = c.currentTime;
   var gain = c.createGainNode();

@@ -93,10 +93,10 @@ LevelProg.prototype.pasteWithPositions = function(model, positions) {
 };
 
 LevelProg.prototype.startVorp = function(canvas) {
-  var renderer = new Renderer(canvas, new Camera());
+  var vorpOut = new VorpOut(new Renderer(canvas, new Camera()), SoundFx.createInstance());
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
-  var vorp = Vorp.createVorp(renderer, null, gameClock, sledgeInvalidator);
+  var vorp = Vorp.createVorp(vorpOut, gameClock, sledgeInvalidator);
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
   transformer.transformModel(this.model);
   vorp.startLoop();

@@ -54,6 +54,11 @@ v add soundfx to constructor
 v add panner node
 - Volume knob in the game controls gain node?
 
+2013-06-11 -
+VorpOut:
+v Refactor Vorp graphics, sound, painters, canvas manipulation, etc into new VorpOut class.
+- Make that available to sprites, instead of a renderer.
+
 sound effects
 - start level
   - One chord getting bent up two octaves, then blinking on and off a bit.

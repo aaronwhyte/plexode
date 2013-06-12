@@ -300,11 +300,10 @@ VedApp.prototype.renderPlayMode = function(appDiv, levelName) {
     grafModel.applyOp(levelValues[i][OpStor.field.OP]);
   }
   // create vorp instance
-  var renderer = new Renderer(canvas, new Camera());
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
-  var soundFx = SoundFx.createInstance();
-  var vorp = Vorp.createVorp(renderer, soundFx, gameClock, sledgeInvalidator);
+  var vorpOut = new VorpOut(new Renderer(canvas, new Camera()), SoundFx.createInstance());
+  var vorp = Vorp.createVorp(vorpOut, gameClock, sledgeInvalidator);
 
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
