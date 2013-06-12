@@ -10,6 +10,8 @@ function VorpOut(renderer, soundFx) {
 
   this.canvasSize = -1;
   this.editable = false;
+
+  this.vec = new Vec2d();
 }
 
 VorpOut.prototype.setEditable = function(editable) {
@@ -121,6 +123,15 @@ VorpOut.prototype.explode = function(x, y) {
   var painter = new ExplosionPainter();
   painter.setPosition(x, y);
   this.addPainter(painter);
+
+  this.vec.setXY(x, y);
+  var decay = Math.random() * 0.3 + 0.3;
+  for (var i = 0; i < 3; i++) {
+    var attack = 0.001;
+    var freq1 = (Math.random() * 200 + 100);
+    var freq2 = 1;
+    this.soundFx && this.soundFx.sound(this.vec, 0.3, attack, decay, freq1, freq2, 'square');
+  }
 };
 
 

@@ -101,8 +101,7 @@ sound effects
   - deactivated
   - activated
   - humming active
-  - zapping something
-- player explosion
+v explosion
 - portal
   v teleport in
   v teleport out
