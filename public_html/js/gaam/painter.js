@@ -36,11 +36,11 @@ Painter.prototype.advance = function(now) {
 };
 
 /**
- * @param {Object} renderer  The API the painter uses to paint with.
- * @param {number} layer  When painting happens in multpile layers,
+ * @param {Object} renderingVisitor  The API the painter uses to paint with.
+ * @param {number} layer  When painting happens in multiple layers,
  * for debugging or because the order matters visually, this is important.
  */
-Painter.prototype.paint = function(renderer, layer) {
+Painter.prototype.paint = function(renderingVisitor, layer) {
   throw new Error("you gotta implement Painter.paint() in your subclasses");
 };
 
