@@ -7,7 +7,7 @@ function SoundFx(audioContext) {
   this.ctx = audioContext;
 }
 
-SoundFx.Z_DISTANCE = 300;
+SoundFx.Z_DISTANCE = 200;
 
 SoundFx.createInstance = function() {
   var ctx = null;

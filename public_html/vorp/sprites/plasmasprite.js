@@ -27,5 +27,3 @@ PlasmaSprite.prototype.onSpriteHit = function(hitSprite) {
   this.world.removeSprite(this.id);
   return true;
 };
-
-
