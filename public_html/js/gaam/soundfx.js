@@ -26,6 +26,7 @@ SoundFx.prototype.setCenter = function(x, y) {
 };
 
 SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) {
+  if (!this.ctx) return;
   vol *= SoundFx.Z_DISTANCE;
   var c = this.ctx;
   var t = c.currentTime;
