@@ -99,7 +99,7 @@ TractorBeamPainter.prototype.advance = function(now) {
 TractorBeamPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
     vorpOut.setFillStyle('rgba(50, 200, 50, 0.6)');
-    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
+    this.sparks.paintAll(vorpOut, this.now);
     if (this.state == TractorBeamPainter.State.HOLDING) {
       vorpOut.setStrokeStyle("rgba(50, 200, 50, " + (Math.random() * 0.2 + 0.6) + ")");
       vorpOut.setLineWidth(6 + this.holdStrength * 0.9);

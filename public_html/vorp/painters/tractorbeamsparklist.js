@@ -51,7 +51,7 @@ TractorBeamSparkList.prototype.advanceSpark = function(spark, now) {
   spark.pos.add(spark.vel);
 };
 
-TractorBeamSparkList.prototype.paint = function(renderer, spark, now) {
-  renderer.setFillStyle('rgba(50, 255, 50, ' + (Math.random() * 0.2 + 0.4) + ')');
-  renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, spark.rad, spark.rad);
+TractorBeamSparkList.prototype.paint = function(vorpOut, spark, now) {
+  vorpOut.setFillStyle('rgba(50, 255, 50, ' + (Math.random() * 0.2 + 0.4) + ')');
+  vorpOut.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, spark.rad, spark.rad);
 };

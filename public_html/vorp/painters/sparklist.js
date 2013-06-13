@@ -43,8 +43,8 @@ SparkList.prototype.advanceSpark = function(spark, now) {
 /**
  * Render the spark.
  */
-SparkList.prototype.paint = function(renderer, spark, now) {
-  throw Error('Implement paint(renderer, spark, now)');
+SparkList.prototype.paint = function(vorpOut, spark, now) {
+  throw Error('Implement paint(vorpOut, spark, now)');
 };
 
 
@@ -87,9 +87,9 @@ SparkList.prototype.advance = function(now) {
 /**
  * Calls paint() for all the sparks.
  */
-SparkList.prototype.paintAll = function(renderer, now) {
+SparkList.prototype.paintAll = function(vorpOut, now) {
   for (var i = 0; i < this.size; i++) {
-    this.paint(renderer, this.sparks[i], now);
+    this.paint(vorpOut, this.sparks[i], now);
   }
 };
 

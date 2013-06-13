@@ -44,12 +44,12 @@ PlasmaSplashPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.pos.add(spark.vel);
 };
 
-PlasmaSplashPainter.SPARK_PAINT = function(renderer, spark, now) {
+PlasmaSplashPainter.SPARK_PAINT = function(vorpOut, spark, now) {
   var timeFrac = 1 - (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.5;
   var size = (1 - timeFrac/2) * PlasmaSprite.RADIUS * 2;
-  renderer.setFillStyle('rgba(255, 0, 255, ' + alpha + ')');
-  renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
+  vorpOut.setFillStyle('rgba(255, 0, 255, ' + alpha + ')');
+  vorpOut.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };
 
 
@@ -83,7 +83,7 @@ PlasmaSplashPainter.prototype.paint = function(vorpOut, layer) {
       this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
-    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
+    this.sparks.paintAll(vorpOut, this.now);
   }
 };
 

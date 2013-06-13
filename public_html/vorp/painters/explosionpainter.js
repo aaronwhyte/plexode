@@ -46,12 +46,12 @@ ExplosionPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.pos.add(spark.vel);
 };
 
-ExplosionPainter.SPARK_PAINT = function(renderer, spark, now) {
+ExplosionPainter.SPARK_PAINT = function(vorpOut, spark, now) {
   var timeFrac = (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 0.25 + 0.75 * timeFrac;
   var size = Math.max(0.2, timeFrac) * Transformer.BOX_RADIUS;
-  renderer.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
-  renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
+  vorpOut.setFillStyle('rgba(255, 255, 255, ' + alpha + ')');
+  vorpOut.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };
 
 
@@ -85,7 +85,7 @@ ExplosionPainter.prototype.paint = function(vorpOut, layer) {
       this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
-    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
+    this.sparks.paintAll(vorpOut, this.now);
   }
 };
 

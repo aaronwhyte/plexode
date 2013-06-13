@@ -47,17 +47,17 @@ PlayerAssemblerPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.pos.add(spark.vel);
 };
 
-PlayerAssemblerPainter.SPARK_PAINT = function(renderer, spark, now) {
+PlayerAssemblerPainter.SPARK_PAINT = function(vorpOut, spark, now) {
   var timeFrac = 1 - (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 1 - 0.8 * timeFrac;
   var size = (1 - (timeFrac * 0.9)) * Transformer.BOX_RADIUS;
 //  var red = Math.floor(128 + 127 * Math.cos(1.3 * timeFrac * 2 * Math.PI));
 //  var green = Math.floor(128 - 127 * Math.cos(timeFrac * 2 * Math.PI));
 //  var blue = Math.floor(255 * timeFrac) % 256;
-//  renderer.setFillStyle('rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')');
+//  vorpOut.setFillStyle('rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')');
   var lite = Math.floor(255 - 128 * timeFrac);
-  renderer.setFillStyle('rgba(' + lite + ',' + lite + ',' + lite + ',' + alpha + ')');
-  renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
+  vorpOut.setFillStyle('rgba(' + lite + ',' + lite + ',' + lite + ',' + alpha + ')');
+  vorpOut.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };
 
 
@@ -93,7 +93,7 @@ PlayerAssemblerPainter.prototype.paint = function(vorpOut, layer) {
     vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
 
   } else if (layer == Vorp.LAYER_SUPERSPARKS) {
-    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
+    this.sparks.paintAll(vorpOut, this.now);
   }
 };
 

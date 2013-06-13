@@ -46,12 +46,12 @@ PortalSplashPainter.SPARK_ADVANCESPARK = function(spark, now) {
   spark.pos.add(spark.vel);
 };
 
-PortalSplashPainter.SPARK_PAINT = function(renderer, spark, now) {
+PortalSplashPainter.SPARK_PAINT = function(vorpOut, spark, now) {
   var timeFrac = 1 - (spark.endTime - now) / (spark.endTime - spark.startTime);
   var alpha = 1 - timeFrac * 0.9;
   var size = 6 - timeFrac * 2;
-  renderer.setFillStyle('rgba(0, 223, 255, ' + alpha + ')');
-  renderer.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
+  vorpOut.setFillStyle('rgba(0, 223, 255, ' + alpha + ')');
+  vorpOut.fillRectPosXYRadXY(spark.pos.x, spark.pos.y, size, size);
 };
 
 
@@ -85,7 +85,7 @@ PortalSplashPainter.prototype.paint = function(vorpOut, layer) {
       this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
-    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
+    this.sparks.paintAll(vorpOut, this.now);
   }
 };
 

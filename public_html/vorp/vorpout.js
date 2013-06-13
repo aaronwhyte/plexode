@@ -111,10 +111,6 @@ VorpOut.prototype.fillRectPosXYRadXY = function(x, y, rx, ry) {
   this.renderer.fillRectPosXYRadXY(x, y, rx, ry);
 };
 
-VorpOut.prototype.getRenderer = function() {
-  return this.renderer;
-};
-
 VorpOut.prototype.beginPath = function() {
   this.renderer.context.beginPath();
 };
