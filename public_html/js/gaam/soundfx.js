@@ -39,8 +39,16 @@ SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) 
   osc.frequency.setValueAtTime(freq1, t);
   osc.frequency. exponentialRampToValueAtTime(freq2, t + attack + decay);
   osc.type = type;
-  osc.start(t);
-  osc.stop(t + attack + decay + 0.1);
+  if (osc.start) {
+    osc.start(t);
+  } else if (osc.noteOn) {
+    osc.noteOn(t);
+  }
+  if (osc.stop) {
+    osc.stop(t + attack + decay + 0.1);
+  } else if (osc.noteOff) {
+    osc.noteOff(t + attack + decay + 0.1);
+  }
 
   var panner = c.createPanner();
   panner.setPosition(pos.x, pos.y, 0);
