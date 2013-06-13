@@ -18,7 +18,7 @@ def formatVorp():
 Vorp is a free 2D physics-based action/puzzle game that runs in modern web browsers.
 <p>
 It's written in JavaScript, using the HTML5 &lt;canvas&gt;
-element to render all the graphics. There are no sound effects yet,
+element to render all the graphics. There are few sound effects,
 the graphics are terrible, and you need a keyboard to play.
 <p>
 It works well in <a href="http://www.google.com/chrome/">Chrome</a>, 
