@@ -342,3 +342,46 @@ v hardcode a test level with logic links in it, without prefabs.
 
 2012.02.11 - ? Redo Sprite Construction III
 v Assign sprite ID at construction.
+
+2013-05
+The Zombie Problem
+When you create creatures from nothing, you can't expect them to always
+turn out perfectly. Some are hideous monsters. But you love them as best
+you can, because they are yours and you are a good entity. But you need
+to set limits or they'll run wild. And limits must be clear. And they
+must include concequences. And sometimes you can't give each of your
+creatures the individual attention and guidance you would like to. So
+you begin to deal in policy, broad strokes, blanket judgements. Maybe
+you automate the application of discipline a little. Maybe the tools
+you have to do so aren't perfect, but what is.
+Long story short, these plasma turrets indicate the boundaries of
+acceptable zombie behavior. On sight. With deadly plasma.
+v Zombie
+  v avoids stuff
+    v inert things
+    v zappers!
+  v chases player
+  v kills player
+  v dies in zapper
+    v slice DeadPlayerSprite system into chunks
+      x camera behavior - stay in a place, or follow a sprite
+      v explosion painter (not sprite)
+      v player re-assembly timeout
+    v tractor beams release grip on removed sprites
+v Anti-Zombie Turret
+  v basic sprite
+  v painter
+  v rayscan behavior
+  v color change when zombie detected, before we start throwing plasma around...
+  v wall-sticker-thing for Ved
+  v we're gonna need some plasma!
+    v plasma sprite
+    v plasma painter - finally get to use the events trail!
+    v vorp.firePlasma(px, py, vx, vy);
+    v plasma collision behavior vs player, zombies, and other masses
+    x plasma factory?
+      x plasma sprite pool
+      x plasma painter pool
+v Zombie Assembler
+
+v make some zombie levels
