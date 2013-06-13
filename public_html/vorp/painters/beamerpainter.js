@@ -18,16 +18,16 @@ BeamerPainter.prototype.advance = function(now) {
   this.now = now;
 };
 
-BeamerPainter.prototype.paint = function(renderer, layer) {
+BeamerPainter.prototype.paint = function(vorpOut, layer) {
   var e = this.events.getFromHead(0);
   e.moveToTime(this.now);
   if (layer == Vorp.LAYER_SPARKS) {
-    renderer.context.lineWidth = Math.random() + 1.5;
-    renderer.setStrokeStyle('rgb(200, 0, 0)');
-    renderer.drawLineXYXY(e.px, e.py, this.beamEnd.x, this.beamEnd.y);
+    vorpOut.setLineWidth(Math.random() + 1.5);
+    vorpOut.setStrokeStyle('rgb(200, 0, 0)');
+    vorpOut.drawLineXYXY(e.px, e.py, this.beamEnd.x, this.beamEnd.y);
   } else if (layer == Vorp.LAYER_MASSES) {
-    renderer.setFillStyle('rgb(128, 128, 128)');
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.setFillStyle('rgb(128, 128, 128)');
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

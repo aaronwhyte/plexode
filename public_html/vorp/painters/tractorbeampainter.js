@@ -93,38 +93,20 @@ TractorBeamPainter.prototype.advance = function(now) {
     }
     this.lastAdvanceTime = this.now;
   }
-
-//  if (this.state == TractorBeamPainter.State.HOLDING &&
-//      (!FLAGS || FLAGS.get('tractorSparksWhileHolding'))) {
-//    for (var i = 0; i < 4 + this.holdStrength; i++) {
-//      if (Math.random() > 0.01) continue;
-//      var temp = this.sparkTemplate;
-//      var along = Math.random();
-//      temp.pos.set(this.heldPos).subtract(this.holderPos)
-//          .scale(along)
-//          .add(this.holderPos);
-//      temp.vel.set(this.heldPos).subtract(this.holderPos).rot90Right();
-//      temp.vel.scaleToLength((Math.random() - 0.5) * (2 + this.holdStrength/5));
-//      temp.rad = TractorBeamPainter.SPARK_RAD;
-//      temp.endTime = this.now + Math.random() * 30;
-//      this.sparks.add(temp);
-//    }
-//  }
   this.sparks.advance(now);
 };
 
-TractorBeamPainter.prototype.paint = function(renderer, layer) {
+TractorBeamPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
-    renderer.setFillStyle('rgba(50, 200, 50, 0.6)');
-    this.sparks.paintAll(renderer, this.now);
+    vorpOut.setFillStyle('rgba(50, 200, 50, 0.6)');
+    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
     if (this.state == TractorBeamPainter.State.HOLDING) {
-      var c = renderer.context;
-      renderer.setStrokeStyle("rgba(50, 200, 50, " + (Math.random() * 0.2 + 0.6) + ")");
-      c.lineWidth = 6 + this.holdStrength * 0.9;
-      c.beginPath();
-      c.moveTo(this.holderPos.x, this.holderPos.y);
-      c.lineTo(this.heldPos.x, this.heldPos.y);
-      c.stroke();
+      vorpOut.setStrokeStyle("rgba(50, 200, 50, " + (Math.random() * 0.2 + 0.6) + ")");
+      vorpOut.setLineWidth(6 + this.holdStrength * 0.9);
+      vorpOut.beginPath();
+      vorpOut.moveTo(this.holderPos.x, this.holderPos.y);
+      vorpOut.lineTo(this.heldPos.x, this.heldPos.y);
+      vorpOut.stroke();
     }
   }
 };

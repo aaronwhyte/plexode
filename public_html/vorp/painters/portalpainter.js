@@ -23,13 +23,13 @@ PortalPainter.prototype.advance = function(now) {
   Painter.prototype.advance.call(this, now);
 };
 
-PortalPainter.prototype.paint = function(renderer, layer) {
+PortalPainter.prototype.paint = function(vorpOut, layer) {
   var e = this.events.getFromHead(0);
   e.moveToTime(this.now);
-  renderer.context.lineWidth = 6;
+  vorpOut.setLineWidth(6);
   if (layer == Vorp.LAYER_MASSES) {
-    renderer.setFillStyle('rgb(0, 223, 255)');
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.setFillStyle('rgb(0, 223, 255)');
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
 
   } else if (layer == Vorp.LAYER_SPARKS) {
     var rad = e.rx;
@@ -39,8 +39,8 @@ PortalPainter.prototype.paint = function(renderer, layer) {
       rad *= PortalPainter.PERSPECTIVE;
       radSum += rad;
       t.scaleToLength(radSum);
-      renderer.setFillStyle('rgba(0, 223, 255, ' +  0.6 * (n - i) / n + ')');
-      renderer.fillRectPosXYRadXY(e.px + t.x , e.py + t.y, rad , rad);
+      vorpOut.setFillStyle('rgba(0, 223, 255, ' +  0.6 * (n - i) / n + ')');
+      vorpOut.fillRectPosXYRadXY(e.px + t.x , e.py + t.y, rad , rad);
     }
   }
 };

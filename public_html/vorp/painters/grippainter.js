@@ -44,14 +44,14 @@ GripPainter.prototype.advance = function(now) {
   this.tractorBeamPainter.advance(now);
 };
 
-GripPainter.prototype.paint = function(renderer, layer) {
+GripPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
-    this.tractorBeamPainter.paint(renderer, layer);
+    this.tractorBeamPainter.paint(vorpOut, layer);
   } else if (layer == Vorp.LAYER_MASSES) {
-    renderer.setFillStyle(this.isHolding ? '#9f9' : '#7a7');
+    vorpOut.setFillStyle(this.isHolding ? '#9f9' : '#7a7');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

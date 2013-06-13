@@ -57,7 +57,10 @@ v add panner node
 2013-06-11 -
 VorpOut:
 v Refactor Vorp graphics, sound, painters, canvas manipulation, etc into new VorpOut class.
-- Make that available to sprites, instead of a renderer.
+v Make that available to painters, instead of their renderers.
+- Ditto for sparklists. Delete getRenderer.
+
+Maybe refactor sprite factories into one big factory?
 
 sound effects
 - start level

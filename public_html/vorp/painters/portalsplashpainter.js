@@ -75,7 +75,7 @@ PortalSplashPainter.prototype.createSparkList = function() {
 };
 
 
-PortalSplashPainter.prototype.paint = function(renderer, layer) {
+PortalSplashPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
@@ -85,7 +85,7 @@ PortalSplashPainter.prototype.paint = function(renderer, layer) {
       this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
-    this.sparks.paintAll(renderer, this.now);    
+    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
   }
 };
 

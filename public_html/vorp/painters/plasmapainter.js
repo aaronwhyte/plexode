@@ -25,29 +25,29 @@ PlasmaPainter.prototype.advance = function(now) {
   }
 };
 
-PlasmaPainter.prototype.paint = function(renderer, layer) {
+PlasmaPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
-    renderer.context.beginPath();
+    vorpOut.beginPath();
     for (var s = 0; s < 2; s++) {
       var prevEvent = null;
       if (s) {
-        renderer.setStrokeStyle('rgba(255, 0, 255, 0.4)');
-        renderer.context.lineWidth = PlasmaSprite.RADIUS * 4;
+        vorpOut.setStrokeStyle('rgba(255, 0, 255, 0.4)');
+        vorpOut.setLineWidth(PlasmaSprite.RADIUS * 4);
       } else {
-        renderer.setStrokeStyle('rgba(255, 0, 255, 0.8)');
-        renderer.context.lineWidth = PlasmaSprite.RADIUS;
+        vorpOut.setStrokeStyle('rgba(255, 0, 255, 0.8)');
+        vorpOut.setLineWidth(PlasmaSprite.RADIUS);
       }
       for (var i = 0, n = this.events.size(); i < n; i++) {
         var event = this.events.getFromTail(i);
         if (prevEvent) {
           prevEvent.moveToTime(event.startTime);
-          renderer.context.lineTo(prevEvent.px, prevEvent.py);
+          vorpOut.lineTo(prevEvent.px, prevEvent.py);
         }
         event.moveToTime(event.startTime);
-        renderer.context.moveTo(event.px, event.py);
+        vorpOut.moveTo(event.px, event.py);
         prevEvent = event;
       }
-      renderer.context.stroke();
+      vorpOut.stroke();
     }
   }
 };

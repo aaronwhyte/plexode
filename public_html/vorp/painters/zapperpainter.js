@@ -14,19 +14,18 @@ ZapperPainter.prototype.setActive = function(active) {
   this.active = active;
 };
 
-ZapperPainter.prototype.paint = function(renderer, layer) {
+ZapperPainter.prototype.paint = function(vorpOut, layer) {
   if (!this.active) return;
   if (layer == Vorp.LAYER_SUPERSPARKS) {
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-    renderer.setFillStyle('rgba(' +
+    vorpOut.setFillStyle('rgba(' +
         (Math.floor(Math.random() * 55) + 150) + ',' +
         0 + ',' +
         (Math.floor(Math.random() * 55) + 170) + ',' +
         (Math.random() * 0.15 + 0.6) +
         ')');
-    //renderer.setFillStyle("rgba(200, 0, 255, " + (Math.random() * 0.2 + 0.4) + ")");
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

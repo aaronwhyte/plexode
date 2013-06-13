@@ -8,7 +8,7 @@ function TimerPainter() {
 TimerPainter.prototype = new Painter(1);
 TimerPainter.prototype.constructor = TimerPainter;
 
-TimerPainter.prototype.paint = function(renderer, layer) {
+TimerPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_EDIT) {
   }
 };

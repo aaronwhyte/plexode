@@ -87,10 +87,49 @@ VorpOut.prototype.drawWorld = function() {
 VorpOut.prototype.drawLayer = function(layer) {
   for (var i = 0; i < this.painters.length; i++) {
     var painter = this.painters[i];
-    painter.paint(this.renderer, layer);
+    painter.paint(this, layer);
   }
 };
 
+VorpOut.prototype.setLineWidth = function(w) {
+  this.renderer.context.lineWidth = w;
+};
+
+VorpOut.prototype.setStrokeStyle = function(style) {
+  this.renderer.setStrokeStyle(style);
+};
+
+VorpOut.prototype.drawLineXYXY = function(x0, y0, x1, y1) {
+  this.renderer.drawLineXYXY(x0, y0, x1, y1);
+};
+
+VorpOut.prototype.setFillStyle = function(style) {
+  this.renderer.setFillStyle(style);
+};
+
+VorpOut.prototype.fillRectPosXYRadXY = function(x, y, rx, ry) {
+  this.renderer.fillRectPosXYRadXY(x, y, rx, ry);
+};
+
+VorpOut.prototype.getRenderer = function() {
+  return this.renderer;
+};
+
+VorpOut.prototype.beginPath = function() {
+  this.renderer.context.beginPath();
+};
+
+VorpOut.prototype.lineTo = function(x, y) {
+  this.renderer.context.lineTo(x, y);
+};
+
+VorpOut.prototype.moveTo = function(x, y) {
+  this.renderer.context.moveTo(x, y);
+};
+
+VorpOut.prototype.stroke = function() {
+  this.renderer.context.stroke();
+};
 
 VorpOut.prototype.splashPortal = function(pos, exiting) {
   var painter = new PortalSplashPainter(exiting);

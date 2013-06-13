@@ -12,12 +12,12 @@ ZombiePainter.prototype.constructor = ZombiePainter;
 ZombiePainter.RGB = [100, 240, 100];
 ZombiePainter.COLOR = 'rgb(' + ZombiePainter.RGB.join(',') + ')';
 
-ZombiePainter.prototype.paint = function(renderer, layer) {
+ZombiePainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_MASSES && !this.events.isEmpty()) {
-    renderer.setFillStyle(ZombiePainter.COLOR);
+    vorpOut.setFillStyle(ZombiePainter.COLOR);
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

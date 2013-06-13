@@ -73,7 +73,7 @@ PlasmaSplashPainter.prototype.createSparkList = function() {
 };
 
 
-PlasmaSplashPainter.prototype.paint = function(renderer, layer) {
+PlasmaSplashPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_SPARKS) {
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
@@ -83,7 +83,7 @@ PlasmaSplashPainter.prototype.paint = function(renderer, layer) {
       this.createSparks(e.px, e.py, this.now);
       this.sparked = true;
     }
-    this.sparks.paintAll(renderer, this.now);    
+    this.sparks.paintAll(vorpOut.getRenderer(), this.now);
   }
 };
 

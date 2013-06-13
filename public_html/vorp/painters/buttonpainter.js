@@ -19,13 +19,13 @@ ButtonPainter.prototype.setLastClickTime = function(t) {
   this.lastClickTime = t;
 };
 
-ButtonPainter.prototype.paint = function(renderer, layer) {
+ButtonPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_MASSES) {
     var val = Math.min(255, Math.floor(255 - 100 + this.debounceFraction(this.now) * 200));
-    renderer.setFillStyle('rgb(' + val + ', ' + val + ', ' + val + ')');
+    vorpOut.setFillStyle('rgb(' + val + ', ' + val + ', ' + val + ')');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

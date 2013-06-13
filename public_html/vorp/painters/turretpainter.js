@@ -18,13 +18,13 @@ TurretPainter.prototype.setLastFireTime = function(t) {
   this.lastFireTime = t;
 };
 
-TurretPainter.prototype.paint = function(renderer, layer) {
+TurretPainter.prototype.paint = function(vorpOut, layer) {
   if (layer == Vorp.LAYER_MASSES) {
     var lite = Math.floor(255 -  128 * this.glowFraction(this.now));
-    renderer.setFillStyle('rgb(' + lite + ', ' + lite + ', ' + lite + ')');
+    vorpOut.setFillStyle('rgb(' + lite + ', ' + lite + ', ' + lite + ')');
     var e = this.events.getFromHead(0);
     e.moveToTime(this.now);
-    renderer.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
+    vorpOut.fillRectPosXYRadXY(e.px, e.py, e.rx, e.ry);
   }
 };
 

@@ -48,10 +48,6 @@ TractorBeamSparkList.prototype.advanceSpark = function(spark, now) {
   spark.vel.x = vx + TractorBeamSparkList.RAND_ACCEL * (Math.random() - 0.5);
   spark.vel.y = vy + TractorBeamSparkList.RAND_ACCEL * (Math.random() - 0.5);
 
-  //  if (this.heldPos) {
-//    spark.vel.x += (this.heldPos.x - spark.pos.x) / 50;
-//    spark.vel.y += (this.heldPos.y - spark.pos.y) / 50;
-//  }
   spark.pos.add(spark.vel);
 };
 
