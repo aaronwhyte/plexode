@@ -1,0 +1,88 @@
+body {
+  font-family: verdana, arial, sans-serif;
+  font-size: small;
+}
+
+code {
+  font-family: courier-new, courier, monospace;
+}
+
+img.icon20x20 {
+  border:0;
+  vertical-align:middle;
+  width:20px;
+  height:20px;
+}
+
+
+/* top */
+div.top {
+  margin-bottom: 1em;
+  line-height: 1.6em;
+}
+
+/* logo */
+.logo {
+  letter-spacing: -0.15em;
+  font-size: 200%;
+  font-family: courier new, courier, monospace;
+  text-decoration:none;
+  color:black;
+}
+
+/* navigation */
+.nav {
+  font-weight: bold;
+}
+
+span.nav {
+  border-width: 0 0 4px 0;
+  border-style: solid;
+  border-color: #8f0;
+}
+
+a.nav {
+  border-width: 0 0 4px 0;
+  border-style: solid;
+  border-color: white;
+  text-decoration: none;
+}
+
+a.nav:hover {
+  border-width: 0 0 4px 0;
+  border-style: solid;
+  border-color: #cfa;
+}
+
+/* links page */
+div.linkGroup {
+  float: left;
+  padding: 0 0.5em 1em;
+}
+
+div.linkGroup div {
+  padding: 2px 4px;
+  margin: 0;
+  background-color: #ccf;
+  border: 1px solid #008;
+  border-width: 1px 0 0;
+}
+
+div.linkGroup a {
+  display: block;
+  text-decoration: none;
+  padding: 0 4px;
+}
+
+div.linkGroup a:hover {
+  text-decoration: underline;
+}
+
+div.copyright {
+  position: absolute;
+  right: 2px;
+  top: 0;
+  color: silver;
+  font-size: 70%;
+  line-height: 1.6em;
+}
