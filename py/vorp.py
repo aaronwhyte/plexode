@@ -21,7 +21,7 @@ It's written in JavaScript, using the HTML5 &lt;canvas&gt;
 element to render all the graphics. There are few sound effects,
 the graphics are terrible, and you need a keyboard to play.
 <p>
-It works well in <a href="http://www.google.com/chrome/">Chrome</a>, 
+It works well in <a href="http://www.google.com/chrome/">Chrome</a>,
 <a href="http://www.mozilla.org/firefox">Firefox</a>,
 <a href="http://www.apple.com/safari/">Safari</a>, and
 <a href="http://www.opera.com/browser">Opera</a>.
