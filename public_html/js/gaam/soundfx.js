@@ -74,6 +74,8 @@ function makeWebStormHappy() {
     connect:1,
     destination:1,
     listener:1,
-    type:1
+    type:1,
+    noteOn:1,
+    noteOff:1
   };
 }

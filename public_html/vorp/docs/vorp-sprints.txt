@@ -16,6 +16,10 @@ v Ditto for sparklists. Delete getRenderer.
 
 Maybe refactor sprite factories into one big factory?
 
+Sustained sounds? Or just overlapping one-shots?
+Sustained ones are objects w state, tied to sprites. Setters, start, end. Like a painter, lives beyond sprite,
+gets clocked, uses "kaput" disposal pattern. These are the singers.
+
 sound effects
 - start level
   - One chord getting bent up two octaves, then blinking on and off a bit.

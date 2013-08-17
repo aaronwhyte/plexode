@@ -36,7 +36,7 @@ Painter.prototype.advance = function(now) {
 };
 
 /**
- * @param {Object} renderingVisitor  The API the painter uses to paint with.
+ * @param {Object} renderingVisitor  The API the painter uses to paint with. (Vorp uses a VorpOut.)
  * @param {number} layer  When painting happens in multiple layers,
  * for debugging or because the order matters visually, this is important.
  */
