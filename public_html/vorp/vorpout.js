@@ -1,4 +1,7 @@
 /**
+ * One per Vorp instance. This is in charge of rendering and sound.
+ * It manages the list of Painter objects, removing kaput ones, and visiting the rest to do rendering.
+ * It also manages the list of Singer objects, removing kaput ones, and visiting the rest to adjust sounds.
  * @param {Renderer} renderer
  * @param {SoundFx} soundFx
  * @constructor
@@ -7,6 +10,7 @@ function VorpOut(renderer, soundFx) {
   this.renderer = renderer;
   this.soundFx = soundFx;
   this.painters = [];
+  this.singers = [];
 
   this.canvasSize = -1;
   this.editable = false;
@@ -40,7 +44,14 @@ VorpOut.prototype.addPainter = function(painter) {
 };
 
 /**
- * Draws to the canvas.
+ * @param {Singer} singer
+ */
+VorpOut.prototype.addSinger = function(singer) {
+  this.singers.push(singer);
+};
+
+/**
+ * Paints with the paitners and sings with the singers, and cleans out the kaput ones.
  */
 VorpOut.prototype.draw = function(now, cameraX, cameraY) {
   this.renderer.clear();
@@ -66,11 +77,32 @@ VorpOut.prototype.draw = function(now, cameraX, cameraY) {
     }
   }
 
-  this.drawWorld(true);
+  this.drawWorld();
 
   if (!this.editable) {
     this.renderer.stats();
   }
+
+  // Tell singers to advance. Remove any that are kaput.
+  // (The timing of isKaput() returning true isn't critical;
+  // it doesn't have to be decided during advance().)
+  for (var i = 0; i < this.singers.length; i++) {
+    var singer = this.singers[i];
+    if (singer.isKaput()) {
+      var popped = this.singers.pop();
+      if (i < this.singers.length) {
+        this.singers[i] = popped;
+        i--;
+      } // else we're trying to remove the final one
+    } else {
+      singer.advance(now);
+    }
+  }
+
+  if (!this.editable) {
+    this.singWorld();
+  }
+
 };
 
 VorpOut.prototype.drawWorld = function() {
@@ -88,6 +120,12 @@ VorpOut.prototype.drawLayer = function(layer) {
   for (var i = 0; i < this.painters.length; i++) {
     var painter = this.painters[i];
     painter.paint(this, layer);
+  }
+};
+
+VorpOut.prototype.singWorld = function() {
+  for (var i = 0; i < this.singers.length; i++) {
+    this.singers[i].sing(this);
   }
 };
 
