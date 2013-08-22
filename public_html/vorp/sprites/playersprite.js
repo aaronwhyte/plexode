@@ -1,4 +1,5 @@
 /**
+ * @param {SpriteTemplate} spriteTemplate
  * @constructor
  * @extends {Sprite}
  */
@@ -63,16 +64,25 @@ PlayerSprite.prototype.act = function() {
   }
 
   GU_copyKeysVec(this.keysVec);
+  var accelerating = false;
   if (!this.keysVec.isZero()) {
     var speed = this.zombieness ? Math.max(0, (0.7 - this.zombieness) / 3) : 1;
     this.accelerate(this.keysVec.scaleToLength(this.accel * speed));
     this.accel *= PlayerSprite.MULT_ACCEL;
     this.accel = Math.min(this.accel, PlayerSprite.MAX_ACCEL);
+    accelerating = true;
   } else {
     //this.addFriction(PlayerSprite.BRAKE);
     this.accel *= PlayerSprite.MULT_DECEL;
     this.accel = Math.max(this.accel, PlayerSprite.MIN_ACCEL);
   }
+  this.pos = this.getPos(this.pos);
+  this.singer.setPosition(this.pos.x, this.pos.y);
+  this.singer.setThrusting(
+      accelerating,
+      (this.accel - PlayerSprite.MIN_ACCEL) /
+          (PlayerSprite.MAX_ACCEL - PlayerSprite.MIN_ACCEL),
+      this.vel.magnitude());
 
   if (this.zombieness) return;
 
@@ -307,6 +317,7 @@ PlayerSprite.prototype.breakGrip = function(opt_kick) {
 PlayerSprite.prototype.die = function() {
   this.breakGrip();
   this.painter.die();
+  this.singer.die();
 };
 
 PlayerSprite.prototype.touchedByAZombie = function() {

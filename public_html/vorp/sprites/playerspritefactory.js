@@ -11,6 +11,7 @@ PlayerSpriteFactory.prototype.createXY = function(x, y) {
       this.baseTemplate
           .makeMovable()
           .setPainter(new PlayerPainter())
+          .setSinger(new PlayerSinger())
           .setPosXY(x, y)
           .setRadXY(r, r)
           .setMass(1)

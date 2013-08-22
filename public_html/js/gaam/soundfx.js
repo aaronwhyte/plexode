@@ -1,5 +1,5 @@
 /**
- * Util for producing short sound effects.
+ * Utils for producing sound effects positioned in 2D.
  * @param {AudioContext} audioContext
  * @constructor
  */
@@ -25,6 +25,16 @@ SoundFx.prototype.setCenter = function(x, y) {
   this.ctx.listener.setPosition(x, y, SoundFx.Z_DISTANCE);
 };
 
+/**
+ * Make a simple one-shot sound.
+ * @param {Vec2d} pos
+ * @param {number} vol
+ * @param {number} attack
+ * @param {number} decay
+ * @param {number} freq1
+ * @param {number} freq2
+ * @param {String} type Wave type string (square, sine, etc)
+ */
 SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) {
   if (!this.ctx) return;
   vol *= SoundFx.Z_DISTANCE;

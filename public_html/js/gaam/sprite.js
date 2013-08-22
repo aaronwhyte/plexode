@@ -25,10 +25,12 @@ Sprite.nextId = 1;
  */
 Sprite.prototype.reset = function(spriteTemplate) {
   if (spriteTemplate) {
+    // TODO: If Sprite objs ever get reused, clear out all the fields below.
     this.gameClock = spriteTemplate.gameClock;
     this.sledgeInvalidator = spriteTemplate.sledgeInvalidator;
     this.world = spriteTemplate.world;
     this.painter = spriteTemplate.painter;
+    this.singer = spriteTemplate.singer;
     // pos0 is the position at time t0. Use getPos() to get the current position.
     this.pos0.set(spriteTemplate.pos);
     this.vel.set(spriteTemplate.vel);
@@ -92,6 +94,13 @@ Sprite.prototype.accelerate = function(v) {
  */
 Sprite.prototype.getPainter = function() {
   return this.painter;
+};
+
+/**
+ * @return {Singer}
+ */
+Sprite.prototype.getSinger = function() {
+  return this.singer;
 };
 
 /**

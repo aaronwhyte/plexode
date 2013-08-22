@@ -6,6 +6,7 @@ function SpriteTemplate() {
   this.sledgeInvalidator = null;
   this.world = null;
   this.painter = null;
+  this.singer = null;
   this.pos = new Vec2d();
   this.vel = new Vec2d();
   this.rad = new Vec2d();
@@ -26,6 +27,11 @@ SpriteTemplate.prototype.setSledgeInvalidator = function(sledgeInvalidator) {
 
 SpriteTemplate.prototype.setWorld = function(world) {
   this.world = world;
+  return this;
+};
+
+SpriteTemplate.prototype.setSinger = function(singer) {
+  this.singer = singer;
   return this;
 };
 

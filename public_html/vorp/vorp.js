@@ -204,6 +204,10 @@ Vorp.prototype.addSprite = function(sprite) {
   if (painter) {
     this.vorpOut.addPainter(painter);
   }
+  var singer = sprite.getSinger();
+  if (singer) {
+    this.vorpOut.addSinger(singer);
+  }
   if (sprite instanceof PlayerAssemblerSprite) {
     // Assume there's exactly one PlayerAssembler per level for now.
     /** @type {PlayerAssemblerSprite} */
