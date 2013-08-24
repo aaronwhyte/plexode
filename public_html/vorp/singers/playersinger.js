@@ -3,19 +3,15 @@
  * @extends {Singer}
  */
 function PlayerSinger() {
-  console.log('PlayerSinger()');
   Singer.call(this);
   this.dieTime = Infinity;
   this.dying = false;
   this.now = 0;
-  this.thrusting = false;
   this.thrustFraction = 0;
   this.speed = 0;
 
   // audio nodes
-  this.wubOsc = null;
-  this.wubGain = null;
-  this.droneOsc = null;
+  this.thrustWub = null;
   this.masterGain = null;
   this.panner = null;
 }
@@ -38,33 +34,29 @@ PlayerSinger.prototype.sing = function(vorpOut, x, y) {
   }
   if (!this.dying) {
     this.panner.setPosition(this.pos.x, this.pos.y, 0);
-    this.masterGain.gain.value = (this.thrustFraction || this.speed > 10) ? this.thrustFraction + 0.2 : 0;
-    this.wubOsc.frequency.value = 5 + 40 * this.thrustFraction;
-    this.droneOsc.frequency.value = 5 + 12 * this.speed;
+    var s = this.speed / 30;
+    var t = this.thrustFraction;
+    if (t) t = 0.3 + this.thrustFraction * 0.7;
+    this.thrustWub.setValue(s * 0.7 + t * 0.3);
   }
 };
 
 PlayerSinger.prototype.initNodes = function(c) {
-  this.wubOsc = c.createOscillator();
-  this.wubOsc.type = 'sine';
+  var t = c.currentTime;
 
-  this.wubGain = c.createGainNode();
-
-  this.droneOsc = c.createOscillator();
-  this.droneOsc.type = 'square';
+  this.thrustWub = new WubOscillator(
+      30, 500,
+      5, 90,
+      0, 1.5);
+  this.thrustWub.createNodes(c);
+  this.thrustWub.setValue(0);
+  this.thrustWub.start(t);
 
   this.masterGain = c.createGainNode();
-
+  this.masterGain.gain.value = 1.5;
   this.panner = c.createPanner();
-  this.panner.setPosition(this.pos.x, this.pos.y, 0);
 
-  var t = c.currentTime;
-  this.wubOsc.start(t);
-  this.droneOsc.start(t);
-
-  this.droneOsc.connect(this.wubGain);
-  this.wubOsc.connect(this.wubGain.gain);
-  this.wubGain.connect(this.masterGain);
+  this.thrustWub.connect(this.masterGain);
   this.masterGain.connect(this.panner);
   this.panner.connect(c.destination);
 };
