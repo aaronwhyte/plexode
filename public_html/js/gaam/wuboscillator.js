@@ -29,8 +29,6 @@ WubOscillator.prototype.createNodes = function(ctx) {
   this.droneOsc.type = 'square';
 
   this.masterGain = ctx.createGainNode();
-  // TODO gain setter?
-  //this.masterGain.gain.value = 1;
 
   this.droneOsc.connect(this.wubGain);
   this.wubOsc.connect(this.wubGain.gain);

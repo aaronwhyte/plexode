@@ -27,6 +27,8 @@ PlayerSprite.prototype.constructor = PlayerSprite;
 
 PlayerSprite.ZOMBIFICATION_DURATION = 60;
 
+PlayerSprite.TRACTOR_ACCEL_MAX = 2.5;
+
 /**
  * @enum {number}
  */
@@ -79,7 +81,6 @@ PlayerSprite.prototype.act = function() {
   this.pos = this.getPos(this.pos);
   this.singer.setPosition(this.pos.x, this.pos.y);
   this.singer.setThrusting(
-      accelerating,
       (this.accel - PlayerSprite.MIN_ACCEL) /
           (PlayerSprite.MAX_ACCEL - PlayerSprite.MIN_ACCEL),
       this.vel.magnitude());
@@ -94,6 +95,7 @@ PlayerSprite.prototype.act = function() {
   if (this.grip == PlayerSprite.Grip.NONE) {
     if (!this.gripKeyDown()) {
       this.canGrip = true;
+      this.singer.setTractoring(0, 0);
     } else if (this.canGrip) {
       this.gripScan();
     }
@@ -142,10 +144,12 @@ PlayerSprite.prototype.gripScan = function() {
     // long-range directional seek
     this.scanInitVec.set(this.keysVec).scaleToLength(PlayerSprite.GRIP_SEEK_RANGE);
     this.gripScanSweep(this.scanInitVec, 1/8, 16);
+    this.singer.setTractoring(1, 0);
   } else {  
     // short-range circular seek
     this.scanInitVec.setXY(PlayerSprite.GRIP_RANGE, 0);
     this.gripScanSweep(this.scanInitVec, 1 , 16);
+    this.singer.setTractoring(0.8, 0);
   }
 };
 
@@ -225,6 +229,9 @@ PlayerSprite.prototype.looseForce = function() {
   }
   //accel.clipToMaxLength(PlayerSprite.MAX_TRACTOR_ACCEL);
   this.accelerate(accel);
+
+  this.setSingerTractorAccel(accel);
+
   var massRatio = this.mass / this.heldSprite.mass;
   this.heldSprite.accelerate(accel.scale(-massRatio));
   Vec2d.free(playerPos);
@@ -233,6 +240,12 @@ PlayerSprite.prototype.looseForce = function() {
   Vec2d.free(dVel);
 };
 
+PlayerSprite.prototype.setSingerTractorAccel = function(accel) {
+  var accelMag = accel.magnitude();
+  this.singer.setTractoring(0,
+      0.3 * this.kickPow / PlayerSprite.MAX_KICK_POW +
+          0.7 * accelMag / PlayerSprite.TRACTOR_ACCEL_MAX);
+};
 
 PlayerSprite.prototype.initStiffPose = function() {
   var playerPos = this.getPos(Vec2d.alloc());
@@ -263,6 +276,9 @@ PlayerSprite.prototype.stiffForce = function() {
     accel.scale(distFactor);
   }
   //accel.clipToMaxLength(PlayerSprite.MAX_TRACTOR_ACCEL);
+
+  this.setSingerTractorAccel(accel);
+
   this.accelerate(accel);
   var massRatio = this.mass / this.heldSprite.mass;
   this.heldSprite.accelerate(accel.scale(-massRatio));
@@ -312,6 +328,8 @@ PlayerSprite.prototype.breakGrip = function(opt_kick) {
   this.heldSprite = null;
   this.kickPow = 0;
   this.painter.setReleasing(opt_kick || 0);
+  this.singer.setKick(opt_kick || 0);
+  this.singer.setTractoring(0, 0);
 };
 
 PlayerSprite.prototype.die = function() {

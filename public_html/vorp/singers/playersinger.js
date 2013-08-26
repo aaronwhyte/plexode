@@ -8,10 +8,19 @@ function PlayerSinger() {
   this.dying = false;
   this.now = 0;
   this.thrustFraction = 0;
+  this.seekFraction = 0;
+  this.holdFraction = 0;
   this.speed = 0;
+  this.kick = 0;
 
   // audio nodes
   this.thrustWub = null;
+  this.thrustGain = null;
+
+  this.tractorSeekWub = null;
+  this.tractorHoldWub = null;
+  this.tractorGain = null;
+
   this.masterGain = null;
   this.panner = null;
 }
@@ -33,30 +42,67 @@ PlayerSinger.prototype.sing = function(vorpOut, x, y) {
     this.initNodes(c);
   }
   if (!this.dying) {
-    this.panner.setPosition(this.pos.x, this.pos.y, 0);
+    this.panner.setPosition(this.pos.x, this.pos.y, 150);
+
+    // movement noises
     var s = this.speed / 30;
     var t = this.thrustFraction;
     if (t) t = 0.3 + this.thrustFraction * 0.7;
-    this.thrustWub.setValue(s * 0.7 + t * 0.3);
+    var thrustVal = s * 0.7 + t * 0.3;
+    if (thrustVal < 0.01) thrustVal = 0;
+    this.thrustWub.setValue(thrustVal);
+    this.thrustGain.gain.value = thrustVal ? 1 : 0;
+
+    // tractor noises
+    this.tractorSeekWub.setValue(this.seekFraction);
+    this.tractorHoldWub.setValue(this.holdFraction);
   }
 };
 
 PlayerSinger.prototype.initNodes = function(c) {
   var t = c.currentTime;
 
+  // thrust
   this.thrustWub = new WubOscillator(
       30, 500,
       5, 90,
-      0, 1.5);
+      0.7, 0.5);
   this.thrustWub.createNodes(c);
   this.thrustWub.setValue(0);
   this.thrustWub.start(t);
+  this.thrustGain = c.createGainNode();
+  this.thrustGain.gain.value = 1.5;
+  this.thrustWub.connect(this.thrustGain);
+
+  this.tractorGain = c.createGainNode();
+  this.tractorGain.gain.value = 3;
+
+  // tractor seek
+  this.tractorSeekWub = new WubOscillator(
+      250, 3000,
+      20, 30,
+      0, 0.5);
+  this.tractorSeekWub.createNodes(c);
+  this.tractorSeekWub.setValue(0);
+  this.tractorSeekWub.start(t);
+  this.tractorSeekWub.connect(this.tractorGain);
+
+  // tractor hold
+  this.tractorHoldWub = new WubOscillator(
+      4000, 500,
+      400, 5,
+      0, 1);
+  this.tractorHoldWub.createNodes(c);
+  this.tractorHoldWub.setValue(0);
+  this.tractorHoldWub.start(t);
+  this.tractorHoldWub.connect(this.tractorGain);
 
   this.masterGain = c.createGainNode();
-  this.masterGain.gain.value = 1.5;
+  this.masterGain.gain.value = 1;
   this.panner = c.createPanner();
 
-  this.thrustWub.connect(this.masterGain);
+  this.thrustGain.connect(this.masterGain);
+  this.tractorGain.connect(this.masterGain);
   this.masterGain.connect(this.panner);
   this.panner.connect(c.destination);
 };
@@ -71,8 +117,16 @@ PlayerSinger.prototype.die = function() {
   this.masterGain.gain.value = 0;
 };
 
-PlayerSinger.prototype.setThrusting = function(thrusting, thrustFraction, speed) {
-  this.thrusting = thrusting;
+PlayerSinger.prototype.setThrusting = function(thrustFraction, speed) {
   this.thrustFraction = thrustFraction;
   this.speed = speed;
+};
+
+PlayerSinger.prototype.setTractoring = function(seekFraction, holdFraction) {
+  this.seekFraction = seekFraction;
+  this.holdFraction = holdFraction;
+};
+
+PlayerSinger.prototype.setKick = function(kick) {
+  this.kick = kick;
 };
