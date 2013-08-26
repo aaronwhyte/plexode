@@ -66,7 +66,7 @@ PlayerSinger.prototype.initNodes = function(c) {
   this.thrustWub = new WubOscillator(
       30, 500,
       5, 90,
-      0.7, 0.5);
+      0.3, 0.6);
   this.thrustWub.createNodes(c);
   this.thrustWub.setValue(0);
   this.thrustWub.start(t);
@@ -79,7 +79,7 @@ PlayerSinger.prototype.initNodes = function(c) {
 
   // tractor seek
   this.tractorSeekWub = new WubOscillator(
-      250, 3000,
+      125, 1000,
       20, 30,
       0, 0.5);
   this.tractorSeekWub.createNodes(c);
@@ -89,9 +89,9 @@ PlayerSinger.prototype.initNodes = function(c) {
 
   // tractor hold
   this.tractorHoldWub = new WubOscillator(
-      4000, 500,
-      400, 5,
-      0, 1);
+      1000, 100,
+      100, 5,
+      0, 0.7);
   this.tractorHoldWub.createNodes(c);
   this.tractorHoldWub.setValue(0);
   this.tractorHoldWub.start(t);

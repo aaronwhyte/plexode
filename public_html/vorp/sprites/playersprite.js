@@ -243,8 +243,8 @@ PlayerSprite.prototype.looseForce = function() {
 PlayerSprite.prototype.setSingerTractorAccel = function(accel) {
   var accelMag = accel.magnitude();
   this.singer.setTractoring(0,
-      0.3 * this.kickPow / PlayerSprite.MAX_KICK_POW +
-          0.7 * accelMag / PlayerSprite.TRACTOR_ACCEL_MAX);
+      0.1 * this.kickPow / PlayerSprite.MAX_KICK_POW +
+          0.9 * accelMag / PlayerSprite.TRACTOR_ACCEL_MAX);
 };
 
 PlayerSprite.prototype.initStiffPose = function() {
