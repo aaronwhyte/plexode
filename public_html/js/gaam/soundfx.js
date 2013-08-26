@@ -47,7 +47,7 @@ SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) 
 
   var osc = c.createOscillator();
   osc.frequency.setValueAtTime(freq1, t);
-  osc.frequency. exponentialRampToValueAtTime(freq2, t + attack + decay);
+  osc.frequency.exponentialRampToValueAtTime(freq2, t + attack + decay);
   osc.type = type;
   if (osc.start) {
     osc.start(t);

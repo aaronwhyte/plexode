@@ -328,7 +328,7 @@ PlayerSprite.prototype.breakGrip = function(opt_kick) {
   this.heldSprite = null;
   this.kickPow = 0;
   this.painter.setReleasing(opt_kick || 0);
-  this.singer.setKick(opt_kick || 0);
+  this.singer.setKick((opt_kick || 0.05) / PlayerSprite.MAX_KICK_POW);
   this.singer.setTractoring(0, 0);
 };
 

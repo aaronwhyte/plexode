@@ -8,25 +8,31 @@
  * @param wubFreq1
  * @param gain0
  * @param gain1
+ * @param {String=} opt_droneType square, sine, etc.
  * @constructor
  */
-function WubOscillator(droneFreq0, droneFreq1, wubFreq0, wubFreq1, gain0, gain1) {
+function WubOscillator(droneFreq0, droneFreq1, wubFreq0, wubFreq1, gain0, gain1, opt_droneType) {
   this.droneFreq0 = droneFreq0;
   this.droneFreq1 = droneFreq1;
   this.wubFreq0 = wubFreq0;
   this.wubFreq1 = wubFreq1;
   this.gain0 = gain0;
   this.gain1 = gain1;
+  this.droneType = opt_droneType || 'square';
 }
 
 WubOscillator.prototype.createNodes = function(ctx) {
   this.wubOsc = ctx.createOscillator();
+  if (!this.wubOsc.start && this.wubOsc.noteOn) this.wubOsc.start = this.wubOsc.noteOn;
+  if (!this.wubOsc.stop && this.wubOsc.noteOff) this.wubOsc.start = this.wubOsc.noteOff;
   this.wubOsc.type = 'sine';
 
   this.wubGain = ctx.createGainNode();
 
   this.droneOsc = ctx.createOscillator();
-  this.droneOsc.type = 'square';
+  if (!this.droneOsc.start && this.droneOsc.noteOn) this.droneOsc.start = this.droneOsc.noteOn;
+  if (!this.droneOsc.stop && this.droneOsc.noteOff) this.droneOsc.start = this.droneOsc.noteOff;
+  this.droneOsc.type = this.droneType;
 
   this.masterGain = ctx.createGainNode();
 
