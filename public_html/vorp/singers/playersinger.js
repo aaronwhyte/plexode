@@ -84,8 +84,8 @@ PlayerSinger.prototype.initNodes = function(c) {
   this.thrustWub = new WubOscillator(
       30, 500,
       5, 20,
-      0.3, 0.6,
-      'sine');
+      0.5, 0.6,
+      'square');
   this.thrustWub.createNodes(c);
   this.thrustWub.setValue(0);
   this.thrustWub.start(t);
