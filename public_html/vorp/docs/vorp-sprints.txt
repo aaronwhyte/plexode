@@ -28,51 +28,47 @@ v player thrust as first working example
 
 sound effects
 v player thrust & motion
-- player tractor beam
-  - activated
-  - scanning
-  - deactivated
-  - grabbed something
-  - holding(strength, force)
-  - kick(force)
-  - break
-- start level
-  - One chord getting bent up two octaves, then blinking on and off a bit.
-- player assembler
-  - creating player
-  - getting hit
-- player vs wall
-  - player hit
-  - wall hit
-- exit
-  - proximity noise
-  - level complete
-- block
-  - vs player
-  - vs wall
-  - vs block
-- button activate
-- door
-  - opening
-  - closing
-  - hit
-- scanner
-  - activated
-  - deactivated
-- gripper
+v player tractor beam
+  v activated
+  v scanning
+  v deactivated
+  v grabbed something
+  v holding(strength, force)
+  v kick(force)
+  v break
+- player assembly
+  - One chord getting bent up two octaves, then blinking on and off a bit?
+- gripper (refactor player tractorbeam code?)
   - proximity - scanning
   - grab
   - proximity - holding(force)
   - release
+- exit
+  - proximity noise
+  - level complete
+- button activate
+- door
+  - opening
+  - closing
+- scanner
+  - activated
+  - deactivated
 - zapper
   - deactivated
   - activated
   - humming active
+- collision noise rework?
+  - player
+  - wall
+  - block
+  - door
+  etc.
 v explosion
 - portal
   v teleport in
   v teleport out
   - collision with unteleportables
+- start level?
 
 - zombie assembler
 -
