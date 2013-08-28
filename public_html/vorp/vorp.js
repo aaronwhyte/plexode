@@ -383,6 +383,7 @@ Vorp.prototype.playerFullyZombified = function() {
 Vorp.prototype.assemblePlayer = function() {
   this.playerSprite = this.playerAssembler.createPlayer();
   this.addSprite(this.playerSprite);
+  this.vorpOut.assemblePlayerNoise(this.playerSprite.getPos(new Vec2d()));
 };
 
 Vorp.prototype.firePlasma = function(px, py, vx, vy) {

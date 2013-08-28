@@ -36,9 +36,8 @@ v player tractor beam
   v holding(strength, force)
   v kick(force)
   v break
-- player assembly
-  - One chord getting bent up two octaves, then blinking on and off a bit?
-- gripper (refactor player tractorbeam code?)
+v player assembly
+- gripper (refactor player tractor beam code?)
   - proximity - scanning
   - grab
   - proximity - holding(force)

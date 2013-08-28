@@ -51,7 +51,7 @@ VorpOut.prototype.addSinger = function(singer) {
 };
 
 /**
- * Paints with the paitners and sings with the singers, and cleans out the kaput ones.
+ * Paints with the painters and sings with the singers, and cleans out the kaput ones.
  */
 VorpOut.prototype.draw = function(now, cameraX, cameraY) {
   this.renderer.clear();
@@ -211,4 +211,25 @@ VorpOut.prototype.explode = function(x, y) {
 VorpOut.prototype.tap = function(pos, vol) {
   this.soundFx && this.soundFx.sound(pos, vol, 0, 0.005, this.r(1000), this.r(2000), 'square');
   this.soundFx && this.soundFx.sound(pos, vol, 0, 0.01, this.r(2000), this.r(1000), 'sine');
+};
+
+
+VorpOut.prototype.assemblePlayerNoise = function(pos) {
+  if (!this.soundFx) return;
+  this.soundFx.sound(pos, 0.09,
+      0.1, 0.001,
+      50, 1000,
+      'sine', 0);
+  this.soundFx.sound(pos, 0.09,
+      0.11, 0.001,
+      50, 2000,
+      'sine', 0);
+  this.soundFx.sound(pos, 0.06,
+      0.12, 0.005,
+      50, 4000,
+      'sine', 0.015);
+  this.soundFx.sound(pos, 0.03,
+      0.14, 0.1,
+      50, 8000,
+      'sine', 0.03);
 };

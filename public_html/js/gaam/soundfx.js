@@ -35,29 +35,32 @@ SoundFx.prototype.setCenter = function(x, y) {
  * @param {number} freq2
  * @param {String} type Wave type string (square, sine, etc)
  */
-SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type) {
+SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type, opt_delay) {
+  var delay = opt_delay || 0;
   if (!this.ctx) return;
   vol *= SoundFx.Z_DISTANCE;
   var c = this.ctx;
-  var t = c.currentTime;
+  var t0 = c.currentTime + delay;
+  var t1 = t0 + attack + decay + 0.1;
   var gain = c.createGainNode();
-  gain.gain.setValueAtTime(0, t);
-  gain.gain.linearRampToValueAtTime(vol, t + attack);
-  gain.gain.linearRampToValueAtTime(0, t + attack + decay);
+  gain.gain.value = 0;
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(vol, t0 + attack);
+  gain.gain.linearRampToValueAtTime(0, t0 + attack + decay);
 
   var osc = c.createOscillator();
-  osc.frequency.setValueAtTime(freq1, t);
-  osc.frequency.exponentialRampToValueAtTime(freq2, t + attack + decay);
+  osc.frequency.setValueAtTime(freq1, t0);
+  osc.frequency.exponentialRampToValueAtTime(freq2, t0 + attack + decay);
   osc.type = type;
   if (osc.start) {
-    osc.start(t);
+    osc.start(t0);
   } else if (osc.noteOn) {
-    osc.noteOn(t);
+    osc.noteOn(t0);
   }
   if (osc.stop) {
-    osc.stop(t + attack + decay + 0.1);
+    osc.stop(t1);
   } else if (osc.noteOff) {
-    osc.noteOff(t + attack + decay + 0.1);
+    osc.noteOff(t1);
   }
 
   var panner = c.createPanner();
