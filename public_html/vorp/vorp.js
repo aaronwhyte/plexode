@@ -119,7 +119,7 @@ Vorp.createVorp = function(vorpOut, gameClock, sledgeInvalidator) {
 Vorp.prototype.setEditable = function(editable) {
   this.editable = editable;
   this.vorpOut.setEditable(editable);
-}
+};
 
 Vorp.prototype.startLoop = function() {
   if (!this.editable) {

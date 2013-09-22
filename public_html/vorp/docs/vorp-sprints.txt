@@ -37,6 +37,9 @@ v player tractor beam
   v kick(force)
   v break
 v player assembly
+  - deactivated
+  - activated
+  - humming active
 - gripper (refactor player tractor beam code?)
   - proximity - scanning
   - grab
@@ -53,9 +56,6 @@ v player assembly
   - activated
   - deactivated
 - zapper
-  - deactivated
-  - activated
-  - humming active
 - collision noise rework?
   - player
   - wall

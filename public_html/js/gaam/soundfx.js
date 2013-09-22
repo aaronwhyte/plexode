@@ -5,6 +5,10 @@
  */
 function SoundFx(audioContext) {
   this.ctx = audioContext;
+  if (this.ctx) {
+    this.masterGainNode = this.ctx.createGainNode();
+    this.masterGainNode.connect(this.ctx.destination);
+  }
 }
 
 SoundFx.Z_DISTANCE = 200;
@@ -23,6 +27,10 @@ SoundFx.createInstance = function() {
 SoundFx.prototype.setCenter = function(x, y) {
   if (!this.ctx) return;
   this.ctx.listener.setPosition(x, y, SoundFx.Z_DISTANCE);
+};
+
+SoundFx.prototype.getMasterGainNode = function() {
+  return this.masterGainNode;
 };
 
 /**
@@ -68,7 +76,7 @@ SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type, 
 
   osc.connect(gain);
   gain.connect(panner);
-  panner.connect(c.destination);
+  panner.connect(this.masterGainNode);
 };
 
 

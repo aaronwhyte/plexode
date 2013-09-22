@@ -36,9 +36,8 @@ PlayerSinger.prototype.advance = function(now) {
 PlayerSinger.prototype.sing = function(vorpOut, x, y) {
   var sfx = vorpOut.soundFx;
   if (!sfx || !sfx.ctx) return;
-  var c = sfx.ctx;
   if (!this.masterGain) {
-    this.initNodes(c);
+    this.initNodes(sfx);
   }
   if (!this.dying) {
     this.panner.setPosition(this.pos.x, this.pos.y, 150);
@@ -77,7 +76,8 @@ PlayerSinger.prototype.sing = function(vorpOut, x, y) {
   }
 };
 
-PlayerSinger.prototype.initNodes = function(c) {
+PlayerSinger.prototype.initNodes = function(sfx) {
+  var c = sfx.ctx;
   var t = c.currentTime;
 
   // thrust
@@ -125,7 +125,7 @@ PlayerSinger.prototype.initNodes = function(c) {
   this.thrustGain.connect(this.masterGain);
   this.tractorGain.connect(this.masterGain);
   this.masterGain.connect(this.panner);
-  this.panner.connect(c.destination);
+  this.panner.connect(sfx.getMasterGainNode());
 };
 
 PlayerSinger.prototype.isKaput = function() {

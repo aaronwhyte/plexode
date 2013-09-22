@@ -217,19 +217,19 @@ VorpOut.prototype.tap = function(pos, vol) {
 VorpOut.prototype.assemblePlayerNoise = function(pos) {
   if (!this.soundFx) return;
   this.soundFx.sound(pos, 0.09,
-      0.1, 0.001,
+      0.04, 0.04,
       50, 1000,
       'sine', 0);
   this.soundFx.sound(pos, 0.09,
-      0.11, 0.001,
-      50, 2000,
-      'sine', 0);
-  this.soundFx.sound(pos, 0.06,
-      0.12, 0.005,
-      50, 4000,
-      'sine', 0.015);
-  this.soundFx.sound(pos, 0.03,
-      0.14, 0.1,
-      50, 8000,
+      0.06, 0.06,
+      100, 2000,
       'sine', 0.03);
+  this.soundFx.sound(pos, 0.06,
+      0.08, 0.08,
+      200, 4000,
+      'sine', 0.06);
+  this.soundFx.sound(pos, 0.03,
+      0.1, 0.1,
+      400, 8000,
+      'square', 0.09);
 };

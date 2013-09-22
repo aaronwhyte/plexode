@@ -126,6 +126,10 @@ function main() {
   var canvas = document.getElementById('canvas');
   var renderer = new Renderer(canvas, new Camera());
   var soundFx = SoundFx.createInstance();
+  var gainNode = soundFx.getMasterGainNode();
+  if (gainNode) {
+    gainNode.gain.value = 4;
+  }
   var vorpOut = new VorpOut(renderer, soundFx);
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
