@@ -20,8 +20,23 @@ OpStor.field = {
 };
 
 /**
- * Appends a new value to the stor. Creates a new names object if the name isn't in use.
- * @param clientOpId used by clients to re-order non-idempotent ops when there are multiple clients. See design doc.
+ * @return {Stor}
+ */
+OpStor.prototype.getStor = function() {
+  return this.stor;
+};
+
+/**
+ * @return {String}
+ */
+OpStor.prototype.getName = function() {
+  return this.name;
+};
+
+/**
+ * Appends a new value to the opstor. Creates a new named object if the name isn't in use.
+ * @param clientOpId used by clients to re-order non-idempotent ops when there are multiple clients.
+ *     See design doc.
  * @param op The actual operation payload
  * @return the server ID of the appended value
  */
@@ -29,10 +44,15 @@ OpStor.prototype.appendOp = function(clientOpId, op) {
   var nextIndex = this.stor.getNextIndex(this.name);
   var value = [nextIndex, clientOpId, op];
   var actualIndex = this.stor.appendValue(this.name, value);
-  if (nextIndex != actualIndex) throw Error("nextIndex " + nextIndex + " != actualIndex " + actualIndex);
+  if (nextIndex != actualIndex) {
+    throw Error("nextIndex " + nextIndex + " != actualIndex " + actualIndex);
+  }
   return actualIndex;
 };
 
+/**
+ * Writes metadata for this opstor if there isn't any in the store yet.
+ */
 OpStor.prototype.touch = function() {
   this.stor.getDataId(this.name);
 };
