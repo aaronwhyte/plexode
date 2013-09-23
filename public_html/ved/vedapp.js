@@ -359,7 +359,7 @@ VedApp.prototype.repopulate = function() {
     var opStor = new OpStor(this.stor, levelName);
     var ops = this.testLevelMap[levelName];
     for (var i = 0; i < ops.length; i++) {
-      opStor.appendOp('repop_' + i, ops[i]);
+      opStor.appendOp(ops[i]);
     }
   }
 };

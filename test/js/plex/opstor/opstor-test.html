@@ -13,19 +13,19 @@ addTest(function testServerAssignedOpIds() {
   sessionStorage.clear();
   var stor = new Stor(sessionStorage, 'opstor-test');
   var opStor = new OpStor(stor, 'foo');
-  opStor.appendOp('client1-100', {x:1});
-  opStor.appendOp('client2-100', {x:2});
-  opStor.appendOp('client1-101', {x:3});
+  opStor.appendOp({x:1});
+  opStor.appendOp({x:2});
+  opStor.appendOp({x:3});
   assertStringifyEquals(
       [
-        [1, 'client1-100', {x:1}],
-        [2, 'client2-100', {x:2}],
-        [3, 'client1-101', {x:3}]
+        [1, {x:1}],
+        [2, {x:2}],
+        [3, {x:3}]
       ],
       opStor.getValuesAfterIndex(-Infinity));
   assertStringifyEquals(
       [
-        [3, 'client1-101', {x:3}]
+        [3, {x:3}]
       ],
       opStor.getValuesAfterIndex(2));
 });

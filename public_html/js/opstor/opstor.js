@@ -15,8 +15,7 @@ function OpStor(stor, name) {
  */
 OpStor.field = {
   OP_INDEX: 0,
-  CLIENT_OP_ID: 1,
-  OP: 2
+  OP: 1
 };
 
 /**
@@ -35,14 +34,12 @@ OpStor.prototype.getName = function() {
 
 /**
  * Appends a new value to the opstor. Creates a new named object if the name isn't in use.
- * @param clientOpId used by clients to re-order non-idempotent ops when there are multiple clients.
- *     See design doc.
  * @param op The actual operation payload
  * @return the server ID of the appended value
  */
-OpStor.prototype.appendOp = function(clientOpId, op) {
+OpStor.prototype.appendOp = function(op) {
   var nextIndex = this.stor.getNextIndex(this.name);
-  var value = [nextIndex, clientOpId, op];
+  var value = [nextIndex, op];
   var actualIndex = this.stor.appendValue(this.name, value);
   if (nextIndex != actualIndex) {
     throw Error("nextIndex " + nextIndex + " != actualIndex " + actualIndex);

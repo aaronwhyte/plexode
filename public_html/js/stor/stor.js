@@ -22,9 +22,9 @@ Stor.Ops = {
   APPEND_VALUE: 'append_value'
 };
 
-//prefix/name/awesometown-level: 123456
-//prefix/data/123456/1: [{...},...]
-//prefix/data/123456/2: [{...},...]
+//prefix/name/awesometown-level: abc
+//prefix/data/abc/1: [{...},...]
+//prefix/data/abc/2: [{...},...]
 
 Stor.prototype.listenToStorage = function() {
   window.addEventListener("storage", this.getStorageListener(), true);
@@ -95,8 +95,8 @@ Stor.prototype.getDataId = function(name) {
   if (!dataId) {
     // assign a new data address
     while (true) {
-      // pick a random non-zero 32-bit number that's not in use.
-      dataId = Math.floor(Math.random() * 0xfffffffe) + 1;
+      // pick a random non-zero 1-3 character base-32 number that's not in use.
+      dataId = Number(Math.floor(Math.random() * (32 * 32 * 32 - 1)) + 1).toString(32);
       if (!this.storage.getItem(this.getKeyForDataIndex(dataId, 1))) {
         // Write the new name/dataId pair.
         this.storage.setItem(nameKey, dataId);

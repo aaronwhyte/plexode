@@ -747,7 +747,7 @@ GrafEd.prototype.redo = function() {
 GrafEd.prototype.commitOpsInternal = function(ops) {
   if (this.opStor) {
     for (var i = 0; i < ops.length; i++) {
-      this.opStor.appendOp(i, ops[i]);
+      this.opStor.appendOp(ops[i]);
     }
     this.syncOps();
   } else {
