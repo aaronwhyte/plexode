@@ -72,6 +72,7 @@ VORP_LESSONS = (
   ("lesson10", "Lesson 10: Teleport Other Things",
     "You can teleport blocks. Sure, why not?"),
 )
+VORP_LESSONS = ()
 
 VORP_LEVELS = (
   ("level1", "Level 1: Collection", "Nice Old Teleporter Puzzle"),
@@ -82,7 +83,7 @@ VORP_LEVELS = (
   ("level6", "Level 6: Teleport Zombies", "Go on the Offensive"),
   #("level8", "Level 8: Battle Grid", "Destroy Them All"),
 )
-
+VORP_LEVELS = ()
 
 def formatLevelDirectory(levels):
   h = []

@@ -1,40 +1,31 @@
 #!/usr/bin/env python
 
 import format
+import os
 
-# TODO: Move this whole thing to glorious photonpotato.com/vorp/edit/
+def getFileNamesInPath(startPath):
+  names = []
+  for root, dirs, files in os.walk(startPath):
+    for fname in files:
+      names.append(os.path.join(root, fname))
+  return names
 
-def formatVed(vorpJsName, vedJsName):
-  name = 'vorp/edit'
+def formatVed(vorpJsName):
+  name = 'vorp'
   h = []
   h.append(format.headStart(name, 2))
   h.append("""
-<link rel="stylesheet" type="text/css" href="../../css/plexode3.css">
-<link rel="stylesheet" type="text/css" href="../vorp.css">
-<link rel="stylesheet" type="text/css" href="./ved.css">
+<link rel="stylesheet" type="text/css" href="../css/plexode3.css">
+<link rel="stylesheet" type="text/css" href="vorp.css">
+<link rel="stylesheet" type="text/css" href="edit/ved.css">
+""")
+  h.append('<script src="%s"></script>' % vorpJsName)
 
-<script src="../""" + vorpJsName + """"></script>
-<script src="./""" + vedJsName + """"></script>
+#  levelNames = getFileNamesInPath("../levels/")
+#  for levelName in levelNames:
+#    h.append('<script src="%s"></script>\n' % levelName);
 
-<script src="../lesson1/level.js"></script>
-<script src="../lesson2/level.js"></script>
-<script src="../lesson3/level.js"></script>
-<script src="../lesson4/level.js"></script>
-<script src="../lesson5/level.js"></script>
-<script src="../lesson6/level.js"></script>
-<script src="../lesson7/level.js"></script>
-<script src="../lesson8/level.js"></script>
-<script src="../lesson9/level.js"></script>
-<script src="../lesson10/level.js"></script>
-
-<script src="../level1/level.js"></script>
-<script src="../level2/level.js"></script>
-<script src="../level3/level.js"></script>
-<script src="../level4/level.js"></script>
-<script src="../level5/level.js"></script>
-<script src="../level6/level.js"></script>
-<script src="../level8/level.js"></script>
-
+  h.append("""
 <script>
 var vedApp;
 function main() {

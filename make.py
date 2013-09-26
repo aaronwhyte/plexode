@@ -64,15 +64,15 @@ def buildPlexode(bdir):
   vorpJsPublicHtmlPath = os.path.join('vorp', vorpJsName)
   concatenateJs(bdir, getVorpJsFileNames(), vorpJsPublicHtmlPath)
 
-  print "compiling ved JS"
-  vedJsName = 'ved_%s.js' % str(int(time.time() * 1000))
-  vedJsPublicHtmlPath = os.path.join('vorp/edit', vedJsName)
-  concatenateJs(bdir, getVedJsFileNames(), vedJsPublicHtmlPath)
+#  print "compiling ved JS"
+#  vedJsName = 'ved_%s.js' % str(int(time.time() * 1000))
+#  vedJsPublicHtmlPath = os.path.join('vorp/edit', vedJsName)
+#  concatenateJs(bdir, getVedJsFileNames(), vedJsPublicHtmlPath)
 
-  print "generating vorp & ved index.html files"
-  build.writePublicHtml(bdir, 'vorp', vorp.formatVorp())
-  vorp.writePublicHtmlForAllLevels(bdir, "vorp/", vorpJsName);
-  build.writePublicHtml(bdir, 'vorp/edit', ved.formatVed(vorpJsName, vedJsName))
+  print "generating vorp index.html files"
+#  build.writePublicHtml(bdir, 'vorp', vorp.formatVorp())
+#  vorp.writePublicHtmlForAllLevels(bdir, "vorp/", vorpJsName);
+  build.writePublicHtml(bdir, 'vorp', ved.formatVed(vorpJsName))
 
   print "DONE building plexode"
 
@@ -90,12 +90,13 @@ def getJsFileNamesInPath(startPath):
 def getVorpJsFileNames():
   js = []
   prefix = 'public_html/js/'
+  js.extend(getJsFileNamesInPath('%splex' % prefix))
   js.extend(getJsFileNamesInPath('%sgaam' % prefix))
   js.extend(getJsFileNamesInPath('%sged' % prefix))
   js.extend(getJsFileNamesInPath('%sgraf' % prefix))
-
-  js.extend(getJsFileNamesInPath('public_html/ved'))
-
+  js.extend(getJsFileNamesInPath('%sstor' % prefix))
+  js.extend(getJsFileNamesInPath('%sopstor' % prefix))
+  js.extend(getJsFileNamesInPath('%s../vorp/levels' % prefix))
   miscDeps = [
     'circularqueue.js',
     'depinj.js',
@@ -119,30 +120,9 @@ def getVorpJsFileNames():
   for dep in miscDeps:
     js.append('%s%s' % (prefix, dep))
 
-  vorpJs = getJsFileNamesInPath('public_html/vorp')
-  for dep in vorpJs:
-    if dep[-8:] != 'level.js':
-      js.append(dep)
-
-  return js
-
-
-def getVedJsFileNames():
-  # These are files above and beyond what Vorp requires.
-  # The compiled Vorp fils will be pulled in by Ved pages, too.
-  js = []
-  prefix = 'public_html/js/'
-  js.extend(getJsFileNamesInPath('%splex' % prefix))
-  js.extend(getJsFileNamesInPath('%sged' % prefix))
-  js.extend(getJsFileNamesInPath('%sgraf' % prefix))
-  js.extend(getJsFileNamesInPath('%sstor' % prefix))
-  js.extend(getJsFileNamesInPath('%sopstor' % prefix))
-  miscDeps = [
-    'plex/array.js',
-  ]
-  for dep in miscDeps:
-    js.append('%s%s' % (prefix, dep))
+  js.extend(getJsFileNamesInPath('public_html/vorp/js'))
   js.extend(getJsFileNamesInPath('public_html/ved'))
+
   return js
 
 def concatenateJs(bdir, sourcePaths, outputPublicHtmlPath):
