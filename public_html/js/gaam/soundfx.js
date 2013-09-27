@@ -13,14 +13,17 @@ function SoundFx(audioContext) {
 
 SoundFx.Z_DISTANCE = 200;
 
+SoundFx.audioContext = null;
+
 SoundFx.createInstance = function() {
-  var ctx = null;
-  if (typeof AudioContext !== 'undefined') {
-    ctx = new AudioContext();
-  } else if (typeof webkitAudioContext !== 'undefined') {
-    ctx = new webkitAudioContext();
+  if (!SoundFx.audioContext) {
+    if (typeof AudioContext !== 'undefined') {
+      SoundFx.audioContext = new AudioContext();
+    } else if (typeof webkitAudioContext !== 'undefined') {
+      SoundFx.audioContext = new webkitAudioContext();
+    }
   }
-  return new SoundFx(ctx);
+  return new SoundFx(SoundFx.audioContext);
 };
 
 

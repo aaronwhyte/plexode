@@ -62,8 +62,20 @@ VedApp.prototype.render = function() {
 
   var hash = plex.url.getFragment();
   var query = plex.url.decodeQuery(hash);
-  var level = query[VedApp.Params.LEVEL];
   var mode = query[VedApp.Params.MODE];
+  var level = query[VedApp.Params.LEVEL];
+  if (!level) {
+    for (var key in query) {
+      if (!query[key]) {
+        // The "default key" is level, and level becomes the value.
+        level = key;
+      }
+    }
+  }
+
+  if (level && !mode) {
+    mode = VedApp.Mode.PLAY;
+  }
 
   if (mode == VedApp.Mode.PLAY) {
     this.renderPlayMode(appDiv, level);
@@ -93,13 +105,10 @@ VedApp.prototype.renderDirectory = function(appDiv) {
     var levelDiv = plex.dom.ce('div', appDiv);
     plex.dom.appendClass(levelDiv, 'vedDirectoryRow');
 
-    var editLink = plex.dom.ce('a', levelDiv);
-    editLink.href = '#' + plex.url.encodeQuery({
-      mode: VedApp.Mode.EDIT,
-      level: levelName
-    });
-    plex.dom.ct(levelName || ' ', editLink);
-    plex.dom.appendClass(editLink, 'vedNavLink');
+    var playLink = plex.dom.ce('a', levelDiv);
+    playLink.href = '#' + encodeURIComponent(levelName);
+    plex.dom.ct(levelName || ' ', playLink);
+    plex.dom.appendClass(playLink, 'vedNavLink');
   }
 
   plex.dom.ce('br', appDiv);
@@ -148,8 +157,12 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelName, renderMode) {
   modesDiv.className = 'vedModesDiv';
 
   // right mode switches
-  for (var k in VedApp.Mode) {
-    var mode = VedApp.Mode[k];
+  var order = [
+    VedApp.Mode.PLAY,
+    VedApp.Mode.EDIT,
+    VedApp.Mode.JSON];
+  for (var i = 0; i < order.length; i++) {
+    var mode = order[i];
     var modeElem;
     if (renderMode == mode) {
       modeElem = plex.dom.ce('span', modesDiv);

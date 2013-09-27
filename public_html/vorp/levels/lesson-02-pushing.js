@@ -1,5 +1,5 @@
 var vorpLevels = vorpLevels || {};
-vorpLevels['lesson 2'] = [
+vorpLevels['lesson-02'] = [
   {
     "type": "addCluster",
     "id": "7"
@@ -72,7 +72,7 @@ vorpLevels['lesson 2'] = [
     "type": "setData",
     "id": "2866",
     "key": "url",
-    "value": "../lesson3/"
+    "value": "#lesson-03"
   },
   {
     "type": "addCluster",
