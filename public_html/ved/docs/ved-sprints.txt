@@ -1,81 +1,31 @@
-2013.01.04 - 2013.01.16
-Improved Dev Key/Mouse Controls
-Primary UX study findings:
-* People can't figure out how it works without extensively studying the help.
-* People can't find the help.
-* Even with help, everything's a little hard, and two
-* Linking things is totes imposs-EE-blay for people.
-Mouse UI adjustments:
-v pan: mouse-drag empty area
-Without Selection
-v drag unselected: down on unselected, drag, up
-v link:
-  v down on linkpoint, drag to other linkpoint, up
-  v linking-mode indicator, like a dimmed line from the start to the cursor
-With Selected Items
-v drag selected:
-  v down on selected, drag, up.
-  v Remove "D".
 
-2013.01.19
-v Text labels on parts
+2013-09-22 -
+Sharing 1.0, editing and playing 2.0, merging Vorp and Ved
+- Official levels are uneditable but can be copied and edited.
+  v uneditable
+  - copy button in level bar
+v Custom levels are just below official ones.
+v "New Level" button adds a generic new level
 
-2013.01.19 - 2013.01.22
-sysclips widget
-v help-like expand/collapse widget
-v get all items to render in wrapper
-v selection
-  v attach click/select event from item canvas to gedui
-    x embed canvases in buttons?
-    v identify which clip was selected
-  v copy sysclip to currentClip
-  v collapse menu
-v BONUS toggle menu key 'm' with help doc
+Sharing
+- Encoding
+  - Encode any level into a linkifier-friendly URL, w hash param like level=data~your-data-here
+  - Make a new "share" view that renders an encoded URL w instructions on how to use it.
+  v round floating-pt precision during edits to shrink data size
+- Decode level=data~your-data-here URLs
 
-2013.01.27
-v JSON export mode
+- Auto-update data URLs when you edit the data??
+- Add "copy to localstorage" to data URLs.
 
-2013.01.28 - 2013.02.01
-Field editing
-v Render data
-v Edit button
-v Edit form
-v Save and stuff
+Titles and Descriptions
+- Add metadata cluster with title and description data
+- Display those in Play mode.
+- Make those editable in the editor
+- Update builtin levels to include the old titles and descriptions
+- Show titles in directory?
 
-DONE! Milestone: Ship fun levels created entirely in Ved
-v Ved usable by me for editing.
-v Some way to publish levels
-  v JSON view + cut-n-paste?
-v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
-v Change level creation flow
-  v Add "new level" button to vedapp home
-  x Remove list of existing levels from ved.
-  x Change vorpLevels from key/val pair to array, removing name and desc.
-v Actually make new levels.
-  v Create lesson level JSON
-    v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
-    v 2: You can push things out of your way.
-    v 3: Touch buttons and sensors to make things happen.
-    v 4: Dying is no big deal. Sometimes you need to do it on purpose to solve a level.
-      v Add "NOT" logic sprite
-        v sprite itself
-        v transformer
-        v sysclip item
-    v 5: You have a tractor beam! Hold Z while moving around to grab things. Press X to let go.
-      v add big_block object
-      v player must pull a big block out of a hole, or grab a block on the far side of a zapper.
-    v 6  grip-switches
-    v 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
-    v 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
-    v 9: You can grab a teleporter and carry it around.
-  v Make lesson JSON into real connected levels.
-  v Challenges
-    v teleporting saves time, and stuff
-    v trading up with grippers?
-  v Apology for Vorp production values.
-v Push
-v Publicize
-2013-02-13: Nailed it.
+Milestone: Ship Ved with easy level sharing! Post levels as URLs!
+
 ===================================================================================
 
 Add real Loopwood front page.
@@ -87,6 +37,8 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
 
 ===================================================================================
 
+Editor Polish
+- make wall grab-points long and aligned with the wall, like a lozenge, so corners can be pulled apart easily.
 - Esc to close dialogs
 - Redo editor help.
   - "h" or "?" to toggle.
@@ -106,20 +58,7 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
     - turn field pink or something (don't do text, since "empty" might be invalid)
 - curved wires
 - arrows on jacks
-
-Level Creation Process, merging Vorp and Ved
-- Official levels are uneditable but have a "copy and edit" button (?)
-- Custom levels are just below official ones. They have ordered number names? Or namegenerator?
-- "New Level" button adds a generic new level
-
-Sharing
-- Encoding
-  - Encode any level into a linkifier-friendly URL
-  - figure out best dictionary
-  v round floating-pt precision during edits to shrink URL
-- Decoding
-
-Milestone: Ship Ved with easy level sharing
+- Fix the snap-to-grid UI somehow.
 
 ===================================================================================
 
