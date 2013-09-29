@@ -22,6 +22,10 @@ Stor.Ops = {
   APPEND_VALUE: 'append_value'
 };
 
+Stor.prototype.getPrefix = function() {
+  return this.prefix;
+};
+
 //prefix/name/awesometown-level: abc
 //prefix/data/abc/1: [{...},...]
 //prefix/data/abc/2: [{...},...]
