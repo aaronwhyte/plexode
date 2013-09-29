@@ -20,18 +20,13 @@ def formatVed(vorpJsName):
 <link rel="stylesheet" type="text/css" href="edit/ved.css">
 """)
   h.append('<script src="%s"></script>' % vorpJsName)
-
-#  levelNames = getFileNamesInPath("../levels/")
-#  for levelName in levelNames:
-#    h.append('<script src="%s"></script>\n' % levelName);
-
   h.append("""
 <script>
 var vedApp;
 function main() {
   var stor = new Stor(localStorage, 'ved');
   stor.listenToStorage();
-  vedApp = new VedApp(document.getElementById('vedroot'), stor, vorpLevels);
+  vedApp = new VedApp(document.getElementById('vedroot'), stor);
   vedApp.render();
 }
 </script>

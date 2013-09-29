@@ -7,15 +7,20 @@ Sharing 1.0, editing and playing 2.0, merging Vorp and Ved
 v Custom levels are just below official ones.
 v "New Level" button adds a generic new level
 
+2013-09-29 done in one day!
 Sharing
-- Encoding
-  - Encode any level into a linkifier-friendly URL, w hash param like level=data~your-data-here
-  - Make a new "share" view that renders an encoded URL w instructions on how to use it.
+v Encoding
+  v Encode any level into a linkifier-friendly URL, w hash param like level=data~your-data-here
+  v Make a new "share" view that renders an encoded URL w instructions on how to use it.
   v round floating-pt precision during edits to shrink data size
-- Decode level=data~your-data-here URLs
+v Decode level=data~your-data-here URLs
+
+Read-only editor mode
+- for data~ levels
+- for builtin~ levels
+- visual cue and "clone" button
 
 - Auto-update data URLs when you edit the data??
-- Add "copy to localstorage" to data URLs.
 
 Titles and Descriptions
 - Add metadata cluster with title and description data

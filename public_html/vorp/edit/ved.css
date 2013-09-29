@@ -13,7 +13,7 @@ body {
   -ms-user-select: text;
 }
 
-.vedLeftLink, .vedEditTitle, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
+.vedLeftLink, .vedLevelTitle, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
   margin:0 0.5em;
   padding:0.3em 0.8em;
   background-color:rgba(64, 64, 64, 0.7);
@@ -37,9 +37,14 @@ span.vedModeLink {
   color:black;
 }
 
-.vedLeftLink, .vedEditTitle {
+.vedLeftLink, .vedLevelTitle {
   float:left;
 }
+
+/*.vedLevelTitle {*/
+  /*max-height:2em;*/
+  /*overflow:hidden;*/
+/*}*/
 
 .vedModesDiv {
   float:right;
