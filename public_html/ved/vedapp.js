@@ -222,10 +222,19 @@ VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
   } else if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
     var opStor = new OpStor(this.stor, name);
     ops = opStor.getValuesAfterIndex(-1);
+    for (var i = 0; i < ops.length; i++) {
+      ops[i] = ops[i][OpStor.field.OP];
+    }
   } else if (levelPrefix == VedApp.LevelPrefix.DATA) {
     var json = this.squisher.unsquish(name);
     ops = JSON.parse(json);
   }
+
+  // compress the ops
+  var model = new GrafModel();
+  model.applyOps(ops);
+  ops = model.createOps();
+
   return ops || [];
 };
 
@@ -253,15 +262,25 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
 
   var splitName = this.splitLevelAddress(levelAddress);
+  var plexKeys = new plex.Keys();
+  var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
+  this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
+  var clipboard = this.createClipboard(appDiv);
+  var grafEd, grafUi, editable;
   if (splitName[0] == VedApp.LevelPrefix.LOCAL) {
-    var plexKeys = new plex.Keys();
-    var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
-    this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
-    var clipboard = this.createClipboard(appDiv);
-    var grafUi = this.createGrafUi(appDiv, splitName[1], clipboard, grafUiKeyCombos);
-    grafUi.startLoop();
-    this.looper = grafUi;
+    editable = true;
+    grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, splitName[1]));
+  } else {
+    editable = false;
+    var model = new GrafModel();
+    var ops = this.getOpsForLevelAddress(levelAddress);
+    model.applyOps(ops);
+    grafEd = new GrafEd(model);
   }
+  grafUi = this.createGrafUi(appDiv, grafEd, clipboard, grafUiKeyCombos);
+  grafUi.setEditable(editable);
+  grafUi.startLoop();
+  this.looper = grafUi;
 };
 
 VedApp.prototype.renderHelp = function(appDiv, plexKeys, grafUiKeyCombos) {
@@ -296,10 +315,9 @@ VedApp.prototype.renderSysClipWrapper = function(appDiv) {
   return wrapper;
 };
 
-VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKeyCombos) {
+VedApp.prototype.createGrafUi = function(appDiv, grafEd, clipboard, grafUiKeyCombos) {
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.className = 'vedEditCanvas';
-  var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
   var model = grafEd.getModel();
   var camera = new Camera();
   var renderer = new Renderer(canvas, camera);
@@ -338,8 +356,7 @@ VedApp.prototype.createClipboard = function(appDiv) {
 VedApp.prototype.createVorpFromOps = function(ops) {
   var grafModel = new GrafModel();
   for (var i = 0; i < ops.length; i++) {
-    // TODO pull actual ops out of opstore jazz before calling createVorpFromOps.
-    grafModel.applyOp(ops[i][OpStor.field.OP] || ops[i]);
+    grafModel.applyOp(ops[i]);
   }
   // create vorp instance
   var gameClock = new GameClock();

@@ -13,13 +13,14 @@ v Encoding
   v round floating-pt precision during edits to shrink data size
 v Decode level=data~your-data-here URLs
 
+2013-09-29 - 
 Read-only editor mode
-- for data~ levels
-- for builtin~ levels
+v for data~ levels
+v for builtin~ levels
 - visual cue and "clone" button
 - make sure clip copying still works
 
-Level copying to localtorage
+Level copying to localstorage
 - builtins can be copied
 - data~ levels can be copied
 - even local~ levels can be cloned, just to make it monotonous.

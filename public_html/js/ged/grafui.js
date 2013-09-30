@@ -52,6 +52,8 @@ function GrafUi(grafEd, renderer, grafRend, grafGeom, plugin, clipboard, clipMen
   this.contentsFramed = false;
 
   this.snap = GrafUi.MIN_SNAP;
+
+  this.editable = true;
 }
 
 GrafUi.FPS = 30;
@@ -114,6 +116,10 @@ GrafUi.Action = {
   REDO: 'redo',
 
   TOGGLE_CLIP_MENU: 'toggle_clip_menu'
+};
+
+GrafUi.prototype.setEditable = function(editable) {
+  this.editable = editable;
 };
 
 GrafUi.prototype.startLoop = function() {
@@ -213,19 +219,16 @@ GrafUi.prototype.getMouseDownListener = function() {
     var id = self.grafGeom.getIdAtVec(worldPos);
     var editId = self.grafGeom.getNearestEditButtonPartId(worldPos);
     var inDefaultMode = self.mode == GrafUi.Mode.DEFAULT;
-//    if (inDefaultMode && event.shiftKey) {
-//      self.startSelection();
-//    }
     if (id == null && editId == null) {
       self.panning = true;
       self.setCanvasPosWithEvent(event);
-    } else if (inDefaultMode && editId) {
+    } else if (self.editable && inDefaultMode && editId) {
       self.startEditingData(editId);
-    } else if (inDefaultMode && self.grafEd.getJack(id)) {
+    } else if (self.editable && inDefaultMode && self.grafEd.getJack(id)) {
       self.startDraggingJack(id);
-    } else if (inDefaultMode && self.grafEd.isSelected(id)) {
+    } else if (self.editable && inDefaultMode && self.grafEd.isSelected(id)) {
       self.startDraggingSelection();
-    } else if (inDefaultMode && self.grafEd.getPart(id)) {
+    } else if (self.editable && inDefaultMode && self.grafEd.getPart(id)) {
       self.startDraggingPart(id);
     }
   };
@@ -238,10 +241,6 @@ GrafUi.prototype.getMouseUpListener = function() {
     event = event || window.event;
     self.panning = false;
     self.setCanvasPosWithEvent(event);
-
-//    if (self.mode == GrafUi.Mode.SELECT) {
-//      self.endSelection();
-//    }
     if (self.mode == GrafUi.Mode.DRAG_SELECTION) {
       self.endDraggingSelection();
     } else if (self.mode == GrafUi.Mode.DRAG_PART) {
@@ -297,15 +296,17 @@ GrafUi.prototype.getKeyDownListener = function() {
 
     // delete
     if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.DELETE)) {
-      self.viewDirty = true;
-      self.plugin.invalidate();
-      self.grafEd.deleteSelection();
+      if (self.editable) {
+        self.viewDirty = true;
+        self.plugin.invalidate();
+        self.grafEd.deleteSelection();
+      }
       // don't do browser "back" navigation
       event.preventDefault();
     }
 
     // link
-    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.LINK)) {
+    if (self.editable && self.keyCombos.eventMatchesAction(event, GrafUi.Action.LINK)) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.linkSelectedJacks();
@@ -317,12 +318,12 @@ GrafUi.prototype.getKeyDownListener = function() {
     }
 
     // undo/redo
-    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNDO)) {
+    if (self.editable && self.keyCombos.eventMatchesAction(event, GrafUi.Action.UNDO)) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.undo();
     }
-    if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.REDO)) {
+    if (self.editable && self.keyCombos.eventMatchesAction(event, GrafUi.Action.REDO)) {
       self.viewDirty = true;
       self.plugin.invalidate();
       self.grafEd.redo();
@@ -348,7 +349,7 @@ GrafUi.prototype.getKeyDownListener = function() {
       }
 
       // paste pseudomode
-      if (self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
+      if (self.editable && self.keyCombos.eventMatchesAction(event, GrafUi.Action.PASTE)) {
         var pasteModel = self.clipboard.getModel();
         if (pasteModel) {
           self.mode = GrafUi.Mode.PASTE;
@@ -384,6 +385,7 @@ GrafUi.prototype.getKeyUpListener = function() {
 
 
 GrafUi.prototype.startEditingData = function(objId) {
+  if (!this.editable) return;
   this.editingId = objId;
   this.mode = GrafUi.Mode.EDIT_DATA;
   var obj = this.grafEd.getModel().getObj(objId);
