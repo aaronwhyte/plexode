@@ -1,10 +1,8 @@
 
-2013-09-22 -
-Sharing 1.0, editing and playing 2.0, merging Vorp and Ved
-- Official levels are uneditable but can be copied and edited.
-  v uneditable
-  - copy button in level bar
-v Custom levels are just below official ones.
+2013-09-22 - 2013-09-29
+New directory
+v Official levels are on top, and not in localstorage.
+v localstorage levels are just below official ones.
 v "New Level" button adds a generic new level
 
 2013-09-29 done in one day!
@@ -19,8 +17,14 @@ Read-only editor mode
 - for data~ levels
 - for builtin~ levels
 - visual cue and "clone" button
+- make sure clip copying still works
 
-- Auto-update data URLs when you edit the data??
+Level copying to localtorage
+- builtins can be copied
+- data~ levels can be copied
+- even local~ levels can be cloned, just to make it monotonous.
+
+- Auto-update data URLs when you edit the data?? Or force a copy to localstorage?
 
 Titles and Descriptions
 - Add metadata cluster with title and description data
