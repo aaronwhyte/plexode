@@ -375,7 +375,7 @@ VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
 };
 
 VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
-  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.JSON);
+  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.SHARE);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
   var ops = this.getOpsForLevelAddress(levelAddress);
   var json = JSON.stringify(ops); // compact JSON, nor prety printed
