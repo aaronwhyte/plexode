@@ -80,6 +80,13 @@ Stor.prototype.getNames = function() {
 };
 
 /**
+ * @return {boolean}
+ */
+Stor.prototype.containsName = function(name) {
+  return plex.array.contains(this.getNames(), name);
+};
+
+/**
  * Appends new values to the stor. Creates a new names object if the name isn't in use.
  * @param name
  * @param values

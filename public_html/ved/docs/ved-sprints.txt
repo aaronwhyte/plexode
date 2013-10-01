@@ -20,12 +20,25 @@ v for builtin~ levels
 - visual cue and "clone" button
 - make sure clip copying still works
 
+2013-09-30
 Level copying to localstorage
-- builtins can be copied
-- data~ levels can be copied
-- even local~ levels can be cloned, just to make it monotonous.
+v builtins can be copied
+v data~ levels can be copied
+v even local~ levels can be cloned, just to make it monotonous.
 
-- Auto-update data URLs when you edit the data?? Or force a copy to localstorage?
+x Auto-update data URLs when you edit the data?? Or force a copy to localstorage?
+
+Fix ghost noises
+- clean up sounds when exiting level
+- or when entering one.
+
+Delete level from level view
+- stor delete
+- opstor delete
+- delete button near copy button
+
+- Make copy and delete buttons not look so crappy
+
 
 Titles and Descriptions
 - Add metadata cluster with title and description data

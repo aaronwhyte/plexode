@@ -137,7 +137,16 @@ VedApp.prototype.renderDirectory = function(appDiv) {
   plex.dom.appendClass(createButton, 'vedButton');
   plex.dom.ct('Create new level', createButton);
   createButton.onclick = function() {
-    self.createLevel();
+    var newName = prompt("New level name?");
+    if (!newName) {
+      alert("That's not a name.");
+      return;
+    }
+    if (self.stor.containsName(newName)) {
+      alert("There's already a level with that name");
+      return;
+    }
+    self.createLevel(newName);
     self.render();
   };
 };
@@ -176,22 +185,41 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
     plex.dom.ct(mode, modeElem);
   }
 
+  var copyButton = plex.dom.ce('button', appDiv);
+  plex.dom.appendClass(copyButton, 'vedButton');
+  plex.dom.ct('Copy level', copyButton);
+  var self = this;
+  copyButton.onclick = function() {
+    var newName = prompt("New level name?");
+    if (!newName) {
+      alert("That's not a name.");
+      return;
+    }
+    if (self.stor.containsName(newName)) {
+      alert("There's already a level with that name");
+      return;
+    }
+    self.createLevel(newName, self.getOpsForLevelAddress(levelAddress));
+    self.getModeLinkFn(VedApp.Mode.EDIT, VedApp.LevelPrefix.LOCAL + newName)();
+  };
+
   // title
   var titleSpan = plex.dom.ce('span', appDiv);
   titleSpan.className = 'vedLevelTitle';
-  if (levelAddress.indexOf(VedApp.LevelPrefix.DATA) == 0) {
-    if (levelAddress.length > 45) {
-      levelAddress = levelAddress.substring(0, 20) + '...' +
-          levelAddress.substring(levelAddress.length - 20);
+  var titleText = levelAddress;
+  if (titleText.indexOf(VedApp.LevelPrefix.DATA) == 0) {
+    if (titleText.length > 45) {
+      titleText = titleText.substring(0, 20) + '...' +
+          titleText.substring(titleText.length - 20);
     }
   }
-  plex.dom.ct(levelAddress, titleSpan);
+  plex.dom.ct(titleText, titleSpan);
 };
 
 VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
   var self = this;
   return function(event) {
-    event.preventDefault();
+    event && event.preventDefault();
     var href = '#' + plex.url.encodeQuery({
       mode: mode,
       level: levelAddress
@@ -425,17 +453,11 @@ VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
   div.innerHTML = html;
 };
 
-VedApp.prototype.createLevel = function() {
-  function pad(str, size) {
-    str = String(str);
-    while (str.length < size) {
-      str = '0' + str;
-    }
-    return str;
-  }
-  var newName = prompt("New level name?");
-  if (newName) {
-    var opStor = new OpStor(this.stor, newName);
-    opStor.touch();
+VedApp.prototype.createLevel = function(name, opt_ops) {
+  var ops = opt_ops || [];
+  var opStor = new OpStor(this.stor, name);
+  opStor.touch();
+  for (var i = 0; i < ops.length; i++) {
+    opStor.appendOp(ops[i]);
   }
 };
