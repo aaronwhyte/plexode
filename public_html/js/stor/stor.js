@@ -245,3 +245,20 @@ Stor.prototype.getNameForId = function(id) {
   }
   return retval;
 };
+
+/**
+ * Delete all names and keys.
+ * @param {String} name
+ */
+Stor.prototype.removeByName = function(name) {
+  if (!this.containsName(name)) return;
+  var dataId = this.getDataId(name);
+  var index = 1;
+  this.storage.removeItem(this.getKeyForName(name));
+  while (true) {
+    var key = this.getKeyForDataIndex(dataId, index++);
+    var val = this.storage.getItem(key);
+    if (!val) return;
+    this.storage.removeItem(key);
+  }
+};

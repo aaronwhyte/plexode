@@ -158,6 +158,10 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
   leftLink.innerHTML = '&laquo;';
   leftLink.className = 'vedLeftLink';
 
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var levelName = split[1];
+
   // left link
   var modesDiv = plex.dom.ce('div', appDiv);
   modesDiv.className = 'vedModesDiv';
@@ -185,10 +189,12 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
     plex.dom.ct(mode, modeElem);
   }
 
+  var self = this;
+
+  // copy button
   var copyButton = plex.dom.ce('button', appDiv);
   plex.dom.appendClass(copyButton, 'vedButton');
   plex.dom.ct('Copy level', copyButton);
-  var self = this;
   copyButton.onclick = function() {
     var newName = prompt("New level name?");
     if (!newName) {
@@ -202,6 +208,20 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
     self.createLevel(newName, self.getOpsForLevelAddress(levelAddress));
     self.getModeLinkFn(VedApp.Mode.EDIT, VedApp.LevelPrefix.LOCAL + newName)();
   };
+
+  // delete button
+  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    var deleteButton = plex.dom.ce('button', appDiv);
+    plex.dom.appendClass(deleteButton, 'vedButton');
+    plex.dom.ct('Delete level', deleteButton);
+    deleteButton.onclick = function() {
+      if (confirm("Are you sure you want to delete this level?")) {
+        var opStor = new OpStor(self.stor, levelName);
+        opStor.remove();
+        plex.url.setFragment('');
+      }
+    };
+  }
 
   // title
   var titleSpan = plex.dom.ce('span', appDiv);

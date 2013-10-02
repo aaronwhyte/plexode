@@ -35,13 +35,13 @@ Fix ghost noises
 v clean up sounds when exiting level
 x or when entering one.
 
+2013-10-01
 Delete level from level view
-- stor delete
-- opstor delete
-- delete button near copy button
+v stor remove
+v opstor remove
+v delete button near copy button for local~ levels
 
 - Make copy and delete buttons not look so crappy
-
 
 Titles and Descriptions
 - Add metadata cluster with title and description data
