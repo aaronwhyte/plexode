@@ -17,8 +17,8 @@ v Decode level=data~your-data-here URLs
 Read-only editor mode
 v for data~ levels
 v for builtin~ levels
-- visual cue and "clone" button
-- make sure clip copying still works
+v make sure clip copying still works
+- visual cue that this is read-only. Maybe flash it in the UI when you fail an "editable" check?
 
 2013-09-30
 Level copying to localstorage
@@ -27,10 +27,13 @@ v data~ levels can be copied
 v even local~ levels can be cloned, just to make it monotonous.
 
 x Auto-update data URLs when you edit the data?? Or force a copy to localstorage?
+Levels take a while to make and I don't want people to lose them because they close a tab.
+So for now, you can't make edits to something that's not backed by localstorage.
 
+2013-10-01
 Fix ghost noises
-- clean up sounds when exiting level
-- or when entering one.
+v clean up sounds when exiting level
+x or when entering one.
 
 Delete level from level view
 - stor delete

@@ -82,6 +82,14 @@ SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type, 
   panner.connect(this.masterGainNode);
 };
 
+SoundFx.prototype.disconnect = function() {
+  if (this.masterGainNode) {
+    this.masterGainNode.gain = 0;
+    this.masterGainNode.disconnect();
+    this.masterGainNode = null;
+  }
+};
+
 
 function makeWebStormHappy() {
   AudioContext = 1;

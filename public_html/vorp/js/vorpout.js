@@ -233,3 +233,9 @@ VorpOut.prototype.assemblePlayerNoise = function(pos) {
       400, 8000,
       'square', 0.09);
 };
+
+VorpOut.prototype.disconnect = function() {
+  if (this.soundFx) {
+    this.soundFx.disconnect();
+  }
+};

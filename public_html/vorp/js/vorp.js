@@ -150,6 +150,9 @@ Vorp.prototype.stopLoop = function() {
     this.listeners = null;
     GU_keys.length = 0;
   }
+  if (this.vorpOut) {
+    this.vorpOut.disconnect();
+  }
   if (this.loop) {
     this.loop.stop();
   }
