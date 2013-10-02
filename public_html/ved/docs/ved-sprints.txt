@@ -41,8 +41,6 @@ v stor remove
 v opstor remove
 v delete button near copy button for local~ levels
 
-- Make copy and delete buttons not look so crappy
-
 Titles and Descriptions
 - Add metadata cluster with title and description data
 - Display those in Play mode.
@@ -50,14 +48,19 @@ Titles and Descriptions
 - Update builtin levels to include the old titles and descriptions
 - Show titles in directory?
 
-Milestone: Ship Ved with easy level sharing! Post levels as URLs!
+File rename
+
+Polish
+- Show intro paragraph on main page
+- Make buttons not look so crappy
+- Fast shifting between modes - kbd shortcuts like 1, 2, 3, 4, 0?  p, e, s, j, u? [, ], and u?
+
+Milestone: Easy level sharing! Post levels as URLs!
 
 ===================================================================================
 
 Add real Loopwood front page.
 Add loopwood.com/vorp
-
-Draw portal link or cluster hilite or something.
 
 Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
 
@@ -65,6 +68,9 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
 
 Editor Polish
 - make wall grab-points long and aligned with the wall, like a lozenge, so corners can be pulled apart easily.
+- curved wires
+- arrows on jacks
+- Draw portal link or cluster hilite or something.
 - Esc to close dialogs
 - Redo editor help.
   - "h" or "?" to toggle.
@@ -82,8 +88,6 @@ Editor Polish
   - Alert to invalid values as they are typed?
     - detect them in the transformation process?
     - turn field pink or something (don't do text, since "empty" might be invalid)
-- curved wires
-- arrows on jacks
 - Fix the snap-to-grid UI somehow.
 
 ===================================================================================
