@@ -124,6 +124,19 @@ plex.array.copy = function(a) {
   return b;
 };
 
+/**
+ * Like Python, this adds all the elements in addMe to toMe.
+ * Unlike Array.contat, this does not create a new array. This modifies toMe.
+ * @param {Array} toMe
+ * @param {Array} addMe
+ * @return {Array} toMe after modification
+ */
+plex.array.extend = function(toMe, addMe) {
+  for (var i = 0; i < addMe.length; i++) {
+    toMe.push(addMe[i]);
+  }
+  return toMe;
+};
 
 ///**
 //* crazy HTML formatter for side-by-side array diffing.
