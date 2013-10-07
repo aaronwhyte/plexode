@@ -41,6 +41,21 @@ v stor remove
 v opstor remove
 v delete button near copy button for local~ levels
 
+Create new compact model serialization that uses parameterized templates and auto-assigned IDs.
+[1 /* wall */, 100, 300, 100, 500] // x, y, x, y
+[9 /* not */, 600, 200] // x, y
+[8 /* link */, 12, 98] // jack IDs
+etc. The auto-assigned IDs will be the trickiest bit.
+So, define the template language (see doc) and do the ID mapping.
+Specify the templates only once, and automate s27n.
+Deserialization is easy.
+But serialization relies on pattern matching.
+I guess... a template matches a cluster if, after generifying the params of the cluster, it serializes to the
+same JSON as the template. OK.
+Ditto for link templates. Those should be easy, since there's only one form of link in Vorp.
+
+
+
 Titles and Descriptions
 - Add metadata cluster with title and description data
 - Display those in Play mode.
