@@ -75,7 +75,7 @@ GrafTemplate.prototype.generateOps = function(params) {
           // Maybe assign the top-level ID
           if (op.type == GrafOp.Type.ADD_CLUSTER) {
             clusterId = paramVal;
-          } else if (op.type == GrafOp.ADD_LINK) {
+          } else if (op.type == GrafOp.Type.ADD_LINK) {
             // no need to track link's ID since links have no sub-objects
           } else {
             throw 'Only an add-cluster or add-link can have a param for an ID. op: ' + JSON.stringify(op);

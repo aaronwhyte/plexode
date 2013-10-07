@@ -46,17 +46,40 @@ var TIMER_REAL_OPS = [
 
 var TIMER_PARAMS = [10, 20, 30, 40];
 
-addTest(function testCreateOps() {
+addTest(function testCreateTimerOps() {
   assertStringifyEquals(TIMER_REAL_OPS, TIMER_TEMPLATE.generateOps(TIMER_PARAMS));
 });
 
-addTest(function testExtractParamsSuccess() {
+addTest(function testExtractTimerParamsSuccess() {
   assertStringifyEquals(TIMER_PARAMS, TIMER_TEMPLATE.getParamsOrNull(TIMER_REAL_OPS));
 });
 
-addTest(function testExtractParamsFailure() {
+addTest(function testExtractTimerParamsFailure() {
   assertStringifyEquals(null, TIMER_TEMPLATE.getParamsOrNull(
       TIMER_REAL_OPS.concat([{"type":"setData","id":13,"key":"a","value":"b"}])));
+});
+
+var LINK_TEMPLATE = new GrafTemplate('link', [
+  {"type":"addLink","id":PARAM,"jackId1":PARAM,"jackId2":PARAM}
+]);
+
+var LINK_REAL_OPS = [
+  {"type":"addLink","id":10,"jackId1":20,"jackId2":30}
+];
+
+var LINK_PARAMS = [10, 20, 30];
+
+addTest(function testCreateLinkOps() {
+  assertStringifyEquals(LINK_REAL_OPS, LINK_TEMPLATE.generateOps(LINK_PARAMS));
+});
+
+addTest(function testExtractLinkParamsSuccess() {
+  assertStringifyEquals(LINK_PARAMS, LINK_TEMPLATE.getParamsOrNull(LINK_REAL_OPS));
+});
+
+addTest(function testExtractLinkParamsFailure() {
+  assertStringifyEquals(null, LINK_TEMPLATE.getParamsOrNull(
+      LINK_REAL_OPS.concat([{"type":"setData","id":10,"key":"a","value":"b"}])));
 });
 
 </script>
