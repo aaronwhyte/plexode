@@ -439,10 +439,15 @@ VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
   this.looper = vorp;
 };
 
+VedApp.prototype.renumberOps = function(ops) {
+  (new GrafModel()).rewriteOpIds(ops);
+  return ops;
+};
+
 VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
   this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.SHARE);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-  var ops = this.getOpsForLevelAddress(levelAddress);
+  var ops = this.renumberOps(this.getOpsForLevelAddress(levelAddress));
   var json = JSON.stringify(ops); // compact JSON, nor prety printed
   var base64 = this.squisher.squish(json);
   // The "level=" prefix must be included, to prevent the first "=" sign
@@ -462,7 +467,8 @@ VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
   this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.JSON);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-  var ops = this.getOpsForLevelAddress(levelAddress);
+  var ops = this.renumberOps(this.getOpsForLevelAddress(levelAddress));
+  ops = this.renumberOps(ops);
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
   div.style.fontSize = 'small';
