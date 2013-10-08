@@ -2,14 +2,14 @@
  * Static namespace only.
  * @type {Object}
  */
-VedTemplateList = {};
+VedTemplates = {};
 
 /**
  * @return {Object} A map from VedType value to GrafTemplate for that value
  */
-VedTemplateList.create = function() {
-  function t(name) {
-    return (new VedTemplateBuilder(name)).cluster(name);
+VedTemplates.createMap = function() {
+  function t(id) {
+    return (new VedTemplateBuilder(id)).cluster(id);
   }
   var templates = [
     t(VedType.AND).part().jacks(AndSprite),
@@ -34,7 +34,7 @@ VedTemplateList.create = function() {
   var map = {};
   for (var i = 0; i < templates.length; i++) {
     var template = templates[i];
-    map[template.name] = template.build();
+    map[template.id] = template.build();
   }
   return map;
 };

@@ -1,8 +1,8 @@
 /**
  * @constructor
  */
-VedTemplateBuilder = function(name) {
-  this.name = name;
+function VedTemplateBuilder(id) {
+  this.id = id;
   this.ops = [];
 };
 
@@ -110,5 +110,5 @@ VedTemplateBuilder.prototype.jacks = function(spriteClass) {
  * @return {GrafTemplate}
  */
 VedTemplateBuilder.prototype.build = function() {
-  return new GrafTemplate(this.name, this.ops);
+  return new GrafTemplate(this.id, this.ops);
 };
