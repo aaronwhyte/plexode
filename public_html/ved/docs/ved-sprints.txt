@@ -53,7 +53,14 @@ But serialization relies on pattern matching.
 I guess... a template matches a cluster if, after generifying the params of the cluster, it serializes to the
 same JSON as the template. OK.
 Ditto for link templates. Those should be easy, since there's only one form of link in Vorp.
-
+v template class & unit test
+v templates for all ved stuff
+v replace sysclip info with data in templates, plus default vals for params
+- templatizer
+  - convert model into canonical JSON and then template JSON
+  - convert template JSON into op JSON and then model
+- change 'json' view to template JSON, not op JSON
+- change 'share' to start with template JSON, not op JSON
 
 
 Titles and Descriptions
