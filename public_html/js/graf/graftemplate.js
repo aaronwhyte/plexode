@@ -19,7 +19,7 @@ GrafTemplate.PARAM = '$TEMPLATE-PARAM';
 GrafTemplate.prototype.getParamsOrNull = function(realOps) {
   // Generate a list of param values, returning early if there's a clear mismatch.
   if (realOps.length != this.ops.length) return null;
-  var params = [];
+  var params = [this.id];
   for (var i = 0; i < realOps.length; i++) {
     var tOp = this.ops[i], rOp = realOps[i];
     var tKeys = plex.object.keys(tOp);
@@ -60,7 +60,10 @@ GrafTemplate.prototype.generateOps = function(params) {
   var genOps = JSON.parse(JSON.stringify(this.ops));
   var op;
   var clusterId, partId, lastId;
-  var nextParam = 0;
+  if (params[0] != this.id) {
+    throw 'Expected param[0] to be ' + this.id + ' but was ' + params[0];
+  }
+  var nextParam = 1;
   for (var i = 0; i < genOps.length; i++) {
     op = genOps[i];
     for (var key in op) {

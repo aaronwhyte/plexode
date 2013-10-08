@@ -44,7 +44,7 @@ var TIMER_REAL_OPS = [
   {"type":"setData","id":13,"key":"name","value":"RUNNING"}
 ];
 
-var TIMER_PARAMS = [10, 20, 30, 40];
+var TIMER_PARAMS = ['timer',10,20,30,40];
 
 addTest(function testCreateTimerOps() {
   assertStringifyEquals(TIMER_REAL_OPS, TIMER_TEMPLATE.generateOps(TIMER_PARAMS));
@@ -67,7 +67,7 @@ var LINK_REAL_OPS = [
   {"type":"addLink","id":10,"jackId1":20,"jackId2":30}
 ];
 
-var LINK_PARAMS = [10, 20, 30];
+var LINK_PARAMS = ['link',10,20,30];
 
 addTest(function testCreateLinkOps() {
   assertStringifyEquals(LINK_REAL_OPS, LINK_TEMPLATE.generateOps(LINK_PARAMS));
