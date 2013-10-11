@@ -37,7 +37,7 @@ plex.Squisher.Encoding = {
  * @return {String} the squished string in base 64
  */
 plex.Squisher.prototype.squish = function(original) {
-  squished = plex.Squisher.Encoding.ORIGINAL + this.encodeToAscii(original);
+  var squished = plex.Squisher.Encoding.ORIGINAL + this.encodeToAscii(original);
 
   var newSquished = plex.Squisher.Encoding.DICTIONARY + this.compressWithStaticDictionary(squished);
   if (newSquished.length < squished.length) {

@@ -11,13 +11,7 @@ function VedApp(rootNode, stor) {
   this.squisher = new plex.Squisher(VedApp.DICT);
 }
 
-VedApp.DICT = [
-  '"type":', '"id":', '"key":', '"value":',
-  '"clusterId":', '"partId":', '"jackId1":', '"jackId2":', '"x":', '"y":',
-  '"addCluster"', '"setData"', '"addPart"', '"addJack"', '"addLink"',
-  '"input"', '"output"', '"name"', '"wall"', 'player', 'assembler', 'zombie', 'block',
-  '},{'
-];
+VedApp.DICT = ['],['];
 
 VedApp.CLIPBOARD_STORAGE_KEY = 'vedClipBoard';
 
@@ -275,7 +269,8 @@ VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
     }
   } else if (levelPrefix == VedApp.LevelPrefix.DATA) {
     var json = this.squisher.unsquish(name);
-    ops = JSON.parse(json);
+    var paramList = JSON.parse(json);
+    ops = this.getTemplatizer().detemplatize(paramList);
   }
 
   // compress the ops
@@ -444,24 +439,33 @@ VedApp.prototype.renumberOps = function(ops) {
   return ops;
 };
 
+VedApp.prototype.getTemplatizer = function() {
+  var templates = plex.object.values(VedTemplates.getClusterMap());
+  plex.array.extend(templates, plex.object.values(VedTemplates.getLinkMap()));
+  return new GrafTemplatizer(templates);
+};
+
 VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
   this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.SHARE);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-  var ops = this.renumberOps(this.getOpsForLevelAddress(levelAddress));
-  var json = JSON.stringify(ops); // compact JSON, nor prety printed
+
+  var graf = new GrafModel();
+  graf.applyOps(this.renumberOps(this.getOpsForLevelAddress(levelAddress)));
+  var paramList = this.getTemplatizer().templatize(graf);
+  var json = JSON.stringify(paramList); // compact JSON, not pretty printed
   var base64 = this.squisher.squish(json);
+
   // The "level=" prefix must be included, to prevent the first "=" sign
   // in the data from being interpreted as a key/value separator.
   var url = [
-      location.origin, location.pathname, '#',
-      VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
+    location.origin, location.pathname, '#',
+    VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
   div.style.fontSize = 'small';
   div.className = 'selectable';
   div.style.wordWrap = 'break-word';
-  var html = plex.string.textToHtml(url);
-  div.innerHTML = html;
+  div.innerHTML = plex.string.textToHtml(url);
 };
 
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {

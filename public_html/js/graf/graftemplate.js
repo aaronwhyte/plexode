@@ -22,10 +22,9 @@ GrafTemplate.prototype.getParamsOrNull = function(realOps) {
   var params = [this.id];
   for (var i = 0; i < realOps.length; i++) {
     var tOp = this.ops[i], rOp = realOps[i];
-    var tKeys = plex.object.keys(tOp);
-    var rKeys = plex.object.keys(rOp);
+    var tKeys = plex.object.keys(plex.object.deleteUndefined(tOp));
+    var rKeys = plex.object.keys(plex.object.deleteUndefined(rOp));
     if (!plex.array.equals(tKeys, rKeys)) {
-      console.log('key list mismatch', tKeys, rKeys);
       return null;
     }
     for (var k = 0; k < tKeys.length; k++) {
@@ -40,17 +39,23 @@ GrafTemplate.prototype.getParamsOrNull = function(realOps) {
   // Create ops using those params.
   // If the created ops match the real ops, we have a winner!
   var genOps = this.generateOps(params);
-  if (JSON.stringify(genOps) == JSON.stringify(realOps)) {
+  var genJsons = [], realJsons = [];
+  for (var i = 0; i < genOps.length; i++) {
+    genJsons[i] = JSON.stringify(genOps[i]);
+    realJsons[i] = JSON.stringify(realOps[i]);
+  }
+  genJsons.sort();
+  realJsons.sort();
+  if (JSON.stringify(genJsons) == JSON.stringify(realJsons)) {
     return params;
   } else {
-    console.log('genOps != realOps', JSON.stringify(genOps), JSON.stringify(realOps));
     return null;
   }
 };
 
 /**
  * @param {Array} params
- * @return {Array.<Object>}
+ * @return {Array}
  */
 GrafTemplate.prototype.generateOps = function(params) {
   function assertIdSet(id) {

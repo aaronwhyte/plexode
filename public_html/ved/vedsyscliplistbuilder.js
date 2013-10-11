@@ -32,7 +32,7 @@ VedSysClipListBuilder.createFromMap = function(idToGraf) {
 VedSysClipListBuilder.createDefaultDataMap = function() {
   var map = {};
 
-  var templates = VedTemplates.createMap();
+  var templates = VedTemplates.getClusterMap();
   for (var id in templates) {
     var params = [id, 1]; // "1" is the cluster ID
     // X, Y

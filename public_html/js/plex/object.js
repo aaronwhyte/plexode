@@ -65,6 +65,19 @@ plex.object.values = function(obj) {
   return values;
 };
 
+plex.object.deleteUndefined = function(obj) {
+  try {
+    for (var key in obj) {
+      if (typeof obj[key] == 'undefined') {
+        delete obj[key];
+      }
+    }
+  } catch (e) {
+    // some kinda access violation
+  }
+  return obj;
+};
+
 plex.object.clear = function(obj) {
   for (var key in obj) {
     if (obj.hasOwnProperty(key)) {

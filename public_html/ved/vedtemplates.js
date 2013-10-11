@@ -7,29 +7,30 @@ VedTemplates = {};
 /**
  * @return {Object} A map from VedType value to GrafTemplate for that value
  */
-VedTemplates.createMap = function() {
-  function t(id) {
-    return (new VedTemplateBuilder(id)).cluster(id);
+VedTemplates.getClusterMap = function() {
+  function t(shortId, vedType) {
+    return (new VedTemplateBuilder(shortId)).cluster(vedType);
   }
   var templates = [
-    t(VedType.AND).part().jacks(AndSprite),
-    t(VedType.BEAM_SENSOR).part().jacks(BeamerSprite),
-    t(VedType.BIG_BLOCK).part(),
-    t(VedType.BLOCK).part(),
-    t(VedType.BUTTON).part().jacks(ButtonSprite),
-    t(VedType.DOOR).part().jacks(DoorControlSprite),
-    t(VedType.EXIT).part().dataParam('url'),
-    t(VedType.GRIP).part().jacks(GripSprite),
-    t(VedType.NOT).part().jacks(NotSprite),
-    t(VedType.PLAYER_ASSEMBLER).part(),
-    t(VedType.PORTAL).part().part(),
-    t(VedType.TIMER).part().dataParam('timeout').jacks(TimerSprite),
-    t(VedType.TOGGLE).part().jacks(ToggleSprite),
-    t(VedType.WALL).part().part(),
-    t(VedType.ZAPPER).part().jacks(ZapperControlSprite),
-    t(VedType.ZOMBIE).part(),
-    t(VedType.ZOMBIE_ASSEMBLER).part(),
-    t(VedType.ANTI_ZOMBIE_TURRET).part()
+    t(1, VedType.WALL).part().part(),
+    t(2, VedType.TIMER).part().dataParam('timeout').jacks(TimerSprite),
+    t(3, VedType.AND).part().jacks(AndSprite),
+    t(4, VedType.BEAM_SENSOR).part().jacks(BeamerSprite),
+    t(5, VedType.BLOCK).part(),
+    t(6, VedType.BUTTON).part().jacks(ButtonSprite),
+    t(7, VedType.DOOR).part().jacks(DoorControlSprite),
+    t(8, VedType.GRIP).part().jacks(GripSprite),
+    // 9 is is for links
+    t(10, VedType.PLAYER_ASSEMBLER).part(),
+    t(11, VedType.TOGGLE).part().jacks(ToggleSprite),
+    t(12, VedType.ZAPPER).part().jacks(ZapperControlSprite),
+    t(13, VedType.ZOMBIE).part(),
+    t(14, VedType.ZOMBIE_ASSEMBLER).part(),
+    t(15, VedType.ANTI_ZOMBIE_TURRET).part(),
+    t(16, VedType.BIG_BLOCK).part(),
+    t(17, VedType.PORTAL).part().part(),
+    t(18, VedType.EXIT).part().dataParam('url'),
+    t(19, VedType.NOT).part().jacks(NotSprite)
   ];
   var map = {};
   for (var i = 0; i < templates.length; i++) {
@@ -37,4 +38,14 @@ VedTemplates.createMap = function() {
     map[template.id] = template.build();
   }
   return map;
+};
+
+VedTemplates.getLinkMap = function() {
+  var template = new GrafTemplate(9, [{
+    "type": "addLink",
+    "id": GrafTemplate.PARAM,
+    "jackId1": GrafTemplate.PARAM,
+    "jackId2": GrafTemplate.PARAM
+  }]);
+  return {'link': template};
 };
