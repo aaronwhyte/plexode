@@ -64,7 +64,9 @@ v change 'share' to start with template JSON, not op JSON
 v change data URL deserialization to expect template params
 
 Convert all static levels to template JSON ?
-- change 'json' view to template JSON, not op JSON
+v change 'json' view to template JSON, not op JSON
+- change local~ levels to use template JSON, not op JSON
+- replace all local levels
 
 Titles and Descriptions
 - Add metadata cluster with title and description data

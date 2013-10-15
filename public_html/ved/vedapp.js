@@ -445,14 +445,19 @@ VedApp.prototype.getTemplatizer = function() {
   return new GrafTemplatizer(templates);
 };
 
+VedApp.prototype.getTemplatizedJsonForLevel = function(levelAddress) {
+  var graf = new GrafModel();
+  var ops = this.getOpsForLevelAddress(levelAddress);
+  this.renumberOps(ops);
+  graf.applyOps(ops);
+  return this.getTemplatizer().templatize(graf);
+};
+
 VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
   this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.SHARE);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
 
-  var graf = new GrafModel();
-  graf.applyOps(this.renumberOps(this.getOpsForLevelAddress(levelAddress)));
-  var paramList = this.getTemplatizer().templatize(graf);
-  var json = JSON.stringify(paramList); // compact JSON, not pretty printed
+  var json = JSON.stringify(this.getTemplatizedJsonForLevel(levelAddress));
   var base64 = this.squisher.squish(json);
 
   // The "level=" prefix must be included, to prevent the first "=" sign
@@ -462,7 +467,6 @@ VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
     VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
-  div.style.fontSize = 'small';
   div.className = 'selectable';
   div.style.wordWrap = 'break-word';
   div.innerHTML = plex.string.textToHtml(url);
@@ -471,16 +475,13 @@ VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
   this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.JSON);
   if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-  var ops = this.renumberOps(this.getOpsForLevelAddress(levelAddress));
-  ops = this.renumberOps(ops);
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
-  div.style.fontSize = 'small';
   div.className = 'selectable';
-  var html = plex.string.textToHtml(JSON.stringify(ops, null, "  "));
-  html = plex.string.replace(html, "  ", "&nbsp; ");
-  html = plex.string.replace(html, "\n", "<br>");
-  div.innerHTML = html;
+  var json = this.getTemplatizedJsonForLevel(levelAddress);
+  var text = JSON.stringify(json);
+  text = plex.string.replace(text, '],', '],\n');
+  div.innerHTML = plex.string.textToHtml(text, true);
 };
 
 VedApp.prototype.createLevel = function(name, opt_ops) {
