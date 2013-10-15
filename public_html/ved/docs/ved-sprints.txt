@@ -63,10 +63,11 @@ v templatizer
 v change 'share' to start with template JSON, not op JSON
 v change data URL deserialization to expect template params
 
+2013-10-14
 Convert all static levels to template JSON ?
 v change 'json' view to template JSON, not op JSON
-- change local~ levels to use template JSON, not op JSON
-- replace all local levels
+v change builtin~ levels to use template JSON, not op JSON
+v replace all local levels
 
 Titles and Descriptions
 - Add metadata cluster with title and description data

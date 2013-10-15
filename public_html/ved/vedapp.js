@@ -260,7 +260,7 @@ VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
   var levelPrefix = split[0];
   var name = split[1];
   if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
-    ops = vorpLevels[name];
+    ops = this.getTemplatizer().detemplatize(vorpLevels[name]);
   } else if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
     var opStor = new OpStor(this.stor, name);
     ops = opStor.getValuesAfterIndex(-1);
