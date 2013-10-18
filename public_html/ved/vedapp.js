@@ -61,28 +61,32 @@ VedApp.prototype.render = function() {
   var hash = plex.url.getFragment();
   var query = plex.url.decodeQuery(hash);
   var mode = query[VedApp.Params.MODE];
-  var level = query[VedApp.Params.LEVEL];
-  if (!level) {
+  var levelAddress = query[VedApp.Params.LEVEL];
+  if (!levelAddress) {
     for (var key in query) {
       if (!query[key]) {
         // The "default key" is level, and level becomes the value.
-        level = key;
+        levelAddress = key;
       }
     }
   }
 
-  if (level && !mode) {
+  if (levelAddress && !mode) {
     mode = VedApp.Mode.PLAY;
   }
 
-  if (mode == VedApp.Mode.PLAY) {
-    this.renderPlayMode(appDiv, level);
-  } else if (mode == VedApp.Mode.EDIT) {
-    this.renderEditMode(appDiv, level);
-  } else if (mode == VedApp.Mode.SHARE) {
-    this.renderShareMode(appDiv, level);
-  } else if (mode == VedApp.Mode.JSON) {
-    this.renderJsonMode(appDiv, level);
+  if (mode) {
+    if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
+    this.renderLevelHeader(appDiv, levelAddress, mode);
+    if (mode == VedApp.Mode.PLAY) {
+      this.renderPlayMode(appDiv, levelAddress);
+    } else if (mode == VedApp.Mode.EDIT) {
+      this.renderEditMode(appDiv, levelAddress);
+    } else if (mode == VedApp.Mode.SHARE) {
+      this.renderShareMode(appDiv, levelAddress);
+    } else if (mode == VedApp.Mode.JSON) {
+      this.renderJsonMode(appDiv, levelAddress);
+    }
   } else {
     this.renderDirectory(appDiv);
   }
@@ -301,9 +305,6 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
 };
 
 VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
-  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.EDIT);
-  if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-
   var splitName = this.splitLevelAddress(levelAddress);
   var plexKeys = new plex.Keys();
   var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
@@ -414,8 +415,6 @@ VedApp.prototype.createVorpFromOps = function(ops) {
 };
 
 VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
-  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.PLAY);
-  if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
   var ops = this.getOpsForLevelAddress(levelAddress);
 
   // hacky fake header/footer to restrict the canvas positioning
@@ -454,18 +453,15 @@ VedApp.prototype.getTemplatizedJsonForLevel = function(levelAddress) {
 };
 
 VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
-  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.SHARE);
-  if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
-
   var json = JSON.stringify(this.getTemplatizedJsonForLevel(levelAddress));
   var base64 = this.squisher.squish(json);
 
   var shareTextDiv = plex.dom.ce('div', appDiv);
   shareTextDiv.className = 'vedShareText';
   shareTextDiv.innerHTML = plex.string.textToHtml(
-      'The level data is encoded in the URL below. ' +
-          'You can email it, post it somewhere, whatever. ' +
-          'Anyone who opens it will be able to play it, copy the data, edit it, re-share it, etc.');
+      'This level is encoded in the URL below. ' +
+      'You can email it, IM it, post it, bookmark it, whatever.\n' +
+      'Anyone who opens it can to play it, copy and edit, and re-share it.', true);
 
   // The "level=" prefix must be included, to prevent the first "=" sign
   // in the data from being interpreted as a key/value separator.
@@ -479,8 +475,6 @@ VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
 };
 
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
-  this.renderLevelHeader(appDiv, levelAddress, VedApp.Mode.JSON);
-  if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
   div.className = 'selectable';
