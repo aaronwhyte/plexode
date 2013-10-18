@@ -460,16 +460,22 @@ VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
   var json = JSON.stringify(this.getTemplatizedJsonForLevel(levelAddress));
   var base64 = this.squisher.squish(json);
 
+  var shareTextDiv = plex.dom.ce('div', appDiv);
+  shareTextDiv.className = 'vedShareText';
+  shareTextDiv.innerHTML = plex.string.textToHtml(
+      'The level data is encoded in the URL below. ' +
+          'You can email it, post it somewhere, whatever. ' +
+          'Anyone who opens it will be able to play it, copy the data, edit it, re-share it, etc.');
+
   // The "level=" prefix must be included, to prevent the first "=" sign
   // in the data from being interpreted as a key/value separator.
   var url = [
     location.origin, location.pathname, '#',
     VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
-  var div = plex.dom.ce('div', appDiv);
-  div.style.clear = 'both';
-  div.className = 'selectable';
-  div.style.wordWrap = 'break-word';
-  div.innerHTML = plex.string.textToHtml(url);
+  var a = plex.dom.ce('a', appDiv);
+  a.className = 'selectable vedShareLink';
+  a.href = url;
+  a.innerHTML = plex.string.textToHtml(url);
 };
 
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
