@@ -41,4 +41,5 @@ vorpLevels['level-04'] =
 [9,110,68,101],
 [9,111,102,71],
 [9,112,102,74],
-[9,113,105,98]];
+[9,113,105,98],
+[20,999,"Level 4: Introducing Zombies", "They're hostile contagious destructible blocks"]];

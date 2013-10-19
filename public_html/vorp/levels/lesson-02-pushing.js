@@ -41,4 +41,5 @@ vorpLevels['lesson-02'] =
 [5,81,1030,1610],
 [5,83,1330,1670],
 [5,85,1330,1610],
-[5,87,1270,1610]];
+[5,87,1270,1610],
+[20,999,"Lesson 2: Pushing Things","Run into the blocks and push them out of your way to reach the exit."]];

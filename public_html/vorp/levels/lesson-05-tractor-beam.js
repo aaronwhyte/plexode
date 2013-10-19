@@ -21,4 +21,5 @@ vorpLevels['lesson-05'] =
 [5,49,350,-400],
 [5,51,260,-420],
 [5,53,310,-320],
-[5,55,490,-390]];
+[5,55,490,-390],
+[20,999,"Lesson 5: You Have a Tractor Beam!","Press Z to grab things. Reach farther by using arrow keys. Press X to let go."]];

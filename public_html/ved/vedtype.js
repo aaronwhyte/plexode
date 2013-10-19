@@ -10,6 +10,7 @@ VedType = {
   DOOR: 'door',
   EXIT: 'exit',
   GRIP: 'gripper',
+  META: 'meta',
   NOT: 'not',
   PLAYER_ASSEMBLER: 'player_assembler',
   PORTAL: 'portal',

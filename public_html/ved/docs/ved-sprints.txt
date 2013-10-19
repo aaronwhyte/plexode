@@ -69,12 +69,15 @@ v change 'json' view to template JSON, not op JSON
 v change builtin~ levels to use template JSON, not op JSON
 v replace all local levels
 
+2013-10-14 -
 Titles and Descriptions
-- Add metadata cluster with title and description data
-- Display those in Play mode.
-- Make those editable in the editor
-- Update builtin levels to include the old titles and descriptions
-- Show titles in directory?
+Gonna need to sink the template data, or ops, into
+v Ved expects a partless cluster of type "meta", with "title" and "description" data.
+v create template for that
+v Display those in level header.
+v Update builtin levels to include the old titles and descriptions
+- Make those editable in edit mode
+- Show titles in directory? It'll slow things down a little but maybe not enough to notice.
 
 File rename
 

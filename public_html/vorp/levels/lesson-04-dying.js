@@ -44,4 +44,5 @@ vorpLevels['lesson-04'] =
 [9,112,78,74],
 [9,113,75,81],
 [9,114,88,84],
-[9,115,85,91]];
+[9,115,85,91],
+[20,999,"Lesson 4: Getting Killed Is Completely Normal","Sometimes you've got to die on purpose to complete a level."]];

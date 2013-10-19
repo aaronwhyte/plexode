@@ -41,4 +41,5 @@ vorpLevels['lesson-07'] =
 [9,109,8,41],
 [9,110,47,19],
 [9,111,36,25],
-[9,112,67,5]];
+[9,112,67,5],
+[20,999,"Lesson 7: You Can Throw Things","Grab a block, hold down Z, and without letting go, tap X."]];

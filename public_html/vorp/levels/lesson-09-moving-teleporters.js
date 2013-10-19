@@ -15,4 +15,5 @@ vorpLevels['lesson-09'] =
 [18,36,40,-570,"#lesson-10"],
 [8,38,540,-410],
 [17,41,40,-170,690,-190],
-[9,44,40,32]];
+[9,44,40,32],
+[20,999,"Lesson 9: Move Teleporters Around","You can grab teleporters and use them like blocks."]];

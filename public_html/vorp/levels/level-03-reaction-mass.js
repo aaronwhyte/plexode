@@ -92,4 +92,5 @@ vorpLevels['level-03'] =
 [9,245,187,99],
 [9,246,187,81],
 [9,247,229,226],
-[9,248,230,112]];
+[9,248,230,112],
+[20,999,"Level 3: Reaction Mass", "When you throw a block, the block throws you."]];

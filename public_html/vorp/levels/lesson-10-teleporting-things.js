@@ -30,4 +30,5 @@ vorpLevels['lesson-10'] =
 [17,78,830,120,-20,-20],
 [9,81,41,32],
 [9,82,26,35],
-[9,83,38,29]];
+[9,83,38,29],
+[20,999,"Lesson 10: Teleport Other Things","You can teleport blocks. Sure, why not?"]];

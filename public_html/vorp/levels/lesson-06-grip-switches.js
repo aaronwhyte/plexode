@@ -25,4 +25,5 @@ vorpLevels['lesson-06'] =
 [8,63,-530,1740],
 [7,66,-720,1960],
 [9,69,35,32],
-[9,70,65,68]];
+[9,70,65,68],
+[20,999,"Lesson 6: Grip Switches","Put something (yourself, blocks, whatever) near a gripswitch to activate it."]];

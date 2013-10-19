@@ -104,4 +104,5 @@ vorpLevels['level-02'] =
 [9,266,187,190],
 [9,267,218,215],
 [9,268,195,221],
-[9,269,224,227]];
+[9,269,224,227],
+[20,999,"Level 2: A Stretch","Your tractor beam has a long reach."]];

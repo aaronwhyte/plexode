@@ -161,4 +161,5 @@ vorpLevels['level-06'] =
 [9,403,298,9],
 [9,404,298,313],
 [9,405,123,365],
-[9,406,366,362]];
+[9,406,366,362],
+[20,999,"Level 6: Weild the Teleporter","Go on the Offensive"]];

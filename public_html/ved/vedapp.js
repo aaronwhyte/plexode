@@ -187,6 +187,125 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
     plex.dom.ct(mode, modeElem);
   }
 
+  // name
+  var nameSpan = plex.dom.ce('span', appDiv);
+  nameSpan.className = 'vedLevelName';
+  var nameText = levelAddress;
+  if (nameText.indexOf(VedApp.LevelPrefix.DATA) == 0) {
+    if (nameText.length > 45) {
+      nameText = nameText.substring(0, 20) + '...' +
+          nameText.substring(nameText.length - 20);
+    }
+  }
+  plex.dom.ct(nameText, nameSpan);
+
+  // title
+  var titleElem = plex.dom.ce('div', appDiv);
+  titleElem.className = 'vedLevelTitle';
+  plex.dom.ct(this.getTitleForLevelAddress(levelAddress), titleElem);
+
+  // desc
+  var descElem = plex.dom.ce('div', appDiv);
+  descElem.className = 'vedLevelDesc';
+  plex.dom.ct(this.getDescForLevelAddress(levelAddress), descElem);
+};
+
+VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
+  var self = this;
+  return function(event) {
+    event && event.preventDefault();
+    var href = '#' + plex.url.encodeQuery({
+      mode: mode,
+      level: levelAddress
+    });
+    history.replaceState(null, document.title, href);
+    self.render();
+  };
+};
+
+VedApp.prototype.splitLevelAddress = function(levelAddress) {
+  for (var key in VedApp.LevelPrefix) {
+    var prefix = VedApp.LevelPrefix[key];
+    if (levelAddress.indexOf(prefix) == 0 && levelAddress.length > prefix.length) {
+      return [prefix, levelAddress.substring(prefix.length)];
+    }
+  }
+  // default prefix is BUILTIN
+  return [VedApp.LevelPrefix.BUILTIN, levelAddress];
+};
+
+VedApp.prototype.getGrafForLevelAddress = function(levelAddress) {
+  var ops = [];
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var name = split[1];
+  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
+    ops = this.getTemplatizer().detemplatize(vorpLevels[name]);
+  } else if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    var opStor = new OpStor(this.stor, name);
+    ops = opStor.getValuesAfterIndex(-1);
+    for (var i = 0; i < ops.length; i++) {
+      ops[i] = ops[i][OpStor.field.OP];
+    }
+  } else if (levelPrefix == VedApp.LevelPrefix.DATA) {
+    var json = this.squisher.unsquish(name);
+    var paramList = JSON.parse(json);
+    ops = this.getTemplatizer().detemplatize(paramList);
+  }
+  var graf = new GrafModel();
+  graf.applyOps(ops);
+  return graf;
+};
+
+VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
+  return this.getGrafForLevelAddress(levelAddress).createOps();
+};
+
+VedApp.prototype.getMetaClusterForLevelAddress = function(levelAddress) {
+  var graf = this.getGrafForLevelAddress(levelAddress);
+  for (var id in graf.clusters) {
+    var cluster = graf.getCluster(id);
+    if (cluster.data['type'] == VedType.META) {
+      return cluster;
+    }
+  }
+  return null;
+};
+
+VedApp.prototype.getTitleForLevelAddress = function(levelAddress) {
+  var mc = this.getMetaClusterForLevelAddress(levelAddress);
+  return mc ? mc.data['title'] : '';
+};
+
+VedApp.prototype.getDescForLevelAddress = function(levelAddress) {
+  var mc = this.getMetaClusterForLevelAddress(levelAddress);
+  return mc ? mc.data['desc'] : '';
+};
+
+VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
+  var splitName = this.splitLevelAddress(levelAddress);
+  if (splitName[0] == VedApp.LevelPrefix.BUILTIN) {
+    if (vorpLevels[splitName[1]]) {
+      return false;
+    }
+  } else if (splitName[0] == VedApp.LevelPrefix.LOCAL) {
+    if (plex.array.contains(this.stor.getNames(), splitName[1])) {
+      return false;
+    }
+  } else if (splitName[0] == VedApp.LevelPrefix.DATA) {
+    return false;
+  }
+  var errorDiv = plex.dom.ce('div', appDiv);
+  plex.dom.appendClass(errorDiv, 'vedError');
+  plex.dom.ct('The level "' + levelAddress + '" was not found.', errorDiv);
+  return true;
+};
+
+VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var levelName = split[1];
+
   var self = this;
 
   // copy button
@@ -221,99 +340,14 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
     };
   }
 
-  // title
-  var titleSpan = plex.dom.ce('span', appDiv);
-  titleSpan.className = 'vedLevelTitle';
-  var titleText = levelAddress;
-  if (titleText.indexOf(VedApp.LevelPrefix.DATA) == 0) {
-    if (titleText.length > 45) {
-      titleText = titleText.substring(0, 20) + '...' +
-          titleText.substring(titleText.length - 20);
-    }
-  }
-  plex.dom.ct(titleText, titleSpan);
-};
-
-VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
-  var self = this;
-  return function(event) {
-    event && event.preventDefault();
-    var href = '#' + plex.url.encodeQuery({
-      mode: mode,
-      level: levelAddress
-    });
-    history.replaceState(null, document.title, href);
-    self.render();
-  };
-};
-
-VedApp.prototype.splitLevelAddress = function(levelAddress) {
-  for (var key in VedApp.LevelPrefix) {
-    var prefix = VedApp.LevelPrefix[key];
-    if (levelAddress.indexOf(prefix) == 0 && levelAddress.length > prefix.length) {
-      return [prefix, levelAddress.substring(prefix.length)];
-    }
-  }
-  // default prefix is BUILTIN
-  return [VedApp.LevelPrefix.BUILTIN, levelAddress];
-};
-
-VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
-  var ops;
-  var split = this.splitLevelAddress(levelAddress);
-  var levelPrefix = split[0];
-  var name = split[1];
-  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
-    ops = this.getTemplatizer().detemplatize(vorpLevels[name]);
-  } else if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
-    var opStor = new OpStor(this.stor, name);
-    ops = opStor.getValuesAfterIndex(-1);
-    for (var i = 0; i < ops.length; i++) {
-      ops[i] = ops[i][OpStor.field.OP];
-    }
-  } else if (levelPrefix == VedApp.LevelPrefix.DATA) {
-    var json = this.squisher.unsquish(name);
-    var paramList = JSON.parse(json);
-    ops = this.getTemplatizer().detemplatize(paramList);
-  }
-
-  // compress the ops
-  var model = new GrafModel();
-  model.applyOps(ops);
-  ops = model.createOps();
-
-  return ops || [];
-};
-
-VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
-  var splitName = this.splitLevelAddress(levelAddress);
-  if (splitName[0] == VedApp.LevelPrefix.BUILTIN) {
-    if (vorpLevels[splitName[1]]) {
-      return false;
-    }
-  } else if (splitName[0] == VedApp.LevelPrefix.LOCAL) {
-    if (plex.array.contains(this.stor.getNames(), splitName[1])) {
-      return false;
-    }
-  } else if (splitName[0] == VedApp.LevelPrefix.DATA) {
-    return false;
-  }
-  var errorDiv = plex.dom.ce('div', appDiv);
-  plex.dom.appendClass(errorDiv, 'vedError');
-  plex.dom.ct('The level "' + levelAddress + '" was not found.', errorDiv);
-  return true;
-};
-
-VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
-  var splitName = this.splitLevelAddress(levelAddress);
   var plexKeys = new plex.Keys();
   var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
   this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
   var clipboard = this.createClipboard(appDiv);
   var grafEd, grafUi, editable;
-  if (splitName[0] == VedApp.LevelPrefix.LOCAL) {
+  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
     editable = true;
-    grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, splitName[1]));
+    grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
   } else {
     editable = false;
     var model = new GrafModel();
@@ -397,12 +431,7 @@ VedApp.prototype.createClipboard = function(appDiv) {
   return new Clipboard(grafRend, localStorage, VedApp.CLIPBOARD_STORAGE_KEY);
 };
 
-VedApp.prototype.createVorpFromOps = function(ops) {
-  var grafModel = new GrafModel();
-  for (var i = 0; i < ops.length; i++) {
-    grafModel.applyOp(ops[i]);
-  }
-  // create vorp instance
+VedApp.prototype.createVorpFromGraf = function(graf) {
   var gameClock = new GameClock();
   var sledgeInvalidator = new SledgeInvalidator();
   var vorpOut = new VorpOut(new Renderer(canvas, new Camera()), SoundFx.createInstance());
@@ -410,12 +439,12 @@ VedApp.prototype.createVorpFromOps = function(ops) {
 
   // Use Transformer to populate Vorp with Model.
   var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
-  transformer.transformModel(grafModel);
+  transformer.transformModel(graf);
   return vorp;
 };
 
 VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
-  var ops = this.getOpsForLevelAddress(levelAddress);
+  var graf = this.getGrafForLevelAddress(levelAddress);
 
   // hacky fake header/footer to restrict the canvas positioning
   // TODO: better canvas resize cues, maybe owned by the renderer
@@ -428,7 +457,7 @@ VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
   canvas.id = 'canvas';
 
   // Start the game up.
-  var vorp = this.createVorpFromOps(ops);
+  var vorp = this.createVorpFromGraf(graf);
   vorp.startLoop();
   this.looper = vorp;
 };

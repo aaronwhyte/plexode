@@ -25,4 +25,5 @@ vorpLevels['lesson-03'] =
 [9,63,30,26],
 [9,64,53,59],
 [9,65,56,59],
-[9,66,60,50]];
+[9,66,60,50],
+[20,999,"Lesson 3: Buttons and Stuff","Bump buttons and cross beams to activate doors and things."]];

@@ -30,7 +30,8 @@ VedTemplates.getClusterMap = function() {
     t(16, VedType.BIG_BLOCK).part(),
     t(17, VedType.PORTAL).part().part(),
     t(18, VedType.EXIT).part().dataParam('url'),
-    t(19, VedType.NOT).part().jacks(NotSprite)
+    t(19, VedType.NOT).part().jacks(NotSprite),
+    t(20, VedType.META).dataParam('title').dataParam('desc')
   ];
   var map = {};
   for (var i = 0; i < templates.length; i++) {
