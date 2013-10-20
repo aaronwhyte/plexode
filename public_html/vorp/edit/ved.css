@@ -68,9 +68,9 @@ span.vedModeLink {
   float:right;
 }
 
-.vedDirectoryRow {
-  font-size:large;
-  margin:0.25em;
+.vedDirectoryLink {
+  margin:0.25em 0;
+  display: block;
 }
 
 .vedError {

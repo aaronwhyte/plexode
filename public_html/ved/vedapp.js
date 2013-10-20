@@ -100,15 +100,34 @@ VedApp.prototype.getHashChangeListener = function() {
 };
 
 VedApp.prototype.renderDirectory = function(appDiv) {
+  var centerDiv = plex.dom.ce('div', appDiv);
+  centerDiv.className = 'center';
+  centerDiv.innerHTML +=
+      '<div class=center>' +
+      '<h1>What?</h1>' +
+      'Vorp is a free 2D physics-based action/puzzle game that runs in modern web browsers.' +
+      '<p>It\'s written in JavaScript, using the HTML5 &lt;canvas&gt; element to render all the graphics. ' +
+      'There are few sound effects, the graphics are terrible, and you need a keyboard to play.' +
+      '<p>It works well in <a href="http://www.google.com/chrome/">Chrome</a>, ' +
+      '<a href="http://www.mozilla.org/firefox">Firefox</a>, ' +
+      '<a href="http://www.apple.com/safari/">Safari</a>, and ' +
+      '<a href="http://www.opera.com/browser">Opera</a>.<br>' +
+      '<a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up might work.' +
+      '<h1>Play it!</h1>' +
+      '</div>';
 
+  var self = this;
   function renderRow(levelAddress) {
-    var levelDiv = plex.dom.ce('div', appDiv);
-    plex.dom.appendClass(levelDiv, 'vedDirectoryRow');
-
-    var playLink = plex.dom.ce('a', levelDiv);
+    var playLink = plex.dom.ce('a', centerDiv);
     playLink.href = '#' + encodeURIComponent(levelAddress);
-    plex.dom.ct(levelAddress || ' ', playLink);
-    plex.dom.appendClass(playLink, 'vedNavLink');
+    var split = self.splitLevelAddress(levelAddress);
+    var dispName = '';
+    if (split[0] == VedApp.LevelPrefix.LOCAL) {
+      dispName += split[1] + ' - ';
+    }
+    dispName += self.getTitleForLevelAddress(levelAddress);
+    plex.dom.ct(dispName, playLink);
+    plex.dom.appendClass(playLink, 'vedDirectoryLink');
   }
 
   // builtin levels
@@ -118,6 +137,8 @@ VedApp.prototype.renderDirectory = function(appDiv) {
     renderRow(levelAddresss[i]);
   }
 
+  plex.dom.ce('p', centerDiv);
+
   // local levels
   var localNames = this.stor.getNames();
   localNames.sort();
@@ -125,13 +146,13 @@ VedApp.prototype.renderDirectory = function(appDiv) {
     renderRow(VedApp.LevelPrefix.LOCAL + localNames[i]);
   }
 
-  plex.dom.ce('br', appDiv);
+  plex.dom.ce('br', centerDiv);
 
   // for callbacks
   var self = this;
 
   // create level button
-  var createButton = plex.dom.ce('button', appDiv);
+  var createButton = plex.dom.ce('button', centerDiv);
   plex.dom.appendClass(createButton, 'vedButton');
   plex.dom.ct('Create new level', createButton);
   createButton.onclick = function() {
