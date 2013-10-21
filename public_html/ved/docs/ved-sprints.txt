@@ -76,14 +76,14 @@ v Ved expects a partless cluster of type "meta", with "title" and "description" 
 v create template for that
 v Display those in level header.
 v Update builtin levels to include the old titles and descriptions
+v Show titles in directory.
 - Make those editable in edit mode
-- Show titles in directory? It'll slow things down a little but maybe not enough to notice.
 
 File rename
 
 Polish
-- Show intro paragraph on main page
-- Make buttons not look so crappy
+v Show intro paragraph on main page
+v Preserve mode across visits to directory.
 - Fast shifting between modes - kbd shortcuts like 1, 2, 3, 4, 0?  p, e, s, j, u? [, ], and u?
 
 Milestone: Easy level sharing! Post levels as URLs!

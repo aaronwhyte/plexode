@@ -29,6 +29,11 @@ body {
   padding:0.5em 0;
 }
 
+h1 {
+  font-size:large;
+  margin:0.5em 0;
+}
+
 .vedModeLink {
   padding:0 0.8em;
 }

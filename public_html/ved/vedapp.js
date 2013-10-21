@@ -71,11 +71,11 @@ VedApp.prototype.render = function() {
     }
   }
 
-  if (levelAddress && !mode) {
-    mode = VedApp.Mode.PLAY;
-  }
-
-  if (mode) {
+  mode = mode || VedApp.Mode.PLAY;
+  this.renderModeSwitch(appDiv, levelAddress, mode);
+  if (!levelAddress) {
+    this.renderDirectory(appDiv, mode);
+  } else {
     if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
     this.renderLevelHeader(appDiv, levelAddress, mode);
     if (mode == VedApp.Mode.PLAY) {
@@ -87,8 +87,6 @@ VedApp.prototype.render = function() {
     } else if (mode == VedApp.Mode.JSON) {
       this.renderJsonMode(appDiv, levelAddress);
     }
-  } else {
-    this.renderDirectory(appDiv);
   }
 };
 
@@ -99,7 +97,7 @@ VedApp.prototype.getHashChangeListener = function() {
   };
 };
 
-VedApp.prototype.renderDirectory = function(appDiv) {
+VedApp.prototype.renderDirectory = function(appDiv, mode) {
   var centerDiv = plex.dom.ce('div', appDiv);
   centerDiv.className = 'center';
   centerDiv.innerHTML +=
@@ -113,19 +111,24 @@ VedApp.prototype.renderDirectory = function(appDiv) {
       '<a href="http://www.apple.com/safari/">Safari</a>, and ' +
       '<a href="http://www.opera.com/browser">Opera</a>.<br>' +
       '<a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up might work.' +
-      '<h1>Play it!</h1>' +
+      '<h1>Official Levels</h1>' +
       '</div>';
 
   var self = this;
   function renderRow(levelAddress) {
     var playLink = plex.dom.ce('a', centerDiv);
-    playLink.href = '#' + encodeURIComponent(levelAddress);
+    playLink.href = '#' + plex.url.encodeQuery(self.createQueryObj(mode, levelAddress));
     var split = self.splitLevelAddress(levelAddress);
     var dispName = '';
     if (split[0] == VedApp.LevelPrefix.LOCAL) {
       dispName += split[1] + ' - ';
     }
-    dispName += self.getTitleForLevelAddress(levelAddress);
+    try {
+      dispName += self.getTitleForLevelAddress(levelAddress);
+    } catch (e) {
+      console.log(e);
+      dispName += 'LEVEL CORRUPTED';
+    }
     plex.dom.ct(dispName, playLink);
     plex.dom.appendClass(playLink, 'vedDirectoryLink');
   }
@@ -141,15 +144,15 @@ VedApp.prototype.renderDirectory = function(appDiv) {
 
   // local levels
   var localNames = this.stor.getNames();
+  if (localNames.length) {
+    centerDiv.innerHTML += '<h1>Editable Levels</h1>';
+  }
   localNames.sort();
   for (var i = 0; i < localNames.length; i++) {
     renderRow(VedApp.LevelPrefix.LOCAL + localNames[i]);
   }
 
   plex.dom.ce('br', centerDiv);
-
-  // for callbacks
-  var self = this;
 
   // create level button
   var createButton = plex.dom.ce('button', centerDiv);
@@ -171,26 +174,19 @@ VedApp.prototype.renderDirectory = function(appDiv) {
 };
 
 
-VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) {
-  var leftLink = plex.dom.ce('a', appDiv);
-  leftLink.href = '#';
-  leftLink.innerHTML = '&laquo;';
-  leftLink.className = 'vedLeftLink';
+VedApp.prototype.createQueryObj = function(mode, levelAddress) {
+  var query = {};
+  if (mode != VedApp.Mode.PLAY) query[VedApp.Params.MODE] = mode;
+  if (levelAddress) query[VedApp.Params.LEVEL] = levelAddress;
+  return query;
+};
 
-  var split = this.splitLevelAddress(levelAddress);
-  var levelPrefix = split[0];
-  var levelName = split[1];
-
-  // left link
-  var modesDiv = plex.dom.ce('div', appDiv);
-  modesDiv.className = 'vedModesDiv';
-
-  // right mode switches
+VedApp.prototype.renderModeSwitch = function(appDiv, levelAddress, renderMode) {
   var order = [
     VedApp.Mode.PLAY,
-    VedApp.Mode.EDIT,
-    VedApp.Mode.SHARE,
-    VedApp.Mode.JSON];
+    VedApp.Mode.EDIT];
+  var modesDiv = plex.dom.ce('div', appDiv);
+  modesDiv.className = 'vedModesDiv';
   for (var i = 0; i < order.length; i++) {
     var mode = order[i];
     var modeElem;
@@ -198,15 +194,19 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, renderMode) 
       modeElem = plex.dom.ce('span', modesDiv);
     } else {
       modeElem = plex.dom.ce('a', modesDiv);
-      modeElem.href = '#' + plex.url.encodeQuery({
-        mode: mode,
-        level: levelAddress
-      });
+      modeElem.href = '#' + plex.url.encodeQuery(this.createQueryObj(mode, levelAddress));
       modeElem.onclick = this.getModeLinkFn(mode, levelAddress);
     }
     modeElem.className = 'vedModeLink';
     plex.dom.ct(mode, modeElem);
   }
+};
+
+VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, mode) {
+  var leftLink = plex.dom.ce('a', appDiv);
+  leftLink.href = '#' + plex.url.encodeQuery(this.createQueryObj(mode, null));
+  leftLink.innerHTML = '&laquo;';
+  leftLink.className = 'vedLeftLink';
 
   // name
   var nameSpan = plex.dom.ce('span', appDiv);
@@ -235,10 +235,7 @@ VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
   var self = this;
   return function(event) {
     event && event.preventDefault();
-    var href = '#' + plex.url.encodeQuery({
-      mode: mode,
-      level: levelAddress
-    });
+    var href = '#' + plex.url.encodeQuery(self.createQueryObj(mode, levelAddress));
     history.replaceState(null, document.title, href);
     self.render();
   };
