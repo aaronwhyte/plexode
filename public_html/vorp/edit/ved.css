@@ -13,15 +13,20 @@ body {
   -ms-user-select: text;
 }
 
-.vedLeftLink, .vedLevelName, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
+.vedLeftLink, .vedLevelName, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle, .vedEditorNotice  {
   margin:0 0.5em;
   padding:0.3em 0.8em;
   border-radius: 0.75em;
   font-weight:bold;
 }
 
-.vedLeftLink, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle {
+.vedLeftLink, .vedModesDiv, #gedHelpToggle, #gedSysClipsToggle, .vedEditorNotice {
   background-color:rgba(64, 64, 64, 0.7);
+}
+
+.vedEditorNotice {
+  font-weight:normal;
+  color:yellow;
 }
 
 #levelHeader {

@@ -82,7 +82,8 @@ x File rename? Meh.
 Final Push
 v Show intro paragraph on main page
 v Preserve mode across visits to directory.
-- visual cue that official levels are read-only.
+v visual cue that official levels are read-only.
+v visual cue that data-url levels are read-only.
 - Make Title and Description editable in edit mode
 - "Share" as a popup from Edit
 

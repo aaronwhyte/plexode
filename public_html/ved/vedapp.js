@@ -344,6 +344,21 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
     self.getModeLinkFn(VedApp.Mode.EDIT, VedApp.LevelPrefix.LOCAL + newName)();
   };
 
+  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
+    var officialNotice = plex.dom.ce('span', appDiv);
+    officialNotice.className = 'vedEditorNotice';
+    plex.dom.ct('This is an official level, not editable. You can make a local copy and edit that.',
+        officialNotice);
+  }
+
+  if (levelPrefix == VedApp.LevelPrefix.DATA) {
+    var officialNotice = plex.dom.ce('span', appDiv);
+    officialNotice.className = 'vedEditorNotice';
+    plex.dom.ct('This is a data-URL level, not editable. You can make a local copy and edit that.',
+        officialNotice);
+  }
+
+
   // delete button
   if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
     var deleteButton = plex.dom.ce('button', appDiv);
