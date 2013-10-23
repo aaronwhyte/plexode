@@ -13,12 +13,11 @@ v Encoding
   v round floating-pt precision during edits to shrink data size
 v Decode level=data~your-data-here URLs
 
-2013-09-29 - 
+2013-09-29...
 Read-only editor mode
 v for data~ levels
 v for builtin~ levels
 v make sure clip copying still works
-- visual cue that this is read-only. Maybe flash it in the UI when you fail an "editable" check?
 
 2013-09-30
 Level copying to localstorage
@@ -69,7 +68,7 @@ v change 'json' view to template JSON, not op JSON
 v change builtin~ levels to use template JSON, not op JSON
 v replace all local levels
 
-2013-10-14 -
+2013-10-14...
 Titles and Descriptions
 Gonna need to sink the template data, or ops, into
 v Ved expects a partless cluster of type "meta", with "title" and "description" data.
@@ -77,14 +76,15 @@ v create template for that
 v Display those in level header.
 v Update builtin levels to include the old titles and descriptions
 v Show titles in directory.
-- Make those editable in edit mode
 
-File rename
+x File rename? Meh.
 
-Polish
+Final Push
 v Show intro paragraph on main page
 v Preserve mode across visits to directory.
-- Fast shifting between modes - kbd shortcuts like 1, 2, 3, 4, 0?  p, e, s, j, u? [, ], and u?
+- visual cue that official levels are read-only.
+- Make Title and Description editable in edit mode
+- "Share" as a popup from Edit
 
 Milestone: Easy level sharing! Post levels as URLs!
 
