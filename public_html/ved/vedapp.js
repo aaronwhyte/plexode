@@ -368,7 +368,7 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
       if (confirm("Are you sure you want to delete this level?")) {
         var opStor = new OpStor(self.stor, levelName);
         opStor.remove();
-        plex.url.setFragment('');
+        plex.url.setFragment(plex.url.encodeQuery(self.createQueryObj(VedApp.Mode.EDIT)));
       }
     };
   }
