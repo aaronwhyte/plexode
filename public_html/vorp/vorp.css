@@ -1,6 +1,5 @@
 body {
-  background: #222;
-  color: #aaa;
+  color: #bbb;
 }
 
 #levelFooter {
@@ -61,8 +60,8 @@ div.center {
   border: 0;
   padding: 0;
   position:absolute;
-  top:0px;
-  background: #000;
+  top:0;
+  background: #111;
   z-index:-2;
 }
 
