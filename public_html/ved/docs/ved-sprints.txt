@@ -70,7 +70,6 @@ v replace all local levels
 
 2013-10-14...
 Titles and Descriptions
-Gonna need to sink the template data, or ops, into
 v Ved expects a partless cluster of type "meta", with "title" and "description" data.
 v create template for that
 v Display those in level header.
@@ -84,7 +83,7 @@ v Show intro paragraph on main page
 v Preserve mode across visits to directory.
 v visual cue that official levels are read-only.
 v visual cue that data-url levels are read-only.
-- Make Title and Description editable in edit mode
+v Make Title and Description editable in edit mode
 - "Share" as a popup from Edit
 
 Milestone: Easy level sharing! Post levels as URLs!

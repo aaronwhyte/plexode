@@ -220,15 +220,41 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, mode) {
   }
   plex.dom.ct(nameText, nameSpan);
 
+  var metaWrapper = plex.dom.ce('div', appDiv);
+  metaWrapper.className = 'vedMetaWrapper';
+
+  this.renderMetaContent(levelAddress, mode);
+};
+
+VedApp.prototype.renderMetaContent = function(levelAddress, mode) {
+  var metaWrapper = document.querySelector('.vedMetaWrapper');
+  metaWrapper.innerHTML = '';
+
   // title
-  var titleElem = plex.dom.ce('div', appDiv);
+  var titleElem = plex.dom.ce('span', metaWrapper);
   titleElem.className = 'vedLevelTitle';
-  plex.dom.ct(this.getTitleForLevelAddress(levelAddress), titleElem);
+
+  // meta-data edit button
+  if (mode == VedApp.Mode.EDIT) {
+    var metaButtonWrap = plex.dom.ce('span', metaWrapper);
+    metaButtonWrap.style.position = 'relative';
+    var metaEditElem = plex.dom.ce('button', metaButtonWrap);
+    metaEditElem.className = 'vedMetaEdit';
+    plex.dom.ct(GrafRend.DATA_BUTTON_TEXT, metaEditElem);
+  }
 
   // desc
-  var descElem = plex.dom.ce('div', appDiv);
+  var descElem = plex.dom.ce('div', metaWrapper);
   descElem.className = 'vedLevelDesc';
-  plex.dom.ct(this.getDescForLevelAddress(levelAddress), descElem);
+
+  this.updateMetaContent(levelAddress);
+};
+
+VedApp.prototype.updateMetaContent = function(levelAddress) {
+  document.querySelector('.vedLevelTitle').innerHTML =
+      plex.string.textToHtml(this.getTitleForLevelAddress(levelAddress)) || '&nbsp;';
+  document.querySelector('.vedLevelDesc').innerHTML =
+      plex.string.textToHtml(this.getDescForLevelAddress(levelAddress)) || '&nbsp;';
 };
 
 VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
@@ -279,8 +305,7 @@ VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
   return this.getGrafForLevelAddress(levelAddress).createOps();
 };
 
-VedApp.prototype.getMetaClusterForLevelAddress = function(levelAddress) {
-  var graf = this.getGrafForLevelAddress(levelAddress);
+VedApp.prototype.getMetaClusterForGraf = function(graf) {
   for (var id in graf.clusters) {
     var cluster = graf.getCluster(id);
     if (cluster.data['type'] == VedType.META) {
@@ -288,6 +313,11 @@ VedApp.prototype.getMetaClusterForLevelAddress = function(levelAddress) {
     }
   }
   return null;
+};
+
+VedApp.prototype.getMetaClusterForLevelAddress = function(levelAddress) {
+  var graf = this.getGrafForLevelAddress(levelAddress);
+  return this.getMetaClusterForGraf(graf);
 };
 
 VedApp.prototype.getTitleForLevelAddress = function(levelAddress) {
@@ -326,8 +356,11 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
 
   var self = this;
 
+  var buttonBarElem = plex.dom.ce('div', appDiv);
+  buttonBarElem.className = 'buttonBarDiv';
+
   // copy button
-  var copyButton = plex.dom.ce('button', appDiv);
+  var copyButton = plex.dom.ce('button', buttonBarElem);
   plex.dom.appendClass(copyButton, 'vedButton');
   plex.dom.ct('Copy level', copyButton);
   copyButton.onclick = function() {
@@ -345,23 +378,22 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
   };
 
   if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
-    var officialNotice = plex.dom.ce('span', appDiv);
+    var officialNotice = plex.dom.ce('span', buttonBarElem);
     officialNotice.className = 'vedEditorNotice';
     plex.dom.ct('This is an official level, not editable. You can make a local copy and edit that.',
         officialNotice);
   }
 
   if (levelPrefix == VedApp.LevelPrefix.DATA) {
-    var officialNotice = plex.dom.ce('span', appDiv);
+    var officialNotice = plex.dom.ce('span', buttonBarElem);
     officialNotice.className = 'vedEditorNotice';
     plex.dom.ct('This is a data-URL level, not editable. You can make a local copy and edit that.',
         officialNotice);
   }
 
-
   // delete button
   if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
-    var deleteButton = plex.dom.ce('button', appDiv);
+    var deleteButton = plex.dom.ce('button', buttonBarElem);
     plex.dom.appendClass(deleteButton, 'vedButton');
     plex.dom.ct('Delete level', deleteButton);
     deleteButton.onclick = function() {
@@ -391,6 +423,16 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
   grafUi = this.createGrafUi(appDiv, grafEd, clipboard, grafUiKeyCombos);
   grafUi.setEditable(editable);
   grafUi.startLoop();
+  var metaEditElem = document.querySelector('.vedMetaEdit');
+  metaEditElem.style.display = editable ? '' : 'none';
+  if (editable) {
+    var metaCluster = this.getMetaClusterForGraf(grafEd.model);
+    metaEditElem.onclick = function() {
+      grafUi.startEditingData(metaCluster.id, ['title', 'desc'], function() {
+        self.updateMetaContent(levelAddress);
+      });
+    };
+  }
   this.looper = grafUi;
 };
 

@@ -384,7 +384,7 @@ GrafUi.prototype.getKeyUpListener = function() {
 };
 
 
-GrafUi.prototype.startEditingData = function(objId) {
+GrafUi.prototype.startEditingData = function(objId, opt_keys, opt_then) {
   if (!this.editable) return;
   this.editingId = objId;
   this.mode = GrafUi.Mode.EDIT_DATA;
@@ -396,6 +396,7 @@ GrafUi.prototype.startEditingData = function(objId) {
 
   var first = true;
   for (var key in obj.data) {
+    if (opt_keys && !plex.array.contains(opt_keys, key)) continue;
     var field = plex.dom.ce('div', this.editDiv);
     field.classList.add('gedEditField');
 
@@ -416,14 +417,15 @@ GrafUi.prototype.startEditingData = function(objId) {
   var button = plex.dom.ce('button', this.editDiv);
   button.classList.add('gedEditButton');
   plex.dom.ct('Save & Close', button);
-  button.onclick = this.getEditingOkFn();
+  button.onclick = this.getEditingOkFn(opt_then);
 };
 
-GrafUi.prototype.getEditingOkFn = function() {
+GrafUi.prototype.getEditingOkFn = function(opt_then) {
   var self = this;
   return function() {
     self.saveEditingData();
     self.stopEditingData();
+    opt_then && opt_then();
   };
 };
 
@@ -434,12 +436,12 @@ GrafUi.prototype.saveEditingData = function() {
   if (!this.editDiv) return;
   var obj = this.grafEd.getModel().objs[this.editingId];
   var inputs = document.querySelectorAll('.gedEditInput');
+  var changes = {};
   if (obj && inputs.length) {
     for (var i = 0; i < inputs.length; i++) {
       var input = inputs[i];
       var key = input.id.split('_')[1];
       var val = input.value;
-      var changes = {};
       if (key && key in obj.data && obj.data[key] != val) {
         changes[key] = input.value;
       }

@@ -54,28 +54,44 @@ span.vedModeLink {
   float:left;
 }
 
+.vedMetaWrapper {
+  clear:both;
+  text-align:center;
+}
+
 .vedLevelTitle {
   font-size:large;
   font-weight:bold;
-  clear:both;
-  text-align:center;
 }
 
 .vedLevelDesc {
   font-size: small;
   font-weight: normal;
+}
+
+.vedButtonBar {
   clear:both;
-  text-align:center;
 }
 
 .vedButton {
   font-size:small;
   padding:0.1em 0.5em;
   border-radius:0.25em;
+  border:0;
+}
+
+.vedMetaEdit {
+  font-size:large;
+  border-radius:0.5em;
+  margin:0 0.5em;
+  position:absolute;
+  bottom:0;
+  border:0;
 }
 
 .vedModesDiv {
   float:right;
+  margin-left: 2em;
 }
 
 .vedDirectoryLink {
