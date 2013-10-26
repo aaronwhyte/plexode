@@ -11,5 +11,4 @@ __all__ = [
   'test',
   'unsquish',
   'ved',
-  'vorp',
   ]

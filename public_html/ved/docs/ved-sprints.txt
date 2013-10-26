@@ -1,92 +1,107 @@
-2013.01.04 - 2013.01.16
-Improved Dev Key/Mouse Controls
-Primary UX study findings:
-* People can't figure out how it works without extensively studying the help.
-* People can't find the help.
-* Even with help, everything's a little hard, and two
-* Linking things is totes imposs-EE-blay for people.
-Mouse UI adjustments:
-v pan: mouse-drag empty area
-Without Selection
-v drag unselected: down on unselected, drag, up
-v link:
-  v down on linkpoint, drag to other linkpoint, up
-  v linking-mode indicator, like a dimmed line from the start to the cursor
-With Selected Items
-v drag selected:
-  v down on selected, drag, up.
-  v Remove "D".
 
-2013.01.19
-v Text labels on parts
+2013-09-22 - 2013-09-29
+New directory
+v Official levels are on top, and not in localstorage.
+v localstorage levels are just below official ones.
+v "New Level" button adds a generic new level
 
-2013.01.19 - 2013.01.22
-sysclips widget
-v help-like expand/collapse widget
-v get all items to render in wrapper
-v selection
-  v attach click/select event from item canvas to gedui
-    x embed canvases in buttons?
-    v identify which clip was selected
-  v copy sysclip to currentClip
-  v collapse menu
-v BONUS toggle menu key 'm' with help doc
+2013-09-29 done in one day!
+Sharing
+v Encoding
+  v Encode any level into a linkifier-friendly URL, w hash param like level=data~your-data-here
+  v Make a new "share" view that renders an encoded URL w instructions on how to use it.
+  v round floating-pt precision during edits to shrink data size
+v Decode level=data~your-data-here URLs
 
-2013.01.27
-v JSON export mode
+2013-09-29...
+Read-only editor mode
+v for data~ levels
+v for builtin~ levels
+v make sure clip copying still works
 
-2013.01.28 - 2013.02.01
-Field editing
-v Render data
-v Edit button
-v Edit form
-v Save and stuff
+2013-09-30
+Level copying to localstorage
+v builtins can be copied
+v data~ levels can be copied
+v even local~ levels can be cloned, just to make it monotonous.
 
-DONE! Milestone: Ship fun levels created entirely in Ved
-v Ved usable by me for editing.
-v Some way to publish levels
-  v JSON view + cut-n-paste?
-v Convert some existing levels from LevelProg code to JSON, to test-publish Ved output.
-v Change level creation flow
-  v Add "new level" button to vedapp home
-  x Remove list of existing levels from ved.
-  x Change vorpLevels from key/val pair to array, removing name and desc.
-v Actually make new levels.
-  v Create lesson level JSON
-    v 1: Move with the arrow keys. It's OK to bump into walls. Touch the green thingy to go to the next level.
-    v 2: You can push things out of your way.
-    v 3: Touch buttons and sensors to make things happen.
-    v 4: Dying is no big deal. Sometimes you need to do it on purpose to solve a level.
-      v Add "NOT" logic sprite
-        v sprite itself
-        v transformer
-        v sysclip item
-    v 5: You have a tractor beam! Hold Z while moving around to grab things. Press X to let go.
-      v add big_block object
-      v player must pull a big block out of a hole, or grab a block on the far side of a zapper.
-    v 6  grip-switches
-    v 7: You can throw things. Grab something. Then hold Z, and while holding it, tap X.
-    v 8: The blue squares are teleporters, which come in pairs. Touch one to teleport to the other.
-    v 9: You can grab a teleporter and carry it around.
-  v Make lesson JSON into real connected levels.
-  v Challenges
-    v teleporting saves time, and stuff
-    v trading up with grippers?
-  v Apology for Vorp production values.
-v Push
-v Publicize
-2013-02-13: Nailed it.
+x Auto-update data URLs when you edit the data?? Or force a copy to localstorage?
+Levels take a while to make and I don't want people to lose them because they close a tab.
+So for now, you can't make edits to something that's not backed by localstorage.
+
+2013-10-01
+Fix ghost noises
+v clean up sounds when exiting level
+x or when entering one.
+
+2013-10-01
+Delete level from level view
+v stor remove
+v opstor remove
+v delete button near copy button for local~ levels
+
+done 2013-10-10
+Create new compact model serialization that uses parameterized templates and auto-assigned IDs.
+[1 /* wall */, 100, 300, 100, 500] // x, y, x, y
+[9 /* not */, 600, 200] // x, y
+[8 /* link */, 12, 98] // jack IDs
+etc. The auto-assigned IDs will be the trickiest bit.
+So, define the template language (see doc) and do the ID mapping.
+Specify the templates only once, and automate s27n.
+Deserialization is easy.
+But serialization relies on pattern matching.
+I guess... a template matches a cluster if, after generifying the params of the cluster, it serializes to the
+same JSON as the template. OK.
+Ditto for link templates. Those should be easy, since there's only one form of link in Vorp.
+v template class & unit test
+v templates for all ved stuff
+v replace sysclip info with data in templates, plus default vals for params
+v templatizer
+  v convert model into canonical JSON and then template JSON
+  v convert template JSON into op JSON and then model
+v change 'share' to start with template JSON, not op JSON
+v change data URL deserialization to expect template params
+
+2013-10-14
+Convert all static levels to template JSON ?
+v change 'json' view to template JSON, not op JSON
+v change builtin~ levels to use template JSON, not op JSON
+v replace all local levels
+
+2013-10-14...
+Titles and Descriptions
+v Ved expects a partless cluster of type "meta", with "title" and "description" data.
+v create template for that
+v Display those in level header.
+v Update builtin levels to include the old titles and descriptions
+v Show titles in directory.
+
+x File rename? Meh.
+
+Final Push
+v Show intro paragraph on main page
+v Preserve mode across visits to directory.
+v visual cue that official levels are read-only.
+v visual cue that data-url levels are read-only.
+v Make Title and Description editable in edit mode
+v "Share" as a popup from Edit
+
+Milestone: Easy level sharing! Post levels as URLs!
+
 ===================================================================================
 
 Add real Loopwood front page.
 Add loopwood.com/vorp
 
-Draw portal link or cluster hilite or something.
-
 Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
 
 ===================================================================================
 
+Editor Polish
+- make wall grab-points long and aligned with the wall, like a lozenge, so corners can be pulled apart easily.
+- curved wires
+- arrows on jacks
+- Draw portal link or cluster hilite or something.
 - Esc to close dialogs
 - Redo editor help.
   - "h" or "?" to toggle.
@@ -104,22 +119,7 @@ Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XS
   - Alert to invalid values as they are typed?
     - detect them in the transformation process?
     - turn field pink or something (don't do text, since "empty" might be invalid)
-- curved wires
-- arrows on jacks
-
-Level Creation Process, merging Vorp and Ved
-- Official levels are uneditable but have a "copy and edit" button (?)
-- Custom levels are just below official ones. They have ordered number names? Or namegenerator?
-- "New Level" button adds a generic new level
-
-Sharing
-- Encoding
-  - Encode any level into a linkifier-friendly URL
-  - figure out best dictionary
-  v round floating-pt precision during edits to shrink URL
-- Decoding
-
-Milestone: Ship Ved with easy level sharing
+- Fix the snap-to-grid UI somehow.
 
 ===================================================================================
 

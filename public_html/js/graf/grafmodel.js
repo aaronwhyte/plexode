@@ -15,6 +15,7 @@ function GrafModel() {
 /**
  * Returns a new ID that is not currently in use.
  * Will never return the same ID twice.
+ * @return {number}
  */
 GrafModel.prototype.newId = function() {
   this.lastId++;
@@ -206,7 +207,7 @@ GrafModel.prototype.getObj = function(id) {
 
 /**
  * @param {GrafModel} model  something to paste into this model
- * @return a
+ * @return {Array.<Object>}
  */
 GrafModel.prototype.opsForAddModel = function(model) {
   var ops = model.createOps();
@@ -216,7 +217,6 @@ GrafModel.prototype.opsForAddModel = function(model) {
 
 /**
  * @param {GrafModel} model  something to paste into this model
- * @return a mapping from old obj IDs to new obj IDs
  */
 GrafModel.prototype.addModel = function(model) {
   this.applyOps(this.opsForAddModel(model));
@@ -231,71 +231,92 @@ GrafModel.prototype.clear = function() {
   this.size = 0;
 };
 
+GrafModel.prototype.createSetDataOps = function(objId) {
+  var ops = [];
+  var obj = this.objs[objId];
+  for (var key in obj.data) {
+    ops.push({
+      type: GrafOp.Type.SET_DATA,
+      id: Number(objId),
+      key: key,
+      oldValue: undefined,
+      value: obj.data[key]
+    });
+  }
+  return ops;
+};
+
 /**
- * @return a JSON array of ops that can be used to create an identical model.
+ * @param clusterId
+ * @return {Array} ops
+ */
+GrafModel.prototype.createClusterOps = function(clusterId) {
+  var ops = [];
+  var cluster = this.clusters[clusterId];
+  clusterId = Number(clusterId);
+  ops.push({
+    type: GrafOp.Type.ADD_CLUSTER,
+    id: clusterId
+  });
+  plex.array.extend(ops, this.createSetDataOps(clusterId));
+
+  // Add cluster's parts.
+  for (var partIdStr in cluster.parts) {
+    var partId = Number(partIdStr);
+    var part = cluster.parts[partId];
+    ops.push({
+      type: GrafOp.Type.ADD_PART,
+      id: partId,
+      clusterId: clusterId,
+      x: part.x,
+      y: part.y
+    });
+    plex.array.extend(ops, this.createSetDataOps(partId));
+
+    // Add part's jacks.
+    for (var jackIdStr in part.jacks) {
+      var jackId = Number(jackIdStr);
+      ops.push({
+        type: GrafOp.Type.ADD_JACK,
+        id: jackId,
+        partId: partId
+      });
+      plex.array.extend(ops, this.createSetDataOps(jackId));
+    }
+  }
+  return ops;
+};
+
+/**
+ * @param linkId
+ * @return {Array} ops
+ */
+GrafModel.prototype.createLinkOps = function(linkId) {
+  var ops = [];
+  linkId = Number(linkId);
+  var link = this.links[linkId];
+  ops.push({
+    type: GrafOp.Type.ADD_LINK,
+    id: linkId,
+    jackId1: link.jackId1,
+    jackId2: link.jackId2
+  });
+  plex.array.extend(ops, this.createSetDataOps(linkId));
+  return ops;
+};
+
+/**
+ * @return {Array.<Object>} a JSON array of ops that can be used to create an identical model.
  * Since that re-uses this model's IDs, it can't be added to this model.
  * See "rewriteOpIds(ops)"
  */
 GrafModel.prototype.createOps = function() {
-  function pushDataOps(objId, data) {
-    for (var key in data) {
-      ops.push({
-        type: GrafOp.Type.SET_DATA,
-        id: objId,
-        key: key,
-        oldValue: undefined,
-        value: data[key]
-      });
-    }
-  }
-
-  // buffer up all ops before applying any
   var ops = [];
-
-  // Add clusters.
   for (var clusterId in this.clusters) {
-    var cluster = this.clusters[clusterId];
-    ops.push({
-      type: GrafOp.Type.ADD_CLUSTER,
-      id: clusterId
-    });
-    pushDataOps(clusterId, cluster.data);
-
-    // Add cluster's parts.
-    for (var partId in cluster.parts) {
-      var part = cluster.parts[partId];
-      ops.push({
-        type: GrafOp.Type.ADD_PART,
-        id: partId,
-        clusterId: clusterId,
-        x: part.x,
-        y: part.y
-      });
-      pushDataOps(partId, part.data);
-
-      // Add part's jacks.
-      for (var jackId in part.jacks) {
-        var jack = part.jacks[jackId];
-        ops.push({
-          type: GrafOp.Type.ADD_JACK,
-          id: jackId,
-          partId: partId
-        });
-        pushDataOps(jackId, jack.data);
-      }
-    }
+    plex.array.extend(ops, this.createClusterOps(clusterId))
   }
-
-  // Add links.
   for (var linkId in this.links) {
-    var link = this.links[linkId];
-    ops.push({
-      type: GrafOp.Type.ADD_LINK,
-      id: linkId,
-      jackId1: link.jackId1,
-      jackId2: link.jackId2
-    });
-    pushDataOps(linkId, link.data);
+    plex.array.extend(ops, this.createLinkOps(linkId));
   }
   return ops;
 };
@@ -303,6 +324,7 @@ GrafModel.prototype.createOps = function() {
 /**
  * Overwrites the op IDs to new IDs from this model's ID generator,
  * so the ops can be applied to this model.
+ * So if this model is empty, the op IDs will be given small numbers.
  * @return {Object} idMap from old ID to new ID
  */
 GrafModel.prototype.rewriteOpIds = function(ops) {
@@ -331,7 +353,10 @@ GrafModel.prototype.rewriteOpIds = function(ops) {
     }
   }
 
+  // These are the names of fields that reference other IDs.
+  // Parts have clusterIds, jacks have partIds, and links have jackIds 1 and 2.
   var fieldNames = ['clusterId', 'partId', 'jackId1', 'jackId2'];
+
   for (var i = 0; i < ops.length; i++) {
     var op = ops[i];
     if (GrafOp.isAddOpType(op.type)) {
@@ -363,37 +388,25 @@ GrafModel.prototype.getLinksBetweenJacks = function(jackId1, jackId2) {
 };
 
 /**
- * @param clusterIds the IDs of clusters in this model to copy.
+ * @param {Array} clusterIds the IDs of clusters in this model to copy.
  * @return {GrafModel} A new model containing only the clusters in clusterIds,
  * plus the links between jacks in those clusters.
  */
 GrafModel.prototype.copyClusters = function(clusterIds) {
-  // Copy just the references into an empty model,
-  // and then create an independent copy-by-value using op-based copying.
-
-  var refCopy = new GrafModel();
-  var jackIds = {};
+  var copy = new GrafModel();
+  var handledClusters = {};
   for (var i = 0; i < clusterIds.length; i++) {
     var id = clusterIds[i];
-    var cluster = this.getCluster(id);
-    refCopy.clusters[id] = cluster;
-    refCopy.objs[id] = cluster;
-    for (var partId in cluster.parts) {
-      var part = cluster.parts[partId];
-      for (var jackId in part.jacks) {
-        jackIds[jackId] = true;
-      }
+    if (!handledClusters[id]) {
+      copy.applyOps(this.createClusterOps(id));
+      handledClusters[id] = true;
     }
   }
   for (var linkId in this.links) {
     var link = this.getLink(linkId);
-    if (jackIds[link.jackId1] && jackIds[link.jackId2]) {
-      refCopy.links[linkId] = link;
-      refCopy.objs[linkId] = link;
+    if (copy.jacks[link.jackId1] && copy.jacks[link.jackId2]) {
+      copy.applyOps(this.createLinkOps(linkId));
     }
   }
-  var ops = refCopy.createOps();
-  var valCopy = new GrafModel();
-  valCopy.applyOps(ops);
-  return valCopy;
+  return copy;
 };

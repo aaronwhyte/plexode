@@ -73,3 +73,7 @@ OpStor.prototype.subscribe = function(callback) {
 OpStor.prototype.unsubscribe = function(callback) {
   this.stor.unsubscribe(callback);
 };
+
+OpStor.prototype.remove = function() {
+  this.stor.removeByName(this.name);
+};

@@ -22,6 +22,10 @@ Stor.Ops = {
   APPEND_VALUE: 'append_value'
 };
 
+Stor.prototype.getPrefix = function() {
+  return this.prefix;
+};
+
 //prefix/name/awesometown-level: abc
 //prefix/data/abc/1: [{...},...]
 //prefix/data/abc/2: [{...},...]
@@ -36,20 +40,23 @@ Stor.prototype.getStorageListener = function() {
     var key = String(e.key);
     var keyRegex = /^([^\/]+)\/([^\/]+)\/(.*)$/g;
     var m = keyRegex.exec(key);
-    var prefix = m[1];
-    var type = m[2];
-    var tail = m[3];
-    if (prefix != self.prefix) return;
-    if (type == Stor.DATA) {
-      var dataRegex = /^([^\/]+)\/(.*)$/g;
-      var dataSplit = dataRegex.exec(tail);
-      var id = dataSplit[1];
-      var name = self.getNameForId(id);
-      if (name) {
-        self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, JSON.parse(e.newValue));
+    // Other storage events, like clip manipulation, can trigger this listener.
+    if (m && m[1] && m[2] && m[3]) {
+      var prefix = m[1];
+      var type = m[2];
+      var tail = m[3];
+      if (prefix != self.prefix) return;
+      if (type == Stor.DATA) {
+        var dataRegex = /^([^\/]+)\/(.*)$/g;
+        var dataSplit = dataRegex.exec(tail);
+        var id = dataSplit[1];
+        var name = self.getNameForId(id);
+        if (name) {
+          self.pubsub.publish(Stor.Ops.APPEND_VALUE, name, JSON.parse(e.newValue));
+        }
+      } else if (type == Stor.NAME) {
+        // TODO rename op?
       }
-    } else if (type == Stor.NAME) {
-      // TODO rename op?
     }
   };
 };
@@ -70,6 +77,13 @@ Stor.prototype.getNames = function() {
     }
   }
   return names;
+};
+
+/**
+ * @return {boolean}
+ */
+Stor.prototype.containsName = function(name) {
+  return plex.array.contains(this.getNames(), name);
 };
 
 /**
@@ -230,4 +244,21 @@ Stor.prototype.getNameForId = function(id) {
     }
   }
   return retval;
+};
+
+/**
+ * Delete all names and keys.
+ * @param {String} name
+ */
+Stor.prototype.removeByName = function(name) {
+  if (!this.containsName(name)) return;
+  var dataId = this.getDataId(name);
+  var index = 1;
+  this.storage.removeItem(this.getKeyForName(name));
+  while (true) {
+    var key = this.getKeyForDataIndex(dataId, index++);
+    var val = this.storage.getItem(key);
+    if (!val) return;
+    this.storage.removeItem(key);
+  }
 };

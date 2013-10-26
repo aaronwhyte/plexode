@@ -2,15 +2,16 @@
  * Top level class for the Vorp EDitor.
  * @param {Element} rootNode
  * @param {Stor} stor
- * @param {Object=} opt_testLevelMap
  * @constructor
  */
-function VedApp(rootNode, stor, opt_testLevelMap) {
+function VedApp(rootNode, stor) {
   this.rootNode = rootNode;
   this.stor = stor;
-  this.testLevelMap = opt_testLevelMap || {};
   this.listeningToHashChanges = false;
+  this.squisher = new plex.Squisher(VedApp.DICT);
 }
+
+VedApp.DICT = ['],['];
 
 VedApp.CLIPBOARD_STORAGE_KEY = 'vedClipBoard';
 
@@ -31,15 +32,11 @@ VedApp.Mode = {
   JSON: 'json'
 };
 
-VedApp.DICT = [
-  'http%3A%2F%2F', 'http://', 'plexode.com/vorp',
-  '"type"', '"name"', '"id":', '"key":', '"value":',
-  '"clusterId":', '"partId":', '"jackId1":', '"jackId2":',
-  '"addCluster"', '"setData"', '"addPart"', '"addJack"', '"addLink"',
-  '"x"', '"y"',
-  '"input"', '"output"'
-];
-
+VedApp.LevelPrefix = {
+  BUILTIN: 'builtin~',
+  LOCAL: 'local~',
+  DATA: 'data~'
+};
 
 VedApp.prototype.render = function() {
 
@@ -62,17 +59,31 @@ VedApp.prototype.render = function() {
 
   var hash = plex.url.getFragment();
   var query = plex.url.decodeQuery(hash);
-  var level = query[VedApp.Params.LEVEL];
   var mode = query[VedApp.Params.MODE];
+  var levelAddress = query[VedApp.Params.LEVEL];
+  if (!levelAddress) {
+    for (var key in query) {
+      if (!query[key]) {
+        // The "default key" is level, and level becomes the value.
+        levelAddress = key;
+      }
+    }
+  }
 
-  if (mode == VedApp.Mode.PLAY) {
-    this.renderPlayMode(appDiv, level);
-  } else if (mode == VedApp.Mode.EDIT) {
-    this.renderEditMode(appDiv, level);
-  } else if (mode == VedApp.Mode.JSON) {
-    this.renderJsonMode(appDiv, level);
+  mode = mode || VedApp.Mode.PLAY;
+  this.renderModeSwitch(appDiv, levelAddress, mode);
+  if (!levelAddress) {
+    this.renderDirectory(appDiv, mode);
   } else {
-    this.renderDirectory(appDiv);
+    if (this.maybeRenderLevelNotFound(appDiv, levelAddress)) return;
+    this.renderLevelHeader(appDiv, levelAddress, mode);
+    if (mode == VedApp.Mode.PLAY) {
+      this.renderPlayMode(appDiv, levelAddress);
+    } else if (mode == VedApp.Mode.EDIT) {
+      this.renderEditMode(appDiv, levelAddress);
+    } else if (mode == VedApp.Mode.JSON) {
+      this.renderJsonMode(appDiv, levelAddress);
+    }
   }
 };
 
@@ -83,127 +94,388 @@ VedApp.prototype.getHashChangeListener = function() {
   };
 };
 
-VedApp.prototype.renderDirectory = function(appDiv) {
+VedApp.prototype.renderDirectory = function(appDiv, mode) {
+  var centerDiv = plex.dom.ce('div', appDiv);
+  centerDiv.className = 'center';
+  centerDiv.innerHTML +=
+      '<div class=center>' +
+      '<h1>What?</h1>' +
+      'Vorp is a free 2D physics-based action/puzzle game that runs in modern web browsers.' +
+      '<p>It\'s written in JavaScript, using the HTML5 &lt;canvas&gt; element to render all the graphics. ' +
+      'There are few sound effects, the graphics are terrible, and you need a keyboard to play.' +
+      '<p>It works well in <a href="http://www.google.com/chrome/">Chrome</a>, ' +
+      '<a href="http://www.mozilla.org/firefox">Firefox</a>, ' +
+      '<a href="http://www.apple.com/safari/">Safari</a>, and ' +
+      '<a href="http://www.opera.com/browser">Opera</a>.<br>' +
+      '<a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up might work.' +
+      '<h1>Official Levels</h1>' +
+      '</div>';
 
-  // list of levels
-  var levelNames = this.stor.getNames();
-  levelNames.sort();
-  for (var i = 0; i < levelNames.length; i++) {
-    var levelName = levelNames[i];
-    var levelDiv = plex.dom.ce('div', appDiv);
-    plex.dom.appendClass(levelDiv, 'vedDirectoryRow');
-
-    var editLink = plex.dom.ce('a', levelDiv);
-    editLink.href = '#' + plex.url.encodeQuery({
-      mode: VedApp.Mode.EDIT,
-      level: levelName
-    });
-    plex.dom.ct(levelName || ' ', editLink);
-    plex.dom.appendClass(editLink, 'vedNavLink');
+  var self = this;
+  function renderRow(levelAddress) {
+    var playLink = plex.dom.ce('a', centerDiv);
+    playLink.href = '#' + plex.url.encodeQuery(self.createQueryObj(mode, levelAddress));
+    var split = self.splitLevelAddress(levelAddress);
+    var dispName = '';
+    if (split[0] == VedApp.LevelPrefix.LOCAL) {
+      dispName += split[1] + ' - ';
+    }
+    try {
+      dispName += self.getTitleForLevelAddress(levelAddress);
+    } catch (e) {
+      console.log(e);
+      dispName += 'LEVEL CORRUPTED';
+    }
+    plex.dom.ct(dispName, playLink);
+    plex.dom.appendClass(playLink, 'vedDirectoryLink');
   }
 
-  plex.dom.ce('br', appDiv);
+  // builtin levels
+  var levelAddresss = plex.object.keys(vorpLevels);
+  levelAddresss.sort();
+  for (var i = 0; i < levelAddresss.length; i++) {
+    renderRow(levelAddresss[i]);
+  }
 
-  // for callbacks
-  var self = this;
+  plex.dom.ce('p', centerDiv);
+
+  // local levels
+  var localNames = this.stor.getNames();
+  if (localNames.length) {
+    centerDiv.innerHTML += '<h1>Editable Levels</h1>';
+  }
+  localNames.sort();
+  for (var i = 0; i < localNames.length; i++) {
+    renderRow(VedApp.LevelPrefix.LOCAL + localNames[i]);
+  }
+
+  plex.dom.ce('br', centerDiv);
 
   // create level button
-  var createButton = plex.dom.ce('button', appDiv);
+  var createButton = plex.dom.ce('button', centerDiv);
   plex.dom.appendClass(createButton, 'vedButton');
   plex.dom.ct('Create new level', createButton);
   createButton.onclick = function() {
-    self.createLevel();
-    self.render();
-  };
-
-  // nuke button
-  var nukeButton = plex.dom.ce('button', appDiv);
-  plex.dom.appendClass(nukeButton, 'vedButton');
-  plex.dom.ct('Clear ' + window.location.host + ' localStorage', nukeButton);
-  nukeButton.onclick = function() {
-    self.nuke();
-    self.render();
-  };
-
-  // repopulate button
-  var repopulateButton = plex.dom.ce('button', appDiv);
-  plex.dom.appendClass(repopulateButton, 'vedButton');
-  plex.dom.ct('Populate localStorage', repopulateButton);
-  repopulateButton.onclick = function() {
-    self.repopulate(); // vorpLevels is populated by levels
+    var newName = prompt("New level name?");
+    if (!newName) {
+//      alert("That's not a name.");
+      return;
+    }
+    if (self.stor.containsName(newName)) {
+      alert("There's already a level with that name");
+      return;
+    }
+    self.createLevel(newName);
     self.render();
   };
 };
 
 
-VedApp.prototype.renderLevelHeader = function(appDiv, levelName, renderMode) {
-  var leftLink = plex.dom.ce('a', appDiv);
-  leftLink.href = '#';
-  leftLink.innerHTML = '&laquo;';
-  leftLink.className = 'vedLeftLink';
-  //plex.dom.appendClass(parentLink, 'vedNavLink');
+VedApp.prototype.createQueryObj = function(mode, levelAddress) {
+  var query = {};
+  if (mode != VedApp.Mode.PLAY) query[VedApp.Params.MODE] = mode;
+  if (levelAddress) query[VedApp.Params.LEVEL] = levelAddress;
+  return query;
+};
 
-  // left link
+VedApp.prototype.renderModeSwitch = function(appDiv, levelAddress, renderMode) {
+  var order = [
+    VedApp.Mode.PLAY,
+    VedApp.Mode.EDIT];
   var modesDiv = plex.dom.ce('div', appDiv);
   modesDiv.className = 'vedModesDiv';
-
-  // right mode switches
-  for (var k in VedApp.Mode) {
-    var mode = VedApp.Mode[k];
+  for (var i = 0; i < order.length; i++) {
+    var mode = order[i];
     var modeElem;
     if (renderMode == mode) {
       modeElem = plex.dom.ce('span', modesDiv);
     } else {
       modeElem = plex.dom.ce('a', modesDiv);
-      modeElem.href = '#' + plex.url.encodeQuery({
-        mode: mode,
-        level: levelName
-      });
-      modeElem.onclick = this.getModeLinkFn(mode, levelName);
+      modeElem.href = '#' + plex.url.encodeQuery(this.createQueryObj(mode, levelAddress));
+      modeElem.onclick = this.getModeLinkFn(mode, levelAddress);
     }
     modeElem.className = 'vedModeLink';
     plex.dom.ct(mode, modeElem);
   }
-
-  // title
-  var titleSpan = plex.dom.ce('span', appDiv);
-  titleSpan.className = 'vedEditTitle';
-  plex.dom.ct(levelName, titleSpan);
 };
 
-VedApp.prototype.getModeLinkFn = function(mode, levelName) {
+VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, mode) {
+  var leftLink = plex.dom.ce('a', appDiv);
+  leftLink.href = '#' + plex.url.encodeQuery(this.createQueryObj(mode, null));
+  leftLink.innerHTML = '&laquo;';
+  leftLink.className = 'vedLeftLink';
+
+  // name
+  var nameSpan = plex.dom.ce('span', appDiv);
+  nameSpan.className = 'vedLevelName';
+  var nameText = levelAddress;
+  if (nameText.indexOf(VedApp.LevelPrefix.DATA) == 0) {
+    if (nameText.length > 45) {
+      nameText = nameText.substring(0, 20) + '...' +
+          nameText.substring(nameText.length - 20);
+    }
+  }
+  plex.dom.ct(nameText, nameSpan);
+
+  var metaWrapper = plex.dom.ce('div', appDiv);
+  metaWrapper.className = 'vedMetaWrapper';
+
+  this.renderMetaContent(levelAddress, mode);
+};
+
+VedApp.prototype.renderMetaContent = function(levelAddress, mode) {
+  var metaWrapper = document.querySelector('.vedMetaWrapper');
+  metaWrapper.innerHTML = '';
+
+  // title
+  var titleElem = plex.dom.ce('span', metaWrapper);
+  titleElem.className = 'vedLevelTitle';
+
+  // meta-data edit button
+  if (mode == VedApp.Mode.EDIT) {
+    var metaButtonWrap = plex.dom.ce('span', metaWrapper);
+    metaButtonWrap.style.position = 'relative';
+    var metaEditElem = plex.dom.ce('button', metaButtonWrap);
+    metaEditElem.className = 'vedMetaEdit';
+    plex.dom.ct(GrafRend.DATA_BUTTON_TEXT, metaEditElem);
+  }
+
+  // desc
+  var descElem = plex.dom.ce('div', metaWrapper);
+  descElem.className = 'vedLevelDesc';
+
+  this.updateMetaContent(levelAddress);
+};
+
+VedApp.prototype.updateMetaContent = function(levelAddress) {
+  document.querySelector('.vedLevelTitle').innerHTML =
+      plex.string.textToHtml(this.getTitleForLevelAddress(levelAddress)) || '&nbsp;';
+  document.querySelector('.vedLevelDesc').innerHTML =
+      plex.string.textToHtml(this.getDescForLevelAddress(levelAddress)) || '&nbsp;';
+};
+
+VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
   var self = this;
   return function(event) {
-    event.preventDefault();
-    var href = '#' + plex.url.encodeQuery({
-      mode: mode,
-      level: levelName
-    });
+    event && event.preventDefault();
+    var href = '#' + plex.url.encodeQuery(self.createQueryObj(mode, levelAddress));
     history.replaceState(null, document.title, href);
     self.render();
   };
 };
 
-VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelName) {
-  if (plex.array.contains(this.stor.getNames(), levelName)) {
+VedApp.prototype.splitLevelAddress = function(levelAddress) {
+  for (var key in VedApp.LevelPrefix) {
+    var prefix = VedApp.LevelPrefix[key];
+    if (levelAddress.indexOf(prefix) == 0 && levelAddress.length > prefix.length) {
+      return [prefix, levelAddress.substring(prefix.length)];
+    }
+  }
+  // default prefix is BUILTIN
+  return [VedApp.LevelPrefix.BUILTIN, levelAddress];
+};
+
+VedApp.prototype.getGrafForLevelAddress = function(levelAddress) {
+  var ops = [];
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var name = split[1];
+  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
+    ops = this.getTemplatizer().detemplatize(vorpLevels[name]);
+  } else if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    var opStor = new OpStor(this.stor, name);
+    ops = opStor.getValuesAfterIndex(-1);
+    for (var i = 0; i < ops.length; i++) {
+      ops[i] = ops[i][OpStor.field.OP];
+    }
+  } else if (levelPrefix == VedApp.LevelPrefix.DATA) {
+    var json = this.squisher.unsquish(name);
+    var paramList = JSON.parse(json);
+    ops = this.getTemplatizer().detemplatize(paramList);
+  }
+  var graf = new GrafModel();
+  graf.applyOps(ops);
+  return graf;
+};
+
+VedApp.prototype.getOpsForLevelAddress = function(levelAddress) {
+  return this.getGrafForLevelAddress(levelAddress).createOps();
+};
+
+VedApp.prototype.getMetaClusterForGraf = function(graf) {
+  for (var id in graf.clusters) {
+    var cluster = graf.getCluster(id);
+    if (cluster.data['type'] == VedType.META) {
+      return cluster;
+    }
+  }
+  return null;
+};
+
+VedApp.prototype.getMetaClusterForLevelAddress = function(levelAddress) {
+  var graf = this.getGrafForLevelAddress(levelAddress);
+  return this.getMetaClusterForGraf(graf);
+};
+
+VedApp.prototype.getTitleForLevelAddress = function(levelAddress) {
+  var mc = this.getMetaClusterForLevelAddress(levelAddress);
+  return mc ? mc.data['title'] : '';
+};
+
+VedApp.prototype.getDescForLevelAddress = function(levelAddress) {
+  var mc = this.getMetaClusterForLevelAddress(levelAddress);
+  return mc ? mc.data['desc'] : '';
+};
+
+VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
+  var splitName = this.splitLevelAddress(levelAddress);
+  if (splitName[0] == VedApp.LevelPrefix.BUILTIN) {
+    if (vorpLevels[splitName[1]]) {
+      return false;
+    }
+  } else if (splitName[0] == VedApp.LevelPrefix.LOCAL) {
+    if (plex.array.contains(this.stor.getNames(), splitName[1])) {
+      return false;
+    }
+  } else if (splitName[0] == VedApp.LevelPrefix.DATA) {
     return false;
   }
   var errorDiv = plex.dom.ce('div', appDiv);
   plex.dom.appendClass(errorDiv, 'vedError');
-  plex.dom.ct('The level "' + levelName + '" was not found in localStorage.', errorDiv);
+  plex.dom.ct('The level "' + levelAddress + '" was not found.', errorDiv);
   return true;
 };
 
-VedApp.prototype.renderEditMode = function(appDiv, levelName) {
-  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.EDIT);
-  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+VedApp.prototype.renderCopyButton = function(buttonBarElem, levelAddress) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Copy level', btn);
+  var self = this;
+  btn.onclick = function () {
+    var newName = prompt("New level name?");
+    if (!newName) {
+//      alert("That's not a name.");
+      return;
+    }
+    if (self.stor.containsName(newName)) {
+      alert("There's already a level with that name");
+      return;
+    }
+    self.createLevel(newName, self.getOpsForLevelAddress(levelAddress));
+    self.getModeLinkFn(VedApp.Mode.EDIT, VedApp.LevelPrefix.LOCAL + newName)();
+  };
+};
+
+VedApp.prototype.renderDeleteButton = function(buttonBarElem, levelName) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Delete', btn);
+  var self = this;
+  btn.onclick = function () {
+    if (confirm("Are you sure you want to delete this level?")) {
+      var opStor = new OpStor(self.stor, levelName);
+      opStor.remove();
+      plex.url.setFragment(plex.url.encodeQuery(self.createQueryObj(VedApp.Mode.EDIT)));
+    }
+  };
+};
+
+VedApp.prototype.renderShareButton = function(buttonBarElem, levelAddress) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Share', btn);
+  var self = this;
+  btn.onclick = function () {
+    // hide the pane if it is showing
+    var pane = document.querySelector('.vedSharePane');
+    if (pane) {
+      pane.parentNode.removeChild(pane);
+      return;
+    }
+    var json = JSON.stringify(self.getTemplatizedJsonForLevel(levelAddress));
+    var base64 = self.squisher.squish(json);
+    pane = plex.dom.ce('div', buttonBarElem);
+    pane.className = 'vedSharePane';
+    plex.dom.ce('div', pane).innerHTML = plex.string.textToHtml(
+        'This level is encoded in the URL below. ' +
+            'You can email it, IM it, post it, bookmark it, whatever.\n' +
+            'Anyone who opens it can to play it, copy and edit, and re-share it.', true);
+    // The "level=" prefix must be included, to prevent the first "=" sign
+    // in the data from being interpreted as a key/value separator.
+    var url = [
+      location.origin, location.pathname, '#',
+      VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
+    var a = plex.dom.ce('a', pane);
+    a.className = 'selectable vedShareLink';
+    a.href = url;
+    a.innerHTML = plex.string.textToHtml(url);
+    var closeDiv = plex.dom.ce('div', pane);
+    closeDiv.style.textAlign = 'center';
+    var closeBtn = plex.dom.ce('button', closeDiv);
+    closeBtn.className = 'vedButton';
+    closeBtn.innerText = 'Close';
+    closeBtn.onclick = function() {
+      pane.parentNode.removeChild(pane);
+    }
+  };
+};
+
+VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var levelName = split[1];
+
+  var buttonBarElem = plex.dom.ce('div', appDiv);
+  buttonBarElem.className = 'vedButtonBar';
+  this.renderCopyButton(buttonBarElem, levelAddress);
+  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    this.renderDeleteButton(buttonBarElem, levelName);
+    this.renderShareButton(buttonBarElem, levelAddress);
+  }
+
+  var notice;
+  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
+    notice = plex.dom.ce('span', buttonBarElem);
+    notice.className = 'vedEditorNotice';
+    plex.dom.ct('This is an official level, not editable. You can make a copy, and edit that.',
+        notice);
+  }
+  if (levelPrefix == VedApp.LevelPrefix.DATA) {
+    notice = plex.dom.ce('span', buttonBarElem);
+    notice.className = 'vedEditorNotice';
+    plex.dom.ct('This is a data-URL level, not editable. You can make a copy, and edit that.',
+        notice);
+  }
 
   var plexKeys = new plex.Keys();
   var grafUiKeyCombos = new GrafUiKeyCombos(plexKeys);
   this.renderHelp(appDiv, plexKeys, grafUiKeyCombos);
   var clipboard = this.createClipboard(appDiv);
-  var grafUi = this.createGrafUi(appDiv, levelName, clipboard, grafUiKeyCombos);
+  var grafEd, grafUi, editable;
+  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    editable = true;
+    grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
+  } else {
+    editable = false;
+    var model = new GrafModel();
+    var ops = this.getOpsForLevelAddress(levelAddress);
+    model.applyOps(ops);
+    grafEd = new GrafEd(model);
+  }
+  grafUi = this.createGrafUi(appDiv, grafEd, clipboard, grafUiKeyCombos);
+  grafUi.setEditable(editable);
   grafUi.startLoop();
+  var metaEditElem = document.querySelector('.vedMetaEdit');
+  metaEditElem.style.display = editable ? '' : 'none';
+  if (editable) {
+    var metaCluster = this.getMetaClusterForGraf(grafEd.model);
+    var self = this;
+    metaEditElem.onclick = function() {
+      grafUi.startEditingData(metaCluster.id, ['title', 'desc'], function() {
+        self.updateMetaContent(levelAddress);
+      });
+    };
+  }
   this.looper = grafUi;
 };
 
@@ -239,10 +511,9 @@ VedApp.prototype.renderSysClipWrapper = function(appDiv) {
   return wrapper;
 };
 
-VedApp.prototype.createGrafUi = function(appDiv, levelName, clipboard, grafUiKeyCombos) {
+VedApp.prototype.createGrafUi = function(appDiv, grafEd, clipboard, grafUiKeyCombos) {
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.className = 'vedEditCanvas';
-  var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
   var model = grafEd.getModel();
   var camera = new Camera();
   var renderer = new Renderer(canvas, camera);
@@ -278,9 +549,20 @@ VedApp.prototype.createClipboard = function(appDiv) {
   return new Clipboard(grafRend, localStorage, VedApp.CLIPBOARD_STORAGE_KEY);
 };
 
-VedApp.prototype.renderPlayMode = function(appDiv, levelName) {
-  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.PLAY);
-  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+VedApp.prototype.createVorpFromGraf = function(graf) {
+  var gameClock = new GameClock();
+  var sledgeInvalidator = new SledgeInvalidator();
+  var vorpOut = new VorpOut(new Renderer(canvas, new Camera()), SoundFx.createInstance());
+  var vorp = Vorp.createVorp(vorpOut, gameClock, sledgeInvalidator);
+
+  // Use Transformer to populate Vorp with Model.
+  var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
+  transformer.transformModel(graf);
+  return vorp;
+};
+
+VedApp.prototype.renderPlayMode = function(appDiv, levelAddress) {
+  var graf = this.getGrafForLevelAddress(levelAddress);
 
   // hacky fake header/footer to restrict the canvas positioning
   // TODO: better canvas resize cues, maybe owned by the renderer
@@ -292,75 +574,46 @@ VedApp.prototype.renderPlayMode = function(appDiv, levelName) {
   var canvas = plex.dom.ce('canvas', appDiv);
   canvas.id = 'canvas';
 
-  // get level graf
-  var opStor = new OpStor(this.stor, levelName);
-  var levelValues = opStor.getValuesAfterIndex(-1);
-  var grafModel = new GrafModel();
-  for (var i = 0; i < levelValues.length; i++) {
-    grafModel.applyOp(levelValues[i][OpStor.field.OP]);
-  }
-  // create vorp instance
-  var gameClock = new GameClock();
-  var sledgeInvalidator = new SledgeInvalidator();
-  var vorpOut = new VorpOut(new Renderer(canvas, new Camera()), SoundFx.createInstance());
-  var vorp = Vorp.createVorp(vorpOut, gameClock, sledgeInvalidator);
-
-  // Use Transformer to populate Vorp with Model.
-  var transformer = new Transformer(vorp, gameClock, sledgeInvalidator);
-  transformer.transformModel(grafModel);
-
   // Start the game up.
+  var vorp = this.createVorpFromGraf(graf);
   vorp.startLoop();
   this.looper = vorp;
 };
 
-VedApp.prototype.renderJsonMode = function(appDiv, levelName) {
-  this.renderLevelHeader(appDiv, levelName, VedApp.Mode.JSON);
-  if (this.maybeRenderLevelNotFound(appDiv, levelName)) return;
+VedApp.prototype.renumberOps = function(ops) {
+  (new GrafModel()).rewriteOpIds(ops);
+  return ops;
+};
 
-  var grafEd = GrafEd.createFromOpStor(new OpStor(this.stor, levelName));
-  var model = grafEd.getModel();
+VedApp.prototype.getTemplatizer = function() {
+  var templates = plex.object.values(VedTemplates.getClusterMap());
+  plex.array.extend(templates, plex.object.values(VedTemplates.getLinkMap()));
+  return new GrafTemplatizer(templates);
+};
+
+VedApp.prototype.getTemplatizedJsonForLevel = function(levelAddress) {
+  var graf = new GrafModel();
+  var ops = this.getOpsForLevelAddress(levelAddress);
+  this.renumberOps(ops);
+  graf.applyOps(ops);
+  return this.getTemplatizer().templatize(graf);
+};
+
+VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
   var div = plex.dom.ce('div', appDiv);
   div.style.clear = 'both';
-  div.style.fontSize = 'small';
   div.className = 'selectable';
-  var ops = model.createOps();
-//  var html = plex.string.textToHtml(JSON.stringify(ops));
-  var html = plex.string.textToHtml(JSON.stringify(ops, null, "  "));
-  html = plex.string.replace(html, "  ", "&nbsp; ");
-  html = plex.string.replace(html, "\n", "<br>");
-  div.innerHTML = html;
+  var json = this.getTemplatizedJsonForLevel(levelAddress);
+  var text = JSON.stringify(json);
+  text = plex.string.replace(text, '],', '],\n');
+  div.innerHTML = plex.string.textToHtml(text, true);
 };
 
-
-VedApp.prototype.createLevel = function() {
-  function pad(str, size) {
-    str = String(str);
-    while (str.length < size) {
-      str = '0' + str;
-    }
-    return str;
-  }
-  var levelName = prompt("New level name?");
-  if (levelName) {
-    var opStor = new OpStor(this.stor, levelName);
-    opStor.touch();
+VedApp.prototype.createLevel = function(name, opt_ops) {
+  var ops = opt_ops || [];
+  var opStor = new OpStor(this.stor, name);
+  opStor.touch();
+  for (var i = 0; i < ops.length; i++) {
+    opStor.appendOp(ops[i]);
   }
 };
-
-VedApp.prototype.nuke = function() {
-  // TODO: stor.deleteAll()
-  // TODO: stor.deleteName(name)
-  localStorage.clear();
-};
-
-VedApp.prototype.repopulate = function() {
-  for (var levelName in this.testLevelMap) {
-    var opStor = new OpStor(this.stor, levelName);
-    var ops = this.testLevelMap[levelName];
-    for (var i = 0; i < ops.length; i++) {
-      opStor.appendOp(ops[i]);
-    }
-  }
-};
-

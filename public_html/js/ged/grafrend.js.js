@@ -15,6 +15,8 @@ function GrafRend(plugin, renderer, geom) {
   this.viewDirty = true;
 }
 
+GrafRend.DATA_BUTTON_TEXT = '\u270E';
+
 GrafRend.MODEL_LINE_WIDTH = 3;
 GrafRend.MODEL_STROKE_STYLE = 'rgba(255, 255, 255, 0.3)';
 GrafRend.MODEL_PREVIEW_STROKE_STYLE = 'rgba(255, 255, 255, 0.15)';
@@ -162,11 +164,10 @@ GrafRend.prototype.drawClusterData = function(cluster) {
 GrafRend.prototype.drawPartData = function(part, cluster) {
   var editPos = Vec2d.alloc();
   this.geom.getEditButtonPos(part.id, editPos);
-  var text = '\u270E';
   this.renderer.context.textAlign = 'center';
   this.renderer.context.textBaseline = 'middle';
-  this.renderer.context.strokeText(text, editPos.x, editPos.y);
-  this.renderer.context.fillText(text, editPos.x, editPos.y);
+  this.renderer.context.strokeText(GrafRend.DATA_BUTTON_TEXT, editPos.x, editPos.y);
+  this.renderer.context.fillText(GrafRend.DATA_BUTTON_TEXT, editPos.x, editPos.y);
   this.renderer.fillCirclePosXYRad(editPos.x, editPos.y, GrafGeom.EDIT_RADIUS);
 
   var x = editPos.x + GrafGeom.EDIT_RADIUS * 1.2;
