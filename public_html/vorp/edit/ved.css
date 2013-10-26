@@ -26,6 +26,7 @@ body {
 
 .vedEditorNotice {
   font-weight:normal;
+  padding:0.2em 0.8em;
   color:yellow;
 }
 
@@ -70,12 +71,13 @@ span.vedModeLink {
 }
 
 .vedButtonBar {
-  clear:both;
+  padding:0.5em 0;
 }
 
 .vedButton {
   font-size:small;
   padding:0.1em 0.5em;
+  margin:0 0.5em;
   border-radius:0.25em;
   border:0;
 }
@@ -127,13 +129,15 @@ canvas.vedClipboard {
 
 .vedShareLink {
   display:block;
-  clear: both;
   word-wrap: break-word;
-  margin:1em;
+  margin:1em 0;
 }
 
-.vedShareText {
+.vedSharePane {
   margin:1em;
+  padding:2em;
+  background-color:rgba(40, 40, 40, 0.93);
+  border-radius: 1em;
 }
 
 #gedHelpToggle {

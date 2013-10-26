@@ -84,7 +84,7 @@ v Preserve mode across visits to directory.
 v visual cue that official levels are read-only.
 v visual cue that data-url levels are read-only.
 v Make Title and Description editable in edit mode
-- "Share" as a popup from Edit
+v "Share" as a popup from Edit
 
 Milestone: Easy level sharing! Post levels as URLs!
 

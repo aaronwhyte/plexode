@@ -29,7 +29,6 @@ VedApp.Params = {
 VedApp.Mode = {
   EDIT: 'edit',
   PLAY: 'play',
-  SHARE: 'share',
   JSON: 'json'
 };
 
@@ -82,8 +81,6 @@ VedApp.prototype.render = function() {
       this.renderPlayMode(appDiv, levelAddress);
     } else if (mode == VedApp.Mode.EDIT) {
       this.renderEditMode(appDiv, levelAddress);
-    } else if (mode == VedApp.Mode.SHARE) {
-      this.renderShareMode(appDiv, levelAddress);
     } else if (mode == VedApp.Mode.JSON) {
       this.renderJsonMode(appDiv, levelAddress);
     }
@@ -161,7 +158,7 @@ VedApp.prototype.renderDirectory = function(appDiv, mode) {
   createButton.onclick = function() {
     var newName = prompt("New level name?");
     if (!newName) {
-      alert("That's not a name.");
+//      alert("That's not a name.");
       return;
     }
     if (self.stor.containsName(newName)) {
@@ -349,24 +346,15 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
   return true;
 };
 
-VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
-  var split = this.splitLevelAddress(levelAddress);
-  var levelPrefix = split[0];
-  var levelName = split[1];
-
+VedApp.prototype.renderCopyButton = function(buttonBarElem, levelAddress) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Copy level', btn);
   var self = this;
-
-  var buttonBarElem = plex.dom.ce('div', appDiv);
-  buttonBarElem.className = 'buttonBarDiv';
-
-  // copy button
-  var copyButton = plex.dom.ce('button', buttonBarElem);
-  plex.dom.appendClass(copyButton, 'vedButton');
-  plex.dom.ct('Copy level', copyButton);
-  copyButton.onclick = function() {
+  btn.onclick = function () {
     var newName = prompt("New level name?");
     if (!newName) {
-      alert("That's not a name.");
+//      alert("That's not a name.");
       return;
     }
     if (self.stor.containsName(newName)) {
@@ -376,33 +364,87 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
     self.createLevel(newName, self.getOpsForLevelAddress(levelAddress));
     self.getModeLinkFn(VedApp.Mode.EDIT, VedApp.LevelPrefix.LOCAL + newName)();
   };
+};
 
-  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
-    var officialNotice = plex.dom.ce('span', buttonBarElem);
-    officialNotice.className = 'vedEditorNotice';
-    plex.dom.ct('This is an official level, not editable. You can make a local copy and edit that.',
-        officialNotice);
-  }
+VedApp.prototype.renderDeleteButton = function(buttonBarElem, levelName) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Delete', btn);
+  var self = this;
+  btn.onclick = function () {
+    if (confirm("Are you sure you want to delete this level?")) {
+      var opStor = new OpStor(self.stor, levelName);
+      opStor.remove();
+      plex.url.setFragment(plex.url.encodeQuery(self.createQueryObj(VedApp.Mode.EDIT)));
+    }
+  };
+};
 
-  if (levelPrefix == VedApp.LevelPrefix.DATA) {
-    var officialNotice = plex.dom.ce('span', buttonBarElem);
-    officialNotice.className = 'vedEditorNotice';
-    plex.dom.ct('This is a data-URL level, not editable. You can make a local copy and edit that.',
-        officialNotice);
-  }
+VedApp.prototype.renderShareButton = function(buttonBarElem, levelAddress) {
+  var btn = plex.dom.ce('button', buttonBarElem);
+  plex.dom.appendClass(btn, 'vedButton');
+  plex.dom.ct('Share', btn);
+  var self = this;
+  btn.onclick = function () {
+    // hide the pane if it is showing
+    var pane = document.querySelector('.vedSharePane');
+    if (pane) {
+      pane.parentNode.removeChild(pane);
+      return;
+    }
+    var json = JSON.stringify(self.getTemplatizedJsonForLevel(levelAddress));
+    var base64 = self.squisher.squish(json);
+    pane = plex.dom.ce('div', buttonBarElem);
+    pane.className = 'vedSharePane';
+    plex.dom.ce('div', pane).innerHTML = plex.string.textToHtml(
+        'This level is encoded in the URL below. ' +
+            'You can email it, IM it, post it, bookmark it, whatever.\n' +
+            'Anyone who opens it can to play it, copy and edit, and re-share it.', true);
+    // The "level=" prefix must be included, to prevent the first "=" sign
+    // in the data from being interpreted as a key/value separator.
+    var url = [
+      location.origin, location.pathname, '#',
+      VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
+    var a = plex.dom.ce('a', pane);
+    a.className = 'selectable vedShareLink';
+    a.href = url;
+    a.innerHTML = plex.string.textToHtml(url);
+    var closeDiv = plex.dom.ce('div', pane);
+    closeDiv.style.textAlign = 'center';
+    var closeBtn = plex.dom.ce('button', closeDiv);
+    closeBtn.className = 'vedButton';
+    closeBtn.innerText = 'Close';
+    closeBtn.onclick = function() {
+      pane.parentNode.removeChild(pane);
+    }
+  };
+};
 
-  // delete button
+VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
+  var split = this.splitLevelAddress(levelAddress);
+  var levelPrefix = split[0];
+  var levelName = split[1];
+
+  var buttonBarElem = plex.dom.ce('div', appDiv);
+  buttonBarElem.className = 'vedButtonBar';
+  this.renderCopyButton(buttonBarElem, levelAddress);
   if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
-    var deleteButton = plex.dom.ce('button', buttonBarElem);
-    plex.dom.appendClass(deleteButton, 'vedButton');
-    plex.dom.ct('Delete level', deleteButton);
-    deleteButton.onclick = function() {
-      if (confirm("Are you sure you want to delete this level?")) {
-        var opStor = new OpStor(self.stor, levelName);
-        opStor.remove();
-        plex.url.setFragment(plex.url.encodeQuery(self.createQueryObj(VedApp.Mode.EDIT)));
-      }
-    };
+    this.renderDeleteButton(buttonBarElem, levelName);
+    this.renderShareButton(buttonBarElem, levelAddress);
+  }
+
+  var notice;
+  if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
+    notice = plex.dom.ce('span', buttonBarElem);
+    notice.className = 'vedEditorNotice';
+    plex.dom.ct('This is an official level, not editable. You can make a copy, and edit that.',
+        notice);
+  }
+  if (levelPrefix == VedApp.LevelPrefix.DATA) {
+    notice = plex.dom.ce('span', buttonBarElem);
+    notice.className = 'vedEditorNotice';
+    plex.dom.ct('This is a data-URL level, not editable. You can make a copy, and edit that.',
+        notice);
   }
 
   var plexKeys = new plex.Keys();
@@ -427,6 +469,7 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
   metaEditElem.style.display = editable ? '' : 'none';
   if (editable) {
     var metaCluster = this.getMetaClusterForGraf(grafEd.model);
+    var self = this;
     metaEditElem.onclick = function() {
       grafUi.startEditingData(metaCluster.id, ['title', 'desc'], function() {
         self.updateMetaContent(levelAddress);
@@ -554,28 +597,6 @@ VedApp.prototype.getTemplatizedJsonForLevel = function(levelAddress) {
   this.renumberOps(ops);
   graf.applyOps(ops);
   return this.getTemplatizer().templatize(graf);
-};
-
-VedApp.prototype.renderShareMode = function(appDiv, levelAddress) {
-  var json = JSON.stringify(this.getTemplatizedJsonForLevel(levelAddress));
-  var base64 = this.squisher.squish(json);
-
-  var shareTextDiv = plex.dom.ce('div', appDiv);
-  shareTextDiv.className = 'vedShareText';
-  shareTextDiv.innerHTML = plex.string.textToHtml(
-      'This level is encoded in the URL below. ' +
-      'You can email it, IM it, post it, bookmark it, whatever.\n' +
-      'Anyone who opens it can to play it, copy and edit, and re-share it.', true);
-
-  // The "level=" prefix must be included, to prevent the first "=" sign
-  // in the data from being interpreted as a key/value separator.
-  var url = [
-    location.origin, location.pathname, '#',
-    VedApp.Params.LEVEL, '=', VedApp.LevelPrefix.DATA, base64].join('');
-  var a = plex.dom.ce('a', appDiv);
-  a.className = 'selectable vedShareLink';
-  a.href = url;
-  a.innerHTML = plex.string.textToHtml(url);
 };
 
 VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
