@@ -27,6 +27,11 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
+<span class="date">2013-10-26</span>
+Now the Vorp editor is integrated into the game, and there's sharing by URL.
+</div>
+
+<div class="news">
 <span class="date">2013-06-02</span>
 <a href="/vorp">Vorp</a> has three new levels, with zombies and turrets!
 </div>

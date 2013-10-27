@@ -88,7 +88,7 @@ v "Share" as a popup from Edit
 Bugs
 v Make sure a "Create level" level starts with a metadata cluster and a default title and description!
 Or just remove the "create" button. Easier and less painful for new users?
-- update main page
+v update main page
 
 Milestone: Easy level sharing! Post levels as URLs!
 
