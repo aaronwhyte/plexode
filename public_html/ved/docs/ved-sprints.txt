@@ -85,6 +85,10 @@ v visual cue that official levels are read-only.
 v visual cue that data-url levels are read-only.
 v Make Title and Description editable in edit mode
 v "Share" as a popup from Edit
+Bugs
+v Make sure a "Create level" level starts with a metadata cluster and a default title and description!
+Or just remove the "create" button. Easier and less painful for new users?
+- update main page
 
 Milestone: Easy level sharing! Post levels as URLs!
 

@@ -108,6 +108,8 @@ VedApp.prototype.renderDirectory = function(appDiv, mode) {
       '<a href="http://www.apple.com/safari/">Safari</a>, and ' +
       '<a href="http://www.opera.com/browser">Opera</a>.<br>' +
       '<a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE 9</a> and up might work.' +
+      '<p>The built-in editor stores your work on your computer using localstorage. ' +
+      'You can share what you make, by sending a URL.' +
       '<h1>Official Levels</h1>' +
       '</div>';
 
@@ -165,11 +167,15 @@ VedApp.prototype.renderDirectory = function(appDiv, mode) {
       alert("There's already a level with that name");
       return;
     }
-    self.createLevel(newName);
+    self.createLevel(newName, self.getNewLevelOps());
     self.render();
   };
 };
 
+VedApp.prototype.getNewLevelOps = function() {
+  // TODO: replace "20" with VedType.META somehow.
+  return this.getTemplatizer().detemplatize([[20, 1, 'untitled', 'nondescript']]);
+};
 
 VedApp.prototype.createQueryObj = function(mode, levelAddress) {
   var query = {};
@@ -259,7 +265,7 @@ VedApp.prototype.getModeLinkFn = function(mode, levelAddress) {
   return function(event) {
     event && event.preventDefault();
     var href = '#' + plex.url.encodeQuery(self.createQueryObj(mode, levelAddress));
-    history.replaceState(null, document.title, href);
+    history.pushState(null, document.title, href);
     self.render();
   };
 };
@@ -609,8 +615,7 @@ VedApp.prototype.renderJsonMode = function(appDiv, levelAddress) {
   div.innerHTML = plex.string.textToHtml(text, true);
 };
 
-VedApp.prototype.createLevel = function(name, opt_ops) {
-  var ops = opt_ops || [];
+VedApp.prototype.createLevel = function(name, ops) {
   var opStor = new OpStor(this.stor, name);
   opStor.touch();
   for (var i = 0; i < ops.length; i++) {
