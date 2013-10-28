@@ -173,8 +173,8 @@ VedApp.prototype.renderDirectory = function(appDiv, mode) {
 };
 
 VedApp.prototype.getNewLevelOps = function() {
-  // TODO: replace "20" with VedType.META somehow.
-  return this.getTemplatizer().detemplatize([[20, 1, 'untitled', 'nondescript']]);
+  var metaTemplate = VedTemplates.getClusterMap()[VedType.META];
+  return this.getTemplatizer().detemplatize([[metaTemplate.id, 1, 'untitled', 'nondescript']]);
 };
 
 VedApp.prototype.createQueryObj = function(mode, levelAddress) {

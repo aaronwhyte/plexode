@@ -33,22 +33,23 @@ VedSysClipListBuilder.createDefaultDataMap = function() {
   var map = {};
 
   var templates = VedTemplates.getClusterMap();
-  for (var id in templates) {
+  for (var vedType in templates) {
+    var template = templates[vedType];
+    var id = template.id;
     var params = [id, 1]; // "1" is the cluster ID
     // X, Y
-    if (id == VedType.WALL || id == VedType.PORTAL) {
+    if (vedType == VedType.WALL || vedType == VedType.PORTAL) {
       // These templates have four point coords.
       plex.array.extend(params, [-Transformer.WALL_RADIUS * 1.5, 0, Transformer.WALL_RADIUS * 1.5, 0]);
     } else {
       plex.array.extend(params, [0, 0]);
     }
     // Misc params
-    if (id == VedType.EXIT) {
+    if (vedType == VedType.EXIT) {
       params.push('.'); // url
-    } else if (id == VedType.TIMER) {
+    } else if (vedType == VedType.TIMER) {
       params.push(100); // timeout in game clocks (1/60 seconds)
     }
-    var template = templates[id];
     var ops = template.generateOps(params);
     var model = new GrafModel();
     model.applyOps(ops);
