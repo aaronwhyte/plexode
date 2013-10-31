@@ -220,11 +220,8 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, mode) {
   }
   plex.dom.ct(nameText, nameSpan);
 
-  var buttonBar = plex.dom.ce('div', appDiv);
-  buttonBar.className = 'vedButtonBar';
-
-  var metaWrapper = plex.dom.ce('div', appDiv);
-  metaWrapper.className = 'vedMetaWrapper';
+  plex.dom.ce('div', appDiv).className = 'vedButtonBar';
+  plex.dom.ce('div', appDiv).className = 'vedMetaWrapper';
 
   this.renderMetaContent(levelAddress, mode);
 };
@@ -355,7 +352,7 @@ VedApp.prototype.maybeRenderLevelNotFound = function(appDiv, levelAddress) {
 VedApp.prototype.renderCopyButton = function(buttonBarElem, levelAddress) {
   var btn = plex.dom.ce('button', buttonBarElem);
   plex.dom.appendClass(btn, 'vedButton');
-  plex.dom.ct('Copy level', btn);
+  plex.dom.ct('copy level', btn);
   var self = this;
   btn.onclick = function () {
     var newName = prompt("New level name?");
@@ -375,7 +372,7 @@ VedApp.prototype.renderCopyButton = function(buttonBarElem, levelAddress) {
 VedApp.prototype.renderDeleteButton = function(buttonBarElem, levelName) {
   var btn = plex.dom.ce('button', buttonBarElem);
   plex.dom.appendClass(btn, 'vedButton');
-  plex.dom.ct('Delete', btn);
+  plex.dom.ct('delete', btn);
   var self = this;
   btn.onclick = function () {
     if (confirm("Are you sure you want to delete this level?")) {
@@ -389,7 +386,7 @@ VedApp.prototype.renderDeleteButton = function(buttonBarElem, levelName) {
 VedApp.prototype.renderShareButton = function(buttonBarElem, levelAddress) {
   var btn = plex.dom.ce('button', buttonBarElem);
   plex.dom.appendClass(btn, 'vedButton');
-  plex.dom.ct('Share', btn);
+  plex.dom.ct('share', btn);
   var self = this;
   btn.onclick = function () {
     // hide the pane if it is showing
@@ -419,7 +416,7 @@ VedApp.prototype.renderShareButton = function(buttonBarElem, levelAddress) {
     closeDiv.style.textAlign = 'center';
     var closeBtn = plex.dom.ce('button', closeDiv);
     closeBtn.className = 'vedButton';
-    closeBtn.innerText = 'Close';
+    closeBtn.innerText = 'close';
     closeBtn.onclick = function() {
       pane.parentNode.removeChild(pane);
     }
