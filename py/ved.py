@@ -16,7 +16,6 @@ def formatVed(vorpJsName):
   h.append(format.headStart(name, 2))
   h.append("""
 <link rel="stylesheet" type="text/css" href="../css/plexode3.css">
-<link rel="stylesheet" type="text/css" href="vorp.css">
 <link rel="stylesheet" type="text/css" href="edit/ved.css">
 """)
   h.append('<script src="%s"></script>' % vorpJsName)

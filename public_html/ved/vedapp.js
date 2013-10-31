@@ -51,11 +51,8 @@ VedApp.prototype.render = function() {
     this.looper = null;
   }
 
-  // out-of-dom fragment to prevent rerendering as we go
-  // (no idea if that really works)
-  var appDiv = plex.dom.ce('div');
   this.rootNode.innerHTML = '';
-  this.rootNode.appendChild(appDiv);
+  var appDiv = plex.dom.ce('div', this.rootNode);
 
   var hash = plex.url.getFragment();
   var query = plex.url.decodeQuery(hash);
@@ -216,12 +213,15 @@ VedApp.prototype.renderLevelHeader = function(appDiv, levelAddress, mode) {
   nameSpan.className = 'vedLevelName';
   var nameText = levelAddress;
   if (nameText.indexOf(VedApp.LevelPrefix.DATA) == 0) {
-    if (nameText.length > 45) {
-      nameText = nameText.substring(0, 20) + '...' +
-          nameText.substring(nameText.length - 20);
+    if (nameText.length > 20) {
+      nameText = nameText.substring(0, 8) + '...' +
+          nameText.substring(nameText.length - 8);
     }
   }
   plex.dom.ct(nameText, nameSpan);
+
+  var buttonBar = plex.dom.ce('div', appDiv);
+  buttonBar.className = 'vedButtonBar';
 
   var metaWrapper = plex.dom.ce('div', appDiv);
   metaWrapper.className = 'vedMetaWrapper';
@@ -431,26 +431,23 @@ VedApp.prototype.renderEditMode = function(appDiv, levelAddress) {
   var levelPrefix = split[0];
   var levelName = split[1];
 
-  var buttonBarElem = plex.dom.ce('div', appDiv);
-  buttonBarElem.className = 'vedButtonBar';
-  this.renderCopyButton(buttonBarElem, levelAddress);
-  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
-    this.renderDeleteButton(buttonBarElem, levelName);
-    this.renderShareButton(buttonBarElem, levelAddress);
-  }
-
+  var buttonBarElem = document.querySelector('.vedButtonBar');
   var notice;
   if (levelPrefix == VedApp.LevelPrefix.BUILTIN) {
     notice = plex.dom.ce('span', buttonBarElem);
     notice.className = 'vedEditorNotice';
-    plex.dom.ct('This is an official level, not editable. You can make a copy, and edit that.',
-        notice);
+    plex.dom.ct('Official level. Copy before editing.', notice);
   }
   if (levelPrefix == VedApp.LevelPrefix.DATA) {
     notice = plex.dom.ce('span', buttonBarElem);
     notice.className = 'vedEditorNotice';
-    plex.dom.ct('This is a data-URL level, not editable. You can make a copy, and edit that.',
-        notice);
+    plex.dom.ct('Data-URL level. Copy before editing.', notice);
+  }
+
+  this.renderCopyButton(buttonBarElem, levelAddress);
+  if (levelPrefix == VedApp.LevelPrefix.LOCAL) {
+    this.renderDeleteButton(buttonBarElem, levelName);
+    this.renderShareButton(buttonBarElem, levelAddress);
   }
 
   var plexKeys = new plex.Keys();
