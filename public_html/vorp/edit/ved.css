@@ -7,6 +7,11 @@ body {
   -ms-user-select: none;
 }
 
+button {
+  color:black;
+  background:#ccc;
+}
+
 div.top {
   margin-bottom: 0.6em;
 }
@@ -121,8 +126,6 @@ span.vedModeLink {
   margin:0 0.5em;
   border-radius:0.25em;
   border:0;
-  color:black;
-  background:#ccc;
 }
 
 .vedModesDiv {
