@@ -91,6 +91,7 @@ Or just remove the "create" button. Easier and less painful for new users?
 v update main page
 
 Milestone: Easy level sharing! Post levels as URLs!
+DONE by, oooh, lets say 2013-10-30. Yay!
 
 ===================================================================================
 
@@ -100,6 +101,14 @@ Add loopwood.com/vorp
 Milestone: Move game stuff to new site (loopwood? photonpotato?) without eval XSS features.
 
 ===================================================================================
+
+Finish the sound effects.
+
+===================================================================================
+
+(((At this point it might be time to move on to a new project. This has gone on for at least 2 years.
+But if not there's certainly more to do.)))
+
 
 Editor Polish
 - make wall grab-points long and aligned with the wall, like a lozenge, so corners can be pulled apart easily.
