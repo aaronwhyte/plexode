@@ -135,7 +135,9 @@ PlayerSinger.prototype.isKaput = function() {
 PlayerSinger.prototype.die = function() {
   this.dieTime = this.now + PlayerSinger.DEATH_DURATION;
   this.dying = true;
-  this.masterGain.gain.value = 0;
+  if (this.masterGain) {
+    this.masterGain.gain.value = 0;
+  }
 };
 
 PlayerSinger.prototype.setThrusting = function(thrustFraction, speed) {

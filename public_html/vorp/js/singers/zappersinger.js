@@ -70,7 +70,9 @@ ZapperSinger.prototype.isKaput = function() {
 ZapperSinger.prototype.die = function() {
   this.dieTime = this.now + ZapperSinger.DEATH_DURATION;
   this.dying = true;
-  this.masterGain.gain.value = 0;
+  if (this.masterGain) {
+    this.masterGain.gain.value = 0;
+  }
 };
 
 ZapperSinger.prototype.setThrusting = function(thrustFraction, speed) {
