@@ -27,6 +27,11 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
+<span class="date">2014-03-17</span>
+Added a <a href="https://plus.google.com/111062934711090819978" rel="publisher">Google+ page for plexode</a>.
+</div>
+
+<div class="news">
 <span class="date">2013-10-26</span>
 Now the Vorp editor is integrated into the game, and there's sharing by URL.
 </div>
