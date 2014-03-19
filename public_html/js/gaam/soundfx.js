@@ -6,6 +6,11 @@
 function SoundFx(audioContext) {
   this.ctx = audioContext;
   if (this.ctx) {
+    if (!this.ctx.createGainNode || !this.ctx.createOscillator) {
+      this.ctx = null;
+    }
+  }
+  if (this.ctx) {
     this.masterGainNode = this.ctx.createGainNode();
     this.masterGainNode.connect(this.ctx.destination);
   }
