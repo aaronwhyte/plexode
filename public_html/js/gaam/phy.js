@@ -7,6 +7,7 @@ Math.sgn = Math.sgn || function(n) {
 /**
  * @param {CellCollider} collider
  * @param {GameClock} gameClock
+ * @param sledgeInvalidator
  * @constructor
  */
 function Phy(collider, gameClock, sledgeInvalidator) {
@@ -70,7 +71,7 @@ Phy.prototype.removeSprite = function(spriteId) {
  * Removes the sprite's old sledge first.
  * @param {Sledge} sledge
  * @param spriteId
- * @return new sledgeId
+ * @return {Number} new sledgeId
  * @private
  */
 Phy.prototype.bindSledgeToSpriteId = function(sledge, spriteId) {

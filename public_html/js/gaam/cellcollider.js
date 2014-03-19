@@ -121,7 +121,10 @@ CellCollider.prototype.addSledgeInGroup = function(sledge, group) {
 };
 
 /**
- *
+ * Adds a sledge to a rectangular range of cells,
+ * and immediately calcuates the hit times for that sledge
+ * vs all others (filtered by group) in those cells.
+ * @private
  */
 CellCollider.prototype.addSledgeToCells = function(
     sledge, sledgeId, x0, y0, x1, y1) {
@@ -160,7 +163,7 @@ CellCollider.prototype.addSledgeToCells = function(
 CellCollider.prototype.initSledgeCellTimes = function(sledge) {
   var now = this.clock.getTime();
   // Sledge's cell time data hasn't been initialized, so do it now.
-  var wall, positive, front, back, cellIndex, time;
+  var wall, positive, front, cellIndex, time;
   if (sledge.vx) {
     sledge.cellPeriodX = Math.abs(this.cellSize / sledge.vx);
     positive = sledge.vx > 0;
@@ -419,7 +422,7 @@ CellCollider.prototype.rayScan = function(rayScan, group) {
 };
 
 /**
- * @return the earliest hit in this cell, or null if there isn't any.
+ * Updates the rayscan with the earliest scan hit, if any.
  */
 CellCollider.prototype.rayScanCell = function(rayScan, x, y, group) {
   if (FLAGS && FLAGS.get('debugRayScans')) {
