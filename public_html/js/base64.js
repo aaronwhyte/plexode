@@ -5,10 +5,6 @@
   var
       object = typeof window != 'undefined' ? window : exports,
       chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
-      INVALID_CHARACTER_ERR = (function () {
-        // fabricate a suitable error object
-        try { document.createElement('$'); }
-        catch (error) { return error; }}());
 
   // encoder
   // [https://gist.github.com/999166] by [https://github.com/nignag]
@@ -25,7 +21,7 @@
             output += map.charAt(63 & block >> 8 - idx % 1 * 8)
             ) {
           charCode = input.charCodeAt(idx += 3/4);
-          if (charCode > 0xFF) throw INVALID_CHARACTER_ERR;
+          if (charCode > 0xFF) throw Error('invalid charCode:' + charCode);
           block = block << 8 | charCode;
         }
         return output;
@@ -35,8 +31,8 @@
   // [https://gist.github.com/1020396] by [https://github.com/atk]
   object.atob || (
       object.atob = function (input) {
-        input = input.replace(/=+$/, '')
-        if (input.length % 4 == 1) throw INVALID_CHARACTER_ERR;
+        input = input.replace(/=+$/, '');
+        if (input.length % 4 == 1) throw Error('invalid input length:' + input.length);
         for (
           // initialize result and counters
             var bc = 0, bs, buffer, idx = 0, output = '';
