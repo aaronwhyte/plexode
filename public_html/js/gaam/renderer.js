@@ -1,6 +1,6 @@
 /**
  * Renders to a canvas using a Camera object to pan and zoom.
- * @param canvas
+ * @param {HTMLCanvasElement} canvas
  * @param {Camera} camera
  * @constructor
  */
