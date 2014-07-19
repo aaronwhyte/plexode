@@ -6,12 +6,12 @@
 function SoundFx(audioContext) {
   this.ctx = audioContext;
   if (this.ctx) {
-    if (!this.ctx.createGainNode || !this.ctx.createOscillator) {
+    if (!(this.ctx.createGain || this.ctx.createGainNode) || !this.ctx.createOscillator) {
       this.ctx = null;
     }
   }
   if (this.ctx) {
-    this.masterGainNode = this.ctx.createGainNode();
+    this.masterGainNode = this.createGain();
     this.masterGainNode.connect(this.ctx.destination);
   }
 }
@@ -31,6 +31,15 @@ SoundFx.createInstance = function() {
   return new SoundFx(SoundFx.audioContext);
 };
 
+SoundFx.prototype.createGain = function() {
+  if (this.ctx.createGain) {
+    return this.ctx.createGain();
+  }
+  if (this.ctx.createGainNode) {
+    return this.ctx.createGainNode();
+  }
+  return null;
+};
 
 SoundFx.prototype.setCenter = function(x, y) {
   if (!this.ctx) return;
@@ -58,7 +67,7 @@ SoundFx.prototype.sound = function(pos, vol, attack, decay, freq1, freq2, type, 
   var c = this.ctx;
   var t0 = c.currentTime + delay;
   var t1 = t0 + attack + decay + 0.1;
-  var gain = c.createGainNode();
+  var gain = this.createGain();
   gain.gain.value = 0;
   gain.gain.setValueAtTime(0, t0);
   gain.gain.linearRampToValueAtTime(vol, t0 + attack);
@@ -95,24 +104,3 @@ SoundFx.prototype.disconnect = function() {
   }
 };
 
-
-function makeWebStormHappy() {
-  AudioContext = 1;
-  webkitAudioContext = 1;
-  x = {
-    createGainNode:1,
-    createPanner:1,
-    gain:1,
-    setValueAtTime: 1,
-    linearRampToValueAtTime: 1,
-    createOscillator: 1,
-    frequency: 1,
-    exponentialRampToValueAtTime:1,
-    connect:1,
-    destination:1,
-    listener:1,
-    type:1,
-    noteOn:1,
-    noteOff:1
-  };
-}

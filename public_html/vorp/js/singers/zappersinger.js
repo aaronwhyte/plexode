@@ -56,7 +56,7 @@ ZapperSinger.prototype.initNodes = function(sfx) {
   this.oscillator.frequency.value = 2000;
   this.oscillator.type = 'sawtooth';
   this.oscillator.start(t);
-  this.masterGain = c.createGainNode();
+  this.masterGain = sfx.createGain();
   this.masterGain.gain.value = 2;
   this.panner = c.createPanner();
   this.masterGain.connect(this.panner);

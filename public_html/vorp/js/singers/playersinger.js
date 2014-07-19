@@ -53,7 +53,7 @@ PlayerSinger.prototype.sing = function(vorpOut, x, y) {
 
     // tractor noises
     this.tractorSeekWub.setValue(this.seekFraction);
-    this.tractorHoldWub.setValue(this.holdFraction);
+    this.tractorHoldWub.setValue(Math.max(0, this.holdFraction - 0.15));
     if (this.kick) {
       var pitch = Math.random() * 20 + 1500 - 100 * this.kick;
       var length = 0.07 + 0.12 * this.kick;
@@ -82,18 +82,18 @@ PlayerSinger.prototype.initNodes = function(sfx) {
 
   // thrust
   this.thrustWub = new WubOscillator(
-      30, 500,
-      5, 20,
-      0.5, 0.6,
+      30, 300,
+      5, 30,
+      0.3, 0.5,
       'square');
   this.thrustWub.createNodes(c);
   this.thrustWub.setValue(0);
   this.thrustWub.start(t);
-  this.thrustGain = c.createGainNode();
+  this.thrustGain = sfx.createGain();
   this.thrustGain.gain.value = 1.5;
   this.thrustWub.connect(this.thrustGain);
 
-  this.tractorGain = c.createGainNode();
+  this.tractorGain = sfx.createGain();
   this.tractorGain.gain.value = 3;
 
   // tractor seek
@@ -109,16 +109,16 @@ PlayerSinger.prototype.initNodes = function(sfx) {
 
   // tractor hold
   this.tractorHoldWub = new WubOscillator(
-      1000, 100,
-      100, 5,
-      0, 0.7,
+      3602, 100,
+      75, 0.1,
+      0, 0.8,
       'square');
   this.tractorHoldWub.createNodes(c);
   this.tractorHoldWub.setValue(0);
   this.tractorHoldWub.start(t);
   this.tractorHoldWub.connect(this.tractorGain);
 
-  this.masterGain = c.createGainNode();
+  this.masterGain = sfx.createGain();
   this.masterGain.gain.value = 1;
   this.panner = c.createPanner();
 

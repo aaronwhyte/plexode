@@ -27,19 +27,31 @@ WubOscillator.prototype.createNodes = function(ctx) {
   if (!this.wubOsc.stop && this.wubOsc.noteOff) this.wubOsc.start = this.wubOsc.noteOff;
   this.wubOsc.type = 'sine';
 
-  this.wubGain = ctx.createGainNode();
+  this.wubGain = this.createGain(ctx);
 
   this.droneOsc = ctx.createOscillator();
   if (!this.droneOsc.start && this.droneOsc.noteOn) this.droneOsc.start = this.droneOsc.noteOn;
   if (!this.droneOsc.stop && this.droneOsc.noteOff) this.droneOsc.start = this.droneOsc.noteOff;
   this.droneOsc.type = this.droneType;
 
-  this.masterGain = ctx.createGainNode();
+  this.masterGain = this.createGain(ctx);
 
   this.droneOsc.connect(this.wubGain);
   this.wubOsc.connect(this.wubGain.gain);
   this.wubGain.connect(this.masterGain);
 };
+
+WubOscillator.prototype.createGain = function(ctx) {
+  if (ctx.createGain) {
+    return ctx.createGain();
+  }
+  if (ctx.createGainNode) {
+    return ctx.createGainNode();
+  }
+  return null;
+};
+
+
 
 WubOscillator.prototype.connect = function(dest) {
   this.masterGain.connect(dest);
