@@ -8,26 +8,6 @@ function Wham() {
   this.v2 = new Vec2d();
 }
 
-///**
-// * Mutates sprite velocities
-// * @param game
-// * @param spriteId1
-// * @param spriteId2
-// * @param xTime
-// * @param yTime
-// */
-//Wham.prototype.spriteHit = function(game, spriteId1, spriteId2, xTime, yTime) {
-//  var sprite1 = game.getSprite(spriteId1);
-//  var sprite2 = game.getSprite(spriteId2);
-//  this.calcAcceleration(sprite1, sprite2, xTime, yTime, Wham.GRIP, this.accelerationsOut);
-//  var a1 = this.accelerationsOut[0];
-//  var a2 = this.accelerationsOut[1];
-//  sprite1.addVelXY(a1.x, a1.y);
-//  sprite2.addVelXY(a2.x, a2.y);
-//  sprite1.onSpriteHit(sprite2, game);
-//  sprite2.onSpriteHit(sprite1, game);
-//};
-
 /**
  * Calculates acelerations without altering anything except the out vecs.
  */
