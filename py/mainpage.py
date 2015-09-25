@@ -27,8 +27,25 @@ a {
   h.append(format.mainDiv("""
 
 <div class="news">
-<span class="date">2014-03-17</span>
-Added a <a href="https://plus.google.com/111062934711090819978" rel="publisher">Google+ page for plexode</a>.
+It's an anagram for "explode!"<br>
+This site started as an HTML rapid-prototyping tool back in the early 2000's.
+It's got some web development tools, a couple of action-packed JavaScript/HTML games, and some wiggly demos.
+<br>
+All the source is on <a href="https://github.com/aaronwhyte/plexode/">github</a>.
+<div>
+
+<div class="news">
+<span class="date">2015-09-26</span>
+Here's a hella old eval3
+<a href="http://plexode.com/eval3/#s=aekVQXANJVQMbAx10AYMeFBERAYIeF5sBSkUePQNEQk+mAXilA1mEGxJRWQGHAVNGRRwBfRtCQ1RQTVZVRrx+spq0ph8dEHQfPU8dSRIfAS5KRElCRk0P4QHj2tzeTQ0BSEpXRgFWVAFQVlMBUblESvPxSEZOKgCAIoEwuGjZFQkFIiEwtB4DBoDJaRSZwB52V0DgsHhMLFqmDjTaZgAJxBIKAJcaZEIgPI5KJpNGhVLRNIyuAhHIpFj8qlhDIzrJ4xIRVJMmkBPlYPJxQdo1KAJBwSdNSBVIpRNJRPI1PBNTANVq8srNbrtfCIPDVWnoPslcqFSdNotViB5EJpQKhGodFo9sl0wv1JlhUKpTKBMI2CL0hJ8jn5CKZFk0ov8vmMzms3nU7Ad1n9BvlGteDpdNt9RCQPs9p0lYrWoqWruWusewroRqloCW1tu3qGqs+9t1m2YBufD34J3IB4O9u95vdE0d1wBNwVKwuHxOLxsjIxaIxUykp0vWmU0mymAibCM80ugrWi7EsyJEqNoC26B/644PBEGVyfsm28XV0F6fNvXWfQD3aYhim9fFQnTgx9nLfx+39WiAICWCGwRgVbIHdJfYKZeDIOdxpGMKpjgBE90XkWyEoJdVl3oZp605Z1dYWcwDloBOGgPBMGFykADwVOkaQxCoDFoBWJmBb2KYQUiLEiAFTDFaNlXwUB8oUb1TFOXCUFyA8FHJWVUJnf6al1lV3YtSM3RVjJ5o3Zl6gDTgm3vUqNJiXWZGxcF/ZIBma2oj8EwPBii3FBKiFooqBl4gig2WlOcWGg+c5ZZETp4oGYITiWhGnbhtF1FIVhCEUU1ENsJD0mWF5DawF5oBeVKeipn6mjVbI+A+u3+gF/gTVSTAqOmIWlnKK3eAGonjFVJ3ldkQjtgxbg4KNRQBB5/qTXVhipFQTVEYprLQUphxVuwCRpFRWgJFUC1or0AQQAEE1gf6UVIqKDC5YUUC5ii3JWWy37hEm47lBacSoTVqbPb26BPuq87ub28bzvW975vsFknv7AAOwJpMFyB4hVwmEDTliLk1EipE+sKmmloWq3Hb2rqwrIVa0rajJEmiSrlmilsOcp+ZoXRbLSle1M3te2dUwy3mwuARVFuRu8U1u3carLHLrMauNSyAULy2vIxPvjKL/aTN8GzDMsL2bFRCxdcXN2e6dqYrUX+1Npch3G9tzvlqgRBMCgQ5JSN4y/CMK5jMea1aLSoxI/RDEoCSmKgqgDbXEioA8/RVCQUBPMYWZ3AgExFAhpJZEiMBOYoWTpFo6RJOkVzptiXjja9W9fuLYmrUjymEr8Ro4O65Hre17/Sg3XGk9zG8d2vwABFr3wBvDb8i42+L6A+igLuX53ZxZigWcz9/nSX57W3T0QAtYf8NMcZkDJGCHGjAvUBwAngPFAtLaqIBgBTtAteDenOs0MaBACAR2EgBASGELTEgIi8hEB0AImoSPlACAxcgaQ1ABfiJprQT4Njjd4FB3y9IYQyE28E0kG0WBhCqxIBIYgyAKDKv05omykQ4h1ClZ790OnMCqBBgY04nrtimc0DJzIvvHNJFoBIoBOMrUmcwCUXoqPHcoaQKpSCHgDH+JIAYEgIxybeEmOoEo8hVCXHwAYXgAA==">
+gnomes demo</a>. These gem-coveting dungeon dwellers were going to be the enemies in Fracas II.
+</div>
+
+<div class="news">
+<span class="date">2015-09-25</span>
+Here's another little vorp level:
+<a href="http://plexode.com/vorp/?20150925#level=data~aeotB48JkRpIaDqVqccRUA1qIPTCnxQNuhOhyozgqqACkKAGwCQoGiYaMxoaHDIkLw8SKx4sMC8eMCkm0TUkIswcNDUXQ0dMMsAyGjUeLywcJxrBTxYdQy4lFgYoIwzRJR4qK1rNYhojKM9eHWNGMignmCbQHDAjZTk9FicSLjFwMjU9Eic1n2XJuxVaJCInZC14wDAaKNGlcXlW0BRLNx8ItVQNDvh7wVcrQzrxRv2DhUzQJpg2BA56NQJJYKolsJ1YBF%2FBYGhWSA4KBlZMV%2FSWEwyKwqILwGhYzBlkwsMssJSQLIl9o9poczBaSQ9aQdMIoJJldqeHU%2BDhdRyynsRjMpWA0LolptFyodLBd0xdVLauO9frJEBdWgOHMGAriqK2MJlDq8MJaNxVcp1VosMO%2BJQ8JSo01RgoxFzmM1xLTxFhmSKV%2BPEK2JGXa6o92QcNROQLnMK50vB5aBExfHuWpGjXBKozqGmXXwRX7LEJChvfULB5vVhBGTzi2aVIY7hGeRUynaR5bWH5iD7JP8fog4KsPoZlhRvPcpcVaMcKob5rOl99XbRfUQHRz23eyPcZH%2B%2BsXb31teJqZAqcRDneCbcg03ZsksAYCGCU58sgUZoEOkhEFkvyWOqkDZNs7rpPuCz5rUV6glmiR7DOCrxqyUikvAjbilEzywxbADPRgbD5xmZydwhEphHo5x0gsYsgEeyz%2BSEdzOJEMC%2BKWnMELQXRZuydg0ri6pkvdD53tm%2BSRjOcMwJycqeNyC7cuQSJJtyTiGxOME2Sa5jMzZCZxHwZc2E0ChEp7OAzgwe4LpICYLT%2Bpp3zuCxqTZERhAwCVDp2ix7p3SQ0UCi08jODLBUxNdOKAfQMUkviGHhSLcspE7vg1SRQQ%2BM8%2BUk3wLTNRlOHersTgqHwfAAA=">surf's up and zombies to go</a>
+<br>It's already pretty hard. But to make it insane-o challenging, try it without your tractor beam - use yourself as bait to draw the zombies into the grip-switches.
 </div>
 
 <div class="news">
@@ -52,7 +69,7 @@ or forum markdown.
 <p>
 Here's a sample URL that animates wiggly tree tentacles on a canvas:
 <a href="/eval3/#s=aekVQXANJVQMbAx10AUpFHpaCHhcVEQGDHhUZoHgePQOLG1RKTVdGU6kfHRB0HwMNA0uRk3APdh4IRFVJVk3GCBw9T2FPAR4BCWJkCmXLzU5QU0YjRk9F0AERDxEREgELAWmtTwlPEBIU5hEK2GF/I1NCT0RJcTkdDqBLsJTueAUCwUCQKAIOcYPC0NgcFg4QCYSjMNh7kiUOiASe6AfT8f0AB8CaUVd4QCgZjUfjsTlTtlgTc0MmMRjcge4uEQ5IAlEwxGopcQVCj3Gg1EQzGoqF4oIA0FQ7Ezieb3qIkIAnGAzFjiCQQCr3FAzGA4k4aszMZhhSzRX5uBIIOgIe1wIjiOgPJBGKokKBPKpGLJVuwTIt5bDMMABIr7LA1bhGBKKBoBI7bJhPIxUKmaIbfIuaIpGKLFhpcZgBAJEB5HVxNGZGYgJByKBbkC+a3W8B4UzW7CQPCfE4IXvTPS5HaWo1T/D7Rn9BodFFMNM+O5pK54JzhTz2gKgBDoBnOt5uv2JUISwBPM1/tB5VfZPKhNIWGBIRb8ikXfN9GxFMUBVfxl2kOCA31fc/H6gl/oAgI2H0ZFk2VEZlyKOkAVoWoAWaeJ5GhAEDABVxXlgCxo2licATaNw3jgadqTFAxDIWgQDzcFQVTbZeAxeAERhNFQRgBeuF3ufCQo7g5+IRf1/0OgEE4NbCPYHhKCzhig5JYlCWoPfl+5UhSYmufRkhCZRlmYh6IA4ZqVZeR8+X4SaNnSjmWYFaCQDcfJ3ZMA973xn99pSmdl5VbqFZrfWBoIf2d0cceipllOjpplmbZvhucTqnOdYuOCMEjnoSZ8jiOqSlqPqCk+axeMytj9A8RBNEYQhTbZuJVlVfiCZpfiDcyTaJNhsabo0CbERedbJlulWXGkMQqcyoIaZdTFOVBUlUVYJqmjGQY0OG07Mj2gZBoQzAIMouQDFASxJJIAwRvQThUvlN70gcS75BIAxeAAA=">
-cthulhu</a>.
+<b>cthulhu</b></a>.
 <p>
 The new compressor turns the form fields into a JSON string,
 percent-encodes all but the most vanilla characters,
@@ -61,32 +78,13 @@ then uses Lempel-Ziv to compress repeated strings,
 and finally encodes everything in linkifier-friendly base64.
 <p>
 Aaaand in <a href="/vorp">Vorp</a>, it should be easier to make small movements with the little pink square that is you -
-better for lining up throws, or getting onto a beam sensor. And <a href="/vorp/level2">level 2</a> got a little overhaul.
+better for lining up throws, or getting onto a beam sensor.
 </div>
 
 <div class="news">
 <span class="date">2013-02-13</span>
 I've been working on <a href="./vorp">Vorp</a>!<br>
 Now there are ten lesson levels, and a couple new challenging levels.
-</div>
-
-<div class="news">
-<span class="date">2012-06-19</span>
-<i>[OBSOLETE]</i> URL compression! Plexode pages that store state in the URL, like <a href="/eval3">eval3</a>,
-now have a URL shortener button in the top right corner, that calculates a compressed URL.
-A compressed URL contains all the information that was in the original. URLs aren't stored in a database.
-<br>
-The algorithm:
-<ol>
-<li>Given a string to compress, find the repeated substrings and their frequencies.
-<li>Select the one with the biggest length*frequency, to 'squish' by substituting a smaller,
-unused string for the larger one.
-<li>Create an 'unsquish' command string to reverse the squish step.
-<li>If the substitution would shorten the string more than the command would lengthen it,
-<br>then the new string = the unsquish command + the old string with the substitution made.
-<br>Otherwise quit.
-<li>Goto step 1.
-</ol>
 </div>
 
 <div class="news">
